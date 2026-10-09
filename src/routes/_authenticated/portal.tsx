@@ -29,7 +29,6 @@ function Portal() {
         supabase.from("ee_plans").select("id,title,company,start_date,end_date,updated_at").order("updated_at", { ascending: false }).limit(5),
         supabase.from("dg_reviews").select("id,score,updated_at,ee_plans(title)").order("updated_at", { ascending: false }).limit(5),
         supabase.from("subscriptions").select("plan,status,amount,created_at").order("created_at", { ascending: false }).limit(1),
-        supabase.from("portal_documents").select("area,category"),
       ]);
       const d = await supabase.from("portal_documents").select("area,category");
       for (const x of [a, p, r, s, d]) if (x.error) throw x.error;
