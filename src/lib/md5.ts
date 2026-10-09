@@ -48,13 +48,13 @@ function md5block(state: number[], block: Uint8Array, offset: number): void {
     const tmp = d;
     d = c;
     c = b;
-    b = (b + rotl((a + f + K[i] + M[g]) | 0, S[i])) | 0;
+    b = (b + rotl((a + f + K[i]! + M[g]!) | 0, S[i]!)) | 0;
     a = tmp;
   }
-  state[0] = (state[0] + a) | 0;
-  state[1] = (state[1] + b) | 0;
-  state[2] = (state[2] + c) | 0;
-  state[3] = (state[3] + d) | 0;
+  state[0] = (state[0]! + a) | 0;
+  state[1] = (state[1]! + b) | 0;
+  state[2] = (state[2]! + c) | 0;
+  state[3] = (state[3]! + d) | 0;
 }
 
 export function md5(input: string): string {
