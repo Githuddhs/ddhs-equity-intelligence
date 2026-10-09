@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
@@ -42,6 +43,11 @@ const AuthRoute = AuthRouteImport.update({
 const Eea12Route = Eea12RouteImport.update({
   id: '/eea12',
   path: '/eea12',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/pricing'
     | '/signup'
     | '/compliance'
     | '/dg-history'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/pricing'
     | '/signup'
     | '/compliance'
     | '/dg-history'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/eea12'
+    | '/pricing'
     | '/signup'
     | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   Eea12Route: typeof Eea12Route
+  PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       path: '/eea12'
       fullPath: '/eea12'
       preLoaderRoute: typeof Eea12RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -352,6 +372,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   Eea12Route: Eea12Route,
+  PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
