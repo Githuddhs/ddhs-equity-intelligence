@@ -11,4 +11,4 @@
 - [ ] PayFast: user to register at payfast.io, then re-request merchant ID, key and passphrase to activate checkout
 - [ ] PayFast live: merchant ID + key wired in; waiting on live passphrase (PAYFAST_LIVE_PASSPHRASE) and a real test payment by the user
 - [ ] Staff dashboard: sdm@ddhs.co.za gets staff access automatically once that account is signed up and confirmed (waiting on user)
-- [ ] Staff alerts: pending invites, incomplete documents, overdue DG reviews
+- [x] Staff alerts: pending invites, incomplete documents, overdue DG reviews
