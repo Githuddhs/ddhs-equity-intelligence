@@ -76,6 +76,7 @@ function ClientsDashboard() {
           ) : (
             <>
               <p className="mt-1 text-muted-foreground">{data?.length ?? 0} client account(s).</p>
+              <StaffAlerts clients={data ?? []} />
               <InviteClientForm />
               <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
                 <table className="w-full text-sm">
@@ -174,6 +175,45 @@ function Calendar({ events }: { events: Ev[] }) {
           </ul>
         </div>
       </div>
+    </section>
+  );
+}
+
+type AlertClient = { id: string; email: string; company: string | null; full_name: string | null; confirmed: boolean; review: { updated_at: string } | null; docs: { eea12: number; plan: number; dg: number } };
+
+function StaffAlerts({ clients }: { clients: AlertClient[] }) {
+  const name = (c: AlertClient) => c.company || c.full_name || c.email;
+  const pending = clients.filter((c) => !c.confirmed);
+  const incomplete = clients.filter((c) => c.confirmed && (c.docs.eea12 < 100 || c.docs.plan < 100 || c.docs.dg < 100));
+  const overdue = clients.filter((c) => c.confirmed && (!c.review || Date.now() - +new Date(c.review.updated_at) > 365 * 86400000));
+  const total = pending.length + incomplete.length + overdue.length;
+  const card = (title: string, tone: string, list: AlertClient[], detail: (c: AlertClient) => string) => (
+    <div className={`rounded-xl border bg-card p-4 shadow-sm ${list.length ? tone : "border-border"}`}>
+      <div className="flex items-center justify-between">
+        <p className="font-semibold">{title}</p>
+        <span className={`rounded-full px-2 py-0.5 text-sm font-bold ${list.length ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"}`}>{list.length}</span>
+      </div>
+      <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm">
+        {list.length === 0 && <li className="text-muted-foreground">All clear.</li>}
+        {list.map((c) => (
+          <li key={c.id}><Link to="/clients/$id" params={{ id: c.id }} className="font-medium text-primary hover:underline">{name(c)}</Link> <span className="text-muted-foreground">· {detail(c)}</span></li>
+        ))}
+      </ul>
+    </div>
+  );
+  return (
+    <section className="mt-6">
+      {total > 0 && (
+        <div role="alert" className="rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-sm font-semibold text-destructive">
+          {total} item(s) need attention: {pending.length} pending invite(s), {incomplete.length} client(s) with missing documents, {overdue.length} overdue DG review(s).
+        </div>
+      )}
+      <div className="mt-3 grid gap-4 md:grid-cols-3">
+        {card("Pending invites", "border-primary/40", pending, (c) => c.email)}
+        {card("Incomplete documents", "border-destructive/40", incomplete, (c) => `EEA12 ${c.docs.eea12}% · Plan ${c.docs.plan}% · DG ${c.docs.dg}%`)}
+        {card("Overdue DG reviews", "border-destructive/40", overdue, (c) => c.review ? `last ${fmt(c.review.updated_at)}` : "never reviewed")}
+      </div>
+      <p className="mt-2 text-xs text-muted-foreground">A DG review counts as overdue when none exists or the latest is more than 12 months old.</p>
     </section>
   );
 }
