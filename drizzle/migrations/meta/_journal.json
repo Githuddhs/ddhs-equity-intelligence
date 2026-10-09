@@ -85,6 +85,13 @@
       "when": 1791560949892,
       "tag": "0011_admin_clients_all",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1791561131705,
+      "tag": "0012_realtime_subscriptions",
+      "breakpoints": true
     }
   ]
 }
