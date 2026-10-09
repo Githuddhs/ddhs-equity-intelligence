@@ -116,7 +116,6 @@ function PlanRow({ plan, onSaved }: { plan: Plan; onSaved: () => void }) {
       <label className="text-xs text-muted-foreground">End<input aria-label="Plan end" type="date" className={`${input} mt-1 w-full`} value={f.end_date} onChange={(e) => setF({ ...f, end_date: e.target.value })} /></label>
       <label className="text-xs text-muted-foreground">DG review due<input aria-label="DG review due" type="date" className={`${input} mt-1 w-full`} value={f.dg_review_due} onChange={(e) => setF({ ...f, dg_review_due: e.target.value })} /></label>
       <button onClick={save} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Save</button>
-      <p className="text-xs text-muted-foreground md:col-span-3">Submitted {new Date(review.created_at).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })} · last updated {new Date(review.updated_at).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })}</p>
     </div>
   );
 }
