@@ -73,6 +73,15 @@ const latestPerLevel = (analyses: SavedAnalysis[]) => {
 };
 const matchLevel = (planLevel: string, lvl: string) => lvl.toLowerCase().startsWith(planLevel.toLowerCase()) || planLevel.toLowerCase().startsWith(lvl.toLowerCase());
 
+/** Latest actual designated male/female/total % for a level, from saved analyses. */
+export const baselineForLevel = (analyses: SavedAnalysis[], level: string) => {
+  const a = [...latestPerLevel(analyses).values()].find((x) => matchLevel(level, x.level));
+  if (!a) return null;
+  const s = sectOf(a); const t = find(s, "total"), m = find(s, "male"), f = find(s, "female");
+  if (!t || !m || !f) return null;
+  return { males: m.actual, females: f.actual, total: t.actual, date: a.created_at.slice(0, 10) };
+};
+
 /** Fills baseline (actual total designated %) and targets per level from the latest analysis for that level. */
 export const goalsFromAnalyses = (goals: GoalRow[], analyses: SavedAnalysis[]): { goals: GoalRow[]; filled: number } => {
   const latest = [...latestPerLevel(analyses).values()];
