@@ -156,9 +156,23 @@ function Eea12Page() {
         <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <h2 className="font-display text-xl font-bold text-primary">Progress</h2>
-            <select value={level} onChange={(e) => setLevel(e.target.value)} className="rounded border border-border bg-background px-2 py-1 text-sm">
-              {LEVELS.map((l) => <option key={l}>{l}</option>)}
-            </select>
+            <label className="flex items-center gap-1.5 text-sm">
+              <span className="font-medium">Sector</span>
+              <select value={sector}
+                onChange={(e) => { const v = e.target.value; setSector(v); applySectorTargets(v, level); }}
+                className="max-w-[340px] rounded border border-border bg-background px-2 py-1 text-sm">
+                <option value="">Select your economic sector…</option>
+                {SECTORS.map((s) => <option key={s.name} value={s.name}>{s.name}</option>)}
+              </select>
+            </label>
+            <label className="flex items-center gap-1.5 text-sm">
+              <span className="font-medium">Occupational level</span>
+              <select value={level}
+                onChange={(e) => { const v = e.target.value; setLevel(v); applySectorTargets(sector, v); }}
+                className="rounded border border-border bg-background px-2 py-1 text-sm">
+                {LEVELS.map((l) => <option key={l}>{l}</option>)}
+              </select>
+            </label>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] border-collapse">
@@ -253,6 +267,13 @@ function Eea12Page() {
                 })}
               </tbody>
             </table>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {sector
+                ? LEVEL_TO_TARGET_KEY[level]
+                  ? `Targets shown are the 5-year sectoral numerical targets for ${sector} at ${level} level (GN 6124, Government Gazette 52514 of 15 April 2025) — edit them to override.`
+                  : `No sectoral numerical targets are set for ${level} — enter your own targets.`
+                : "Select your economic sector above to auto-fill these targets from the 5-year sectoral numerical targets (GN 6124, 15 April 2025)."}
+            </p>
           </section>
 
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
