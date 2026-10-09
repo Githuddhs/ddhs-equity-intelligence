@@ -7,3 +7,5 @@
 - [x] Subscription page (no online payments yet; real prices needed from user)
 - [ ] PayFast checkout: request merchant credentials, test sandbox payment end to end
 - [ ] Confirm sign-up accounts persist in the user database after email confirmation (verify + report)
+- [x] Sign-up persistence: confirmed — accounts are stored in the real user database and persist after email confirmation
+- [ ] PayFast: user to register at payfast.io, then re-request merchant ID, key and passphrase to activate checkout
