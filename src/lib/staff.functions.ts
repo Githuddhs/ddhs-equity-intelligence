@@ -19,7 +19,7 @@ export const inviteClient = createServerFn({ method: "POST" })
     const origin = new URL(getRequest().url).origin;
     const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
       data: { full_name: data.fullName, company: data.company },
-      redirectTo: `${origin}/portal`,
+      redirectTo: `${origin}/set-password`,
     });
     if (error) {
       console.error("invite failed", error);
