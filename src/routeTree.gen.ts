@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -41,6 +42,11 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiEeAssistRoute = ApiEeAssistRouteImport.update({
+  id: '/api/ee-assist',
+  path: '/api/ee-assist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   id: '/api/eea-insights',
   path: '/api/eea-insights',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
   '/history': typeof AuthenticatedHistoryRoute
+  '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
   '/history': typeof AuthenticatedHistoryRoute
+  '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/eea12'
     | '/history'
+    | '/api/ee-assist'
     | '/api/eea-insights'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/eea12'
     | '/history'
+    | '/api/ee-assist'
     | '/api/eea-insights'
     | '/lovable/email/transactional/preview'
   id:
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/eea12'
     | '/_authenticated/history'
+    | '/api/ee-assist'
     | '/api/eea-insights'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
@@ -112,6 +124,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   Eea12Route: typeof Eea12Route
+  ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -153,6 +166,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/ee-assist': {
+      id: '/api/ee-assist'
+      path: '/api/ee-assist'
+      fullPath: '/api/ee-assist'
+      preLoaderRoute: typeof ApiEeAssistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/eea-insights': {
       id: '/api/eea-insights'
       path: '/api/eea-insights'
@@ -186,6 +206,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   Eea12Route: Eea12Route,
+  ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
