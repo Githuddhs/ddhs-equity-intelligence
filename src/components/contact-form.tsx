@@ -20,10 +20,12 @@ const initialForm = {
   website: "",
 };
 
+type FieldKey = keyof typeof initialForm;
+
 export function ContactForm() {
   const sendEnquiry = useServerFn(submitEnquiry);
   const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
