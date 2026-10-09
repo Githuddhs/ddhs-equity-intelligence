@@ -141,7 +141,7 @@ function Eea12Page() {
       ai_summary: summary || null,
     }).select("id").single();
     setSaving(false);
-    if (error) return toast.error("Could not save: " + error.message);
+    if (error) { toast.error("Could not save: " + error.message); return; }
     setSavedId(data.id);
     toast.success("Analysis saved to your history.");
   };
