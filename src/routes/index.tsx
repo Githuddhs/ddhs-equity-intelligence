@@ -172,7 +172,7 @@ function Index() {
               DDHS <span className="text-teal">Equity Intelligence</span>
             </span>
           </div>
-          <nav className="order-last hidden w-full items-center justify-between text-sm font-semibold text-teal md:flex 2xl:order-none 2xl:w-auto 2xl:justify-start 2xl:gap-6">
+          <nav className="order-last hidden w-full items-center justify-between text-sm font-semibold text-teal md:flex">
             <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
             <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
             <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
