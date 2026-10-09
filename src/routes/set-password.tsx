@@ -10,9 +10,9 @@ export const Route = createFileRoute("/set-password")({
   head: () => ({
     meta: [
       { title: "Set your password — DDHS Equity Intelligence" },
-      { name: "description", content: "Accept your DDHS invite and choose a password for My portal." },
+      { name: "description", content: "Accept your DDHS Equity Intelligence invite and choose a password for My portal." },
       { property: "og:title", content: "Set your password — DDHS Equity Intelligence" },
-      { property: "og:description", content: "Accept your DDHS invite and choose a password for My portal." },
+      { property: "og:description", content: "Accept your DDHS Equity Intelligence invite and choose a password for My portal." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -53,10 +53,10 @@ function SetPasswordPage() {
   return (
     <main className="mx-auto max-w-md px-6 py-16">
       <h1 className="font-display text-3xl font-semibold">Set your password</h1>
-      <p className="mt-2 text-muted-foreground">Choose a password to finish accepting your DDHS invite.</p>
+      <p className="mt-2 text-muted-foreground">Choose a password to finish accepting your DDHS Equity Intelligence invite.</p>
       {ready === false ? (
         <p className="mt-8 rounded-md border border-border bg-muted p-4">
-          This invite link has expired or was already used. Ask DDHS to send a new invite, or sign in if you already set a password.
+          This invite link has expired or was already used. Ask DDHS Equity Intelligence to send a new invite, or sign in if you already set a password.
         </p>
       ) : (
         <form onSubmit={submit} className="mt-8 space-y-4">

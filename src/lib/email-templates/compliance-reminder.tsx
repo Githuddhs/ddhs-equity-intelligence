@@ -30,7 +30,7 @@ function ComplianceReminder({ items = sample, dashboardUrl = 'https://ddhs.co.za
             Open compliance dashboard
           </Button>
           <Hr style={{ borderColor: '#E3E8EE', margin: '24px 0 12px' }} />
-          <Text style={{ color: '#5B6B7C', fontSize: '11px' }}>You receive this because reminders are switched on in your DDHS Compliance dashboard. Change reminder timing there.</Text>
+          <Text style={{ color: '#5B6B7C', fontSize: '11px' }}>You receive this because reminders are switched on in your DDHS Equity Intelligence compliance dashboard. Change reminder timing there.</Text>
         </Container>
       </Body>
     </Html>
