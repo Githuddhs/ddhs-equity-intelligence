@@ -9,3 +9,6 @@
 - [ ] Confirm sign-up accounts persist in the user database after email confirmation (verify + report)
 - [x] Sign-up persistence: confirmed — accounts are stored in the real user database and persist after email confirmation
 - [ ] PayFast: user to register at payfast.io, then re-request merchant ID, key and passphrase to activate checkout
+- [ ] PayFast: public sample account cannot sign subscriptions — needs user's own sandbox or live merchant ID, key, passphrase
+- [ ] PayFast live: user's own merchant ID, key and passphrase + set PAYFAST_SANDBOX to false
+- [x] Staff compliance dashboard (/clients) — grant staff access to sdm@ddhs.co.za once that account exists

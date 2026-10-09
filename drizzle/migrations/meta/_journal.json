@@ -50,6 +50,13 @@
       "when": 1791556889098,
       "tag": "0006_create_portal_documents",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791559187527,
+      "tag": "0007_admin_roles_dashboard",
+      "breakpoints": true
     }
   ]
 }

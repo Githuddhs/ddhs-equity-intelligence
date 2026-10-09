@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { md5 } from "@/lib/md5";
 
 function pfEncode(value: string): string {
-  return encodeURIComponent(value.trim()).replace(/%20/g, "+");
+  return encodeURIComponent(value.trim()).replace(/[!'()*~]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase()).replace(/%20/g, "+");
 }
 
 // Rebuild the signature from the received params, in received order,
