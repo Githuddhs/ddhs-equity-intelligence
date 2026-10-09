@@ -67,7 +67,7 @@ function QuoteNotification({
             as="h1"
             style={{ color: '#0A2540', fontSize: '20px', margin: '0 0 4px' }}
           >
-            New quote request from the DDHS website
+            New quote request from the DDHS Equity Intelligence website
           </Heading>
           <Text style={{ color: '#5B6B7C', fontSize: '13px', margin: '0 0 20px' }}>
             Submitted through the pricing page on ddhs.co.za
@@ -119,7 +119,7 @@ function QuoteNotification({
 export const template = {
   component: QuoteNotification,
   subject: (data: Record<string, any>) =>
-    `Quote request: ${data['service'] ?? 'Consulting'} — ${data['company'] ?? 'DDHS website'}`,
+    `Quote request: ${data['service'] ?? 'Consulting'} — ${data['company'] ?? 'DDHS Equity Intelligence website'}`,
   displayName: 'Quote request notification',
   to: 'sdm@ddhs.co.za',
   previewData: {

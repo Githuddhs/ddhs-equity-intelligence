@@ -69,7 +69,7 @@ function EnquiryNotification({
             as="h1"
             style={{ color: '#0A2540', fontSize: '20px', margin: '0 0 4px' }}
           >
-            New enquiry from the DDHS website
+            New enquiry from the DDHS Equity Intelligence website
           </Heading>
           <Text style={{ color: '#5B6B7C', fontSize: '13px', margin: '0 0 20px' }}>
             Submitted through the contact form on ddhs.co.za
@@ -120,7 +120,7 @@ function EnquiryNotification({
 export const template = {
   component: EnquiryNotification,
   subject: (data: Record<string, any>) =>
-    `New enquiry: ${data['fullName'] ?? 'Website visitor'} — ${data['company'] ?? 'DDHS website'}`,
+    `New enquiry: ${data['fullName'] ?? 'Website visitor'} — ${data['company'] ?? 'DDHS Equity Intelligence website'}`,
   displayName: 'Contact form enquiry notification',
   to: 'sdm@ddhs.co.za',
   previewData: {

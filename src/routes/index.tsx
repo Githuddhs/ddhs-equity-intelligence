@@ -408,7 +408,7 @@ function Index() {
               Help Shape the Enterprise Standard for EE Intelligence
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-navy-foreground/80">
-              DDHS is currently preparing for controlled employer pilots with organisations seeking
+              DDHS Equity Intelligence is currently preparing for controlled employer pilots with organisations seeking
               stronger Employment Equity governance, accountability and reporting.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -482,7 +482,7 @@ function Index() {
             <div>
               <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Company</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {["About DDHS", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
+                {["About DDHS Equity Intelligence", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
                   <li key={l}><a href="#contact" className="transition-colors hover:text-primary">{l}</a></li>
                 ))}
               </ul>
