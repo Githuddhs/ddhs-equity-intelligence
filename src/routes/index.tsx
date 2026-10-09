@@ -201,9 +201,11 @@ function Index() {
             </h1>
             <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
               Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
-              and executive insight. DDHS Equity Intelligence helps South African employers manage
-              Employment Equity analysis, planning, monitoring, governance and reporting from a
-              single platform.
+              and executive insight.{" "}
+              <span className="font-semibold text-primary">DDHS</span>{" "}
+              <span className="font-semibold text-teal">Equity Intelligence</span> helps South
+              African employers manage Employment Equity analysis, planning, monitoring, governance
+              and reporting from a single platform.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
@@ -463,12 +465,15 @@ function Index() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                   <BarChart3 className="h-4 w-4 text-primary-foreground" />
                 </div>
-                <span className="font-display font-bold text-primary">DDHS Equity Intelligence</span>
+                <span className="font-display font-bold text-primary">
+                  DDHS <span className="text-teal">Equity Intelligence</span>
+                </span>
               </div>
               <p className="mt-4 text-sm font-medium text-teal">Data. Accountability. Transformation.</p>
               <p className="mt-2 text-sm text-muted-foreground">
-                DDHS Equity Intelligence (Pty) Ltd — South African enterprise workforce
-                transformation intelligence.
+                <span className="font-semibold text-primary">DDHS</span>{" "}
+                <span className="font-semibold text-teal">Equity Intelligence</span> (Pty) Ltd —
+                South African enterprise workforce transformation intelligence.
               </p>
             </div>
             <div>

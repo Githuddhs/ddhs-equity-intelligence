@@ -79,7 +79,7 @@ export function DashboardMock() {
               <BarChart3 className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             <span className="font-display text-[13px] font-bold leading-tight text-primary">
-              DDHS
+              DDHS <span className="text-teal">Equity Intelligence</span>
             </span>
           </div>
           <nav className="space-y-1">
