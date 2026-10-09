@@ -32,16 +32,16 @@ function SignupPage() {
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email: f.email, password: f.password,
-      options: { emailRedirectTo: window.location.origin + "/history", data: { full_name: f.fullName, company: f.company, job_title: f.jobTitle, workforce_size: f.size } },
+      options: { emailRedirectTo: window.location.origin + "/portal", data: { full_name: f.fullName, company: f.company, job_title: f.jobTitle, workforce_size: f.size } },
     });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
-    if (data.session) { navigate({ to: "/history" }); return; }
+    if (data.session) { navigate({ to: "/portal" }); return; }
     setSent(true);
   };
 
   const google = async () => {
-    sessionStorage.setItem("auth_next", "/history");
+    sessionStorage.setItem("auth_next", "/portal");
     const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/auth" });
     if (r.error) toast.error(String(r.error));
   };
@@ -55,7 +55,7 @@ function SignupPage() {
           <div className="mt-6">
             <h1 className="font-display text-2xl font-bold text-primary">Check your inbox</h1>
             <p className="mt-2 text-sm text-muted-foreground">We sent a confirmation link to <strong>{f.email}</strong>. Click it to activate your account.</p>
-            <Link to="/auth" search={{ next: "/history" }} className="mt-6 inline-block text-sm font-semibold text-teal">Go to sign in</Link>
+            <Link to="/auth" search={{ next: "/portal" }} className="mt-6 inline-block text-sm font-semibold text-teal">Go to sign in</Link>
           </div>
         ) : (
           <>
@@ -76,7 +76,7 @@ function SignupPage() {
                 {busy ? "Creating account…" : "Create account"}
               </button>
             </form>
-            <p className="mt-4 text-sm text-muted-foreground">Already have an account? <Link to="/auth" search={{ next: "/history" }} className="font-semibold text-teal">Sign in</Link></p>
+            <p className="mt-4 text-sm text-muted-foreground">Already have an account? <Link to="/auth" search={{ next: "/portal" }} className="font-semibold text-teal">Sign in</Link></p>
           </>
         )}
       </div>
