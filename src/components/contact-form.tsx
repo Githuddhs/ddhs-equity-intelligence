@@ -63,7 +63,7 @@ export function ContactForm() {
       result = await sendEnquiry({ data: parsed.data });
     } catch {
       setSubmitting(false);
-      toast.error("We couldn't send your enquiry just now. Please try again, or email info@ddhs.co.za.");
+      toast.error("We couldn't send your enquiry just now. Please try again, or email sdm@ddhs.co.za.");
       return;
     }
 

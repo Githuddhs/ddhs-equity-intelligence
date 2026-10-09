@@ -444,10 +444,10 @@ function Index() {
             No generic sales pitch. We focus on your current Employment Equity processes, reporting
             obligations and implementation challenges. Prefer email? Reach us directly at{" "}
             <a
-              href="mailto:info@ddhs.co.za"
+              href="mailto:sdm@ddhs.co.za"
               className="font-semibold text-teal underline-offset-4 hover:underline"
             >
-              info@ddhs.co.za
+              sdm@ddhs.co.za
             </a>
             .
           </p>
