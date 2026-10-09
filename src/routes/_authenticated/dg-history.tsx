@@ -39,7 +39,7 @@ function DgHistory() {
   const del = async (id: string) => {
     if (!confirm("Delete this review?")) return;
     const { error } = await supabase.from("dg_reviews").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Review deleted.");
     qc.invalidateQueries({ queryKey: ["dg_reviews"] });
   };
