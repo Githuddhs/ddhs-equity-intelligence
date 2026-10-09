@@ -181,6 +181,7 @@ function Index() {
             <a href="/plans" className="font-semibold text-teal transition-colors hover:text-primary">EE Plans</a>
             <a href="/dg-review" className="font-semibold text-teal transition-colors hover:text-primary">DG Review</a>
           </nav>
+          <a href="/signup" className="hidden text-sm font-semibold text-primary hover:text-teal sm:inline">Sign up</a>
           <a
             href="#contact"
             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"

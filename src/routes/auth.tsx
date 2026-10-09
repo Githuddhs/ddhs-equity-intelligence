@@ -68,9 +68,9 @@ function AuthPage() {
             {busy ? "Please wait…" : mode === "in" ? "Sign in" : "Create account"}
           </button>
         </form>
-        <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-4 text-sm text-teal">
-          {mode === "in" ? "No account? Create one" : "Have an account? Sign in"}
-        </button>
+        {mode === "in"
+          ? <Link to="/signup" className="mt-4 inline-block text-sm text-teal">No account? Create one</Link>
+          : <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Have an account? Sign in</button>}
       </div>
     </div>
   );
