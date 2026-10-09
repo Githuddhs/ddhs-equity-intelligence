@@ -22,8 +22,8 @@ export const Route = createFileRoute("/api/public/hooks/payfast-itn")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const passphrase = process.env["PAYFAST_PASSPHRASE"] ?? "";
-        const sandbox = process.env["PAYFAST_SANDBOX"] === "true";
+        const passphrase = process.env["PAYFAST_LIVE_PASSPHRASE"] ?? "";
+        const sandbox = false;
         const base = sandbox ? "https://sandbox.payfast.co.za" : "https://www.payfast.co.za";
 
         const rawBody = await request.text();

@@ -17,6 +17,8 @@ export const PAYFAST_PLANS = {
   saas5000: { name: "SaaS — 1,001 to 5,000 employees", amount: "21275.00", first: "21275.00" },
 } as const;
 
+export const PAYFAST_MERCHANT = { id: "34733401", key: "qech9jtsygv73" } as const;
+
 export type PayfastPlan = keyof typeof PAYFAST_PLANS;
 
 const checkoutInput = z.object({
@@ -42,9 +44,10 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { plan: PayfastPlan }) => checkoutInput.parse(input))
   .handler(async ({ data, context }) => {
-    const merchantId = process.env["PAYFAST_MERCHANT_ID"];
-    const merchantKey = process.env["PAYFAST_MERCHANT_KEY"];
-    const passphrase = process.env["PAYFAST_PASSPHRASE"] ?? "";
+    // Merchant ID and key are not secret (PayFast sends them in the browser checkout form).
+    const merchantId = PAYFAST_MERCHANT.id;
+    const merchantKey = PAYFAST_MERCHANT.key;
+    const passphrase = process.env["PAYFAST_LIVE_PASSPHRASE"] ?? "";
     if (!merchantId || !merchantKey) {
       throw new Error("Card payments are not configured yet. Please use the banking details below.");
     }
@@ -83,7 +86,7 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
       throw new Error("We couldn't start the payment. Please try again.");
     }
 
-    const sandbox = process.env["PAYFAST_SANDBOX"] === "true";
+    const sandbox = false;
     const action = sandbox
       ? "https://sandbox.payfast.co.za/eng/process"
       : "https://www.payfast.co.za/eng/process";
