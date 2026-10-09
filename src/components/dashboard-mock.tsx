@@ -65,9 +65,9 @@ export function DashboardMock() {
         <span className="h-2.5 w-2.5 rounded-full bg-destructive/50" />
         <span className="h-2.5 w-2.5 rounded-full bg-teal/50" />
         <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-        <div className="ml-3 flex items-center gap-2 rounded-md border bg-background px-3 py-1 text-[11px] text-muted-foreground">
-          <Search className="h-3 w-3" />
-          app.ddhs.co.za/overview
+        <div className="ml-3 flex min-w-0 items-center gap-2 rounded-md border bg-background px-3 py-1 text-[11px] text-muted-foreground">
+          <Search className="h-3 w-3 shrink-0" />
+          <span className="truncate">app.ddhs.co.za/overview</span>
         </div>
       </div>
 
@@ -90,8 +90,8 @@ export function DashboardMock() {
                   item.active ? "bg-teal-soft text-teal" : "text-muted-foreground"
                 }`}
               >
-                <item.icon className="h-3.5 w-3.5" />
-                {item.label}
+                <item.icon className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{item.label}</span>
               </div>
             ))}
           </nav>
@@ -103,7 +103,7 @@ export function DashboardMock() {
         {/* Main */}
         <div className="min-w-0 flex-1 p-4 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
+            <div className="min-w-0">
               <p className="font-display text-[15px] font-bold text-primary">
                 Equity Intelligence Overview
               </p>
@@ -111,28 +111,28 @@ export function DashboardMock() {
                 Reporting period · October 2025 – September 2026
               </p>
             </div>
-            <span className="rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+            <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
               EEA13 Cycle · Q1 2026
             </span>
           </div>
 
           {/* KPIs */}
-          <div className="mt-4 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-2.5">
             {kpis.map((kpi) => (
               <div key={kpi.label} className="rounded-xl border bg-background p-3">
-                <p className="truncate text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   {kpi.label}
                 </p>
                 <p className="mt-1 font-display text-xl font-bold text-primary">{kpi.value}</p>
                 <p
-                  className={`mt-0.5 flex items-center gap-1 text-[10px] font-semibold ${
+                  className={`mt-0.5 flex items-center gap-1 text-[11px] font-semibold ${
                     kpi.up ? "text-teal" : "text-destructive"
                   }`}
                 >
                   {kpi.up ? (
-                    <ArrowUpRight className="h-3 w-3" />
+                    <ArrowUpRight className="h-3 w-3 shrink-0" />
                   ) : (
-                    <TriangleAlert className="h-3 w-3" />
+                    <TriangleAlert className="h-3 w-3 shrink-0" />
                   )}
                   {kpi.delta}
                 </p>
@@ -140,101 +140,105 @@ export function DashboardMock() {
             ))}
           </div>
 
-          <div className="mt-3 grid gap-3 lg:grid-cols-2">
-            {/* Score */}
-            <div className="rounded-xl border bg-background p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[12px] font-semibold text-primary">EE Readiness Score</p>
-                <LineChart className="h-3.5 w-3.5 text-teal" />
-              </div>
-              <div className="mt-2 flex items-center gap-4">
-                <div className="relative shrink-0">
-                  <svg viewBox="0 0 120 120" className="h-24 w-24 -rotate-90">
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r={radius}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="10"
-                      className="text-secondary"
-                    />
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r={radius}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="10"
-                      strokeLinecap="round"
-                      strokeDasharray={circumference}
-                      strokeDashoffset={circumference * (1 - score / 100)}
-                      className="text-teal"
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="font-display text-xl font-bold text-primary">{score}</span>
-                    <span className="text-[9px] text-muted-foreground">out of 100</span>
-                  </span>
-                </div>
-                <div className="min-w-0 flex-1 space-y-2">
-                  {scoreBands.map((band) => (
-                    <div key={band.label}>
-                      <div className="flex items-center justify-between text-[10px] font-medium text-muted-foreground">
-                        <span className="truncate">{band.label}</span>
-                        <span className="font-semibold text-primary">{band.value}</span>
-                      </div>
-                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
-                        <div
-                          className="h-full rounded-full bg-teal"
-                          style={{ width: `${band.value}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* Score */}
+          <div className="mt-3 rounded-xl border bg-background p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[13px] font-semibold text-primary">EE Readiness Score</p>
+              <LineChart className="h-3.5 w-3.5 text-teal" />
             </div>
-
-            {/* Actions */}
-            <div className="rounded-xl border bg-background p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[12px] font-semibold text-primary">Accountability Queue</p>
-                <ClipboardCheck className="h-3.5 w-3.5 text-teal" />
+            <div className="mt-3 flex items-center gap-4">
+              <div className="relative shrink-0">
+                <svg viewBox="0 0 120 120" className="h-24 w-24 -rotate-90">
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r={radius}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="10"
+                    className="text-secondary"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r={radius}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference * (1 - score / 100)}
+                    className="text-teal"
+                  />
+                </svg>
+                <span className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="font-display text-xl font-bold text-primary">{score}</span>
+                  <span className="text-[9px] text-muted-foreground">out of 100</span>
+                </span>
               </div>
-              <div className="mt-2 space-y-2">
-                {actions.map((action) => (
-                  <div key={action.title} className="rounded-lg border bg-secondary/40 p-2.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-[11px] font-semibold leading-snug text-primary">
-                        {action.title}
-                      </p>
-                      <span
-                        className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-semibold ${statusTone(
-                          action.status,
-                        )}`}
-                      >
-                        {action.status}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-[10px] text-muted-foreground">Owner · {action.owner}</p>
+              <p className="text-[11px] leading-relaxed text-muted-foreground">
+                A composite measure of representation, target progress, action completion and
+                evidence coverage across your workforce.
+              </p>
+            </div>
+            <div className="mt-4 space-y-2.5">
+              {scoreBands.map((band) => (
+                <div key={band.label}>
+                  <div className="flex items-center justify-between text-[11px] font-medium">
+                    <span className="text-muted-foreground">{band.label}</span>
+                    <span className="font-semibold text-primary">{band.value}</span>
                   </div>
-                ))}
-              </div>
+                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
+                    <div
+                      className="h-full rounded-full bg-teal"
+                      style={{ width: `${band.value}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="mt-3 rounded-xl border bg-background p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[13px] font-semibold text-primary">Accountability Queue</p>
+              <ClipboardCheck className="h-3.5 w-3.5 text-teal" />
+            </div>
+            <div className="mt-3 space-y-2">
+              {actions.map((action) => (
+                <div key={action.title} className="rounded-lg border bg-secondary/40 p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-[12px] font-semibold leading-snug text-primary">
+                      {action.title}
+                    </p>
+                    <span
+                      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${statusTone(
+                        action.status,
+                      )}`}
+                    >
+                      {action.status}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Owner · {action.owner}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Evidence strip */}
           <div className="mt-3 rounded-xl border bg-background p-4">
             <div className="flex items-center justify-between">
-              <p className="text-[12px] font-semibold text-primary">Evidence Repository</p>
+              <p className="text-[13px] font-semibold text-primary">Evidence Repository</p>
               <FileCheck2 className="h-3.5 w-3.5 text-teal" />
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {evidence.map((item) => (
                 <span
                   key={item.label}
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[10px] font-medium ${
+                  className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-medium ${
                     item.state === "Verified"
                       ? "border-teal/30 bg-teal-soft text-teal"
                       : "border-destructive/30 bg-destructive/10 text-destructive"
