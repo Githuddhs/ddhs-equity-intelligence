@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { enquirySchema, submitEnquiry, workforceSizes } from "@/lib/contact.functions";
 
 const fieldClass =
-  "w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-teal focus:ring-2 focus:ring-teal/25";
+  "w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-teal focus:ring-2 focus:ring-teal/25 aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-destructive/20";
 const labelClass = "mb-1.5 block text-sm font-semibold text-primary";
 
 const initialForm = {
@@ -52,7 +52,9 @@ export function ContactForm() {
         if (!(key in fieldErrors)) fieldErrors[key] = issue.message;
       }
       setErrors(fieldErrors);
-      toast.error("Please check the highlighted fields.");
+      const first = Object.keys(fieldErrors)[0];
+      if (first) document.getElementById(first)?.focus();
+      toast.error(Object.values(fieldErrors)[0] ?? "Please check the highlighted fields.");
       return;
     }
 
@@ -119,6 +121,7 @@ export function ContactForm() {
           </label>
           <input
             id="fullName"
+            aria-invalid={!!errors.fullName}
             name="fullName"
             autoComplete="name"
             className={fieldClass}
@@ -134,6 +137,7 @@ export function ContactForm() {
           </label>
           <input
             id="email"
+            aria-invalid={!!errors.email}
             name="email"
             type="email"
             autoComplete="email"
@@ -150,6 +154,7 @@ export function ContactForm() {
           </label>
           <input
             id="company"
+            aria-invalid={!!errors.company}
             name="company"
             autoComplete="organization"
             className={fieldClass}
@@ -215,6 +220,7 @@ export function ContactForm() {
         </label>
         <textarea
           id="message"
+            aria-invalid={!!errors.message}
           name="message"
           rows={4}
           className={`${fieldClass} resize-y`}
@@ -222,7 +228,9 @@ export function ContactForm() {
           value={form.message}
           onChange={update("message")}
         />
-        {errors.message && <p className="mt-1.5 text-xs font-medium text-destructive">{errors.message}</p>}
+        <p className={`mt-1.5 text-xs ${errors.message ? "font-medium text-destructive" : "text-muted-foreground"}`}>
+          {errors.message ?? `${form.message.trim().length}/20 characters minimum`}
+        </p>
       </div>
 
       {/* Honeypot: visually hidden, ignored by real visitors. */}
