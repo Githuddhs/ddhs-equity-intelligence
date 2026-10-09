@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { AiInsights } from "@/components/ai-insights";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -285,6 +286,17 @@ function Eea12Page() {
               </p>
             )}
           </section>
+
+          <AiInsights payload={{
+            sector: sector || "Not specified",
+            level,
+            total: r.total,
+            groups: GROUPS.map((g) => ({
+              name: NAMES[g.key], headcount: counts[g.key],
+              sharePct: +(r.share[g.key] || 0).toFixed(1), eapPct: eap[g.key], gapPct: +(r.gap[g.key] || 0).toFixed(1),
+            })),
+            sectoral: r.sectoral.map((s) => ({ name: s.name, target: s.target, actual: +(s.actual || 0).toFixed(1) })),
+          }} />
         </div>
       </main>
     </div>
