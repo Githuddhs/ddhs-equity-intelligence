@@ -190,6 +190,39 @@ export type Database = {
         }
         Relationships: []
       }
+      portal_documents: {
+        Row: {
+          area: string
+          category: string
+          created_at: string
+          file_name: string
+          id: string
+          size_bytes: number
+          storage_path: string
+          user_id: string
+        }
+        Insert: {
+          area: string
+          category: string
+          created_at?: string
+          file_name: string
+          id?: string
+          size_bytes?: number
+          storage_path: string
+          user_id?: string
+        }
+        Update: {
+          area?: string
+          category?: string
+          created_at?: string
+          file_name?: string
+          id?: string
+          size_bytes?: number
+          storage_path?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       quote_requests: {
         Row: {
           company: string

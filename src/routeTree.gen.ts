@@ -24,6 +24,7 @@ import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
+import { Route as AuthenticatedPortalAreaRouteImport } from './routes/_authenticated/portal_.$area'
 import { Route as ApiPublicHooksComplianceRemindersRouteImport } from './routes/api/public/hooks/compliance-reminders'
 import { Route as ApiPublicHooksPayfastItnRouteImport } from './routes/api/public/hooks/payfast-itn'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -102,6 +103,11 @@ const AuthenticatedPlansIdRoute = AuthenticatedPlansIdRouteImport.update({
   path: '/plans/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPortalAreaRoute = AuthenticatedPortalAreaRouteImport.update({
+  id: '/portal_/$area',
+  path: '/portal/$area',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiPublicHooksComplianceRemindersRoute =
   ApiPublicHooksComplianceRemindersRouteImport.update({
     id: '/api/public/hooks/compliance-reminders',
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
+  '/portal/$area': typeof AuthenticatedPortalAreaRoute
   '/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
+  '/portal/$area': typeof AuthenticatedPortalAreaRoute
   '/plans': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
+  '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
   '/_authenticated/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/plans/$id'
+    | '/portal/$area'
     | '/plans/'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/plans/$id'
+    | '/portal/$area'
     | '/plans'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/_authenticated/plans/$id'
+    | '/_authenticated/portal_/$area'
     | '/_authenticated/plans/'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
@@ -362,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlansIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/portal_/$area': {
+      id: '/_authenticated/portal_/$area'
+      path: '/portal/$area'
+      fullPath: '/portal/$area'
+      preLoaderRoute: typeof AuthenticatedPortalAreaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/hooks/compliance-reminders': {
       id: '/api/public/hooks/compliance-reminders'
       path: '/api/public/hooks/compliance-reminders'
@@ -393,6 +412,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
+  AuthenticatedPortalAreaRoute: typeof AuthenticatedPortalAreaRoute
   AuthenticatedPlansIndexRoute: typeof AuthenticatedPlansIndexRoute
 }
 
@@ -403,6 +423,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
+  AuthenticatedPortalAreaRoute: AuthenticatedPortalAreaRoute,
   AuthenticatedPlansIndexRoute: AuthenticatedPlansIndexRoute,
 }
 

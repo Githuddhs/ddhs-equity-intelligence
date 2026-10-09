@@ -43,6 +43,13 @@
       "when": 1791556397327,
       "tag": "0005_create_quote_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791556889098,
+      "tag": "0006_create_portal_documents",
+      "breakpoints": true
     }
   ]
 }
