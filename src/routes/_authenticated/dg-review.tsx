@@ -6,7 +6,7 @@ import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
-import { DG_ITEMS, normaliseContent, scoreAnswers, TEXT_SECTIONS, type DgAnswer, type PlanContent } from "@/lib/ee-plan";
+import { DG_ITEMS, normaliseContent, scoreAnswers, TEXT_SECTIONS, type DgAnswer, type PlanContent , dgFromAnalyses } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/dg-review")({
   head: () => ({
@@ -42,7 +42,7 @@ function DgReviewPage() {
     (async () => {
       const [p, a, r] = await Promise.all([
         supabase.from("ee_plans").select("id,title,company,sector,start_date,end_date,content").order("updated_at", { ascending: false }),
-        supabase.from("eea12_analyses").select("level,sector,total_headcount,created_at,results").order("created_at", { ascending: false }).limit(10),
+        supabase.from("eea12_analyses").select("level,sector,total_headcount,created_at,results").order("created_at", { ascending: false }).limit(20),
         id ? supabase.from("dg_reviews").select("*").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
       ]);
       setPlans(p.data ?? []);
@@ -53,7 +53,10 @@ function DgReviewPage() {
         setPlanId(r.data.plan_id ?? "");
         setAnswers((r.data.answers ?? {}) as Record<string, DgAnswer>);
         setAssessment(r.data.ai_assessment ?? "");
-      } else setPlanId(p.data?.[0]?.id ?? "");
+      } else {
+        setPlanId(p.data?.[0]?.id ?? "");
+        setAnswers(dgFromAnalyses(a.data ?? []));
+      }
     })();
   }, [id]);
 
@@ -107,7 +110,8 @@ function DgReviewPage() {
               <option value="">No plan on file</option>
               {plans.map((p) => <option key={p.id} value={p.id}>{p.title} — {p.company || "no employer"}</option>)}
             </select>
-            <span className="mt-2 block text-xs text-muted-foreground">{analyses.length} saved EEA12 analyses will be included.</span>
+            <span className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">{analyses.length} saved EEA12 analyses included.
+              {analyses.length > 0 && <button onClick={() => { setAnswers((cur) => ({ ...cur, ...dgFromAnalyses(analyses) })); toast.success("Progress items filled from EEA12 analyses."); }} className="font-semibold text-teal underline">Refresh progress from analyses</button>}</span>
           </label>
           <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card px-8 py-5 shadow-sm">
             <span className={`font-display text-4xl font-bold ${tone}`}>{score}%</span>
