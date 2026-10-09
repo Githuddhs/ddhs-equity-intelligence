@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
@@ -57,6 +58,11 @@ const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedComplianceRoute = AuthenticatedComplianceRouteImport.update({
   id: '/compliance',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/eea12': typeof Eea12Route
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/eea12': typeof Eea12Route
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/eea12': typeof Eea12Route
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/eea12'
     | '/pricing'
     | '/signup'
+    | '/clients'
     | '/compliance'
     | '/dg-history'
     | '/dg-review'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/eea12'
     | '/pricing'
     | '/signup'
+    | '/clients'
     | '/compliance'
     | '/dg-history'
     | '/dg-review'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/eea12'
     | '/pricing'
     | '/signup'
+    | '/_authenticated/clients'
     | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
@@ -310,6 +322,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/clients': {
+      id: '/_authenticated/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof AuthenticatedClientsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/compliance': {
       id: '/_authenticated/compliance'
@@ -406,6 +425,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedComplianceRoute: typeof AuthenticatedComplianceRoute
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
@@ -417,6 +437,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedComplianceRoute: AuthenticatedComplianceRoute,
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
