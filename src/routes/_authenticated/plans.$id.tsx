@@ -6,7 +6,7 @@ import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
-import { normaliseContent, TEXT_SECTIONS, type PlanContent } from "@/lib/ee-plan";
+import { normaliseContent, TEXT_SECTIONS, type PlanContent , goalsFromAnalyses, type SavedAnalysis } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
   head: () => ({
@@ -29,6 +29,7 @@ function PlanBuilder() {
   const [meta, setMeta] = useState<Meta | null>(null);
   const [content, setContent] = useState<PlanContent | null>(null);
   const [analyses, setAnalyses] = useState<unknown[]>([]);
+  const [rawAnalyses, setRawAnalyses] = useState<SavedAnalysis[]>([]);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [drafting, setDrafting] = useState<string | null>(null);
@@ -41,6 +42,7 @@ function PlanBuilder() {
       setMeta({ title: data.title, company: data.company, sector: data.sector, start_date: data.start_date ?? "", end_date: data.end_date ?? "" });
       setContent(normaliseContent(data.content));
       const a = await supabase.from("eea12_analyses").select("sector,level,total_headcount,results,created_at").order("created_at", { ascending: false }).limit(10);
+      setRawAnalyses(a.data ?? []);
       setAnalyses((a.data ?? []).map((x) => ({ sector: x.sector, level: x.level, headcount: x.total_headcount, sectoral: (x.results as { sectoral?: unknown }).sectoral, date: x.created_at })));
     })();
   }, [id]);
@@ -109,7 +111,11 @@ function PlanBuilder() {
         </section>
 
         <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="font-display text-xl font-bold text-primary">Numerical goals (end of plan)</h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-display text-xl font-bold text-primary">Numerical goals (end of plan)</h2>
+            <button disabled={!rawAnalyses.length} onClick={() => { const r = goalsFromAnalyses(content.goals, rawAnalyses); upContent({ goals: r.goals }); toast.success(r.filled ? `Filled ${r.filled} level(s) from saved EEA12 analyses.` : "No saved analysis matches these levels."); }}
+              className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal disabled:opacity-50">Fill from EEA12 analyses</button>
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">Target % of each occupational level — align with the sectoral targets for your sector (s20(2)(c)).</p>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[640px] text-sm">

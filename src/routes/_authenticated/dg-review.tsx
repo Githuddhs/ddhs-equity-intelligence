@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,7 +6,7 @@ import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
-import { DG_ITEMS, normaliseContent, scoreAnswers, TEXT_SECTIONS, type DgAnswer, type PlanContent } from "@/lib/ee-plan";
+import { DG_ITEMS, normaliseContent, scoreAnswers, TEXT_SECTIONS, type DgAnswer, type PlanContent , dgFromAnalyses } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/dg-review")({
   head: () => ({
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/dg-review")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { id?: string } => (typeof s["id"] === "string" ? { id: s["id"] } : {}),
   component: DgReviewPage,
 });
 
@@ -27,6 +28,7 @@ type Analysis = { level: string; sector: string; total_headcount: number; create
 type Sectoral = { name: string; target: number; actual: number };
 
 function DgReviewPage() {
+  const { id } = Route.useSearch();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [analyses, setAnalyses] = useState<Analysis[]>([]);
   const [reviewId, setReviewId] = useState<string | null>(null);
@@ -40,19 +42,23 @@ function DgReviewPage() {
     (async () => {
       const [p, a, r] = await Promise.all([
         supabase.from("ee_plans").select("id,title,company,sector,start_date,end_date,content").order("updated_at", { ascending: false }),
-        supabase.from("eea12_analyses").select("level,sector,total_headcount,created_at,results").order("created_at", { ascending: false }).limit(10),
-        supabase.from("dg_reviews").select("*").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+        supabase.from("eea12_analyses").select("level,sector,total_headcount,created_at,results").order("created_at", { ascending: false }).limit(20),
+        id ? supabase.from("dg_reviews").select("*").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
       ]);
       setPlans(p.data ?? []);
       setAnalyses(a.data ?? []);
+      setReviewId(null); setAnswers({}); setAssessment("");
       if (r.data) {
         setReviewId(r.data.id);
         setPlanId(r.data.plan_id ?? "");
         setAnswers((r.data.answers ?? {}) as Record<string, DgAnswer>);
         setAssessment(r.data.ai_assessment ?? "");
-      } else if (p.data?.[0]) setPlanId(p.data[0].id);
+      } else {
+        setPlanId(p.data?.[0]?.id ?? "");
+        setAnswers(dgFromAnalyses(a.data ?? []));
+      }
     })();
-  }, []);
+  }, [id]);
 
   const score = useMemo(() => scoreAnswers(answers), [answers]);
   const plan = plans.find((p) => p.id === planId);
@@ -94,6 +100,7 @@ function DgReviewPage() {
       <main className="mx-auto max-w-5xl px-6 py-10 print:hidden">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Sections 42–45</p>
         <h1 className="font-display text-3xl font-bold text-primary">Director-General review readiness</h1>
+        <div className="mt-3 flex gap-2 text-sm"><Link to="/dg-history" className="rounded-lg border border-border px-3 py-1.5 font-semibold">Past reviews</Link><Link to="/dg-review" search={{}} className="rounded-lg border border-border px-3 py-1.5 font-semibold">New review</Link>{reviewId && <span className="self-center text-xs text-muted-foreground">Editing a saved review</span>}</div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Assess your organisation against what the Director-General checks, get AI advice on weak areas, and print an evidence pack.</p>
 
         <section className="mt-8 grid gap-4 md:grid-cols-[1fr_auto]">
@@ -103,7 +110,8 @@ function DgReviewPage() {
               <option value="">No plan on file</option>
               {plans.map((p) => <option key={p.id} value={p.id}>{p.title} — {p.company || "no employer"}</option>)}
             </select>
-            <span className="mt-2 block text-xs text-muted-foreground">{analyses.length} saved EEA12 analyses will be included.</span>
+            <span className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">{analyses.length} saved EEA12 analyses included.
+              {analyses.length > 0 && <button onClick={() => { setAnswers((cur) => ({ ...cur, ...dgFromAnalyses(analyses) })); toast.success("Progress items filled from EEA12 analyses."); }} className="font-semibold text-teal underline">Refresh progress from analyses</button>}</span>
           </label>
           <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card px-8 py-5 shadow-sm">
             <span className={`font-display text-4xl font-bold ${tone}`}>{score}%</span>
