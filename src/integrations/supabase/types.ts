@@ -14,13 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_enquiries: {
+        Row: {
+          company: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          job_title: string | null
+          message: string
+          phone: string | null
+          source: string
+          workforce_size: string | null
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          job_title?: string | null
+          message: string
+          phone?: string | null
+          source?: string
+          workforce_size?: string | null
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          job_title?: string | null
+          message?: string
+          phone?: string | null
+          source?: string
+          workforce_size?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      enquiry_throttled: { Args: { p_email: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
