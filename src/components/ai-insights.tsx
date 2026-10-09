@@ -12,7 +12,7 @@ export function renderMd(text: string) {
   return text.split("\n").map((line, i) => {
     const bold = (s: string) => s.split(/\*\*(.+?)\*\*/g).map((p, j) => (j % 2 ? <strong key={j}>{p}</strong> : p));
     if (line.startsWith("## ") || line.startsWith("### "))
-      return <h3 key={i} className="mt-4 font-display text-base font-bold text-primary">{line.replace(/^#+\s/, "")}</h3>;
+      return <h3 key={i} className="card-title mt-4 text-primary">{line.replace(/^#+\s/, "")}</h3>;
     if (/^\s*(\d+\.|[-*])\s/.test(line))
       return <p key={i} className="ml-4 mt-1 text-sm leading-relaxed">{bold(line.trim())}</p>;
     if (!line.trim()) return null;
@@ -58,7 +58,7 @@ export function AiInsights({ payload, onComplete }: { payload: InsightsPayload; 
     <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="font-display text-xl font-bold text-primary">AI gap explanation & action plan</h2>
+          <h2 className="section-title text-primary">AI gap explanation & action plan</h2>
           <p className="text-sm text-muted-foreground">Explains the target gaps above and suggests prioritised actions.</p>
         </div>
         {loading ? (

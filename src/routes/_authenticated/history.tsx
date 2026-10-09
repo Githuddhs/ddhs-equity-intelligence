@@ -45,8 +45,8 @@ function HistoryPage() {
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
-        <h1 className="font-display text-3xl font-bold text-primary">Analysis history</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Every saved EEA12 run, newest first.</p>
+        <h1 className="page-title text-primary">Analysis history</h1>
+        <p className="page-lead mt-2 text-muted-foreground">Every saved EEA12 run, newest first.</p>
         {isLoading && <p className="mt-6 text-sm text-muted-foreground">Loading…</p>}
         {error && <p className="mt-6 text-sm text-destructive">Could not load your analyses.</p>}
         {data && data.length === 0 && (
@@ -59,7 +59,7 @@ function HistoryPage() {
               <article key={a.id} className="rounded-xl border border-border bg-card p-5 shadow-sm">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <h2 className="font-display text-lg font-bold text-primary">{a.level} — {a.sector || "No sector"}</h2>
+                    <h2 className="section-title text-primary">{a.level} — {a.sector || "No sector"}</h2>
                     <p className="text-xs text-muted-foreground">{new Date(a.created_at).toLocaleString("en-ZA")} · {a.total_headcount} employees</p>
                   </div>
                   <div className="flex gap-2 text-sm">

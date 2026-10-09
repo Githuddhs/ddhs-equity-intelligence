@@ -97,8 +97,8 @@ function AreaPage() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
         <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
-        <h1 className="mt-2 font-display text-3xl font-bold text-primary">{cfg.title}</h1>
-        <p className="mt-1 text-muted-foreground">{cfg.intro}</p>
+        <h1 className="page-title mt-2 text-primary">{cfg.title}</h1>
+        <p className="page-lead mt-1 text-muted-foreground">{cfg.intro}</p>
 
         <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">

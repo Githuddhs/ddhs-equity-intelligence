@@ -65,7 +65,7 @@ function ClientsDashboard() {
       <AppHeader />
       <main className="mx-auto max-w-6xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">DDHS staff</p>
-        <h1 className="font-display text-3xl font-bold text-primary">Client compliance dashboard</h1>
+        <h1 className="page-title text-primary">Client compliance dashboard</h1>
         {isLoading ? <p className="mt-6 text-muted-foreground">Loading…</p>
           : error ? <p className="mt-6 text-destructive">Could not load clients.</p>
           : data === null ? (
@@ -132,7 +132,7 @@ function Calendar({ events }: { events: Ev[] }) {
   return (
     <section className="mt-10">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-xl font-bold text-primary">Deadline calendar</h2>
+        <h2 className="section-title text-primary">Deadline calendar</h2>
         <div className="flex items-center gap-2">
           <button aria-label="Previous month" onClick={() => { setSel(null); setCur(new Date(cur.getFullYear(), cur.getMonth() - 1, 1)); }} className="rounded-lg border border-border px-3 py-1">‹</button>
           <span className="w-40 text-center font-semibold">{cur.toLocaleDateString("en-ZA", { month: "long", year: "numeric" })}</span>

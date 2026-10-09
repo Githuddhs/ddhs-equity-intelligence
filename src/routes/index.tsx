@@ -143,7 +143,7 @@ function SectionHeading({
         <p className="text-sm font-semibold uppercase tracking-widest text-teal">{eyebrow}</p>
       )}
       <h2
-        className={`mt-3 text-3xl font-bold tracking-tight text-balance sm:text-4xl ${
+        className={`display-title mt-3 text-balance ${
           dark ? "text-navy-foreground" : "text-primary"
         }`}
       >
@@ -198,7 +198,7 @@ function Index() {
       <section className="mx-auto max-w-7xl px-6 pt-20 pb-16">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-primary text-balance sm:text-5xl">
+            <h1 className="hero-title text-primary text-balance">
               Take Control of Employment Equity Implementation
             </h1>
             <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
@@ -251,7 +251,7 @@ function Index() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-soft">
                   <card.icon className="h-6 w-6 text-teal" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-primary">{card.title}</h3>
+                <h3 className="card-title mt-5 text-primary">{card.title}</h3>
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
               </div>
             ))}
@@ -283,7 +283,7 @@ function Index() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary">
                   <f.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-primary">{f.title}</h3>
+                <h3 className="card-title mt-4 text-primary">{f.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
               </div>
             ))}
@@ -334,7 +334,7 @@ function Index() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal">
                   <card.icon className="h-5 w-5 text-teal-foreground" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-navy-foreground">{card.title}</h3>
+                <h3 className="card-title mt-4 text-navy-foreground">{card.title}</h3>
                 <p className="mt-2 text-sm text-navy-foreground/70">{card.body}</p>
               </div>
             ))}
@@ -366,7 +366,7 @@ function Index() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-soft">
                   <ind.icon className="h-7 w-7 text-teal" />
                 </div>
-                <h3 className="mt-5 font-semibold text-primary">{ind.title}</h3>
+                <h3 className="card-title mt-5 text-primary">{ind.title}</h3>
               </div>
             ))}
           </div>
@@ -387,7 +387,7 @@ function Index() {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-primary text-balance sm:text-4xl">
+            <h2 className="display-title text-balance text-primary">
               Be Ready Before the Next Review
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
@@ -408,7 +408,7 @@ function Index() {
       <section id="pilots" className="py-20">
         <div className="mx-auto max-w-5xl px-6">
           <div className="rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-16 text-center shadow-xl sm:px-16">
-            <h2 className="text-3xl font-bold tracking-tight text-navy-foreground text-balance sm:text-4xl">
+            <h2 className="display-title text-balance text-navy-foreground">
               Help Shape the Enterprise Standard for EE Intelligence
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-navy-foreground/80">
@@ -436,7 +436,7 @@ function Index() {
       {/* Section 9: Final Conversion */}
       <section id="contact" className="bg-primary py-24">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-navy-foreground text-balance sm:text-4xl">
+          <h2 className="display-title text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-navy-foreground/70">

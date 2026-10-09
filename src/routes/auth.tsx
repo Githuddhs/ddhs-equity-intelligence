@@ -58,8 +58,8 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
         <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
-        <h1 className="mt-4 font-display text-2xl font-bold text-primary">{mode === "in" ? "Sign in" : "Create account"}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Save your EEA12 analyses and view their history.</p>
+        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : "Create account"}</h1>
+        <p className="page-lead mt-1 text-muted-foreground">Save your EEA12 analyses and view their history.</p>
         <button onClick={google} className="mt-6 w-full rounded-lg border border-border px-4 py-2 text-sm font-semibold">Continue with Google</button>
         <form onSubmit={submit} className="mt-4 space-y-3">
           <input className={field} type="email" required placeholder="Work email" value={email} onChange={(e) => setEmail(e.target.value)} />

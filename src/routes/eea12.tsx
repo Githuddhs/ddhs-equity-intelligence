@@ -136,8 +136,8 @@ function Eea12Page() {
       <main className="mx-auto max-w-7xl space-y-10 px-6 py-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-teal">EEA12 Workforce Analysis</p>
-          <h1 className="mt-2 font-display text-3xl font-bold text-primary md:text-4xl">Occupational level progress check</h1>
-          <p className="mt-3 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          <h1 className="page-title mt-2 text-primary">Occupational level progress check</h1>
+          <p className="page-lead mt-3 max-w-3xl text-muted-foreground">
             Enter your headcount for one occupational level. The tool checks it against sectoral targets first, then the EAP,
             and ranks which designated groups to prioritise for the next appointment.
           </p>
@@ -150,7 +150,7 @@ function Eea12Page() {
 
         <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="mb-4 flex flex-wrap items-center gap-3">
-            <h2 className="font-display text-xl font-bold text-primary">Progress</h2>
+            <h2 className="section-title text-primary">Progress</h2>
             <label className="flex items-center gap-1.5 text-sm">
               <span className="font-medium">Sector</span>
               <select value={sector}
@@ -236,7 +236,7 @@ function Eea12Page() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
-            <h2 className="mb-4 font-display text-xl font-bold text-primary">Sectoral targets</h2>
+            <h2 className="section-title mb-4 text-primary">Sectoral targets</h2>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-muted">
@@ -272,7 +272,7 @@ function Eea12Page() {
           </section>
 
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
-            <h2 className="mb-4 font-display text-xl font-bold text-primary">Comments — {level}</h2>
+            <h2 className="section-title mb-4 text-primary">Comments — {level}</h2>
             <p className="text-sm leading-relaxed">{r.comment}</p>
             {r.over.length > 0 && (
               <p className="mt-3 text-sm text-muted-foreground">
@@ -294,7 +294,7 @@ function Eea12Page() {
 
           <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-6 shadow-sm">
             <div>
-              <h2 className="font-display text-lg font-bold text-primary">Save this analysis</h2>
+              <h2 className="section-title text-primary">Save this analysis</h2>
               <p className="text-sm text-muted-foreground">
                 {savedId ? "Saved to your history." : summary ? "Figures and the AI summary will be saved." : "Figures will be saved. Generate the AI summary first to include it."}
               </p>
