@@ -131,7 +131,7 @@ function DocRow({ area, doc, files, onChange }: { area: Area; doc: { key: string
   const [busy, setBusy] = useState(false);
 
   async function upload(f: File) {
-    if (f.size > 20 * 1024 * 1024) return toast.error("That file is larger than 20 MB.");
+    if (f.size > 20 * 1024 * 1024) { toast.error("That file is larger than 20 MB."); return; }
     setBusy(true);
     try {
       const { data: u } = await supabase.auth.getUser();
@@ -154,7 +154,7 @@ function DocRow({ area, doc, files, onChange }: { area: Area; doc: { key: string
 
   async function open(x: Doc) {
     const { data, error } = await supabase.storage.from("client-documents").createSignedUrl(x.storage_path, 60);
-    if (error || !data) return toast.error("Couldn't open the file");
+    if (error || !data) { toast.error("Could not open the file"); return; }
     window.open(data.signedUrl, "_blank", "noopener");
   }
 
@@ -162,7 +162,7 @@ function DocRow({ area, doc, files, onChange }: { area: Area; doc: { key: string
     if (!confirm(`Delete ${x.file_name}?`)) return;
     await supabase.storage.from("client-documents").remove([x.storage_path]);
     const { error } = await supabase.from("portal_documents").delete().eq("id", x.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Deleted");
     onChange();
   }
