@@ -87,6 +87,8 @@ export const submitEnquiry = createServerFn({ method: "POST" })
       };
     }
 
+    const enquiryRef = crypto.randomUUID();
+
     const { error } = await supabase.from("contact_enquiries").insert({
       full_name: data.fullName,
       email: data.email,
@@ -104,6 +106,27 @@ export const submitEnquiry = createServerFn({ method: "POST" })
         ok: false as const,
         error: "We couldn't send your enquiry just now. Please try again, or email info@ddhs.co.za.",
       };
+    }
+
+    // Notify the team. A failed notification must not fail the enquiry —
+    // the submission is already stored.
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      await sendTemplateEmail("enquiry-notification", data.email, {
+        templateData: {
+          fullName: data.fullName,
+          email: data.email,
+          company: data.company,
+          jobTitle: data.jobTitle || "",
+          phone: data.phone || "",
+          workforceSize: data.workforceSize || "",
+          message: data.message,
+        },
+        idempotencyKey: `enquiry-notification-${enquiryRef}`,
+        replyTo: data.email,
+      });
+    } catch (notifyError) {
+      console.error("enquiry notification email failed", notifyError);
     }
 
     return { ok: true as const };
