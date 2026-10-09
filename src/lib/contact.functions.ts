@@ -34,7 +34,7 @@ export const enquirySchema = z.object({
     .min(20, "Please tell us a little more about your EE process")
     .max(2000, "Please keep your message under 2,000 characters"),
   // Honeypot: real visitors never fill this in.
-  website: z.string().max(0).optional(),
+  website: z.string().max(500).optional(),
 });
 
 export type EnquiryInput = z.infer<typeof enquirySchema>;
