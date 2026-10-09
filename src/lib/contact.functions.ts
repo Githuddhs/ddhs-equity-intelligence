@@ -13,7 +13,7 @@ export const workforceSizes = [
   "5,000+ employees",
 ] as const;
 
-const enquirySchema = z.object({
+export const enquirySchema = z.object({
   fullName: z
     .string()
     .trim()

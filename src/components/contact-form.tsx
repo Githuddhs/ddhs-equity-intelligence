@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 
-import { submitEnquiry, workforceSizes } from "@/lib/contact.functions";
+import { enquirySchema, submitEnquiry, workforceSizes } from "@/lib/contact.functions";
 
 const fieldClass =
   "w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-teal focus:ring-2 focus:ring-teal/25";
@@ -41,9 +41,29 @@ export function ContactForm() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+
+    const parsed = await enquirySchema.safeParseAsync(form);
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? "form");
+        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      toast.error("Please check the highlighted fields.");
+      return;
+    }
+
     setSubmitting(true);
 
-    const result = await sendEnquiry({ data: form });
+    let result: Awaited<ReturnType<typeof sendEnquiry>>;
+    try {
+      result = await sendEnquiry({ data: parsed.data });
+    } catch {
+      setSubmitting(false);
+      toast.error("We couldn't send your enquiry just now. Please try again, or email info@ddhs.co.za.");
+      return;
+    }
 
     if (!result.ok) {
       setSubmitting(false);
