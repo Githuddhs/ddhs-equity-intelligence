@@ -14,3 +14,6 @@
 - [x] Staff alerts: pending invites, incomplete documents, overdue DG reviews
 - [x] DG review deadline per EE plan; overdue alerts use it
 - [x] Invite sent to sdm@ddhs.co.za (user accepts via email)
+- [x] DG review submission triggers a PayFast once-off payment
+- [x] Full staff dashboard page (pending invites, incomplete docs, overdue DG) with clickable details
+- [x] Client DG review form in My portal; Manage page shows submission date

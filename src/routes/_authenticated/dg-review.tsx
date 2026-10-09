@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { startDgReviewPayment } from "@/lib/payfast.functions";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
@@ -74,6 +75,17 @@ function DgReviewPage() {
     setSaving(false);
     if (res.error) { toast.error("Could not save: " + res.error.message); return; }
     setReviewId(res.data.id);
+    if (!reviewId) {
+      toast.success("Review saved. Taking you to PayFast to pay for this review…");
+      try {
+        const { action, fields } = await startDgReviewPayment({ data: { reviewId: res.data.id } });
+        const form = document.createElement("form");
+        form.method = "POST"; form.action = action;
+        for (const [name, value] of Object.entries(fields)) { const i = document.createElement("input"); i.type = "hidden"; i.name = name; i.value = value; form.appendChild(i); }
+        document.body.appendChild(form); form.submit();
+      } catch (e) { toast.error(e instanceof Error ? e.message : "Could not start the payment."); }
+      return;
+    }
     toast.success("Review saved.");
   };
 

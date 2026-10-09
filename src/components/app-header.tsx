@@ -27,6 +27,7 @@ export function AppHeader() {
           <Link to="/plans" className={link} activeProps={active}>EE Plans</Link>
           <Link to="/dg-review" className={link} activeProps={active}>DG Review</Link>
           <Link to="/dg-history" className={link} activeProps={active}>DG History</Link>
+          {isAdmin && <Link to="/staff" className={link} activeProps={active}>Staff dashboard</Link>}
           {isAdmin && <Link to="/clients" className={link} activeProps={active}>Clients</Link>}
           <button onClick={signOut} className="ml-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">Sign out</button>
         </nav>

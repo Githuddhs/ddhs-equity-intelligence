@@ -38,7 +38,7 @@ function ClientsDashboard() {
         supabase.from("ee_plans").select("user_id,title,start_date,end_date,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category"),
-        supabase.from("subscriptions").select("user_id,plan,status,created_at").order("created_at", { ascending: false }),
+        supabase.from("subscriptions").select("user_id,plan,status,created_at").neq("plan", "dg_review").order("created_at", { ascending: false }),
       ]);
       for (const x of [c, a, p, r, d, s]) if (x.error) throw x.error;
       return (c.data ?? []).map((cl) => {
