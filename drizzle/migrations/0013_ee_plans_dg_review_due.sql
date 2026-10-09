@@ -1,0 +1,1 @@
+ALTER TABLE public.ee_plans ADD COLUMN IF NOT EXISTS dg_review_due date;
