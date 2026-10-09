@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as Eea12RouteImport } from './routes/eea12'
+import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const Eea12Route = Eea12RouteImport.update({
   path: '/eea12',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
+  id: '/api/eea-insights',
+  path: '/api/eea-insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -33,30 +39,47 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/eea12': typeof Eea12Route
+  '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/eea12': typeof Eea12Route
+  '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/eea12': typeof Eea12Route
+  '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/eea12' | '/lovable/email/transactional/preview'
+  fullPaths:
+    | '/'
+    | '/eea12'
+    | '/api/eea-insights'
+    | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/eea12' | '/lovable/email/transactional/preview'
-  id: '__root__' | '/' | '/eea12' | '/lovable/email/transactional/preview'
+  to:
+    | '/'
+    | '/eea12'
+    | '/api/eea-insights'
+    | '/lovable/email/transactional/preview'
+  id:
+    | '__root__'
+    | '/'
+    | '/eea12'
+    | '/api/eea-insights'
+    | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   Eea12Route: typeof Eea12Route
+  ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -76,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Eea12RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/eea-insights': {
+      id: '/api/eea-insights'
+      path: '/api/eea-insights'
+      fullPath: '/api/eea-insights'
+      preLoaderRoute: typeof ApiEeaInsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -89,6 +119,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   Eea12Route: Eea12Route,
+  ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
