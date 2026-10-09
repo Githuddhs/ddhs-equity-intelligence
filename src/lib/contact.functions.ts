@@ -104,7 +104,7 @@ export const submitEnquiry = createServerFn({ method: "POST" })
       console.error("contact_enquiries insert failed", error);
       return {
         ok: false as const,
-        error: "We couldn't send your enquiry just now. Please try again, or email info@ddhs.co.za.",
+        error: "We couldn't send your enquiry just now. Please try again, or email sdm@ddhs.co.za.",
       };
     }
 

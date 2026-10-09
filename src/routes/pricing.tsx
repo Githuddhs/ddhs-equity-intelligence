@@ -66,7 +66,7 @@ function PricingPage() {
               <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Account number</dt><dd className="font-mono font-semibold text-primary">1055905626</dd></div>
               <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Branch code</dt><dd className="font-mono font-semibold text-primary">450105</dd></div>
             </dl>
-            <p className="mt-4 text-sm text-muted-foreground">Use your company name as the payment reference, then email your proof of payment to info@ddhs.co.za and our team will activate your account.</p>
+            <p className="mt-4 text-sm text-muted-foreground">Use your company name as the payment reference, then email your proof of payment to sdm@ddhs.co.za and our team will activate your account.</p>
           </div>
         </section>
       </main>
