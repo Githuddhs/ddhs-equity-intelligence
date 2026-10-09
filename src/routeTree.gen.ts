@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
+import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
@@ -40,6 +41,11 @@ const Eea12Route = Eea12RouteImport.update({
   id: '/eea12',
   path: '/eea12',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedComplianceRoute = AuthenticatedComplianceRouteImport.update({
+  id: '/compliance',
+  path: '/compliance',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDgHistoryRoute = AuthenticatedDgHistoryRouteImport.update({
   id: '/dg-history',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/compliance'
     | '/dg-history'
     | '/dg-review'
     | '/history'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/compliance'
     | '/dg-history'
     | '/dg-review'
     | '/history'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/eea12'
+    | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
     | '/_authenticated/history'
@@ -206,6 +218,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/eea12'
       preLoaderRoute: typeof Eea12RouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/compliance': {
+      id: '/_authenticated/compliance'
+      path: '/compliance'
+      fullPath: '/compliance'
+      preLoaderRoute: typeof AuthenticatedComplianceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dg-history': {
       id: '/_authenticated/dg-history'
@@ -267,6 +286,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedComplianceRoute: typeof AuthenticatedComplianceRoute
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
@@ -275,6 +295,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedComplianceRoute: AuthenticatedComplianceRoute,
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
