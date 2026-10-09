@@ -32,7 +32,7 @@ function ManageClient() {
       const [c, p, r] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("ee_plans").select("id,title,company,start_date,end_date,dg_review_due").eq("user_id", id).order("updated_at", { ascending: false }),
-        supabase.from("dg_reviews").select("id,score,plan_id,updated_at").eq("user_id", id).order("updated_at", { ascending: false }),
+        supabase.from("dg_reviews").select("id,score,plan_id,created_at,updated_at").eq("user_id", id).order("updated_at", { ascending: false }),
       ]);
       for (const x of [c, p, r]) if (x.error) throw x.error;
       return { client: (c.data ?? []).find((x) => x.id === id) ?? null, plans: p.data ?? [], reviews: r.data ?? [] };
@@ -120,7 +120,7 @@ function PlanRow({ plan, onSaved }: { plan: Plan; onSaved: () => void }) {
   );
 }
 
-function ReviewRow({ review, plans, onSaved }: { review: { id: string; score: number; plan_id: string | null; updated_at: string }; plans: Plan[]; onSaved: () => void }) {
+function ReviewRow({ review, plans, onSaved }: { review: { id: string; score: number; plan_id: string | null; created_at: string; updated_at: string }; plans: Plan[]; onSaved: () => void }) {
   const [score, setScore] = useState(String(review.score));
   const [planId, setPlanId] = useState(review.plan_id ?? "");
   const save = async () => {
