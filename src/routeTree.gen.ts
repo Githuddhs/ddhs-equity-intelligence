@@ -19,6 +19,7 @@ import { Route as AuthenticatedComplianceRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
@@ -76,6 +77,11 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiEeAssistRoute = ApiEeAssistRouteImport.update({
   id: '/api/ee-assist',
   path: '/api/ee-assist',
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/portal': typeof AuthenticatedPortalRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/portal': typeof AuthenticatedPortalRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/dg-history'
     | '/dg-review'
     | '/history'
+    | '/portal'
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/plans/$id'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/dg-history'
     | '/dg-review'
     | '/history'
+    | '/portal'
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/plans/$id'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
     | '/_authenticated/history'
+    | '/_authenticated/portal'
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/_authenticated/plans/$id'
@@ -315,6 +327,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/portal': {
+      id: '/_authenticated/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/ee-assist': {
       id: '/api/ee-assist'
       path: '/api/ee-assist'
@@ -372,6 +391,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
   AuthenticatedPlansIndexRoute: typeof AuthenticatedPlansIndexRoute
 }
@@ -381,6 +401,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
   AuthenticatedPlansIndexRoute: AuthenticatedPlansIndexRoute,
 }
