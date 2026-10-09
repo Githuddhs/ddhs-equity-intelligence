@@ -25,7 +25,7 @@ const checkoutInput = z.object({
 
 // PayFast requires URL encoding with spaces as '+' and uppercase hex escapes.
 function pfEncode(value: string): string {
-  return encodeURIComponent(value.trim()).replace(/%20/g, "+");
+  return encodeURIComponent(value.trim()).replace(/[!'()*~]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase()).replace(/%20/g, "+");
 }
 
 function payfastSignature(fields: Record<string, string>, passphrase: string): string {
