@@ -110,15 +110,15 @@ function PricingPage() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-6 py-16">
-        <h1 className="text-center font-display text-4xl font-bold text-primary">Subscription plans</h1>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-lg text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
-        <h2 className="mt-14 font-display text-2xl font-bold text-primary">Managed compliance packages</h2>
+        <h1 className="page-title text-center text-primary">Subscription plans</h1>
+        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
+        <h2 className="section-title mt-14 text-primary">Managed compliance packages</h2>
         <p className="mt-1 text-muted-foreground">We run your Employment Equity programme with you. Your first online payment covers the setup fee plus the first month.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {PACKAGES.map((p) => (
             <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-6 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
               {p.featured && <span className="mb-3 w-fit rounded-full bg-teal px-3 py-1 text-xs font-semibold text-primary-foreground">Most popular</span>}
-              <h3 className="font-display text-xl font-bold text-primary">{p.name}</h3>
+              <h3 className="card-title text-primary">{p.name}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{p.market}</p>
               <p className="mt-5 font-display text-2xl font-bold text-primary">{p.price}<span className="text-base font-medium text-muted-foreground">/month</span></p>
               <p className="text-sm text-muted-foreground">{p.setup} · {p.annual}</p>
@@ -138,7 +138,7 @@ function PricingPage() {
         </div>
 
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
-          <h2 className="font-display text-2xl font-bold text-primary">Software-only subscription</h2>
+          <h2 className="section-title text-primary">Software-only subscription</h2>
           <p className="mt-1 text-muted-foreground">For organisations with in-house EE expertise. Priced by number of employees.</p>
           <div className="mt-6 grid gap-8 lg:grid-cols-[2fr_1fr]">
             <div className="divide-y divide-border rounded-lg border border-border">
@@ -163,7 +163,7 @@ function PricingPage() {
         <div className="mt-16 grid gap-6 lg:grid-cols-2">
           {([["Specialist consulting rates", RATES], ["Once-off projects", PROJECTS]] as const).map(([title, rows]) => (
             <section key={title} className="rounded-xl border border-border bg-card p-8">
-              <h2 className="font-display text-2xl font-bold text-primary">{title}</h2>
+              <h2 className="section-title text-primary">{title}</h2>
               <dl className="mt-4 divide-y divide-border text-sm">
                 {rows.map(([k, v]) => <div key={k} className="flex justify-between gap-4 py-2"><dt>{k}</dt><dd className="font-semibold text-primary">{v}</dd></div>)}
               </dl>
@@ -173,24 +173,24 @@ function PricingPage() {
         </div>
 
         <section id="quote" className="mt-16 scroll-mt-8 rounded-xl border border-border bg-card p-8">
-          <h2 className="font-display text-2xl font-bold text-primary">Request a quote</h2>
+          <h2 className="section-title text-primary">Request a quote</h2>
           <p className="mt-1 text-muted-foreground">Tell us what you need and our team will come back to you with a quote. Every request goes straight to our consulting team.</p>
           <QuoteForm />
         </section>
 
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
-          <h2 className="font-display text-2xl font-bold text-primary">Payment options</h2>
+          <h2 className="section-title text-primary">Payment options</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-4">
-            {PAYMENT.map((x) => <div key={x.t}><h3 className="font-semibold text-primary">{x.t}</h3><p className="mt-1 text-sm text-muted-foreground">{x.d}</p></div>)}
+            {PAYMENT.map((x) => <div key={x.t}><h3 className="card-title text-primary">{x.t}</h3><p className="mt-1 text-sm text-muted-foreground">{x.d}</p></div>)}
           </div>
           <div className="mt-8 rounded-lg border border-border bg-background p-6">
-            <h3 className="font-display text-lg font-bold text-primary">Banking details</h3>
+            <h3 className="card-title text-primary">Banking details</h3>
             <p className="mt-1 text-sm text-muted-foreground">Use these details for EFT payments and debit orders.</p>
             <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
               <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Account name</dt><dd className="font-semibold text-primary">Diversity Digital Hiring Solutions</dd></div>
               <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Bank</dt><dd className="font-semibold text-primary">Capitec Bank</dd></div>
-              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Account number</dt><dd className="font-mono font-semibold text-primary">1055905626</dd></div>
-              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Branch code</dt><dd className="font-mono font-semibold text-primary">450105</dd></div>
+              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Account number</dt><dd className="font-semibold tabular-nums text-primary">1055905626</dd></div>
+              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Branch code</dt><dd className="font-semibold tabular-nums text-primary">450105</dd></div>
             </dl>
             <p className="mt-4 text-sm text-muted-foreground">Use your company name as the payment reference, then email your proof of payment to sdm@ddhs.co.za and our team will activate your account.</p>
           </div>

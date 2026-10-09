@@ -51,7 +51,7 @@ function DgHistory() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-teal">Sections 42–45</p>
-            <h1 className="font-display text-3xl font-bold text-primary">DG review history</h1>
+            <h1 className="page-title text-primary">DG review history</h1>
           </div>
           <Link to="/dg-review" search={{}} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">New review</Link>
         </div>

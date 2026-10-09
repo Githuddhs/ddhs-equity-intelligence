@@ -53,14 +53,14 @@ function SignupPage() {
         <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
         {sent ? (
           <div className="mt-6">
-            <h1 className="font-display text-2xl font-bold text-primary">Check your inbox</h1>
-            <p className="mt-2 text-sm text-muted-foreground">We sent a confirmation link to <strong>{f.email}</strong>. Click it to activate your account.</p>
+            <h1 className="page-title text-primary">Check your inbox</h1>
+            <p className="page-lead mt-2 text-muted-foreground">We sent a confirmation link to <strong>{f.email}</strong>. Click it to activate your account.</p>
             <Link to="/auth" search={{ next: "/portal" }} className="mt-6 inline-block text-sm font-semibold text-teal">Go to sign in</Link>
           </div>
         ) : (
           <>
-            <h1 className="mt-4 font-display text-2xl font-bold text-primary">Create your account</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Run EEA12 analyses, build EE plans and prepare for DG reviews.</p>
+            <h1 className="page-title mt-4 text-primary">Create your account</h1>
+            <p className="page-lead mt-1 text-muted-foreground">Run EEA12 analyses, build EE plans and prepare for DG reviews.</p>
             <button onClick={google} className="mt-6 w-full rounded-lg border border-border px-4 py-2 text-sm font-semibold">Continue with Google</button>
             <form onSubmit={submit} className="mt-4 grid gap-3 sm:grid-cols-2">
               <input className={field} required placeholder="Full name" value={f.fullName} onChange={up("fullName")} />

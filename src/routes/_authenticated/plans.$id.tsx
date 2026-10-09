@@ -101,7 +101,7 @@ function PlanBuilder() {
         </div>
 
         <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="font-display text-xl font-bold text-primary">Plan details</h2>
+          <h2 className="section-title text-primary">Plan details</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <label className="text-sm">Plan title<input className={field} value={meta.title} onChange={(e) => upMeta({ title: e.target.value })} /></label>
             <label className="text-sm">Employer<input className={field} value={meta.company} onChange={(e) => upMeta({ company: e.target.value })} /></label>
@@ -132,7 +132,7 @@ function PlanBuilder() {
 
         <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="font-display text-xl font-bold text-primary">Numerical goals (end of plan)</h2>
+            <h2 className="section-title text-primary">Numerical goals (end of plan)</h2>
             <button disabled={!rawAnalyses.length} onClick={() => { const r = goalsFromAnalyses(content.goals, rawAnalyses); upContent({ goals: r.goals }); toast.success(r.filled ? `Filled ${r.filled} level(s) from saved EEA12 analyses.` : "No saved analysis matches these levels."); }}
               className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal disabled:opacity-50">Fill from EEA12 analyses</button>
           </div>
@@ -163,7 +163,7 @@ function PlanBuilder() {
           <section key={s.key} className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="font-display text-lg font-bold text-primary">{s.title}</h2>
+                <h2 className="section-title text-primary">{s.title}</h2>
                 <p className="text-sm text-muted-foreground">{s.hint}</p>
               </div>
               {s.ai && (drafting === s.key ? (
@@ -182,16 +182,16 @@ function PlanBuilder() {
       </main>
 
       <article className="hidden p-8 text-sm print:block">
-        <h1 className="text-2xl font-bold">{meta.title}</h1>
+        <h1 className="page-title">{meta.title}</h1>
         <p>{meta.company} · {meta.sector} · {meta.start_date} to {meta.end_date}</p>
-        <h2 className="mt-6 text-lg font-bold">Numerical goals</h2>
+        <h2 className="section-title mt-6">Numerical goals</h2>
         <table className="mt-2 w-full border-collapse text-xs">
           <thead><tr>{["Level", "Current %", "Des. males %", "Females %", "Total des. %", "Notes"].map((h) => <th key={h} className="border border-border p-1 text-left">{h}</th>)}</tr></thead>
           <tbody>{content.goals.map((g) => <tr key={g.level}>{[g.level, g.baseline, g.males, g.females, g.total, g.notes].map((v, i) => <td key={i} className="border border-border p-1">{v}</td>)}</tr>)}</tbody>
         </table>
         {TEXT_SECTIONS.map((s) => (
           <div key={s.key} className="mt-6 break-inside-avoid-page">
-            <h2 className="text-lg font-bold">{s.title}</h2>
+            <h2 className="section-title">{s.title}</h2>
             {content[s.key] ? renderMd(content[s.key]) : <p className="italic">Not completed.</p>}
           </div>
         ))}

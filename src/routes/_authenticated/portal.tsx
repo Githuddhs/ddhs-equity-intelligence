@@ -60,8 +60,8 @@ function Portal() {
       <AppHeader />
       <main className="mx-auto max-w-6xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Customer portal</p>
-        <h1 className="font-display text-3xl font-bold text-primary">Welcome{name ? `, ${name}` : ""}</h1>
-        <p className="mt-1 text-muted-foreground">{meta["company"] ? `${meta["company"]} · ` : ""}Everything you've saved, visible only to you.</p>
+        <h1 className="page-title text-primary">Welcome{name ? `, ${name}` : ""}</h1>
+        <p className="page-lead mt-1 text-muted-foreground">{meta["company"] ? `${meta["company"]} · ` : ""}Everything you've saved, visible only to you.</p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           <Stat label="EEA12 analyses" value={data?.analyses.length} />
@@ -77,7 +77,7 @@ function Portal() {
           </div>
         </div>
 
-        <h2 className="mt-8 font-display text-xl font-bold text-primary">Compliance documents & progress</h2>
+        <h2 className="section-title mt-8 text-primary">Compliance documents & progress</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-3">
           {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6]] as const).map(([k, label, total]) => {
             const n = new Set((data?.docs ?? []).filter((x) => x.area === k).map((x) => x.category)).size;
@@ -147,7 +147,7 @@ function Panel({ title, all, create, createLabel, empty, children }: { title: st
   return (
     <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-lg font-bold text-primary">{title}</h2>
+        <h2 className="section-title text-primary">{title}</h2>
         <Link to={all} className="text-sm font-semibold text-teal">View all</Link>
       </div>
       <div className="mt-4 space-y-2">{has ? children : <p className="text-sm text-muted-foreground">{empty}</p>}</div>

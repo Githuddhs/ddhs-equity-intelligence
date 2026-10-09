@@ -111,7 +111,7 @@ function DgReviewPage() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10 print:hidden">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Sections 42–45</p>
-        <h1 className="font-display text-3xl font-bold text-primary">Director-General review readiness</h1>
+        <h1 className="page-title text-primary">Director-General review readiness</h1>
         <div className="mt-3 flex gap-2 text-sm"><Link to="/dg-history" className="rounded-lg border border-border px-3 py-1.5 font-semibold">Past reviews</Link><Link to="/dg-review" search={{}} className="rounded-lg border border-border px-3 py-1.5 font-semibold">New review</Link>{reviewId && <span className="self-center text-xs text-muted-foreground">Editing a saved review</span>}</div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Assess your organisation against what the Director-General checks, get AI advice on weak areas, and print an evidence pack.</p>
 
@@ -133,7 +133,7 @@ function DgReviewPage() {
 
         {groups.map((g) => (
           <section key={g} className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-            <h2 className="font-display text-lg font-bold text-primary">{g}</h2>
+            <h2 className="section-title text-primary">{g}</h2>
             <div className="mt-3 divide-y divide-border">
               {DG_ITEMS.filter((i) => i.group === g).map((i) => (
                 <div key={i.id} className="grid gap-2 py-3 md:grid-cols-[1fr_auto]">
@@ -155,7 +155,7 @@ function DgReviewPage() {
 
         <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="font-display text-xl font-bold text-primary">AI risk assessment & remediation</h2>
+            <h2 className="section-title text-primary">AI risk assessment & remediation</h2>
             <div className="flex gap-2 text-sm">
               {ai.loading
                 ? <button onClick={ai.stop} className="rounded-lg border border-border px-4 py-2 font-semibold">Stop</button>
@@ -171,14 +171,14 @@ function DgReviewPage() {
       </main>
 
       <article className="hidden p-8 text-sm print:block">
-        <h1 className="text-2xl font-bold">Director-General Review — Evidence Pack</h1>
+        <h1 className="page-title">Director-General Review — Evidence Pack</h1>
         <p>{plan?.company || "Employer"} · Prepared {new Date().toLocaleDateString("en-ZA")} · Readiness score {score}%</p>
-        <h2 className="mt-6 text-lg font-bold">1. Compliance checklist</h2>
+        <h2 className="section-title mt-6">1. Compliance checklist</h2>
         <table className="mt-2 w-full border-collapse text-xs">
           <thead><tr>{["Requirement", "Ref", "Status", "Evidence"].map((h) => <th key={h} className="border border-border p-1 text-left">{h}</th>)}</tr></thead>
           <tbody>{DG_ITEMS.map((i) => <tr key={i.id}><td className="border border-border p-1">{i.text}</td><td className="border border-border p-1">{i.ref}</td><td className="border border-border p-1">{answers[i.id]?.status || "—"}</td><td className="border border-border p-1">{answers[i.id]?.evidence}</td></tr>)}</tbody>
         </table>
-        <h2 className="mt-6 text-lg font-bold">2. Employment Equity plan</h2>
+        <h2 className="section-title mt-6">2. Employment Equity plan</h2>
         {plan && planContent ? (
           <>
             <p>{plan.title} · {plan.sector} · {plan.start_date} to {plan.end_date}</p>
@@ -186,14 +186,14 @@ function DgReviewPage() {
               <thead><tr>{["Level", "Current %", "Des. males %", "Females %", "Total des. %"].map((h) => <th key={h} className="border border-border p-1 text-left">{h}</th>)}</tr></thead>
               <tbody>{planContent.goals.map((g) => <tr key={g.level}>{[g.level, g.baseline, g.males, g.females, g.total].map((v, k) => <td key={k} className="border border-border p-1">{v}</td>)}</tr>)}</tbody>
             </table>
-            {TEXT_SECTIONS.filter((s) => planContent[s.key]).map((s) => <div key={s.key} className="mt-3"><h3 className="font-bold">{s.title}</h3>{renderMd(planContent[s.key])}</div>)}
+            {TEXT_SECTIONS.filter((s) => planContent[s.key]).map((s) => <div key={s.key} className="mt-3"><h3 className="card-title">{s.title}</h3>{renderMd(planContent[s.key])}</div>)}
           </>
         ) : <p className="italic">No EE plan on file.</p>}
-        <h2 className="mt-6 text-lg font-bold">3. Workforce analyses (EEA12)</h2>
+        <h2 className="section-title mt-6">3. Workforce analyses (EEA12)</h2>
         {analyses.length ? analyses.map((a, k) => (
           <p key={k} className="mt-1">{new Date(a.created_at).toLocaleDateString("en-ZA")} — {a.level}, {a.sector || "no sector"}, {a.total_headcount} employees: {((a.results as { sectoral?: Sectoral[] }).sectoral ?? []).map((s) => `${s.name} ${s.actual.toFixed(1)}% vs ${s.target}%`).join("; ")}</p>
         )) : <p className="italic">No saved analyses.</p>}
-        <h2 className="mt-6 text-lg font-bold">4. Risk assessment & remediation</h2>
+        <h2 className="section-title mt-6">4. Risk assessment & remediation</h2>
         {assessment ? renderMd(assessment) : <p className="italic">Not yet assessed.</p>}
       </article>
     </div>

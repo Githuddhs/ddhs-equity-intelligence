@@ -48,8 +48,8 @@ function PlansPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-teal">EEA13</p>
-            <h1 className="font-display text-3xl font-bold text-primary">Employment Equity plans</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Build a section 20 compliant plan, draft sections with AI, and print it for consultation and sign-off.</p>
+            <h1 className="page-title text-primary">Employment Equity plans</h1>
+            <p className="page-lead mt-2 text-muted-foreground">Build a section 20 compliant plan, draft sections with AI, and print it for consultation and sign-off.</p>
           </div>
           <button onClick={create} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">New plan</button>
         </div>
@@ -58,7 +58,7 @@ function PlansPage() {
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {data?.map((p) => (
             <Link key={p.id} to="/plans/$id" params={{ id: p.id }} className="rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
-              <h2 className="font-display text-lg font-bold text-primary">{p.title}</h2>
+              <h2 className="section-title text-primary">{p.title}</h2>
               <p className="text-sm">{p.company || "Company not set"} · {p.sector || "Sector not set"}</p>
               <p className="mt-2 text-xs text-muted-foreground">{p.start_date} to {p.end_date} · updated {new Date(p.updated_at).toLocaleDateString("en-ZA")}</p>
             </Link>

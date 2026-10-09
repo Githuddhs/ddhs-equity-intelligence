@@ -89,7 +89,7 @@ export function ContactForm() {
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-teal">
           <CheckCircle2 className="h-7 w-7 text-teal-foreground" />
         </div>
-        <h3 className="mt-5 text-2xl font-bold text-navy-foreground">Enquiry received</h3>
+        <h3 className="card-title mt-5 text-navy-foreground">Enquiry received</h3>
         <p className="mx-auto mt-3 max-w-md text-navy-foreground/70">
           Thank you. An EE specialist will review your details and respond with a short
           discovery call to understand your current Employment Equity processes and reporting

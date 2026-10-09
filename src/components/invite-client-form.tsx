@@ -27,7 +27,7 @@ export function InviteClientForm() {
   const input = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";
   return (
     <form onSubmit={submit} className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
-      <h2 className="font-display text-lg font-bold text-primary">Create a client</h2>
+      <h2 className="section-title text-primary">Create a client</h2>
       <p className="text-sm text-muted-foreground">They get an email invite to set a password and open My portal.</p>
       <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1fr_1fr_auto]">
         <input aria-label="Contact name" required minLength={2} maxLength={120} placeholder="Contact name" className={input} value={f.fullName} onChange={(e) => setF({ ...f, fullName: e.target.value })} />

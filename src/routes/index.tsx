@@ -143,7 +143,7 @@ function SectionHeading({
         <p className="text-sm font-semibold uppercase tracking-widest text-teal">{eyebrow}</p>
       )}
       <h2
-        className={`mt-3 text-3xl font-bold tracking-tight text-balance sm:text-4xl ${
+        className={`display-title mt-3 text-balance ${
           dark ? "text-navy-foreground" : "text-primary"
         }`}
       >
@@ -163,7 +163,7 @@ function Index() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <BarChart3 className="h-4 w-4 text-primary-foreground" />
@@ -172,23 +172,25 @@ function Index() {
               DDHS <span className="text-teal">Equity Intelligence</span>
             </span>
           </div>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">
-            <a href="#platform" className="transition-colors hover:text-primary">Platform</a>
-            <a href="#capabilities" className="transition-colors hover:text-primary">Capabilities</a>
-            <a href="#governance" className="transition-colors hover:text-primary">Governance</a>
-            <a href="#pilots" className="transition-colors hover:text-primary">Pilot Programme</a>
-            <a href="/eea12" className="font-semibold text-teal transition-colors hover:text-primary">EEA12 Analysis</a>
-            <a href="/plans" className="font-semibold text-teal transition-colors hover:text-primary">EE Plans</a>
-            <a href="/dg-review" className="font-semibold text-teal transition-colors hover:text-primary">DG Review</a>
+          <nav className="order-last hidden w-full items-center justify-between text-sm font-semibold text-teal md:flex">
+            <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
+            <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
+            <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
+            <a href="#pilots" className="whitespace-nowrap transition-colors hover:text-primary">Pilot Programme</a>
+            <a href="/eea12" className="whitespace-nowrap transition-colors hover:text-primary">EEA12 Analysis</a>
+            <a href="/plans" className="whitespace-nowrap transition-colors hover:text-primary">EE Plans</a>
+            <a href="/dg-review" className="whitespace-nowrap transition-colors hover:text-primary">DG Review</a>
           </nav>
-          <a href="/pricing" className="hidden text-sm font-semibold text-primary hover:text-teal sm:inline">Pricing</a>
-          <a href="/signup" className="hidden text-sm font-semibold text-primary hover:text-teal sm:inline">Sign up</a>
-          <a
-            href="#contact"
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Schedule a Demonstration
-          </a>
+          <div className="flex items-center gap-5">
+            <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
+            <a href="/signup" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Sign up</a>
+            <a
+              href="#contact"
+              className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Schedule a Demonstration
+            </a>
+          </div>
         </div>
       </header>
 
@@ -196,7 +198,7 @@ function Index() {
       <section className="mx-auto max-w-7xl px-6 pt-20 pb-16">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-primary text-balance sm:text-5xl">
+            <h1 className="hero-title text-primary text-balance">
               Take Control of Employment Equity Implementation
             </h1>
             <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
@@ -249,7 +251,7 @@ function Index() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-soft">
                   <card.icon className="h-6 w-6 text-teal" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-primary">{card.title}</h3>
+                <h3 className="card-title mt-5 text-primary">{card.title}</h3>
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
               </div>
             ))}
@@ -281,7 +283,7 @@ function Index() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary">
                   <f.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-primary">{f.title}</h3>
+                <h3 className="card-title mt-4 text-primary">{f.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
               </div>
             ))}
@@ -332,7 +334,7 @@ function Index() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal">
                   <card.icon className="h-5 w-5 text-teal-foreground" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-navy-foreground">{card.title}</h3>
+                <h3 className="card-title mt-4 text-navy-foreground">{card.title}</h3>
                 <p className="mt-2 text-sm text-navy-foreground/70">{card.body}</p>
               </div>
             ))}
@@ -364,7 +366,7 @@ function Index() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-soft">
                   <ind.icon className="h-7 w-7 text-teal" />
                 </div>
-                <h3 className="mt-5 font-semibold text-primary">{ind.title}</h3>
+                <h3 className="card-title mt-5 text-primary">{ind.title}</h3>
               </div>
             ))}
           </div>
@@ -385,7 +387,7 @@ function Index() {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-primary text-balance sm:text-4xl">
+            <h2 className="display-title text-balance text-primary">
               Be Ready Before the Next Review
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
@@ -406,7 +408,7 @@ function Index() {
       <section id="pilots" className="py-20">
         <div className="mx-auto max-w-5xl px-6">
           <div className="rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-16 text-center shadow-xl sm:px-16">
-            <h2 className="text-3xl font-bold tracking-tight text-navy-foreground text-balance sm:text-4xl">
+            <h2 className="display-title text-balance text-navy-foreground">
               Help Shape the Enterprise Standard for EE Intelligence
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-navy-foreground/80">
@@ -434,7 +436,7 @@ function Index() {
       {/* Section 9: Final Conversion */}
       <section id="contact" className="bg-primary py-24">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-navy-foreground text-balance sm:text-4xl">
+          <h2 className="display-title text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-navy-foreground/70">
@@ -477,7 +479,7 @@ function Index() {
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Platform</h4>
+              <h4 className="label-title text-primary">Platform</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["Workforce Analysis", "EE Planning", "Accountability", "Evidence Management", "Executive Reporting"].map((l) => (
                   <li key={l}><a href="#platform" className="transition-colors hover:text-primary">{l}</a></li>
@@ -485,7 +487,7 @@ function Index() {
               </ul>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Company</h4>
+              <h4 className="label-title text-primary">Company</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["About DDHS Equity Intelligence", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
                   <li key={l}><a href="#contact" className="transition-colors hover:text-primary">{l}</a></li>
@@ -493,7 +495,7 @@ function Index() {
               </ul>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Governance</h4>
+              <h4 className="label-title text-primary">Governance</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["Privacy", "Responsible AI", "Data Protection", "Security"].map((l) => (
                   <li key={l}><a href="#governance" className="transition-colors hover:text-primary">{l}</a></li>

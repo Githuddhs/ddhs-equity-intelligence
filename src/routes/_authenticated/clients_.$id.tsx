@@ -57,12 +57,12 @@ function ManageClient() {
 
   return (
     <Shell>
-      <h1 className="font-display text-3xl font-bold text-primary">{cl.company || cl.full_name || cl.email}</h1>
-      <p className="text-muted-foreground">{cl.full_name ? `${cl.full_name} · ` : ""}{cl.email} · {cl.confirmed ? "Active" : "Invite pending"}</p>
+      <h1 className="page-title text-primary">{cl.company || cl.full_name || cl.email}</h1>
+      <p className="page-lead text-muted-foreground">{cl.full_name ? `${cl.full_name} · ` : ""}{cl.email} · {cl.confirmed ? "Active" : "Invite pending"}</p>
 
       <section className="mt-8">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-primary">EE plans</h2>
+          <h2 className="section-title text-primary">EE plans</h2>
           <button onClick={addPlan} className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal">Add plan</button>
         </div>
         <div className="mt-3 space-y-3">
@@ -73,7 +73,7 @@ function ManageClient() {
 
       <section className="mt-8">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-primary">DG reviews</h2>
+          <h2 className="section-title text-primary">DG reviews</h2>
           <button onClick={addReview} className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal">Add review</button>
         </div>
         <div className="mt-3 space-y-3">

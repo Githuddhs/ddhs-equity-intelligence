@@ -52,8 +52,8 @@ function SetPasswordPage() {
 
   return (
     <main className="mx-auto max-w-md px-6 py-16">
-      <h1 className="font-display text-3xl font-semibold">Set your password</h1>
-      <p className="mt-2 text-muted-foreground">Choose a password to finish accepting your DDHS Equity Intelligence invite.</p>
+      <h1 className="page-title">Set your password</h1>
+      <p className="page-lead mt-2 text-muted-foreground">Choose a password to finish accepting your DDHS Equity Intelligence invite.</p>
       {ready === false ? (
         <p className="mt-8 rounded-md border border-border bg-muted p-4">
           This invite link has expired or was already used. Ask DDHS Equity Intelligence to send a new invite, or sign in if you already set a password.

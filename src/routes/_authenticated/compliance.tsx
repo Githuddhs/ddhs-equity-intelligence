@@ -59,8 +59,8 @@ function Compliance() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Employment Equity Act</p>
-        <h1 className="font-display text-3xl font-bold text-primary">Compliance dashboard</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h1 className="page-title text-primary">Compliance dashboard</h1>
+        <p className="page-lead mt-2 text-muted-foreground">
           {data?.plan ? <>Tracking <strong>{data.plan.title}</strong>. </> : "No EE plan yet. "}
           {data?.review ? <>Latest DG review: <strong>{data.review.score}%</strong> ({new Date(data.review.updated_at).toLocaleDateString("en-ZA")}).</> : "No DG review saved yet."}
         </p>
@@ -136,7 +136,7 @@ function ReminderSettings() {
     <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="font-display text-lg font-bold text-primary">Email reminders</h2>
+          <h2 className="section-title text-primary">Email reminders</h2>
           <p className="text-xs text-muted-foreground">Sent each morning to <strong>{data.email}</strong> when a deadline is this many days away.</p>
         </div>
         <label className="flex items-center gap-2 text-sm font-semibold">

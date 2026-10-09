@@ -76,8 +76,8 @@ function StaffDashboard() {
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
       <main className="mx-auto max-w-6xl px-6 py-10">
-        <h1 className="font-display text-3xl font-bold text-primary">Staff dashboard</h1>
-        <p className="mt-2 text-muted-foreground">Everything that needs your attention across clients. Click a box to see the details, and a client to expand them.</p>
+        <h1 className="page-title text-primary">Staff dashboard</h1>
+        <p className="page-lead mt-2 text-muted-foreground">Everything that needs your attention across clients. Click a box to see the details, and a client to expand them.</p>
         {isLoading && <p className="mt-8 text-muted-foreground">Loading…</p>}
         {error && <p className="mt-8 text-destructive">Could not load the dashboard.</p>}
         {data === null && <p className="mt-8 text-muted-foreground">This page is for DDHS staff only.</p>}
