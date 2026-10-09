@@ -5,16 +5,22 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { md5 } from "@/lib/md5";
 
-// Monthly plan prices in ZAR, including 15% VAT (list prices exclude VAT).
+// Monthly fee and once-off setup fee in ZAR including 15% VAT (list prices exclude VAT).
+// First payment = first month + setup fee; later months = monthly fee.
 export const PAYFAST_PLANS = {
-  starter: { name: "Starter", amount: "1725.00" },
-  professional: { name: "Professional", amount: "5175.00" },
+  essential: { name: "Essential Compliance", amount: "5744.25", first: "16669.25" },
+  professional: { name: "Professional EE Management", amount: "14375.00", first: "35650.00" },
+  enterprise: { name: "Enterprise Transformation", amount: "33925.00", first: "85675.00" },
+  saas100: { name: "SaaS — up to 100 employees", amount: "1725.00", first: "1725.00" },
+  saas500: { name: "SaaS — 101 to 500 employees", amount: "5175.00", first: "5175.00" },
+  saas1000: { name: "SaaS — 501 to 1,000 employees", amount: "10925.00", first: "10925.00" },
+  saas5000: { name: "SaaS — 1,001 to 5,000 employees", amount: "21275.00", first: "21275.00" },
 } as const;
 
 export type PayfastPlan = keyof typeof PAYFAST_PLANS;
 
 const checkoutInput = z.object({
-  plan: z.enum(["starter", "professional"]),
+  plan: z.enum(Object.keys(PAYFAST_PLANS) as [PayfastPlan, ...PayfastPlan[]]),
 });
 
 // PayFast requires URL encoding with spaces as '+' and uppercase hex escapes.
@@ -56,7 +62,7 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
       notify_url: `${origin}/api/public/hooks/payfast-itn`,
       email_address: email,
       m_payment_id: mPaymentId,
-      amount: plan.amount,
+      amount: plan.first,
       item_name: `DDHS Equity Intelligence — ${plan.name} (monthly)`,
       subscription_type: "1",
       recurring_amount: plan.amount,
@@ -69,7 +75,7 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
       user_id: context.userId,
       plan: data.plan,
       status: "pending",
-      amount: Number(plan.amount),
+      amount: Number(plan.first),
       m_payment_id: mPaymentId,
     });
     if (error) {
