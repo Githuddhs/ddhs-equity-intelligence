@@ -131,7 +131,7 @@ function PricingPage() {
                   {busy === p.payfast ? "Redirecting to PayFast…" : "Subscribe — pay online"}
                 </button>
               ) : (
-                <a href="/#contact" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</a>
+                <a href="#quote" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</a>
               )}
             </div>
           ))}
@@ -150,7 +150,7 @@ function PricingPage() {
                     {t.payfast ? (
                       <button type="button" disabled={busy !== null} onClick={() => payWithPayfast(t.payfast!)} className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-60">{busy === t.payfast ? "Redirecting…" : "Subscribe"}</button>
                     ) : (
-                      <a href="/#contact" className="rounded-lg border border-primary px-3 py-1.5 text-sm font-semibold text-primary">Contact us</a>
+                      <a href="#quote" className="rounded-lg border border-primary px-3 py-1.5 text-sm font-semibold text-primary">Contact us</a>
                     )}
                   </div>
                 </div>
@@ -167,10 +167,16 @@ function PricingPage() {
               <dl className="mt-4 divide-y divide-border text-sm">
                 {rows.map(([k, v]) => <div key={k} className="flex justify-between gap-4 py-2"><dt>{k}</dt><dd className="font-semibold text-primary">{v}</dd></div>)}
               </dl>
-              <a href="/#contact" className="mt-4 inline-block text-sm font-semibold text-teal">Request a quote →</a>
+              <a href="#quote" className="mt-4 inline-block text-sm font-semibold text-teal">Request a quote →</a>
             </section>
           ))}
         </div>
+
+        <section id="quote" className="mt-16 scroll-mt-8 rounded-xl border border-border bg-card p-8">
+          <h2 className="font-display text-2xl font-bold text-primary">Request a quote</h2>
+          <p className="mt-1 text-muted-foreground">Tell us what you need and our team will come back to you with a quote. Every request goes straight to our consulting team.</p>
+          <QuoteForm />
+        </section>
 
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
           <h2 className="font-display text-2xl font-bold text-primary">Payment options</h2>
