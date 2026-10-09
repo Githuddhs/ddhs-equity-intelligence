@@ -93,3 +93,35 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
 
     return { action, fields };
   });
+
+// Once-off fee per DG review, ZAR incl. 15% VAT (R3,500 excl. VAT).
+export const DG_REVIEW_FEE = "4025.00";
+
+export const startDgReviewPayment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { reviewId: string }) => z.object({ reviewId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { data: review } = await context.supabase.from("dg_reviews").select("id").eq("id", data.reviewId).eq("user_id", context.userId).maybeSingle();
+    if (!review) throw new Error("Review not found.");
+    const passphrase = process.env["PAYFAST_LIVE_PASSPHRASE"] ?? "";
+    const origin = new URL(getRequest().url).origin;
+    const mPaymentId = crypto.randomUUID();
+    const fields: Record<string, string> = {
+      merchant_id: PAYFAST_MERCHANT.id,
+      merchant_key: PAYFAST_MERCHANT.key,
+      return_url: `${origin}/dg-review?id=${review.id}&paid=1`,
+      cancel_url: `${origin}/dg-review?id=${review.id}&cancelled=1`,
+      notify_url: `${origin}/api/public/hooks/payfast-itn`,
+      email_address: String(context.claims.email ?? ""),
+      m_payment_id: mPaymentId,
+      amount: DG_REVIEW_FEE,
+      item_name: "DDHS Equity Intelligence — DG review",
+      custom_str1: review.id,
+    };
+    fields["signature"] = payfastSignature(fields, passphrase);
+    const { error } = await context.supabase.from("subscriptions").insert({
+      user_id: context.userId, plan: "dg_review", status: "pending", amount: Number(DG_REVIEW_FEE), m_payment_id: mPaymentId,
+    });
+    if (error) { console.error("dg payment insert failed", error); throw new Error("We couldn't start the payment. Please try again."); }
+    return { action: "https://www.payfast.co.za/eng/process", fields };
+  });
