@@ -8,7 +8,7 @@ export type InsightsPayload = {
   sectoral: { name: string; target: number; actual: number }[];
 };
 
-function renderMd(text: string) {
+export function renderMd(text: string) {
   return text.split("\n").map((line, i) => {
     const bold = (s: string) => s.split(/\*\*(.+?)\*\*/g).map((p, j) => (j % 2 ? <strong key={j}>{p}</strong> : p));
     if (line.startsWith("## ") || line.startsWith("### "))
@@ -20,7 +20,7 @@ function renderMd(text: string) {
   });
 }
 
-export function AiInsights({ payload }: { payload: InsightsPayload }) {
+export function AiInsights({ payload, onComplete }: { payload: InsightsPayload; onComplete?: (text: string) => void }) {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,11 +41,14 @@ export function AiInsights({ payload }: { payload: InsightsPayload }) {
       }
       const reader = res.body.getReader();
       const dec = new TextDecoder();
+      let full = "";
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        setText((t) => t + dec.decode(value, { stream: true }));
+        full += dec.decode(value, { stream: true });
+        setText(full);
       }
+      if (full) onComplete?.(full);
     } catch (e) {
       if ((e as Error).name !== "AbortError") setError("Could not reach the AI service.");
     } finally { setLoading(false); }

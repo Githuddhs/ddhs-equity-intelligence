@@ -53,6 +53,48 @@ export type Database = {
         }
         Relationships: []
       }
+      eea12_analyses: {
+        Row: {
+          ai_summary: string | null
+          counts: Json
+          created_at: string
+          eap: Json
+          id: string
+          level: string
+          results: Json
+          sector: string
+          targets: Json
+          total_headcount: number
+          user_id: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          counts: Json
+          created_at?: string
+          eap: Json
+          id?: string
+          level: string
+          results: Json
+          sector?: string
+          targets: Json
+          total_headcount?: number
+          user_id?: string
+        }
+        Update: {
+          ai_summary?: string | null
+          counts?: Json
+          created_at?: string
+          eap?: Json
+          id?: string
+          level?: string
+          results?: Json
+          sector?: string
+          targets?: Json
+          total_headcount?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
