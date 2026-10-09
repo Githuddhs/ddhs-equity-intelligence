@@ -115,7 +115,11 @@ function AreaPage() {
 
         <div className="mt-6 space-y-3">
           {cfg.docs.map((d) => (
-            <DocRow key={d.key} area={area} doc={d} files={docs.filter((x) => x.category === d.key)} onChange={() => { qc.invalidateQueries({ queryKey: ["portal-docs"] }); }} />
+            <DocRow key={d.key} area={area} doc={d} files={docs.filter((x) => x.category === d.key)} onChange={() => { qc.invalidateQueries({ queryKey: ["portal-docs"] }); qc.invalidateQueries({ queryKey: ["portal"] }); }}
+              onAdded={(row) => {
+                qc.setQueryData<Doc[]>(["portal-docs", area], (old) => [row, ...(old ?? [])]);
+                qc.invalidateQueries({ queryKey: ["portal"] });
+              }} />
           ))}
         </div>
         <p className="mt-6 text-sm text-muted-foreground">Files are private to your account. Maximum 20 MB per file.</p>
@@ -126,7 +130,7 @@ function AreaPage() {
 
 type Doc = { id: string; file_name: string; storage_path: string; size_bytes: number; created_at: string; category: string };
 
-function DocRow({ area, doc, files, onChange }: { area: Area; doc: { key: string; label: string; hint: string }; files: Doc[]; onChange: () => void }) {
+function DocRow({ area, doc, files, onChange, onAdded }: { area: Area; doc: { key: string; label: string; hint: string }; files: Doc[]; onChange: () => void; onAdded: (d: Doc) => void }) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
 
@@ -140,10 +144,10 @@ function DocRow({ area, doc, files, onChange }: { area: Area; doc: { key: string
       const path = `${u.user.id}/${area}/${doc.key}/${crypto.randomUUID()}-${safe}`;
       const up = await supabase.storage.from("client-documents").upload(path, f);
       if (up.error) throw up.error;
-      const ins = await supabase.from("portal_documents").insert({ area, category: doc.key, file_name: f.name.slice(0, 200), storage_path: path, size_bytes: f.size });
+      const ins = await supabase.from("portal_documents").insert({ area, category: doc.key, file_name: f.name.slice(0, 200), storage_path: path, size_bytes: f.size }).select().single();
       if (ins.error) throw ins.error;
-      toast.success("Document uploaded");
-      onChange();
+      onAdded(ins.data);
+      toast.success(`${doc.label} marked complete`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Upload failed");
     } finally {
