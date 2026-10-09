@@ -178,6 +178,8 @@ function Index() {
             <a href="#governance" className="transition-colors hover:text-primary">Governance</a>
             <a href="#pilots" className="transition-colors hover:text-primary">Pilot Programme</a>
             <a href="/eea12" className="font-semibold text-teal transition-colors hover:text-primary">EEA12 Analysis</a>
+            <a href="/plans" className="font-semibold text-teal transition-colors hover:text-primary">EE Plans</a>
+            <a href="/dg-review" className="font-semibold text-teal transition-colors hover:text-primary">DG Review</a>
           </nav>
           <a
             href="#contact"

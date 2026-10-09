@@ -53,6 +53,86 @@ export type Database = {
         }
         Relationships: []
       }
+      dg_reviews: {
+        Row: {
+          ai_assessment: string | null
+          answers: Json
+          created_at: string
+          id: string
+          plan_id: string | null
+          score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_assessment?: string | null
+          answers?: Json
+          created_at?: string
+          id?: string
+          plan_id?: string | null
+          score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          ai_assessment?: string | null
+          answers?: Json
+          created_at?: string
+          id?: string
+          plan_id?: string | null
+          score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dg_reviews_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "ee_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ee_plans: {
+        Row: {
+          company: string
+          content: Json
+          created_at: string
+          end_date: string | null
+          id: string
+          sector: string
+          start_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string
+          content?: Json
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          sector?: string
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          company?: string
+          content?: Json
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          sector?: string
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       eea12_analyses: {
         Row: {
           ai_summary: string | null

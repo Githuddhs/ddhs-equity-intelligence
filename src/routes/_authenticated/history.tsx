@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { renderMd } from "@/components/ai-insights";
+import { AppHeader } from "@/components/app-header";
 
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
@@ -39,19 +40,10 @@ function HistoryPage() {
     if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["eea12_analyses"] });
   };
-  const signOut = async () => { await supabase.auth.signOut(); window.location.href = "/"; };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
-          <div className="flex gap-3 text-sm">
-            <Link to="/eea12" className="rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground">New analysis</Link>
-            <button onClick={signOut} className="rounded-lg border border-border px-4 py-2 font-semibold">Sign out</button>
-          </div>
-        </div>
-      </header>
+      <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
         <h1 className="font-display text-3xl font-bold text-primary">Analysis history</h1>
         <p className="mt-2 text-sm text-muted-foreground">Every saved EEA12 run, newest first.</p>
