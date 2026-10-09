@@ -23,26 +23,36 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-const PLANS: {
-  name: string;
-  price: string;
-  per: string;
-  blurb: string;
-  features: string[];
-  cta: string;
-  featured?: boolean;
-  payfast?: PayfastPlan;
-}[] = [
-  { name: "Starter", price: "R1,500", per: "/month", blurb: "For smaller designated employers getting compliant.", features: ["EEA12 analysis for all levels", "AI gap summaries", "Saved analysis history", "1 EE plan", "Email reminders"], cta: "Start with Starter", payfast: "starter" },
-  { name: "Professional", price: "R4,500", per: "/month", blurb: "For HR and EE teams managing a full plan cycle.", features: ["Everything in Starter", "Unlimited EE plans with AI drafting", "DG review checklist & evidence pack", "Compliance dashboard", "Priority support"], cta: "Choose Professional", featured: true, payfast: "professional" },
-  { name: "Enterprise", price: "On request", per: "", blurb: "For groups with multiple entities or sites.", features: ["Everything in Professional", "Multiple companies & sites", "Onboarding and training", "Dedicated account manager", "Custom reporting"], cta: "Talk to sales" },
+type Pkg = { name: string; market: string; price: string; setup: string; annual: string; intro?: string; features: string[]; featured?: boolean; payfast?: PayfastPlan };
+
+const PACKAGES: Pkg[] = [
+  { name: "Essential Compliance", market: "Small employers (50–150 employees)", price: "R4,995", setup: "R9,500 once-off setup", annual: "R59,940 per year", payfast: "essential",
+    features: ["Workforce profile analysis", "EE compliance assessment", "Annual EEA2 and EEA4 submission support", "One EE Committee workshop annually", "EE compliance dashboard", "Quarterly compliance review", "Email support"] },
+  { name: "Professional EE Management", market: "Medium-sized employers (150–500 employees)", price: "R12,500", setup: "R18,500 once-off setup", annual: "R150,000 per year", intro: "Everything in Essential, plus:", featured: true, payfast: "professional",
+    features: ["EEA12 workforce analysis", "EEA13 EE Plan development", "Quarterly committee support", "Barrier analysis", "Recruitment monitoring", "Management reports", "Numerical target tracking", "Online document repository", "Quarterly executive dashboard"] },
+  { name: "Enterprise Transformation", market: "Large employers (500–5,000 employees)", price: "R29,500", setup: "R45,000 once-off setup", annual: "R354,000 per year", intro: "Everything in Professional, plus:", payfast: "enterprise",
+    features: ["Monthly EE Committee support", "DG Review preparation", "Sectoral target analysis", "Strategic transformation planning", "Executive presentations", "Audit readiness assessments", "Unlimited support requests", "Advanced analytics dashboard", "Board reporting"] },
+  { name: "Enterprise Plus", market: "Universities, municipalities, SOEs, listed companies", price: "R49,500–R85,000", setup: "R75,000–R150,000 setup", annual: "R594,000–R1,020,000 per year",
+    features: ["Dedicated EE Consultant", "Dedicated Data Analyst", "Transformation strategy support", "Multi-campus / site management", "Advanced predictive analytics", "Custom reporting", "DG Review support", "Executive workshops", "Unlimited users"] },
 ];
+
+const SAAS: { size: string; price: string; payfast?: PayfastPlan }[] = [
+  { size: "Up to 100 employees", price: "R1,500", payfast: "saas100" },
+  { size: "101 – 500", price: "R4,500", payfast: "saas500" },
+  { size: "501 – 1,000", price: "R9,500", payfast: "saas1000" },
+  { size: "1,001 – 5,000", price: "R18,500", payfast: "saas5000" },
+  { size: "5,000+", price: "Custom" },
+];
+const SAAS_FEATURES = ["Automated EE reporting", "Workforce analytics", "EEA12 analysis", "EEA13 planning tools", "Evidence repository", "Dashboard reporting"];
+
+const RATES = [["Virtual EE Consultant", "R1,500/hour"], ["Senior EE Specialist", "R2,500/hour"], ["DG Review Consultant", "R3,500/hour"], ["Executive Advisory", "R5,000/hour"], ["Training Facilitation", "R10,000–R25,000/day"]];
+const PROJECTS = [["EEA2 & EEA4 Submission", "R8,000–R20,000"], ["Workforce Analysis (EEA12)", "R15,000–R40,000"], ["EE Plan (EEA13)", "R15,000–R35,000"], ["Barrier Analysis", "R20,000–R50,000"], ["EE Committee Training", "R12,000–R25,000"], ["DG Review Preparation", "R40,000–R150,000"], ["Full Compliance Audit", "R25,000–R75,000"]];
 
 const PAYMENT = [
   { t: "Card or Instant EFT online", d: "Pay securely with PayFast — cards, Instant EFT, SnapScan and more." },
   { t: "EFT / bank transfer", d: "Pay against a monthly or annual tax invoice." },
   { t: "Debit order", d: "Automatic monthly collection from your business account." },
-  { t: "Annual upfront", d: "Pay for 12 months and receive two months free." },
+  { t: "Annual invoice", d: "Pay for 12 months upfront against one tax invoice." },
 ];
 
 function submitPayfastForm(action: string, fields: Record<string, string>) {
@@ -100,32 +110,67 @@ function PricingPage() {
       </header>
       <main className="mx-auto max-w-6xl px-6 py-16">
         <h1 className="text-center font-display text-4xl font-bold text-primary">Subscription plans</h1>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-lg text-muted-foreground">Prices exclude VAT. Pay securely online with PayFast, or by invoice.</p>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {PLANS.map((p) => (
-            <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-8 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
+        <p className="mx-auto mt-3 max-w-2xl text-center text-lg text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
+        <h2 className="mt-14 font-display text-2xl font-bold text-primary">Managed compliance packages</h2>
+        <p className="mt-1 text-muted-foreground">We run your Employment Equity programme with you. Your first online payment covers the setup fee plus the first month.</p>
+        <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {PACKAGES.map((p) => (
+            <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-6 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
               {p.featured && <span className="mb-3 w-fit rounded-full bg-teal px-3 py-1 text-xs font-semibold text-primary-foreground">Most popular</span>}
-              <h2 className="font-display text-xl font-bold text-primary">{p.name}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{p.blurb}</p>
-              <p className="mt-6 font-display text-3xl font-bold text-primary">{p.price}<span className="text-base font-medium text-muted-foreground">{p.per}</span></p>
-              <ul className="mt-6 flex-1 space-y-2 text-sm">
+              <h3 className="font-display text-xl font-bold text-primary">{p.name}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{p.market}</p>
+              <p className="mt-5 font-display text-2xl font-bold text-primary">{p.price}<span className="text-base font-medium text-muted-foreground">/month</span></p>
+              <p className="text-sm text-muted-foreground">{p.setup} · {p.annual}</p>
+              {p.intro && <p className="mt-5 text-sm font-semibold text-primary">{p.intro}</p>}
+              <ul className={`${p.intro ? "mt-2" : "mt-5"} flex-1 space-y-2 text-sm`}>
                 {p.features.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
               </ul>
               {p.payfast ? (
-                <button
-                  type="button"
-                  disabled={busy !== null}
-                  onClick={() => payWithPayfast(p.payfast!)}
-                  className={`mt-8 rounded-lg px-4 py-2 text-center text-sm font-semibold disabled:opacity-60 ${p.featured ? "bg-teal text-primary-foreground" : "bg-primary text-primary-foreground"}`}
-                >
-                  {busy === p.payfast ? "Redirecting to PayFast…" : `${p.cta} — pay online`}
+                <button type="button" disabled={busy !== null} onClick={() => payWithPayfast(p.payfast!)} className={`mt-8 rounded-lg px-4 py-2 text-center text-sm font-semibold disabled:opacity-60 ${p.featured ? "bg-teal text-primary-foreground" : "bg-primary text-primary-foreground"}`}>
+                  {busy === p.payfast ? "Redirecting to PayFast…" : "Subscribe — pay online"}
                 </button>
               ) : (
-                <a href="/#contact" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">{p.cta}</a>
+                <a href="/#contact" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</a>
               )}
             </div>
           ))}
         </div>
+
+        <section className="mt-16 rounded-xl border border-border bg-card p-8">
+          <h2 className="font-display text-2xl font-bold text-primary">Software-only subscription</h2>
+          <p className="mt-1 text-muted-foreground">For organisations with in-house EE expertise. Priced by number of employees.</p>
+          <div className="mt-6 grid gap-8 lg:grid-cols-[2fr_1fr]">
+            <div className="divide-y divide-border rounded-lg border border-border">
+              {SAAS.map((t) => (
+                <div key={t.size} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                  <span className="font-semibold">{t.size}</span>
+                  <div className="flex items-center gap-4">
+                    <span className="font-display text-lg font-bold text-primary">{t.price}{t.payfast && <span className="text-sm font-medium text-muted-foreground">/month</span>}</span>
+                    {t.payfast ? (
+                      <button type="button" disabled={busy !== null} onClick={() => payWithPayfast(t.payfast!)} className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-60">{busy === t.payfast ? "Redirecting…" : "Subscribe"}</button>
+                    ) : (
+                      <a href="/#contact" className="rounded-lg border border-primary px-3 py-1.5 text-sm font-semibold text-primary">Contact us</a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <ul className="space-y-2 text-sm">{SAAS_FEATURES.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}</ul>
+          </div>
+        </section>
+
+        <div className="mt-16 grid gap-6 lg:grid-cols-2">
+          {([["Specialist consulting rates", RATES], ["Once-off projects", PROJECTS]] as const).map(([title, rows]) => (
+            <section key={title} className="rounded-xl border border-border bg-card p-8">
+              <h2 className="font-display text-2xl font-bold text-primary">{title}</h2>
+              <dl className="mt-4 divide-y divide-border text-sm">
+                {rows.map(([k, v]) => <div key={k} className="flex justify-between gap-4 py-2"><dt>{k}</dt><dd className="font-semibold text-primary">{v}</dd></div>)}
+              </dl>
+              <a href="/#contact" className="mt-4 inline-block text-sm font-semibold text-teal">Request a quote →</a>
+            </section>
+          ))}
+        </div>
+
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
           <h2 className="font-display text-2xl font-bold text-primary">Payment options</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-4">
