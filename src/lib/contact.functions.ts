@@ -122,7 +122,7 @@ export const submitEnquiry = createServerFn({ method: "POST" })
           workforceSize: data.workforceSize || "",
           message: data.message,
         },
-        idempotencyKey: `enquiry-notification-${inserted.id}`,
+        idempotencyKey: `enquiry-notification-${enquiryRef}`,
         replyTo: data.email,
       });
     } catch (notifyError) {
