@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AiInsights } from "@/components/ai-insights";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -80,6 +82,9 @@ function Eea12Page() {
   const [level, setLevel] = useState("Senior Management");
   const [sector, setSector] = useState("");
   const [counts, setCounts] = useState(DEFAULT_COUNTS);
+  const [summary, setSummary] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [savedId, setSavedId] = useState<string | null>(null);
   const [eap, setEap] = useState(DEFAULT_EAP);
   const [targetsByLevel, setTargetsByLevel] = useState<Record<string, Targets>>(() =>
     Object.fromEntries(LEVELS.map((l) => [l, { males: 30.5, females: 46.1, total: 76.6 }])));
@@ -121,6 +126,25 @@ function Eea12Page() {
     else comment = "All sectoral targets are achieved. Use the EAP ranking to keep progressing towards demographic representivity and avoid further appointments from over-represented groups.";
     return { total, share, sectoral, gap, optimal, secondary, comment, over, desTotal };
   }, [counts, eap, targets]);
+
+  const save = async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) {
+      toast.info("Sign in to save analyses.");
+      window.location.href = "/auth?next=/eea12";
+      return;
+    }
+    setSaving(true);
+    const { data, error } = await supabase.from("eea12_analyses").insert({
+      sector, level, total_headcount: r.total, counts, eap, targets,
+      results: { sectoral: r.sectoral, gap: r.gap, share: r.share, comment: r.comment },
+      ai_summary: summary || null,
+    }).select("id").single();
+    setSaving(false);
+    if (error) return toast.error("Could not save: " + error.message);
+    setSavedId(data.id);
+    toast.success("Analysis saved to your history.");
+  };
 
   const num = "w-full rounded border border-border bg-background px-1 py-1 text-center text-sm";
   const th = "border border-border px-2 py-1.5 text-xs font-semibold";
@@ -296,7 +320,22 @@ function Eea12Page() {
               sharePct: +(r.share[g.key] || 0).toFixed(1), eapPct: eap[g.key], gapPct: +(r.gap[g.key] || 0).toFixed(1),
             })),
             sectoral: r.sectoral.map((s) => ({ name: s.name, target: s.target, actual: +(s.actual || 0).toFixed(1) })),
-          }} />
+          }} onComplete={(t) => { setSummary(t); setSavedId(null); }} />
+
+          <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div>
+              <h2 className="font-display text-lg font-bold text-primary">Save this analysis</h2>
+              <p className="text-sm text-muted-foreground">
+                {savedId ? "Saved to your history." : summary ? "Figures and the AI summary will be saved." : "Figures will be saved. Generate the AI summary first to include it."}
+              </p>
+            </div>
+            <div className="flex gap-2 text-sm">
+              <Link to="/history" className="rounded-lg border border-border px-4 py-2 font-semibold">View history</Link>
+              <button onClick={save} disabled={saving || !!savedId || r.total <= 0} className="rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-50">
+                {saving ? "Saving…" : savedId ? "Saved" : "Save analysis"}
+              </button>
+            </div>
+          </section>
         </div>
       </main>
     </div>
