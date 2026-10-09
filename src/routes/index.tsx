@@ -163,7 +163,7 @@ function Index() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <BarChart3 className="h-4 w-4 text-primary-foreground" />
@@ -172,23 +172,25 @@ function Index() {
               DDHS <span className="text-teal">Equity Intelligence</span>
             </span>
           </div>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">
-            <a href="#platform" className="transition-colors hover:text-primary">Platform</a>
-            <a href="#capabilities" className="transition-colors hover:text-primary">Capabilities</a>
-            <a href="#governance" className="transition-colors hover:text-primary">Governance</a>
-            <a href="#pilots" className="transition-colors hover:text-primary">Pilot Programme</a>
-            <a href="/eea12" className="font-semibold text-teal transition-colors hover:text-primary">EEA12 Analysis</a>
-            <a href="/plans" className="font-semibold text-teal transition-colors hover:text-primary">EE Plans</a>
-            <a href="/dg-review" className="font-semibold text-teal transition-colors hover:text-primary">DG Review</a>
+          <nav className="hidden items-center gap-6 text-sm font-semibold text-teal md:flex">
+            <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
+            <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
+            <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
+            <a href="#pilots" className="whitespace-nowrap transition-colors hover:text-primary">Pilot Programme</a>
+            <a href="/eea12" className="whitespace-nowrap transition-colors hover:text-primary">EEA12 Analysis</a>
+            <a href="/plans" className="whitespace-nowrap transition-colors hover:text-primary">EE Plans</a>
+            <a href="/dg-review" className="whitespace-nowrap transition-colors hover:text-primary">DG Review</a>
           </nav>
-          <a href="/pricing" className="hidden text-sm font-semibold text-primary hover:text-teal sm:inline">Pricing</a>
-          <a href="/signup" className="hidden text-sm font-semibold text-primary hover:text-teal sm:inline">Sign up</a>
-          <a
-            href="#contact"
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Schedule a Demonstration
-          </a>
+          <div className="flex items-center gap-5">
+            <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
+            <a href="/signup" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Sign up</a>
+            <a
+              href="#contact"
+              className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Schedule a Demonstration
+            </a>
+          </div>
         </div>
       </header>
 
