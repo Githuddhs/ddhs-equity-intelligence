@@ -57,6 +57,13 @@
       "when": 1791559187527,
       "tag": "0007_admin_roles_dashboard",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791560652504,
+      "tag": "0008_tighten_enquiry_quote_policies",
+      "breakpoints": true
     }
   ]
 }
