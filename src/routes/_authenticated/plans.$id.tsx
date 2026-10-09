@@ -120,7 +120,7 @@ function PlanBuilder() {
               {PLAN_LEVELS.map((l) => <option key={l}>{l}</option>)}
             </select></label>
             <button disabled={!meta.sector} onClick={() => {
-              const r = templateFromSector(meta.sector, focusLevel, content);
+              const r = templateFromSector(meta.sector, focusLevel, content, rawAnalyses);
               if (!r.hasSector) { toast.error("Pick a sector from the list first."); return; }
               setMeta({ ...meta, start_date: r.start_date, end_date: r.end_date }); setContent(r.content); setDirty(true);
               toast.success(`Filled goals, five-year dates and ${r.filledSections} empty section(s) for ${meta.sector} — review, then Save plan.`);
