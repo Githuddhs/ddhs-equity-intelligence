@@ -7,6 +7,9 @@ import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
 import { normaliseContent, TEXT_SECTIONS, type PlanContent , goalsFromAnalyses, type SavedAnalysis } from "@/lib/ee-plan";
+import { SECTORS } from "@/lib/sectors";
+import { templateFromSector } from "@/lib/plan-template";
+import { PLAN_LEVELS } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
   head: () => ({
@@ -29,6 +32,7 @@ function PlanBuilder() {
   const [meta, setMeta] = useState<Meta | null>(null);
   const [content, setContent] = useState<PlanContent | null>(null);
   const [analyses, setAnalyses] = useState<unknown[]>([]);
+  const [focusLevel, setFocusLevel] = useState("Senior Management");
   const [rawAnalyses, setRawAnalyses] = useState<SavedAnalysis[]>([]);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -101,11 +105,27 @@ function PlanBuilder() {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <label className="text-sm">Plan title<input className={field} value={meta.title} onChange={(e) => upMeta({ title: e.target.value })} /></label>
             <label className="text-sm">Employer<input className={field} value={meta.company} onChange={(e) => upMeta({ company: e.target.value })} /></label>
-            <label className="text-sm">Economic sector<input className={field} value={meta.sector} onChange={(e) => upMeta({ sector: e.target.value })} placeholder="e.g. Financial and Insurance Activities" /></label>
+            <label className="text-sm">Economic sector<select className={field} value={meta.sector} onChange={(e) => upMeta({ sector: e.target.value })}>
+              <option value="">Select a sector…</option>
+              {meta.sector && !SECTORS.some((s) => s.name === meta.sector) && <option value={meta.sector}>{meta.sector}</option>}
+              {SECTORS.map((s) => <option key={s.name} value={s.name}>{s.name}</option>)}
+            </select></label>
             <div className="grid grid-cols-2 gap-3">
               <label className="text-sm">Start date<input type="date" className={field} value={meta.start_date} onChange={(e) => upMeta({ start_date: e.target.value })} /></label>
               <label className="text-sm">End date<input type="date" className={field} value={meta.end_date} onChange={(e) => upMeta({ end_date: e.target.value })} /></label>
             </div>
+          </div>
+          <div className="mt-4 flex flex-wrap items-end gap-3 rounded-lg border border-dashed border-teal/50 bg-muted/40 p-3">
+            <label className="text-sm">Focus occupational level<select className={field} value={focusLevel} onChange={(e) => setFocusLevel(e.target.value)}>
+              {PLAN_LEVELS.map((l) => <option key={l}>{l}</option>)}
+            </select></label>
+            <button disabled={!meta.sector} onClick={() => {
+              const r = templateFromSector(meta.sector, focusLevel, content);
+              if (!r.hasSector) { toast.error("Pick a sector from the list first."); return; }
+              setMeta({ ...meta, start_date: r.start_date, end_date: r.end_date }); setContent(r.content); setDirty(true);
+              toast.success(`Filled goals, five-year dates and ${r.filledSections} empty section(s) for ${meta.sector} — review, then Save plan.`);
+            }} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Fill from sector &amp; level</button>
+            <span className="text-xs text-muted-foreground">Uses the gazetted sectoral targets. Sections you've already written are kept.</span>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">A plan must cover between one and five years (s20(2)(e)). AI drafting uses your {analyses.length} most recent saved EEA12 analyses.</p>
         </section>
