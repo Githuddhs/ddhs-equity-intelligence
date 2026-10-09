@@ -16,3 +16,4 @@
 - [x] Invite sent to sdm@ddhs.co.za (user accepts via email)
 - [ ] DG review submission triggers a PayFast once-off payment
 - [ ] Full staff dashboard page (pending invites, incomplete docs, overdue DG) with clickable details
+- [ ] Client DG review form in My portal; Manage page shows submission date
