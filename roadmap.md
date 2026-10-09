@@ -19,4 +19,4 @@
 - [x] Client DG review form in My portal; Manage page shows submission date
 - [x] Homepage brand styling: "DDHS" navy, "Equity Intelligence" teal everywhere it appears
 - [x] Top menu links in teal; no overlap or stacking at narrow widths
-- [ ] Standardise fonts across all pages: one display face, one body face, consistent heading/body sizes
+- [x] Standardise fonts across all pages: shared type scale (Sora headings, Manrope body) applied everywhere
