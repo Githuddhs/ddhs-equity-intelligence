@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil } from "@/lib/ee-plan";
+import { InviteClientForm } from "@/components/invite-client-form";
 
 export const Route = createFileRoute("/_authenticated/clients")({
   head: () => ({
@@ -32,7 +33,7 @@ function ClientsDashboard() {
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
       if (!isAdmin) return null;
       const [c, a, p, r, d, s] = await Promise.all([
-        supabase.rpc("admin_clients"),
+        supabase.rpc("admin_clients_all"),
         supabase.from("eea12_analyses").select("user_id,created_at").order("created_at", { ascending: false }),
         supabase.from("ee_plans").select("user_id,title,start_date,end_date,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,updated_at").order("updated_at", { ascending: false }),
@@ -74,7 +75,8 @@ function ClientsDashboard() {
             </div>
           ) : (
             <>
-              <p className="mt-1 text-muted-foreground">{data?.length ?? 0} confirmed client account(s).</p>
+              <p className="mt-1 text-muted-foreground">{data?.length ?? 0} client account(s).</p>
+              <InviteClientForm />
               <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
                 <table className="w-full text-sm">
                   <thead className="bg-muted text-left text-muted-foreground">
@@ -85,7 +87,7 @@ function ClientsDashboard() {
                   <tbody>
                     {data?.map((cl) => (
                       <tr key={cl.id} className="border-t border-border align-top">
-                        <td className="p-3"><p className="font-semibold">{cl.company || cl.full_name || "—"}</p><p className="text-muted-foreground">{cl.email}</p></td>
+                        <td className="p-3"><p className="font-semibold">{cl.company || cl.full_name || "—"}</p><p className="text-muted-foreground">{cl.email}</p>{!cl.confirmed && <p className="text-xs font-semibold text-primary">Invite pending</p>}<Link to="/clients/$id" params={{ id: cl.id }} className="mt-1 inline-block text-sm font-semibold text-teal">Manage →</Link></td>
                         <td className="p-3"><p>{cl.analyses.length} saved{cl.analyses[0] ? ` · ${fmt(cl.analyses[0].created_at)}` : ""}</p><Bar pct={cl.docs.eea12} /></td>
                         <td className="p-3"><p>{cl.plan ? cl.plan.title : "No plan"}</p>{cl.plan?.end_date && <p className="text-muted-foreground">Ends {fmt(cl.plan.end_date)}</p>}<Bar pct={cl.docs.plan} /></td>
                         <td className="p-3">{cl.review ? <p className={`font-display text-lg font-bold ${cl.review.score >= 80 ? "text-teal" : cl.review.score >= 50 ? "text-primary" : "text-destructive"}`}>{cl.review.score}%</p> : <p>Not started</p>}<Bar pct={cl.docs.dg} /></td>

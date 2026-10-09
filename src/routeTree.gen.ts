@@ -23,6 +23,7 @@ import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
+import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
 import { Route as AuthenticatedPortalAreaRouteImport } from './routes/_authenticated/portal_.$area'
@@ -99,6 +100,11 @@ const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   path: '/api/eea-insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedClientsIdRoute = AuthenticatedClientsIdRouteImport.update({
+  id: '/clients_/$id',
+  path: '/clients/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPlansIndexRoute = AuthenticatedPlansIndexRouteImport.update({
   id: '/plans/',
   path: '/plans/',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/portal': typeof AuthenticatedPortalRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
   '/plans/': typeof AuthenticatedPlansIndexRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/portal': typeof AuthenticatedPortalRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
   '/plans': typeof AuthenticatedPlansIndexRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
   '/_authenticated/plans/': typeof AuthenticatedPlansIndexRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
     | '/plans/'
@@ -235,6 +245,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
     | '/plans'
@@ -257,6 +268,7 @@ export interface FileRouteTypes {
     | '/_authenticated/portal'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/_authenticated/clients_/$id'
     | '/_authenticated/plans/$id'
     | '/_authenticated/portal_/$area'
     | '/_authenticated/plans/'
@@ -379,6 +391,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEeaInsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/clients_/$id': {
+      id: '/_authenticated/clients_/$id'
+      path: '/clients/$id'
+      fullPath: '/clients/$id'
+      preLoaderRoute: typeof AuthenticatedClientsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/plans/': {
       id: '/_authenticated/plans/'
       path: '/plans'
@@ -431,6 +450,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedClientsIdRoute: typeof AuthenticatedClientsIdRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
   AuthenticatedPortalAreaRoute: typeof AuthenticatedPortalAreaRoute
   AuthenticatedPlansIndexRoute: typeof AuthenticatedPlansIndexRoute
@@ -443,6 +463,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedClientsIdRoute: AuthenticatedClientsIdRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
   AuthenticatedPortalAreaRoute: AuthenticatedPortalAreaRoute,
   AuthenticatedPlansIndexRoute: AuthenticatedPlansIndexRoute,
