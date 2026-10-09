@@ -35,7 +35,7 @@ function ClientsDashboard() {
       const [c, a, p, r, d, s] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("eea12_analyses").select("user_id,created_at").order("created_at", { ascending: false }),
-        supabase.from("ee_plans").select("user_id,title,start_date,end_date,updated_at").order("updated_at", { ascending: false }),
+        supabase.from("ee_plans").select("user_id,title,start_date,end_date,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category"),
         supabase.from("subscriptions").select("user_id,plan,status,created_at").order("created_at", { ascending: false }),
@@ -179,13 +179,19 @@ function Calendar({ events }: { events: Ev[] }) {
   );
 }
 
-type AlertClient = { id: string; email: string; company: string | null; full_name: string | null; confirmed: boolean; review: { updated_at: string } | null; docs: { eea12: number; plan: number; dg: number } };
+type AlertClient = { id: string; email: string; company: string | null; full_name: string | null; confirmed: boolean; plan: { dg_review_due: string | null } | null; review: { updated_at: string } | null; docs: { eea12: number; plan: number; dg: number } };
 
 function StaffAlerts({ clients }: { clients: AlertClient[] }) {
   const name = (c: AlertClient) => c.company || c.full_name || c.email;
   const pending = clients.filter((c) => !c.confirmed);
   const incomplete = clients.filter((c) => c.confirmed && (c.docs.eea12 < 100 || c.docs.plan < 100 || c.docs.dg < 100));
-  const overdue = clients.filter((c) => c.confirmed && (!c.review || Date.now() - +new Date(c.review.updated_at) > 365 * 86400000));
+  const dueOf = (c: AlertClient) => c.plan?.dg_review_due ?? null;
+  const isOverdue = (c: AlertClient) => {
+    const due = dueOf(c);
+    if (due) return new Date(`${due}T23:59:59`) < new Date() && (!c.review || c.review.updated_at.slice(0, 10) < due);
+    return !c.review || Date.now() - +new Date(c.review.updated_at) > 365 * 86400000;
+  };
+  const overdue = clients.filter((c) => c.confirmed && isOverdue(c));
   const total = pending.length + incomplete.length + overdue.length;
   const card = (title: string, tone: string, list: AlertClient[], detail: (c: AlertClient) => string) => (
     <div className={`rounded-xl border bg-card p-4 shadow-sm ${list.length ? tone : "border-border"}`}>
@@ -211,9 +217,9 @@ function StaffAlerts({ clients }: { clients: AlertClient[] }) {
       <div className="mt-3 grid gap-4 md:grid-cols-3">
         {card("Pending invites", "border-primary/40", pending, (c) => c.email)}
         {card("Incomplete documents", "border-destructive/40", incomplete, (c) => `EEA12 ${c.docs.eea12}% · Plan ${c.docs.plan}% · DG ${c.docs.dg}%`)}
-        {card("Overdue DG reviews", "border-destructive/40", overdue, (c) => c.review ? `last ${fmt(c.review.updated_at)}` : "never reviewed")}
+        {card("Overdue DG reviews", "border-destructive/40", overdue, (c) => `${dueOf(c) ? `due ${fmt(dueOf(c)!)}` : "no deadline set"} · ${c.review ? `last ${fmt(c.review.updated_at)}` : "never reviewed"}`)}
       </div>
-      <p className="mt-2 text-xs text-muted-foreground">A DG review counts as overdue when none exists or the latest is more than 12 months old.</p>
+      <p className="mt-2 text-xs text-muted-foreground">A DG review is overdue when its deadline (set on the client's plan) has passed without a review since. Clients with no deadline fall back to 12 months since the last review.</p>
     </section>
   );
 }

@@ -31,7 +31,7 @@ function ManageClient() {
     queryFn: async () => {
       const [c, p, r] = await Promise.all([
         supabase.rpc("admin_clients_all"),
-        supabase.from("ee_plans").select("id,title,company,start_date,end_date").eq("user_id", id).order("updated_at", { ascending: false }),
+        supabase.from("ee_plans").select("id,title,company,start_date,end_date,dg_review_due").eq("user_id", id).order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("id,score,plan_id,updated_at").eq("user_id", id).order("updated_at", { ascending: false }),
       ]);
       for (const x of [c, p, r]) if (x.error) throw x.error;
@@ -97,23 +97,24 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-type Plan = { id: string; title: string; company: string; start_date: string | null; end_date: string | null };
+type Plan = { id: string; title: string; company: string; start_date: string | null; end_date: string | null; dg_review_due: string | null };
 
 function PlanRow({ plan, onSaved }: { plan: Plan; onSaved: () => void }) {
-  const [f, setF] = useState({ title: plan.title, company: plan.company, start_date: plan.start_date ?? "", end_date: plan.end_date ?? "" });
+  const [f, setF] = useState({ title: plan.title, company: plan.company, start_date: plan.start_date ?? "", end_date: plan.end_date ?? "", dg_review_due: plan.dg_review_due ?? "" });
   const save = async () => {
     if (!f.title.trim() || f.title.length > 200) { toast.error("Please enter a plan title (max 200 characters)."); return; }
     if (f.start_date && f.end_date && f.end_date < f.start_date) { toast.error("End date must be after the start date."); return; }
-    const { error } = await supabase.from("ee_plans").update({ title: f.title.trim(), company: f.company.trim().slice(0, 160), start_date: f.start_date || null, end_date: f.end_date || null }).eq("id", plan.id);
+    const { error } = await supabase.from("ee_plans").update({ title: f.title.trim(), company: f.company.trim().slice(0, 160), start_date: f.start_date || null, end_date: f.end_date || null, dg_review_due: f.dg_review_due || null }).eq("id", plan.id);
     if (error) { toast.error(error.message); return; }
     toast.success("Plan saved"); onSaved();
   };
   return (
-    <div className="grid gap-3 rounded-xl border border-border bg-card p-4 shadow-sm md:grid-cols-[2fr_1.5fr_1fr_1fr_auto] md:items-end">
+    <div className="grid gap-3 rounded-xl border border-border bg-card p-4 shadow-sm md:grid-cols-[2fr_1.5fr_1fr_1fr_1fr_auto] md:items-end">
       <label className="text-xs text-muted-foreground">Title<input aria-label="Plan title" className={`${input} mt-1 w-full`} value={f.title} onChange={(e) => setF({ ...f, title: e.target.value })} /></label>
       <label className="text-xs text-muted-foreground">Company<input aria-label="Plan company" className={`${input} mt-1 w-full`} value={f.company} onChange={(e) => setF({ ...f, company: e.target.value })} /></label>
       <label className="text-xs text-muted-foreground">Start<input aria-label="Plan start" type="date" className={`${input} mt-1 w-full`} value={f.start_date} onChange={(e) => setF({ ...f, start_date: e.target.value })} /></label>
       <label className="text-xs text-muted-foreground">End<input aria-label="Plan end" type="date" className={`${input} mt-1 w-full`} value={f.end_date} onChange={(e) => setF({ ...f, end_date: e.target.value })} /></label>
+      <label className="text-xs text-muted-foreground">DG review due<input aria-label="DG review due" type="date" className={`${input} mt-1 w-full`} value={f.dg_review_due} onChange={(e) => setF({ ...f, dg_review_due: e.target.value })} /></label>
       <button onClick={save} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Save</button>
     </div>
   );
