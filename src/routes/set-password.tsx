@@ -40,12 +40,12 @@ function SetPasswordPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 8) return toast.error("Use at least 8 characters.");
-    if (password !== confirm) return toast.error("The passwords don't match.");
+    if (password.length < 8) { toast.error("Use at least 8 characters."); return; }
+    if (password !== confirm) { toast.error("The passwords don't match."); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Password saved. Welcome to My portal.");
     navigate({ to: "/portal" });
   };
