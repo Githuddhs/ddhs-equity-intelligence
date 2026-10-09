@@ -120,7 +120,7 @@ function EnquiryNotification({
 export const template = {
   component: EnquiryNotification,
   subject: (data: Record<string, any>) =>
-    `New enquiry: ${data.fullName ?? 'Website visitor'} — ${data.company ?? 'DDHS website'}`,
+    `New enquiry: ${data['fullName'] ?? 'Website visitor'} — ${data['company'] ?? 'DDHS website'}`,
   displayName: 'Contact form enquiry notification',
   to: 'info@ddhs.co.za',
   previewData: {
