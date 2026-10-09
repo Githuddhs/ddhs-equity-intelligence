@@ -55,7 +55,7 @@ function Portal() {
             {data?.sub ? (
               <p className="mt-1 font-display text-xl font-bold capitalize text-primary">{data.sub.plan} <span className={`text-sm ${data.sub.status === "active" ? "text-teal" : "text-muted-foreground"}`}>· {data.sub.status}</span></p>
             ) : (
-              <Link to="/pricing" search={{}} className="mt-1 inline-block font-semibold text-teal">Choose a plan →</Link>
+              <Link to="/pricing" search={{ paid: false, cancelled: false }} className="mt-1 inline-block font-semibold text-teal">Choose a plan →</Link>
             )}
           </div>
         </div>
@@ -91,7 +91,7 @@ function Portal() {
   );
 }
 
-function Stat({ label, value }: { label: string; value?: number }) {
+function Stat({ label, value }: { label: string; value?: number | undefined }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <p className="text-sm text-muted-foreground">{label}</p>
