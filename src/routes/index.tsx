@@ -471,8 +471,9 @@ function Index() {
               </div>
               <p className="mt-4 text-sm font-medium text-teal">Data. Accountability. Transformation.</p>
               <p className="mt-2 text-sm text-muted-foreground">
-                DDHS Equity Intelligence (Pty) Ltd — South African enterprise workforce
-                transformation intelligence.
+                <span className="font-semibold text-primary">DDHS</span>{" "}
+                <span className="font-semibold text-teal">Equity Intelligence</span> (Pty) Ltd —
+                South African enterprise workforce transformation intelligence.
               </p>
             </div>
             <div>
