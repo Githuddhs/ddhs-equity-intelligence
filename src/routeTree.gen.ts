@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
+import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
@@ -39,6 +40,11 @@ const Eea12Route = Eea12RouteImport.update({
   id: '/eea12',
   path: '/eea12',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDgHistoryRoute = AuthenticatedDgHistoryRouteImport.update({
+  id: '/dg-history',
+  path: '/dg-history',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDgReviewRoute = AuthenticatedDgReviewRouteImport.update({
   id: '/dg-review',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/dg-history'
     | '/dg-review'
     | '/history'
     | '/api/ee-assist'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/dg-history'
     | '/dg-review'
     | '/history'
     | '/api/ee-assist'
@@ -146,6 +157,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/eea12'
+    | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
     | '/_authenticated/history'
     | '/api/ee-assist'
@@ -194,6 +206,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/eea12'
       preLoaderRoute: typeof Eea12RouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dg-history': {
+      id: '/_authenticated/dg-history'
+      path: '/dg-history'
+      fullPath: '/dg-history'
+      preLoaderRoute: typeof AuthenticatedDgHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dg-review': {
       id: '/_authenticated/dg-review'
@@ -248,6 +267,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
@@ -255,6 +275,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
