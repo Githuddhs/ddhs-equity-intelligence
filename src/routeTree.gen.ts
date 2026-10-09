@@ -16,6 +16,7 @@ import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as StaffLoginRouteImport } from './routes/staff-login'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
@@ -65,6 +66,11 @@ const SetPasswordRoute = SetPasswordRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffLoginRoute = StaffLoginRouteImport.update({
+  id: '/staff-login',
+  path: '/staff-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
+  '/staff-login': typeof StaffLoginRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
+  '/staff-login': typeof StaffLoginRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
+  '/staff-login': typeof StaffLoginRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/set-password'
     | '/signup'
+    | '/staff-login'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -258,6 +268,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/set-password'
     | '/signup'
+    | '/staff-login'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -283,6 +294,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/set-password'
     | '/signup'
+    | '/staff-login'
     | '/_authenticated/clients'
     | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
@@ -309,6 +321,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
+  StaffLoginRoute: typeof StaffLoginRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
@@ -365,6 +378,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-login': {
+      id: '/staff-login'
+      path: '/staff-login'
+      fullPath: '/staff-login'
+      preLoaderRoute: typeof StaffLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/clients': {
@@ -521,6 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
+  StaffLoginRoute: StaffLoginRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   ApiPublicHooksComplianceRemindersRoute:
