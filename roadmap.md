@@ -10,4 +10,4 @@
 - [x] Sign-up persistence: confirmed — accounts are stored in the real user database and persist after email confirmation
 - [ ] PayFast: user to register at payfast.io, then re-request merchant ID, key and passphrase to activate checkout
 - [ ] PayFast live: merchant ID + key wired in; waiting on live passphrase (PAYFAST_LIVE_PASSPHRASE) and a real test payment by the user
-- [x] Staff compliance dashboard (/clients) — grant staff access to sdm@ddhs.co.za once that account exists
+- [ ] Staff dashboard: sdm@ddhs.co.za gets staff access automatically once that account is signed up and confirmed (waiting on user)
