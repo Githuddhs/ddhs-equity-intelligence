@@ -63,7 +63,7 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
       frequency: "3", // monthly
       cycles: "0", // until cancelled
     };
-    fields.signature = payfastSignature(fields, passphrase);
+    fields["signature"] = payfastSignature(fields, passphrase);
 
     const { error } = await context.supabase.from("subscriptions").insert({
       user_id: context.userId,

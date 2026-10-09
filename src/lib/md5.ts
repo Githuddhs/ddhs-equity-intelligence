@@ -29,7 +29,7 @@ function md5block(state: number[], block: Uint8Array, offset: number): void {
     M.push(block[j] | (block[j + 1] << 8) | (block[j + 2] << 16) | (block[j + 3] << 24));
   }
 
-  let [a, b, c, d] = state;
+  let a = state[0]!, b = state[1]!, c = state[2]!, d = state[3]!;
   for (let i = 0; i < 64; i++) {
     let f: number, g: number;
     if (i < 16) {
