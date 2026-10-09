@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 
@@ -20,6 +21,21 @@ export const Route = createFileRoute("/_authenticated/portal")({
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" });
 
 function Portal() {
+  const qc = useQueryClient();
+  // Live subscription status: PayFast confirms payments in the background, so listen for changes.
+  useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    void supabase.auth.getUser().then(({ data: u }) => {
+      if (!u.user) return;
+      channel = supabase
+        .channel(`subs-${u.user.id}`)
+        .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${u.user.id}` }, () => {
+          void qc.invalidateQueries({ queryKey: ["portal"] });
+        })
+        .subscribe();
+    });
+    return () => { if (channel) void supabase.removeChannel(channel); };
+  }, [qc]);
   const { data } = useQuery({
     queryKey: ["portal"],
     queryFn: async () => {
