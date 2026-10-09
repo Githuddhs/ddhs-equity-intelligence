@@ -122,7 +122,7 @@ export const template = {
   subject: (data: Record<string, any>) =>
     `New enquiry: ${data['fullName'] ?? 'Website visitor'} — ${data['company'] ?? 'DDHS website'}`,
   displayName: 'Contact form enquiry notification',
-  to: 'info@ddhs.co.za',
+  to: 'sdm@ddhs.co.za',
   previewData: {
     fullName: 'Thandi Nkosi',
     email: 'thandi@example.co.za',
