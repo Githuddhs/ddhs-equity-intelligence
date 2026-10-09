@@ -177,6 +177,7 @@ function Index() {
             <a href="#capabilities" className="transition-colors hover:text-primary">Capabilities</a>
             <a href="#governance" className="transition-colors hover:text-primary">Governance</a>
             <a href="#pilots" className="transition-colors hover:text-primary">Pilot Programme</a>
+            <a href="/eea12" className="font-semibold text-teal transition-colors hover:text-primary">EEA12 Analysis</a>
           </nav>
           <a
             href="#contact"
