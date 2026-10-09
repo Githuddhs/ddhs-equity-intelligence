@@ -87,16 +87,20 @@ export const submitEnquiry = createServerFn({ method: "POST" })
       };
     }
 
-    const { error } = await supabase.from("contact_enquiries").insert({
-      full_name: data.fullName,
-      email: data.email,
-      company: data.company,
-      job_title: data.jobTitle || null,
-      phone: data.phone || null,
-      workforce_size: data.workforceSize || null,
-      message: data.message,
-      source: "website",
-    });
+    const { data: inserted, error } = await supabase
+      .from("contact_enquiries")
+      .insert({
+        full_name: data.fullName,
+        email: data.email,
+        company: data.company,
+        job_title: data.jobTitle || null,
+        phone: data.phone || null,
+        workforce_size: data.workforceSize || null,
+        message: data.message,
+        source: "website",
+      })
+      .select("id")
+      .single();
 
     if (error) {
       console.error("contact_enquiries insert failed", error);
@@ -104,6 +108,27 @@ export const submitEnquiry = createServerFn({ method: "POST" })
         ok: false as const,
         error: "We couldn't send your enquiry just now. Please try again, or email info@ddhs.co.za.",
       };
+    }
+
+    // Notify the team. A failed notification must not fail the enquiry —
+    // the submission is already stored.
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      await sendTemplateEmail("enquiry-notification", data.email, {
+        templateData: {
+          fullName: data.fullName,
+          email: data.email,
+          company: data.company,
+          jobTitle: data.jobTitle || "",
+          phone: data.phone || "",
+          workforceSize: data.workforceSize || "",
+          message: data.message,
+        },
+        idempotencyKey: `enquiry-notification-${inserted.id}`,
+        replyTo: data.email,
+      });
+    } catch (notifyError) {
+      console.error("enquiry notification email failed", notifyError);
     }
 
     return { ok: true as const };
