@@ -9,3 +9,6 @@
 - [ ] Confirm sign-up accounts persist in the user database after email confirmation (verify + report)
 - [x] Sign-up persistence: confirmed — accounts are stored in the real user database and persist after email confirmation
 - [ ] PayFast: user to register at payfast.io, then re-request merchant ID, key and passphrase to activate checkout
+- [x] PayFast test mode switched on with PayFast's public sandbox details
+- [ ] PayFast live: user's own merchant ID, key and passphrase + set PAYFAST_SANDBOX to false
+- [ ] Staff compliance dashboard: every client's EEA12 / EE plan / DG progress + deadline calendar
