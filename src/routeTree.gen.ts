@@ -24,6 +24,7 @@ import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
 import { Route as ApiPublicHooksComplianceRemindersRouteImport } from './routes/api/public/hooks/compliance-reminders'
+import { Route as ApiPublicHooksPayfastItnRouteImport } from './routes/api/public/hooks/payfast-itn'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -101,6 +102,12 @@ const ApiPublicHooksComplianceRemindersRoute =
     path: '/api/public/hooks/compliance-reminders',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksPayfastItnRoute =
+  ApiPublicHooksPayfastItnRouteImport.update({
+    id: '/api/public/hooks/payfast-itn',
+    path: '/api/public/hooks/payfast-itn',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -123,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
+  '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -140,6 +148,7 @@ export interface FileRoutesByTo {
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/plans': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
+  '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -159,6 +168,7 @@ export interface FileRoutesById {
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
+  '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/plans/$id'
     | '/plans/'
     | '/api/public/hooks/compliance-reminders'
+    | '/api/public/hooks/payfast-itn'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/plans/$id'
     | '/plans'
     | '/api/public/hooks/compliance-reminders'
+    | '/api/public/hooks/payfast-itn'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -213,6 +225,7 @@ export interface FileRouteTypes {
     | '/_authenticated/plans/$id'
     | '/_authenticated/plans/'
     | '/api/public/hooks/compliance-reminders'
+    | '/api/public/hooks/payfast-itn'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -226,6 +239,7 @@ export interface RootRouteChildren {
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
+  ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -336,6 +350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksComplianceRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/payfast-itn': {
+      id: '/api/public/hooks/payfast-itn'
+      path: '/api/public/hooks/payfast-itn'
+      fullPath: '/api/public/hooks/payfast-itn'
+      preLoaderRoute: typeof ApiPublicHooksPayfastItnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -378,6 +399,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   ApiPublicHooksComplianceRemindersRoute:
     ApiPublicHooksComplianceRemindersRoute,
+  ApiPublicHooksPayfastItnRoute: ApiPublicHooksPayfastItnRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport

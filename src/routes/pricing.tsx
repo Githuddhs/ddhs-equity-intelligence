@@ -1,6 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+import { supabase } from "@/integrations/supabase/client";
+import { startPayfastCheckout, type PayfastPlan } from "@/lib/payfast.functions";
 
 export const Route = createFileRoute("/pricing")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    paid: search["paid"] === "1",
+    cancelled: search["cancelled"] === "1",
+  }),
   head: () => ({
     meta: [
       { title: "Subscription plans — DDHS Equity Intelligence" },
@@ -14,19 +23,73 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-const PLANS = [
-  { name: "Starter", price: "R1,500", per: "/month", blurb: "For smaller designated employers getting compliant.", features: ["EEA12 analysis for all levels", "AI gap summaries", "Saved analysis history", "1 EE plan", "Email reminders"], cta: "Start with Starter" },
-  { name: "Professional", price: "R4,500", per: "/month", blurb: "For HR and EE teams managing a full plan cycle.", features: ["Everything in Starter", "Unlimited EE plans with AI drafting", "DG review checklist & evidence pack", "Compliance dashboard", "Priority support"], cta: "Choose Professional", featured: true },
+const PLANS: {
+  name: string;
+  price: string;
+  per: string;
+  blurb: string;
+  features: string[];
+  cta: string;
+  featured?: boolean;
+  payfast?: PayfastPlan;
+}[] = [
+  { name: "Starter", price: "R1,500", per: "/month", blurb: "For smaller designated employers getting compliant.", features: ["EEA12 analysis for all levels", "AI gap summaries", "Saved analysis history", "1 EE plan", "Email reminders"], cta: "Start with Starter", payfast: "starter" },
+  { name: "Professional", price: "R4,500", per: "/month", blurb: "For HR and EE teams managing a full plan cycle.", features: ["Everything in Starter", "Unlimited EE plans with AI drafting", "DG review checklist & evidence pack", "Compliance dashboard", "Priority support"], cta: "Choose Professional", featured: true, payfast: "professional" },
   { name: "Enterprise", price: "On request", per: "", blurb: "For groups with multiple entities or sites.", features: ["Everything in Professional", "Multiple companies & sites", "Onboarding and training", "Dedicated account manager", "Custom reporting"], cta: "Talk to sales" },
 ];
 
 const PAYMENT = [
+  { t: "Card or Instant EFT online", d: "Pay securely with PayFast — cards, Instant EFT, SnapScan and more." },
   { t: "EFT / bank transfer", d: "Pay against a monthly or annual tax invoice." },
   { t: "Debit order", d: "Automatic monthly collection from your business account." },
   { t: "Annual upfront", d: "Pay for 12 months and receive two months free." },
 ];
 
+function submitPayfastForm(action: string, fields: Record<string, string>) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = action;
+  for (const [name, value] of Object.entries(fields)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+
 function PricingPage() {
+  const { paid, cancelled } = Route.useSearch();
+  const navigate = useNavigate();
+  const [busy, setBusy] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (paid) {
+      toast.success("Payment received — thank you! Your subscription is being activated.");
+    } else if (cancelled) {
+      toast.info("Payment cancelled. You can try again whenever you're ready.");
+    }
+  }, [paid, cancelled]);
+
+  async function payWithPayfast(plan: PayfastPlan) {
+    setBusy(plan);
+    try {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        navigate({ to: "/auth", search: { next: "/pricing" } });
+        return;
+      }
+      const result = await startPayfastCheckout({ data: { plan } });
+      submitPayfastForm(result.action, result.fields);
+    } catch (error) {
+      console.error(error);
+      toast.error(error instanceof Error ? error.message : "We couldn't start the payment. Please try again.");
+      setBusy(null);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
@@ -37,7 +100,7 @@ function PricingPage() {
       </header>
       <main className="mx-auto max-w-6xl px-6 py-16">
         <h1 className="text-center font-display text-4xl font-bold text-primary">Subscription plans</h1>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-lg text-muted-foreground">Prices exclude VAT. Billed monthly or annually by invoice.</p>
+        <p className="mx-auto mt-3 max-w-2xl text-center text-lg text-muted-foreground">Prices exclude VAT. Pay securely online with PayFast, or by invoice.</p>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {PLANS.map((p) => (
             <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-8 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
@@ -48,13 +111,24 @@ function PricingPage() {
               <ul className="mt-6 flex-1 space-y-2 text-sm">
                 {p.features.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
               </ul>
-              <a href="/#contact" className={`mt-8 rounded-lg px-4 py-2 text-center text-sm font-semibold ${p.featured ? "bg-teal text-primary-foreground" : "border border-primary text-primary"}`}>{p.cta}</a>
+              {p.payfast ? (
+                <button
+                  type="button"
+                  disabled={busy !== null}
+                  onClick={() => payWithPayfast(p.payfast!)}
+                  className={`mt-8 rounded-lg px-4 py-2 text-center text-sm font-semibold disabled:opacity-60 ${p.featured ? "bg-teal text-primary-foreground" : "bg-primary text-primary-foreground"}`}
+                >
+                  {busy === p.payfast ? "Redirecting to PayFast…" : `${p.cta} — pay online`}
+                </button>
+              ) : (
+                <a href="/#contact" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">{p.cta}</a>
+              )}
             </div>
           ))}
         </div>
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
           <h2 className="font-display text-2xl font-bold text-primary">Payment options</h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
+          <div className="mt-6 grid gap-6 md:grid-cols-4">
             {PAYMENT.map((x) => <div key={x.t}><h3 className="font-semibold text-primary">{x.t}</h3><p className="mt-1 text-sm text-muted-foreground">{x.d}</p></div>)}
           </div>
           <div className="mt-8 rounded-lg border border-border bg-background p-6">
