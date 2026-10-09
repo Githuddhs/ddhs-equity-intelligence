@@ -5,3 +5,5 @@
 - [x] Auto-fill plan goals and DG review progress from saved EEA12 analyses
 
 - [x] Subscription page (no online payments yet; real prices needed from user)
+- [ ] PayFast checkout: request merchant credentials, test sandbox payment end to end
+- [ ] Confirm sign-up accounts persist in the user database after email confirmation (verify + report)
