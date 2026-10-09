@@ -29,9 +29,11 @@ function Portal() {
         supabase.from("ee_plans").select("id,title,company,start_date,end_date,updated_at").order("updated_at", { ascending: false }).limit(5),
         supabase.from("dg_reviews").select("id,score,updated_at,ee_plans(title)").order("updated_at", { ascending: false }).limit(5),
         supabase.from("subscriptions").select("plan,status,amount,created_at").order("created_at", { ascending: false }).limit(1),
+        supabase.from("portal_documents").select("area,category"),
       ]);
-      for (const x of [a, p, r, s]) if (x.error) throw x.error;
-      return { user: u.data.user, analyses: a.data ?? [], plans: p.data ?? [], reviews: r.data ?? [], sub: s.data?.[0] ?? null };
+      const d = await supabase.from("portal_documents").select("area,category");
+      for (const x of [a, p, r, s, d]) if (x.error) throw x.error;
+      return { docs: d.data ?? [], user: u.data.user, analyses: a.data ?? [], plans: p.data ?? [], reviews: r.data ?? [], sub: s.data?.[0] ?? null };
     },
   });
 
@@ -58,6 +60,22 @@ function Portal() {
               <Link to="/pricing" search={{ paid: false, cancelled: false }} className="mt-1 inline-block font-semibold text-teal">Choose a plan →</Link>
             )}
           </div>
+        </div>
+
+        <h2 className="mt-8 font-display text-xl font-bold text-primary">Compliance documents & progress</h2>
+        <div className="mt-3 grid gap-4 sm:grid-cols-3">
+          {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6]] as const).map(([k, label, total]) => {
+            const n = new Set((data?.docs ?? []).filter((x) => x.area === k).map((x) => x.category)).size;
+            const pct = Math.round((n / total) * 100);
+            return (
+              <Link key={k} to="/portal/$area" params={{ area: k }} className="rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
+                <p className="font-semibold">{label}</p>
+                <p className="text-sm text-muted-foreground">{n} of {total} documents · {pct}%</p>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full bg-teal" style={{ width: `${pct}%` }} /></div>
+                <p className="mt-3 text-sm font-semibold text-teal">Upload & track →</p>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">

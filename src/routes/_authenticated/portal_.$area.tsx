@@ -200,4 +200,3 @@ function DocRow({ area, doc, files, onChange }: { area: Area; doc: { key: string
   );
 }
 
-export const PORTAL_AREAS = AREAS;
