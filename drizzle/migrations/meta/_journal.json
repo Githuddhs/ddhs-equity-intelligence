@@ -36,6 +36,13 @@
       "when": 1791555401911,
       "tag": "0004_create_subscriptions",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791556397327,
+      "tag": "0005_create_quote_requests",
+      "breakpoints": true
     }
   ]
 }

@@ -190,6 +190,39 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_requests: {
+        Row: {
+          company: string
+          created_at: string
+          details: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          service: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          details: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          service: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          details?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          service?: string
+        }
+        Relationships: []
+      }
       reminder_settings: {
         Row: {
           enabled: boolean
