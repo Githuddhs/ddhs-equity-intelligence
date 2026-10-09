@@ -479,7 +479,7 @@ function Index() {
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Platform</h4>
+              <h4 className="label-title text-primary">Platform</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["Workforce Analysis", "EE Planning", "Accountability", "Evidence Management", "Executive Reporting"].map((l) => (
                   <li key={l}><a href="#platform" className="transition-colors hover:text-primary">{l}</a></li>
@@ -487,7 +487,7 @@ function Index() {
               </ul>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Company</h4>
+              <h4 className="label-title text-primary">Company</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["About DDHS Equity Intelligence", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
                   <li key={l}><a href="#contact" className="transition-colors hover:text-primary">{l}</a></li>
@@ -495,7 +495,7 @@ function Index() {
               </ul>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-primary">Governance</h4>
+              <h4 className="label-title text-primary">Governance</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["Privacy", "Responsible AI", "Data Protection", "Security"].map((l) => (
                   <li key={l}><a href="#governance" className="transition-colors hover:text-primary">{l}</a></li>
