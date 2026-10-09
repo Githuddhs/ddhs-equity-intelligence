@@ -15,6 +15,13 @@
       "when": 1791537002199,
       "tag": "0001_create_eea12_analyses",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791537271288,
+      "tag": "0002_create_ee_plans_dg_reviews",
+      "breakpoints": true
     }
   ]
 }
