@@ -57,7 +57,17 @@ function PricingPage() {
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {PAYMENT.map((x) => <div key={x.t}><h3 className="font-semibold text-primary">{x.t}</h3><p className="mt-1 text-sm text-muted-foreground">{x.d}</p></div>)}
           </div>
-          <p className="mt-6 text-sm text-muted-foreground">Choose a plan and our team will send your invoice and activate your account.</p>
+          <div className="mt-8 rounded-lg border border-border bg-background p-6">
+            <h3 className="font-display text-lg font-bold text-primary">Banking details</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Use these details for EFT payments and debit orders.</p>
+            <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
+              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Account name</dt><dd className="font-semibold text-primary">Diversity Digital Hiring Solutions</dd></div>
+              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Bank</dt><dd className="font-semibold text-primary">Capitec Bank</dd></div>
+              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Account number</dt><dd className="font-mono font-semibold text-primary">1055905626</dd></div>
+              <div className="flex justify-between gap-4 border-b border-border/60 py-1.5"><dt className="text-muted-foreground">Branch code</dt><dd className="font-mono font-semibold text-primary">450105</dd></div>
+            </dl>
+            <p className="mt-4 text-sm text-muted-foreground">Use your company name as the payment reference, then email your proof of payment to info@ddhs.co.za and our team will activate your account.</p>
+          </div>
         </section>
       </main>
     </div>
