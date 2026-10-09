@@ -137,11 +137,11 @@ function Eea12Page() {
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-teal">EEA12 Workforce Analysis</p>
           <h1 className="mt-2 font-display text-3xl font-bold text-primary md:text-4xl">Occupational level progress check</h1>
-          <p className="mt-3 max-w-3xl text-muted-foreground">
+          <p className="mt-3 max-w-3xl text-lg leading-relaxed text-muted-foreground">
             Enter your headcount for one occupational level. The tool checks it against sectoral targets first, then the EAP,
             and ranks which designated groups to prioritise for the next appointment.
           </p>
-          <ol className="mt-4 list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
+          <ol className="mt-4 list-decimal space-y-1 pl-5 text-muted-foreground">
             <li>First, aim to meet the sectoral targets for Designated Males and Designated Females.</li>
             <li>Second, aim to achieve the EAP targets.</li>
             <li>Avoid perpetuating the appointment of over-represented groups where representation exceeds the EAP.</li>
