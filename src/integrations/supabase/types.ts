@@ -175,6 +175,42 @@ export type Database = {
         }
         Relationships: []
       }
+      internal_tokens: {
+        Row: {
+          name: string
+          token: string
+        }
+        Insert: {
+          name: string
+          token?: string
+        }
+        Update: {
+          name?: string
+          token?: string
+        }
+        Relationships: []
+      }
+      reminder_settings: {
+        Row: {
+          enabled: boolean
+          lead_days: number[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          enabled?: boolean
+          lead_days?: number[]
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          enabled?: boolean
+          lead_days?: number[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

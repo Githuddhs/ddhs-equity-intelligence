@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useState } from "react";
+import { toast } from "sonner";
+import { sendTestReminder } from "@/lib/reminders.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil, DG_ITEMS, type Deadline, type DgAnswer } from "@/lib/ee-plan";
@@ -68,6 +72,8 @@ function Compliance() {
           </div>
         )}
 
+        <ReminderSettings />
+
         <div className="mt-6 space-y-3">
           {deadlines.map((d) => {
             const n = daysUntil(d.due);
@@ -95,5 +101,58 @@ function Compliance() {
         <p className="mt-6 text-xs text-muted-foreground">Dates follow the standard EE reporting cycle (31 August reporting date, 15 January online submission). Confirm against current Department of Employment and Labour notices. "Add reminder" saves a calendar entry with alerts 14 and 3 days before.</p>
       </main>
     </div>
+  );
+}
+
+const LEADS = [60, 30, 14, 7, 1];
+function ReminderSettings() {
+  const qc = useQueryClient();
+  const test = useServerFn(sendTestReminder);
+  const [busy, setBusy] = useState(false);
+  const { data } = useQuery({
+    queryKey: ["reminder_settings"],
+    queryFn: async () => {
+      const [{ data: u }, { data: s }] = await Promise.all([supabase.auth.getUser(), supabase.from("reminder_settings").select("enabled,lead_days").maybeSingle()]);
+      return { email: u.user?.email ?? "", enabled: s?.enabled ?? false, lead_days: s?.lead_days ?? [30, 7, 1] };
+    },
+  });
+  if (!data) return null;
+  const save = async (p: { enabled?: boolean; lead_days?: number[] }) => {
+    const { data: u } = await supabase.auth.getUser();
+    const { error } = await supabase.from("reminder_settings").upsert({ user_id: u.user!.id, enabled: data.enabled, lead_days: data.lead_days, ...p });
+    if (error) { toast.error("Could not save: " + error.message); return; }
+    qc.invalidateQueries({ queryKey: ["reminder_settings"] });
+    toast.success(p.enabled === false ? "Email reminders switched off." : "Reminder settings saved.");
+  };
+  const runTest = async () => {
+    setBusy(true);
+    try {
+      const r = await test();
+      if (r.ok) toast.success(`Test reminder with ${r.count} deadline(s) sent to ${r.email}.`); else toast.error(r.error);
+    } catch { toast.error("Could not send the test reminder."); }
+    setBusy(false);
+  };
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="font-display text-lg font-bold text-primary">Email reminders</h2>
+          <p className="text-xs text-muted-foreground">Sent each morning to <strong>{data.email}</strong> when a deadline is this many days away.</p>
+        </div>
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={data.enabled} onChange={(e) => save({ enabled: e.target.checked })} className="h-4 w-4 accent-[var(--color-teal)]" />
+          {data.enabled ? "On" : "Off"}
+        </label>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-xs text-muted-foreground">Remind me</span>
+        {LEADS.map((d) => {
+          const on = data.lead_days.includes(d);
+          return <button key={d} disabled={!data.enabled} onClick={() => save({ lead_days: on ? data.lead_days.filter((x) => x !== d) : [...data.lead_days, d].sort((a, b) => b - a) })}
+            className={`rounded-md border px-2.5 py-1 text-xs font-semibold disabled:opacity-50 ${on ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{d} day{d === 1 ? "" : "s"} before</button>;
+        })}
+        <button onClick={runTest} disabled={busy} className="ml-auto rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal">{busy ? "Sending…" : "Send test reminder"}</button>
+      </div>
+    </section>
   );
 }
