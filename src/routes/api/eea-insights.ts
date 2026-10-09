@@ -23,7 +23,7 @@ export const Route = createFileRoute("/api/eea-insights")({
       POST: async ({ request }) => {
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
-        const key = process.env.LOVABLE_API_KEY;
+        const key = process.env["LOVABLE_API_KEY"];
         if (!key) return Response.json({ error: "AI is not configured." }, { status: 500 });
 
         const upstream = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
