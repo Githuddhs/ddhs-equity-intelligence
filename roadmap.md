@@ -12,4 +12,5 @@
 - [ ] PayFast live: merchant ID + key wired in; waiting on live passphrase (PAYFAST_LIVE_PASSPHRASE) and a real test payment by the user
 - [ ] Staff dashboard: sdm@ddhs.co.za gets staff access automatically once that account is signed up and confirmed (waiting on user)
 - [x] Staff alerts: pending invites, incomplete documents, overdue DG reviews
-- [ ] DG review deadline per EE plan; overdue alerts use it
+- [x] DG review deadline per EE plan; overdue alerts use it
+- [x] Invite sent to sdm@ddhs.co.za (user accepts via email)
