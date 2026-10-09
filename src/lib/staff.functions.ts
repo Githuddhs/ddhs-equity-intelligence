@@ -16,10 +16,11 @@ export const inviteClient = createServerFn({ method: "POST" })
     const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
     if (!isAdmin) throw new Error("Only DDHS staff can invite clients.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const origin = new URL(getRequest().url).origin;
+    const reqOrigin = new URL(getRequest().url).origin;
+    const origin = /localhost|127\.0\.0\.1/.test(reqOrigin) ? "https://id-preview--878b594a-f0cd-417b-a23a-aefeb59a767b.lovable.app" : reqOrigin;
     const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
       data: { full_name: data.fullName, company: data.company },
-      redirectTo: `${origin}/portal`,
+      redirectTo: `${origin}/set-password`,
     });
     if (error) {
       console.error("invite failed", error);
