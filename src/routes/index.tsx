@@ -19,7 +19,8 @@ import {
   Users,
 } from "lucide-react";
 
-import dashboardHero from "@/assets/dashboard-hero.png";
+import { ContactForm } from "@/components/contact-form";
+import { DashboardMock } from "@/components/dashboard-mock";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -215,15 +216,7 @@ function Index() {
             </div>
           </div>
           <div className="relative">
-            <div className="overflow-hidden rounded-2xl border shadow-2xl shadow-primary/10">
-              <img
-                src={dashboardHero}
-                alt="DDHS Equity Intelligence executive dashboard showing EE Score, progress against targets, open actions and evidence status"
-                width={1600}
-                height={1200}
-                className="w-full"
-              />
-            </div>
+            <DashboardMock />
           </div>
         </div>
         <div className="mt-14 grid gap-4 rounded-2xl border bg-secondary/50 p-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -441,23 +434,17 @@ function Index() {
             Move beyond fragmented spreadsheets and manual reporting. Gain a clear view of targets,
             implementation progress, accountability, risk and supporting evidence.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a
-              href="mailto:info@ddhs.co.za"
-              className="inline-flex items-center gap-2 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
-            >
-              Request an Enterprise Demonstration <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="mailto:info@ddhs.co.za"
-              className="inline-flex items-center rounded-lg border border-navy-foreground/30 px-6 py-3 text-sm font-semibold text-navy-foreground transition-colors hover:bg-navy-foreground/10"
-            >
-              Speak to an EE Specialist
-            </a>
-          </div>
+          <ContactForm />
           <p className="mt-6 text-sm text-navy-foreground/60">
             No generic sales pitch. We focus on your current Employment Equity processes, reporting
-            obligations and implementation challenges.
+            obligations and implementation challenges. Prefer email? Reach us directly at{" "}
+            <a
+              href="mailto:info@ddhs.co.za"
+              className="font-semibold text-teal underline-offset-4 hover:underline"
+            >
+              info@ddhs.co.za
+            </a>
+            .
           </p>
         </div>
       </section>
