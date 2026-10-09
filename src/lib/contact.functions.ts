@@ -87,20 +87,18 @@ export const submitEnquiry = createServerFn({ method: "POST" })
       };
     }
 
-    const { data: inserted, error } = await supabase
-      .from("contact_enquiries")
-      .insert({
-        full_name: data.fullName,
-        email: data.email,
-        company: data.company,
-        job_title: data.jobTitle || null,
-        phone: data.phone || null,
-        workforce_size: data.workforceSize || null,
-        message: data.message,
-        source: "website",
-      })
-      .select("id")
-      .single();
+    const enquiryRef = crypto.randomUUID();
+
+    const { error } = await supabase.from("contact_enquiries").insert({
+      full_name: data.fullName,
+      email: data.email,
+      company: data.company,
+      job_title: data.jobTitle || null,
+      phone: data.phone || null,
+      workforce_size: data.workforceSize || null,
+      message: data.message,
+      source: "website",
+    });
 
     if (error) {
       console.error("contact_enquiries insert failed", error);
