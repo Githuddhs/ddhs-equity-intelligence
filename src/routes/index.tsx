@@ -150,7 +150,7 @@ function SectionHeading({
         {title}
       </h2>
       {body && (
-        <p className={`mt-4 text-lg ${dark ? "text-navy-foreground/70" : "text-muted-foreground"}`}>
+        <p className={`mt-4 text-lg leading-relaxed ${dark ? "text-navy-foreground/80" : "text-muted-foreground"}`}>
           {body}
         </p>
       )}
@@ -197,7 +197,7 @@ function Index() {
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-primary text-balance sm:text-5xl">
               Take Control of Employment Equity Implementation
             </h1>
-            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
               Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
               and executive insight. DDHS Equity Intelligence helps South African employers manage
               Employment Equity analysis, planning, monitoring, governance and reporting from a

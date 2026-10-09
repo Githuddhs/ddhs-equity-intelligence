@@ -41,25 +41,28 @@
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.21 0.05 255);
+  /* Soft cool off-white instead of stark white */
+  --background: oklch(0.982 0.005 240);
+  /* Deeper ink for stronger reading contrast */
+  --foreground: oklch(0.19 0.045 255);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.05 255);
+  --card-foreground: oklch(0.19 0.045 255);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.05 255);
+  --popover-foreground: oklch(0.19 0.045 255);
   /* Deep navy #0A2540 */
   --primary: oklch(0.28 0.065 252);
   --primary-foreground: oklch(0.98 0.005 240);
-  --secondary: oklch(0.96 0.01 230);
+  --secondary: oklch(0.955 0.012 230);
   --secondary-foreground: oklch(0.28 0.065 252);
-  --muted: oklch(0.965 0.008 235);
-  --muted-foreground: oklch(0.5 0.03 250);
-  --accent: oklch(0.94 0.03 195);
+  --muted: oklch(0.955 0.01 235);
+  /* Darker secondary text — readable, not washed out */
+  --muted-foreground: oklch(0.42 0.03 250);
+  --accent: oklch(0.93 0.035 195);
   --accent-foreground: oklch(0.28 0.065 252);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0.005 240);
-  --border: oklch(0.92 0.01 245);
-  --input: oklch(0.92 0.01 245);
+  --border: oklch(0.9 0.012 245);
+  --input: oklch(0.9 0.012 245);
   --ring: oklch(0.62 0.1 195);
   /* Brand tokens */
   --navy: oklch(0.28 0.065 252);
@@ -79,10 +82,21 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    /* Larger, more comfortable base reading size */
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: var(--color-teal-soft);
+    color: var(--color-navy);
   }
 }
 
