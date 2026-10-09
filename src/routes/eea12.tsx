@@ -82,7 +82,7 @@ function Eea12Page() {
   const [eap, setEap] = useState(DEFAULT_EAP);
   const [targetsByLevel, setTargetsByLevel] = useState<Record<string, Targets>>(() =>
     Object.fromEntries(LEVELS.map((l) => [l, { males: 30.5, females: 46.1, total: 76.6 }])));
-  const targets = targetsByLevel[level];
+  const targets = targetsByLevel[level] ?? { males: 30.5, females: 46.1, total: 76.6 };
   const setTargets = (t: Targets) => setTargetsByLevel((prev) => ({ ...prev, [level]: t }));
   const applySectorTargets = (sectorName: string, lvl: string) => {
     const s = SECTORS.find((x) => x.name === sectorName);
@@ -257,7 +257,7 @@ function Eea12Page() {
                       <td className={`${td} text-left`}>{s.name}</td>
                       <td className={td}>
                         <input type="number" step={0.1} aria-label={`${s.name} target`} className={num} value={targets[key]}
-                          onChange={(e) => setTargets({ ...targets, [key]: Number(e.target.value) || 0 })} />
+                          onChange={(e) => setTargets({ ...targets, [key]: Number(e.target.value) || 0 } as Targets)} />
                       </td>
                       <td className={td}>{pct(s.actual)}</td>
                       <td className={td}>{sgn(s.actual - s.target)}</td>
