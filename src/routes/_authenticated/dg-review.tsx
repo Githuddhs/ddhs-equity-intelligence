@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/dg-review")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { id?: string } => (typeof s["id"] === "string" ? { id: s["id"] } : {}),
   component: DgReviewPage,
 });
 
@@ -27,6 +28,7 @@ type Analysis = { level: string; sector: string; total_headcount: number; create
 type Sectoral = { name: string; target: number; actual: number };
 
 function DgReviewPage() {
+  const { id } = Route.useSearch();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [analyses, setAnalyses] = useState<Analysis[]>([]);
   const [reviewId, setReviewId] = useState<string | null>(null);
@@ -41,18 +43,19 @@ function DgReviewPage() {
       const [p, a, r] = await Promise.all([
         supabase.from("ee_plans").select("id,title,company,sector,start_date,end_date,content").order("updated_at", { ascending: false }),
         supabase.from("eea12_analyses").select("level,sector,total_headcount,created_at,results").order("created_at", { ascending: false }).limit(10),
-        supabase.from("dg_reviews").select("*").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+        id ? supabase.from("dg_reviews").select("*").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
       ]);
       setPlans(p.data ?? []);
       setAnalyses(a.data ?? []);
+      setReviewId(null); setAnswers({}); setAssessment("");
       if (r.data) {
         setReviewId(r.data.id);
         setPlanId(r.data.plan_id ?? "");
         setAnswers((r.data.answers ?? {}) as Record<string, DgAnswer>);
         setAssessment(r.data.ai_assessment ?? "");
-      } else if (p.data?.[0]) setPlanId(p.data[0].id);
+      } else setPlanId(p.data?.[0]?.id ?? "");
     })();
-  }, []);
+  }, [id]);
 
   const score = useMemo(() => scoreAnswers(answers), [answers]);
   const plan = plans.find((p) => p.id === planId);
@@ -94,6 +97,7 @@ function DgReviewPage() {
       <main className="mx-auto max-w-5xl px-6 py-10 print:hidden">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Sections 42–45</p>
         <h1 className="font-display text-3xl font-bold text-primary">Director-General review readiness</h1>
+        <div className="mt-3 flex gap-2 text-sm"><Link to="/dg-history" className="rounded-lg border border-border px-3 py-1.5 font-semibold">Past reviews</Link><Link to="/dg-review" search={{}} className="rounded-lg border border-border px-3 py-1.5 font-semibold">New review</Link>{reviewId && <span className="self-center text-xs text-muted-foreground">Editing a saved review</span>}</div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Assess your organisation against what the Director-General checks, get AI advice on weak areas, and print an evidence pack.</p>
 
         <section className="mt-8 grid gap-4 md:grid-cols-[1fr_auto]">
