@@ -46,10 +46,10 @@ export function ContactForm() {
 
     const parsed = await enquirySchema.safeParseAsync(form);
     if (!parsed.success) {
-      const fieldErrors: Record<string, string> = {};
+      const fieldErrors: Partial<Record<FieldKey, string>> = {};
       for (const issue of parsed.error.issues) {
-        const key = String(issue.path[0] ?? "form");
-        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+        const key = String(issue.path[0] ?? "fullName") as FieldKey;
+        if (!(key in fieldErrors)) fieldErrors[key] = issue.message;
       }
       setErrors(fieldErrors);
       toast.error("Please check the highlighted fields.");
