@@ -349,6 +349,17 @@ export type Database = {
           id: string
         }[]
       }
+      admin_clients_all: {
+        Args: never
+        Returns: {
+          company: string
+          confirmed: boolean
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+        }[]
+      }
       enquiry_throttled: { Args: { p_email: string }; Returns: boolean }
       has_role: {
         Args: {

@@ -78,6 +78,13 @@
       "when": 1791560932290,
       "tag": "0010_staff_edit_plans_reviews",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1791560949892,
+      "tag": "0011_admin_clients_all",
+      "breakpoints": true
     }
   ]
 }
