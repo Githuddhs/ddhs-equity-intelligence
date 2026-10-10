@@ -40,7 +40,7 @@ export function buildTimetable(responses: { answers: unknown }[], weak: { title:
   const span = (r: Row) => {
     const a = addMonths(start, r.start - 1), b = addMonths(start, r.end - 1);
     const q = (m: number) => `Y${Math.ceil(m / 12)} ${quarter(((m - 1) % 12) + 1)}`;
-    return r.start === r.end ? `Month ${r.start} (${q(r.start)}, ${monthName(a)})` : `Months ${r.start}–${r.end} (${q(r.start)}–${q(r.end)}, ${monthName(a)} – ${monthName(b)})`;
+    return r.start === r.end ? `Month ${r.start} (${q(r.start)}, ${monthName(a)})` : `Months ${r.start}–${r.end} (${q(r.start) === q(r.end) ? q(r.start) : `${q(r.start)}–${q(r.end)}`}, ${monthName(a)} – ${monthName(b)})`;
   };
   const sorted = rows.filter((r) => r.start <= months).sort((a, b) => a.start - b.start || a.end - b.end);
   const text = [
