@@ -1,0 +1,2 @@
+ALTER TABLE public.workforce_snapshots ADD COLUMN units jsonb NOT NULL DEFAULT '[]'::jsonb;
+COMMENT ON COLUMN public.workforce_snapshots.units IS 'Per division/department/section headcount: [{division, department, section, counts, disability}]';
