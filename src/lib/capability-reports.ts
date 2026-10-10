@@ -100,7 +100,7 @@ export async function exportEea12Pdf(a: Eea12Export) {
 // ---------- DG review ----------
 export type DgExport = {
   score: number; answers: unknown; ai_assessment: string | null; updated_at: string;
-  planTitle?: string; company?: string;
+  planTitle?: string | undefined; company?: string | undefined;
 };
 
 export async function exportDgReviewPdf(r: DgExport) {
