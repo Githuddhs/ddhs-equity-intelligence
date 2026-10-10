@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AccountabilityManagementRouteImport } from './routes/accountability-management'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ClientViewRouteImport } from './routes/client-view'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
@@ -66,6 +67,11 @@ const AccountabilityManagementRoute =
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientViewRoute = ClientViewRouteImport.update({
+  id: '/client-view',
+  path: '/client-view',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Eea12Route = Eea12RouteImport.update({
@@ -247,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
+  '/client-view': typeof ClientViewRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -286,6 +293,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
+  '/client-view': typeof ClientViewRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -327,6 +335,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
+  '/client-view': typeof ClientViewRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -368,6 +377,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accountability-management'
     | '/auth'
+    | '/client-view'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -407,6 +417,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accountability-management'
     | '/auth'
+    | '/client-view'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/accountability-management'
     | '/auth'
+    | '/client-view'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -488,6 +500,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AccountabilityManagementRoute: typeof AccountabilityManagementRoute
   AuthRoute: typeof AuthRoute
+  ClientViewRoute: typeof ClientViewRoute
   Eea12Route: typeof Eea12Route
   Eea13PlanningRoute: typeof Eea13PlanningRoute
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
@@ -537,6 +550,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client-view': {
+      id: '/client-view'
+      path: '/client-view'
+      fullPath: '/client-view'
+      preLoaderRoute: typeof ClientViewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eea12': {
@@ -824,6 +844,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AccountabilityManagementRoute: AccountabilityManagementRoute,
   AuthRoute: AuthRoute,
+  ClientViewRoute: ClientViewRoute,
   Eea12Route: Eea12Route,
   Eea13PlanningRoute: Eea13PlanningRoute,
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,

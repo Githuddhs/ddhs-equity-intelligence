@@ -13,3 +13,4 @@
 - Workforce upload: Excel, CSV/TSV, PDF, Word (.docx).
 - Auto-fill plan: dated month/quarter timetable from barrier data; fills empty sections only.
 - Shared read-only client view (/view/$token): private expiring links created from My portal; reports downloadable without sign-in.
+- Demo run of shared client view with real data (sdm@sun.ac.za).
