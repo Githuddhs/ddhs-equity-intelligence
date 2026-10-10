@@ -71,11 +71,12 @@ function StaffDashboard() {
           ? new Date(`${due}T23:59:59`) < new Date() && (!review || review.updated_at.slice(0, 10) < due)
           : !review || daysSince(review.updated_at) > 365;
         return { ...cl, docs, missing, plan, review, due, overdue, docCount: docs.length };
-      });
+      }) };
     },
   });
 
-  const all = data ?? [];
+  const all = data?.clients ?? [];
+  const ov = data?.overview;
   const pending = all.filter((c) => !c.confirmed);
   const incomplete = all.filter((c) => c.confirmed && c.missing.some((m) => m.uploaded < DOCS[m.area].items.length));
   const overdue = all.filter((c) => c.confirmed && c.overdue);
