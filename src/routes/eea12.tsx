@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SECTORS, LEVEL_TO_TARGET_KEY, type Targets, type TargetKey } from "@/lib/sectors";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AiInsights } from "@/components/ai-insights";
 import { AuthCta } from "@/components/auth-cta";
 import { toast } from "sonner";
@@ -68,8 +68,9 @@ function Eea12Page() {
     const w = wf.units.length && filtered ? aggregate(wf.units, f).counts : normaliseWorkforce(wf.counts);
     const row = w[lvl];
     if (row) setCounts({ ...DEFAULT_COUNTS, ...row });
-    toast.success(`Loaded ${lvl} for ${describeFilter(f)}.`);
   };
+  // Every level and unit starts from the actual headcount in Workforce Data.
+  useEffect(() => { if (wf) loadFromWorkforce(level, unitFilter); }, [wf, level, unitFilter]); // eslint-disable-line react-hooks/exhaustive-deps
   const [targetsByLevel, setTargetsByLevel] = useState<Record<string, Targets>>(() =>
     Object.fromEntries(LEVELS.map((l) => [l, { males: 30.5, females: 46.1, total: 76.6 }])));
   const targets = targetsByLevel[level] ?? { males: 30.5, females: 46.1, total: 76.6 };
@@ -191,9 +192,9 @@ function Eea12Page() {
               {wf.units.length > 0 && <OrgUnitPicker units={wf.units} value={unitFilter} onChange={setUnitFilter} />}
               <button type="button" onClick={() => loadFromWorkforce()}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-                Use my workforce data
+                Reset to workforce data
               </button>
-              <p className="w-full text-xs text-muted-foreground">Fills the headcount for the selected level from your latest workforce snapshot ({describeFilter(unitFilter)}).</p>
+              <p className="w-full text-xs text-muted-foreground">Headcount for each level is filled automatically from your latest workforce snapshot ({describeFilter(unitFilter)}).</p>
             </div>
           )}
           <div className="overflow-x-auto">
