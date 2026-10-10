@@ -120,7 +120,7 @@ function WorkforceFoundationPage() {
             DDHS <span className="text-teal">Equity Intelligence</span>
           </Link>
           <div className="flex items-center gap-4 text-sm font-semibold">
-            <Link to="/pricing" className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
+            <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
             <Link to="/signup" className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Sign up</Link>
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">
               Schedule a Demonstration
