@@ -441,6 +441,7 @@ export type Database = {
           snapshot_date: string
           source: string
           total_headcount: number
+          units: Json
           updated_at: string
           user_id: string
         }
@@ -454,6 +455,7 @@ export type Database = {
           snapshot_date?: string
           source?: string
           total_headcount?: number
+          units?: Json
           updated_at?: string
           user_id?: string
         }
@@ -467,6 +469,7 @@ export type Database = {
           snapshot_date?: string
           source?: string
           total_headcount?: number
+          units?: Json
           updated_at?: string
           user_id?: string
         }

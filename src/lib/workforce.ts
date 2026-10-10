@@ -159,6 +159,8 @@ export type ParsedFile = {
   total: number;
   unknownColumns: string[];
   rowCount: number;
+  /** Per division/department/section counts, when the file has those columns. */
+  units?: import("@/lib/org-units").OrgUnit[];
 };
 
 /**
@@ -290,6 +292,12 @@ function parseEmployeeRows(rows: string[][]): ParsedFile | null {
     if (lvl < 0 || gen < 0 || race < 0) continue;
     const nat = head.indexOf("nationality");
     const dis = head.findIndex((x) => DISABILITY_ALIASES.has(x));
+    const col = (names: string[]) => head.findIndex((x) => names.includes(x));
+    const divCol = col(["division", "divisionname", "businessunit", "cluster", "faculty", "branch"]);
+    const depCol = col(["department", "departmentname", "dept", "deptname", "school"]);
+    const secCol = col(["section", "sectionname", "subdepartment", "unit", "unitname", "team"]);
+    const hasUnits = divCol >= 0 || depCol >= 0 || secCol >= 0;
+    const unitMap = new Map<string, { division: string; department: string; section: string; counts: Workforce; disability: Record<string, number> }>();
     const counts = emptyWorkforce();
     const disability: Record<string, number> = {};
     const found = new Set<string>();
@@ -313,16 +321,30 @@ function parseEmployeeRows(rows: string[][]): ParsedFile | null {
         : r.startsWith("white") ? (male ? "MW" : "FW") : undefined;
       if (!key) { skipped["unknown race"] = (skipped["unknown race"] ?? 0) + 1; continue; }
       counts[level]![key] += 1;
+      const isDisabled = dis >= 0 && /^(y|yes|true|1)$/i.test((c[dis] ?? "").trim());
+      if (hasUnits) {
+        const pick = (i: number) => (i >= 0 ? (c[i] ?? "").trim() : "") || "Not specified";
+        const division = pick(divCol), department = pick(depCol), section = pick(secCol);
+        const id = `${division}\u0000${department}\u0000${section}`;
+        let u = unitMap.get(id);
+        if (!u) { u = { division, department, section, counts: emptyWorkforce(), disability: {} }; unitMap.set(id, u); }
+        u.counts[level]![key] += 1;
+        if (isDisabled) u.disability[level] = (u.disability[level] ?? 0) + 1;
+      }
       found.add(level);
       rowCount++;
       if (dis >= 0 && /^(y|yes|true|1)$/i.test((c[dis] ?? "").trim())) disability[level] = (disability[level] ?? 0) + 1;
     }
     if (!rowCount) return null;
     const warnings = [`Read ${rowCount.toLocaleString("en-ZA")} employee rows and counted them per level and group.`];
+    if (hasUnits) {
+      const n = (k: "division" | "department" | "section") => new Set([...unitMap.values()].map((u) => u[k])).size;
+      warnings.push(`Found ${n("division")} division(s), ${n("department")} department(s) and ${n("section")} section(s).`);
+    }
     for (const [k, v] of Object.entries(skipped)) warnings.push(`${v} row(s) skipped: ${k}.`);
     const missing = LEVELS.filter((l) => !found.has(l));
     if (missing.length) warnings.push(`No employees found for: ${missing.join(", ")}.`);
-    return { counts, disability, levelsFound: [...found], warnings: warnings.slice(0, 12), total: grandTotal(counts), unknownColumns: [], rowCount };
+    return { counts, disability, levelsFound: [...found], warnings: warnings.slice(0, 12), total: grandTotal(counts), unknownColumns: [], rowCount, units: hasUnits ? [...unitMap.values()] : undefined };
   }
   return null;
 }
