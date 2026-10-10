@@ -10,6 +10,7 @@ import {
   sectionScores, completionPct, type BarrierAnswers, type BarrierComments, type BarrierProfile,
 } from "@/lib/barrier";
 import { exportBarrierExcel, exportBarrierPdf } from "@/lib/barrier-export";
+import { downloadBarrierResponseDoc } from "@/lib/barrier-response-doc";
 
 export const Route = createFileRoute("/_authenticated/barrier-analysis")({
   head: () => ({
@@ -42,7 +43,7 @@ function BarrierAnalysisPage() {
   const [sources, setSources] = useState<string[]>([]);
   const [effectiveness, setEffectiveness] = useState("");
   const [saving, setSaving] = useState(false);
-  const [exporting, setExporting] = useState<"xlsx" | "pdf" | null>(null);
+  const [exporting, setExporting] = useState<"xlsx" | "pdf" | "doc" | null>(null);
 
   const runExport = async (kind: "xlsx" | "pdf") => {
     if (!responses.length) { toast.error("No saved responses to export yet."); return; }
@@ -320,6 +321,10 @@ function BarrierAnalysisPage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="section-title text-primary">Saved responses</h2>
               <div className="flex gap-2">
+                <button onClick={async () => { setExporting("doc"); try { await downloadBarrierResponseDoc(responses, responses[0]?.org_name ?? ""); toast.success("Response document downloaded."); } catch { toast.error("Could not create the document."); } finally { setExporting(null); } }} disabled={exporting !== null}
+                  className="rounded-lg bg-teal px-3 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-50">
+                  {exporting === "doc" ? "Preparing…" : "Response document (Word)"}
+                </button>
                 <button onClick={() => runExport("xlsx")} disabled={exporting !== null}
                   className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal hover:bg-teal/10 disabled:opacity-50">
                   {exporting === "xlsx" ? "Preparing…" : "Export Excel"}
