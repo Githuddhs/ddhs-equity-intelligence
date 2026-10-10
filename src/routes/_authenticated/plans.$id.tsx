@@ -11,6 +11,7 @@ import { SECTORS } from "@/lib/sectors";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { autofillPlan } from "@/lib/plan-autofill";
+import { PlanTimeline } from "@/components/plan-timeline";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
   head: () => ({
@@ -196,6 +197,7 @@ function PlanBuilder() {
             {drafting === s.key && ai.error && <p className="mt-2 text-sm text-destructive">{ai.error}</p>}
           </section>
         ))}
+        <PlanTimeline content={content} start={meta.start_date} end={meta.end_date} onChange={(m) => upContent({ milestones: m })} />
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
       </main>
 
@@ -213,6 +215,9 @@ function PlanBuilder() {
             {content[s.key] ? renderMd(content[s.key]) : <p className="italic">Not completed.</p>}
           </div>
         ))}
+        {content.milestones.length > 0 && (<div className="mt-6 break-inside-avoid-page"><h2 className="section-title">Monitoring timeline</h2>
+          <table className="mt-2 w-full border-collapse text-xs"><thead><tr>{["Due", "Type", "Milestone", "Owner", "Status"].map((h) => <th key={h} className="border border-border p-1 text-left">{h}</th>)}</tr></thead>
+          <tbody>{[...content.milestones].sort((a, b) => a.due.localeCompare(b.due)).map((m) => <tr key={m.id}>{[m.due, m.kind, m.title, m.owner, m.status.replace("_", " ")].map((v, i) => <td key={i} className="border border-border p-1">{v}</td>)}</tr>)}</tbody></table></div>)}
         <div className="mt-12 grid grid-cols-2 gap-12">
           <p className="border-t border-foreground pt-1">Chief Executive Officer</p>
           <p className="border-t border-foreground pt-1">Assigned Senior Manager</p>
