@@ -78,10 +78,24 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
         <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
-        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : "Reset password"}</h1>
+        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : mode === "up" ? "Create your account" : "Reset password"}</h1>
         <p className="page-lead mt-1 text-muted-foreground">
-          {mode === "reset" ? "Enter your account email and we'll send you a reset link." : "One sign-in for every capability — EEA12 analysis, EE plans, DG review and your portal."}
+          {mode === "reset"
+            ? "Enter your account email and we'll send you a reset link."
+            : mode === "up"
+              ? "One account for every capability — EEA12 analysis, EE plans, DG review and your portal."
+              : "One sign-in for every capability — EEA12 analysis, EE plans, DG review and your portal."}
         </p>
+        {awaitingConfirm ? (
+          <div className="mt-6 rounded-md border border-border bg-muted p-4 text-sm">
+            <p className="font-semibold text-primary">Check your email</p>
+            <p className="mt-1 text-muted-foreground">
+              We've sent a confirmation link to <span className="font-medium">{email}</span>. Open it to activate your account, then sign in.
+            </p>
+            <button onClick={() => { setAwaitingConfirm(false); setMode("in"); }} className="mt-3 text-sm font-semibold text-teal">Back to sign in</button>
+          </div>
+        ) : (
+        <>
         {mode !== "reset" && (
           <button onClick={google} className="mt-6 w-full rounded-lg border border-border px-4 py-2 text-sm font-semibold">Continue with Google</button>
         )}
