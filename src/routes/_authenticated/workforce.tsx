@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { extractPdfText } from "@/lib/workforce.functions";
 import {
   DISABILITY_COLUMN,
   GROUPS,
@@ -18,6 +19,7 @@ import {
   normaliseDisability,
   normaliseWorkforce,
   parseWorkforceFile,
+  parseWorkforceRows,
   templateCsv,
   type Counts,
   type ParsedFile,
@@ -130,8 +132,38 @@ function WorkforcePage() {
 
   const onFile = async (f: File) => {
     try {
-      const text = await f.text();
-      const parsed = parseWorkforceFile(text, f.name);
+      const ext = (f.name.split(".").pop() ?? "").toLowerCase();
+      let parsed: ParsedFile;
+      if (ext === "xlsx" || ext === "xls") {
+        const XLSX = await import("xlsx");
+        const wb = XLSX.read(await f.arrayBuffer(), { type: "array" });
+        const sheet = wb.Sheets[wb.SheetNames[0] ?? ""];
+        if (!sheet) throw new Error(`${f.name} has no sheets in it.`);
+        const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "" })
+          .map((r) => r.map((c) => String(c ?? "").trim()))
+          .filter((r) => r.some((c) => c.length > 0));
+        parsed = parseWorkforceRows(rows, f.name);
+      } else if (ext === "pdf") {
+        const buf = await f.arrayBuffer();
+        let bin = "";
+        new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
+        const res = await extractPdfText({ data: { fileName: f.name, base64: btoa(bin) } });
+        // PDF text loses its columns, so glue the known multi-word headings
+        // and level names together before splitting on whitespace.
+        const phrases = [DISABILITY_COLUMN, "Occupational level", ...LEVELS, ...GROUPS.map((g) => g.label)];
+        const glue = (l: string) => {
+          let out = l;
+          for (const p of phrases) out = out.replace(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), p.replace(/ /g, ""));
+          return out;
+        };
+        const rows = res.text
+          .split(/\r?\n/)
+          .map((l) => glue(l).split(/\s+/).map((c) => c.trim().replace(/ /g, " ")).filter((c) => c.length > 0))
+          .filter((r) => r.length > 0);
+        parsed = parseWorkforceRows(rows, f.name);
+      } else {
+        parsed = parseWorkforceFile(await f.text(), f.name);
+      }
       setPending({ ...parsed, fileName: f.name });
       if (parsed.total <= 0) toast.error("No headcount figures could be read from that file.");
     } catch (e) {
@@ -177,8 +209,8 @@ function WorkforcePage() {
         <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
         <h1 className="page-title mt-2 text-primary">Workforce Data Foundation</h1>
         <p className="page-lead mt-1 text-muted-foreground">
-          Your headcount by occupational level, population group, gender and disability. Type it in or upload a
-          spreadsheet export — nothing is saved until you have checked it.
+          Your headcount by occupational level, population group, gender and disability. Type it in or upload
+          an Excel, CSV or PDF export — nothing is saved until you have checked it.
         </p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
@@ -290,23 +322,23 @@ function WorkforcePage() {
         <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
           <h2 className="section-title text-primary">Or upload your HR export</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Save your spreadsheet as CSV (in Excel: File → Save As → CSV) and upload it here. We read the levels
-            and groups, show you every number we found, and only save it once you confirm.
+            Upload an Excel spreadsheet (.xlsx or .xls), a CSV export or a PDF of your workforce table. We read
+            the levels and groups, show you every number we found, and only save it once you confirm.
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <input
               ref={file}
               type="file"
-              accept=".csv,.tsv,.txt,text/csv"
+              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
               className="hidden"
-              aria-label="Upload workforce spreadsheet as CSV"
+              aria-label="Upload workforce file (Excel, CSV or PDF)"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }}
             />
             <button
               onClick={() => file.current?.click()}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              Choose a CSV file
+              Choose a file
             </button>
             <button onClick={downloadTemplate} className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">
               Download template

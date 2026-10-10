@@ -167,17 +167,25 @@ export type ParsedFile = {
  * to the client, who confirms before it is saved.
  */
 export function parseWorkforceFile(text: string, fileName: string): ParsedFile {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  if (!lines.length) throw new Error(`${fileName} has no rows in it.`);
+  const sep = (lines[0]?.split("\t").length ?? 0) > (lines[0]?.split(",").length ?? 0) ? "\t" : ",";
+  return parseWorkforceRows(lines.map((l) => splitCells(l, sep)), fileName);
+}
+
+/**
+ * Read an already-tabulated workforce export (from CSV, Excel or PDF text).
+ * Each row is an array of cell strings; the header row must contain an
+ * "Occupational level" column and at least three group columns.
+ */
+export function parseWorkforceRows(rows: string[][], fileName: string): ParsedFile {
   const warnings: string[] = [];
   const unknownColumns: string[] = [];
   const counts = emptyWorkforce();
   const disability: Record<string, number> = {};
   const levelsFound: string[] = [];
 
-  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  if (!lines.length) throw new Error(`${fileName} has no rows in it.`);
-
-  const sep = (lines[0]?.split("\t").length ?? 0) > (lines[0]?.split(",").length ?? 0) ? "\t" : ",";
-  const rows = lines.map((l) => splitCells(l, sep));
+  if (!rows.length) throw new Error(`${fileName} has no rows in it.`);
 
   let headerIdx = -1;
   let levelCol = -1;
