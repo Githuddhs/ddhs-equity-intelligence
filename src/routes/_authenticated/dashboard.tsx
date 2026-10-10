@@ -56,6 +56,7 @@ function Card({ title, to, cta, children }: { title: string; to: "/eea12" | "/ba
 }
 
 function Dashboard() {
+  const [exporting, setExporting] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
