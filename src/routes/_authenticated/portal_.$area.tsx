@@ -5,9 +5,9 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 
-type Area = "eea12" | "plan" | "dg";
+type Area = "eea12" | "plan" | "dg" | "hr";
 
-const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/plans" | "/dg-review"; toolLabel: string; docs: { key: string; label: string; hint: string }[] }> = {
+const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/plans" | "/dg-review" | "/policies"; toolLabel: string; docs: { key: string; label: string; hint: string }[] }> = {
   eea12: {
     title: "EEA12 analysis",
     intro: "Upload the workforce data behind your analysis and track how complete your workforce picture is.",
@@ -45,6 +45,19 @@ const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/pla
       { key: "income", label: "Income differential statement", hint: "EEA4 and remuneration analysis (s27)" },
       { key: "training", label: "Skills development records", hint: "Training and promotion records by designated group" },
       { key: "policies", label: "HR policies", hint: "Recruitment, promotion and harassment policies" },
+    ],
+  },
+  hr: {
+    title: "HR reports",
+    intro: "Upload additional HR reports that support your EE plan, income differential analysis and DG review.",
+    tool: "/policies",
+    toolLabel: "EE policies & letters",
+    docs: [
+      { key: "remuneration", label: "Remuneration / payroll report", hint: "Pay by occupational level, race, gender and disability (EEA4)" },
+      { key: "turnover", label: "Turnover & exit report", hint: "Terminations and exit interview analysis" },
+      { key: "training_report", label: "Training report", hint: "Workplace Skills Plan / Annual Training Report" },
+      { key: "disciplinary", label: "Disciplinary & grievance report", hint: "Cases by designated group" },
+      { key: "other_hr", label: "Other HR reports", hint: "Any additional HR reports" },
     ],
   },
 };

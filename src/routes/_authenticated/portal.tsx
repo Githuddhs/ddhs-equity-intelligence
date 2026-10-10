@@ -107,8 +107,9 @@ function Portal() {
         </Link>
 
         <h2 className="section-title mt-8 text-primary">Compliance documents & progress</h2>
-        <div className="mt-3 grid gap-4 sm:grid-cols-3">
-          {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6]] as const).map(([k, label, total]) => {
+        <Link to="/policies" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">EE policies, senior manager letter & HR report uploads →</Link>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6], ["hr", "HR reports", 5]] as const).map(([k, label, total]) => {
             const n = new Set((data?.docs ?? []).filter((x) => x.area === k).map((x) => x.category)).size;
             const pct = Math.round((n / total) * 100);
             return (

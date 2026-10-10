@@ -14,6 +14,8 @@ export type PlanContent = {
   monitoring: string;
   disputes: string;
   consultation: string;
+  reasonableGrounds: string;
+  incomeDifferentials: string;
   goals: GoalRow[];
   milestones: Milestone[];
   /** Overall plan sign-off by a senior manager (Review portal). */
@@ -31,12 +33,14 @@ export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milesto
   { key: "timetable", title: "Timetable and responsibilities", hint: "Timeframes for each measure and who is responsible (s20(2)(d)).", ai: true },
   { key: "monitoring", title: "Internal monitoring and evaluation", hint: "How progress is tracked, reviewed and reported (s20(2)(f)).", ai: true },
   { key: "disputes", title: "Internal dispute resolution", hint: "Procedure to resolve disputes about interpretation or implementation (s20(2)(g)).", ai: true },
+  { key: "reasonableGrounds", title: "Reasonable grounds for not meeting targets", hint: "Justifiable reasons where targets were not met, e.g. insufficient recruitment or promotion opportunities, lack of suitably qualified applicants, economic conditions (s42(4), EE Regulations).", ai: true },
+  { key: "incomeDifferentials", title: "Income differentials", hint: "Analysis of remuneration and benefits by level, race, gender and disability, and measures to reduce disproportionate differentials (s27, EEA4).", ai: true },
   { key: "consultation", title: "Consultation record", hint: "Dates, parties consulted and outcomes of consultation on the plan.", ai: false },
 ];
 
 export const emptyContent = (): PlanContent => ({
   seniorManager: "", committee: "", objectives: "", barriers: "", measures: "", timetable: "",
-  monitoring: "", disputes: "", consultation: "", milestones: [],
+  monitoring: "", disputes: "", consultation: "", reasonableGrounds: "", incomeDifferentials: "", milestones: [],
   goals: PLAN_LEVELS.map((level) => ({ level, baseline: "", males: "", females: "", total: "", notes: "" })),
 });
 
