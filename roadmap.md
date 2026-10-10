@@ -24,5 +24,5 @@
 
 - [x] EEA12: auto-populate headcount from Workforce Data for every level/unit
 
-- [ ] Save EE plan gap analyses and list previous ones
+- [x] Save EE plan gap analyses and list previous ones
 - [ ] EE analysis questionnaire response document, populated from Workforce Foundation, feeding the EE plan
