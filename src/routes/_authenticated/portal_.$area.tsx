@@ -122,7 +122,7 @@ function AreaPage() {
               }} />
           ))}
         </div>
-        <p className="mt-6 text-sm text-muted-foreground">Files are private to your account. Maximum 20 MB per file.</p>
+        <p className="mt-6 text-sm text-muted-foreground">Files are private to your account. Word, Excel, PDF, images and most other formats are accepted — maximum 20 MB per file.</p>
       </main>
     </div>
   );
