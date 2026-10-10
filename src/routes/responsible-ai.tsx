@@ -99,7 +99,7 @@ function ResponsibleAiPage() {
       <main className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 7 of 7</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 11 of 11</p>
             <h1 className="display-title mt-2 text-balance text-primary">
               Responsible AI Assistant
             </h1>
