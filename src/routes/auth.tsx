@@ -24,7 +24,8 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { next } = Route.useSearch();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"in" | "reset">("in");
+  const [mode, setMode] = useState<"in" | "up" | "reset">("in");
+  const [awaitingConfirm, setAwaitingConfirm] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
