@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   CircleDot,
   Gauge,
-  ShieldCheck,
   TrendingUp,
 } from "lucide-react";
 
