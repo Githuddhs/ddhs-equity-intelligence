@@ -11,7 +11,7 @@ import { SECTORS } from "@/lib/sectors";
 import { useLatestOrgUnits } from "@/components/org-unit-picker";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
-import { autofillPlan } from "@/lib/plan-autofill";
+import { autofillPlan, averageBarrierScores, questionnaireSections } from "@/lib/plan-autofill";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
 
@@ -56,7 +56,7 @@ function PlanBuilder() {
       setRawAnalyses(a.data ?? []);
       setAnalyses((a.data ?? []).map((x) => ({ sector: x.sector, level: x.level, headcount: x.total_headcount, sectoral: (x.results as { sectoral?: unknown }).sectoral, date: x.created_at })));
       const { data: u } = await supabase.auth.getUser();
-      const b = await supabase.from("barrier_responses").select("answers,profile").eq("user_id", u.user?.id ?? "");
+      const b = await supabase.from("barrier_responses").select("answers,profile,priorities,open_feedback").eq("user_id", u.user?.id ?? "");
       setBarriers(b.data ?? []);
     })();
   }, [id]);
@@ -121,6 +121,13 @@ function PlanBuilder() {
             setContent(r.content); setDirty(true);
             toast.success(`Filled ${r.goalsFilled} goal level(s) and ${r.filled.length} section(s) — review, then Save plan.`);
           }} className="mt-3 rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Auto-fill plan</button>
+          <button disabled={!barriers.length} onClick={() => {
+            if ((content.objectives.trim() || content.barriers.trim() || content.measures.trim()) && !confirm("Replace Objectives, Barriers and Affirmative action measures with the questionnaire results?")) return;
+            const gaps = content.goals.filter((r) => r.baseline && r.total && Number(r.baseline) < Number(r.total));
+            const q = questionnaireSections(barriers, gaps);
+            setContent({ ...content, barriers: q.barriers, measures: q.measures, objectives: q.objectives || content.objectives }); setDirty(true);
+            toast.success(`Pulled objectives, barriers and measures from ${q.count} questionnaire response(s) — review, then Save plan.`);
+          }} className="ml-2 mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50">Pull from EE questionnaire</button>
           {!rawAnalyses.length && !barriers.length && <p className="mt-2 text-xs text-muted-foreground">Save an <Link to="/eea12" className="text-teal underline">EEA12 analysis</Link> or complete the <Link to="/barrier-analysis" className="text-teal underline">Barrier Analysis</Link> first.</p>}
         </section>
 
