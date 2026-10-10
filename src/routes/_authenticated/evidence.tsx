@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/evidence")({
   component: EvidencePage,
 });
 
-function List({ title, items }: { title: string; items?: string[] }) {
+function List({ title, items }: { title: string; items?: string[] | undefined }) {
   if (!items?.length) return null;
   return <div className="mt-3"><p className="text-sm font-semibold">{title}</p><ul className="mt-1 list-disc pl-5 text-sm">{items.map((x, i) => <li key={i}>{x}</li>)}</ul></div>;
 }
