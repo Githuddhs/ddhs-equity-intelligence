@@ -4,7 +4,6 @@
 - Org personalisation: swap generic "the organisation" wording for real name, divisions, role titles — BLOCKED: waiting on Sello to supply details.
 - DG review price: confirm real price (placeholder R4,025 incl. VAT).
 - sdm@ddhs.co.za activation: password-reset link sent to a reachable address; Sello must open it and set a password before staff sign-in works.
-- GitHub sync: BLOCKED — Sello must connect it in the editor (+ menu → GitHub → Connect project); the agent cannot. Alternative offered: package the code as a downloadable archive for him to push.
 - Publish decision: published site still runs the older build (shows "Sign up"); preview is current.
 
 ## Done
