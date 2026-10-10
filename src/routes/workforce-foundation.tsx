@@ -289,6 +289,7 @@ function WorkforceFoundationPage() {
             </Link>
             <Link
               to="/pricing"
+              search={{ paid: false, cancelled: false }}
               className="inline-flex items-center rounded-lg border border-navy-foreground/30 px-6 py-3 text-sm font-semibold text-navy-foreground hover:bg-navy-foreground/10"
             >
               See pricing
