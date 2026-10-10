@@ -61,7 +61,7 @@ function ResetPasswordPage() {
             <p className="page-lead mt-1 text-muted-foreground">
               This reset link is invalid or has expired. Request a fresh one from the sign-in page.
             </p>
-            <Link to="/auth" className="mt-6 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Back to sign in</Link>
+            <Link to="/auth" search={{ next: "/portal" }} className="mt-6 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Back to sign in</Link>
           </>
         ) : !ready ? (
           <p className="page-lead mt-1 text-muted-foreground">Checking your reset link…</p>
