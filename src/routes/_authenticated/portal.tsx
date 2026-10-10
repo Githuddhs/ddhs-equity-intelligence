@@ -91,6 +91,15 @@ function Portal() {
           <span className="text-sm font-semibold text-teal">{data?.snapshot ? "Update workforce data →" : "Capture workforce data →"}</span>
         </Link>
 
+        <Link to="/barrier-analysis" className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
+          <div>
+            <p className="label-title text-teal">EEA13 Barrier Analysis</p>
+            <p className="mt-1 font-semibold text-primary">Run the barrier analysis questionnaire and track aggregate results</p>
+            <p className="text-sm text-muted-foreground">15 areas from recruitment to governance — responses stay confidential and are reported in aggregate only.</p>
+          </div>
+          <span className="text-sm font-semibold text-teal">Open questionnaire →</span>
+        </Link>
+
         <h2 className="section-title mt-8 text-primary">Compliance documents & progress</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-3">
           {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6]] as const).map(([k, label, total]) => {
