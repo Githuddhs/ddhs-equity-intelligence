@@ -26,3 +26,6 @@
 
 - [x] Save EE plan gap analyses and list previous ones
 - [x] EE analysis questionnaire response document, populated from Workforce Foundation, feeding the EE plan
+- [x] EEA13 planning page (goals, targets, timeline) linked from Document evidence
+- [x] EEA13 goals pull headcount from Workforce Data
+- [ ] Test Document evidence with a real EE plan + scanned HR report (needs your files)
