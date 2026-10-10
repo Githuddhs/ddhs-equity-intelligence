@@ -36,13 +36,21 @@ function StaffDashboard() {
       const { data: u } = await supabase.auth.getUser();
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
       if (!isAdmin) return null;
-      const [c, p, r, d] = await Promise.all([
+      const [c, p, r, d, s, e, q] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("ee_plans").select("user_id,title,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,created_at,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category,file_name,created_at"),
+        supabase.from("subscriptions").select("user_id,plan,status,created_at").neq("plan", "dg_review"),
+        supabase.from("contact_enquiries").select("id,name,email,message,created_at").order("created_at", { ascending: false }).limit(10),
+        supabase.from("quote_requests").select("id,created_at").order("created_at", { ascending: false }),
       ]);
       for (const x of [c, p, r, d]) if (x.error) throw x.error;
+      const overview = {
+        subscriptions: (s.data ?? []).filter((x) => x.status === "active"),
+        enquiries: e.data ?? [],
+        quotes: q.data?.length ?? 0,
+      };
       return (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
         const missing = (Object.keys(DOCS) as Area[]).map((a) => {
