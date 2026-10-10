@@ -7,6 +7,7 @@ import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
+import { dgFromEvidence, latestEvidence } from "@/lib/evidence";
 import { DG_ITEMS, normaliseContent, scoreAnswers, TEXT_SECTIONS, type DgAnswer, type PlanContent , dgFromAnalyses } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/dg-review")({
@@ -123,7 +124,8 @@ function DgReviewPage() {
               {plans.map((p) => <option key={p.id} value={p.id}>{p.title} — {p.company || "no employer"}</option>)}
             </select>
             <span className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">{analyses.length} saved EEA12 analyses included.
-              {analyses.length > 0 && <button onClick={() => { setAnswers((cur) => ({ ...cur, ...dgFromAnalyses(analyses) })); toast.success("Progress items filled from EEA12 analyses."); }} className="font-semibold text-teal underline">Refresh progress from analyses</button>}</span>
+              {analyses.length > 0 && <button onClick={() => { setAnswers((cur) => ({ ...cur, ...dgFromAnalyses(analyses) })); toast.success("Progress items filled from EEA12 analyses."); }} className="font-semibold text-teal underline">Refresh progress from analyses</button>}
+              <button onClick={async () => { const e = await latestEvidence(); if (!e) { toast.error("No document evidence yet — run it on the Document evidence page."); return; } const r = dgFromEvidence(answers, e.data); setAnswers(r.answers); toast.success(`Filled ${r.filled} unanswered item(s) from your documents.`); }} className="font-semibold text-teal underline">Fill from documents</button></span>
           </label>
           <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card px-8 py-5 shadow-sm">
             <span className={`font-display text-4xl font-bold ${tone}`}>{score}%</span>
