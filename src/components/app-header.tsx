@@ -43,6 +43,7 @@ export function AppHeader() {
           ) : (
             <>
               <Link to="/portal" className={link} activeProps={active}>My portal</Link>
+              <Link to="/dashboard" className={link} activeProps={active}>Dashboard</Link>
               <Link to="/workforce" className={link} activeProps={active}>Workforce Data</Link>
               <Link to="/barrier-analysis" className={link} activeProps={active}>Barriers</Link>
               <Link to="/compliance" className={link} activeProps={active}>Compliance</Link>

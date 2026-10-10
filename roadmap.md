@@ -30,3 +30,4 @@
 - [x] EEA13 barrier analysis questionnaire in My portal (/barrier-analysis): 15 scored areas + experiences, priorities, open feedback; saved responses, aggregate section scores; linked from header and portal
 - [x] EE plan live monitoring calendar (goals, objectives, measures)
 - [x] Auto-fill builds month/quarter timetable from 24-month experiences
+- [x] My portal compliance dashboard (/dashboard)
