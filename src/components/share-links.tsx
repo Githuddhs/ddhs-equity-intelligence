@@ -21,7 +21,7 @@ export function ShareLinks() {
   const url = (t: string) => `${window.location.origin}/view/${t}`;
   const create = async () => {
     const { error } = await db.from("client_share_links").insert({ label: label.trim() || "Shared view", expires_at: new Date(Date.now() + days * 864e5).toISOString() });
-    if (error) return toast.error("Could not create link");
+    if (error) { toast.error("Could not create link"); return; }
     toast.success("Link created"); void qc.invalidateQueries({ queryKey: ["share-links"] });
   };
   const revoke = async (id: string) => {

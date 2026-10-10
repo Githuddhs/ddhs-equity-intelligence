@@ -64,7 +64,7 @@ function SharedView() {
         {isLoading ? <p>Loading…</p> : !data ? (
           <div className="rounded-lg border border-border p-8 text-center">
             <h1 className="font-display text-3xl font-bold text-primary">This link isn't active</h1>
-            <p className="mt-3 text-muted-foreground">It may have expired or been switched off. Ask your organisation for a new link, or <Link to="/auth" className="text-accent underline">sign in</Link>.</p>
+            <p className="mt-3 text-muted-foreground">It may have expired or been switched off. Ask your organisation for a new link, or <Link to="/auth" search={{ next: "/portal" } as never} className="text-accent underline">sign in</Link>.</p>
           </div>
         ) : (
           <>
