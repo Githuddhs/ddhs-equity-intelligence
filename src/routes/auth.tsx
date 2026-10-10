@@ -48,6 +48,18 @@ function AuthPage() {
       setMode("in");
       return;
     }
+    if (mode === "up") {
+      const res = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: window.location.origin + "/portal" },
+      });
+      setBusy(false);
+      if (res.error) { toast.error(res.error.message); return; }
+      if (res.data.session) { navigate({ to: next }); return; }
+      setAwaitingConfirm(true);
+      return;
+    }
     const res = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (res.error) { toast.error(res.error.message); return; }
