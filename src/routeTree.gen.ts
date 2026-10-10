@@ -23,6 +23,7 @@ import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
 import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
+import { Route as AuthenticatedBarrierAnalysisRouteImport } from './routes/_authenticated/barrier-analysis'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
@@ -111,6 +112,12 @@ const WorkforceFoundationRoute = WorkforceFoundationRouteImport.update({
   path: '/workforce-foundation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedBarrierAnalysisRoute =
+  AuthenticatedBarrierAnalysisRouteImport.update({
+    id: '/barrier-analysis',
+    path: '/barrier-analysis',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
   id: '/clients',
   path: '/clients',
@@ -214,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
+  '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -246,6 +254,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
+  '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -280,6 +289,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
+  '/_authenticated/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/workforce-foundation'
+    | '/barrier-analysis'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/workforce-foundation'
+    | '/barrier-analysis'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -379,6 +391,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/workforce-foundation'
+    | '/_authenticated/barrier-analysis'
     | '/_authenticated/clients'
     | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
@@ -520,6 +533,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkforceFoundationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/barrier-analysis': {
+      id: '/_authenticated/barrier-analysis'
+      path: '/barrier-analysis'
+      fullPath: '/barrier-analysis'
+      preLoaderRoute: typeof AuthenticatedBarrierAnalysisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/clients': {
       id: '/_authenticated/clients'
       path: '/clients'
@@ -643,6 +663,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBarrierAnalysisRoute: typeof AuthenticatedBarrierAnalysisRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedComplianceRoute: typeof AuthenticatedComplianceRoute
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
@@ -658,6 +679,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBarrierAnalysisRoute: AuthenticatedBarrierAnalysisRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedComplianceRoute: AuthenticatedComplianceRoute,
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
