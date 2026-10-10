@@ -146,7 +146,7 @@ function StaffDashboard() {
                 <ul className="mt-3 divide-y divide-border text-sm">
                   {ov.enquiries.map((e) => (
                     <li key={e.id} className="py-2">
-                      <p className="font-semibold">{e.name} <span className="font-normal text-muted-foreground">· {e.email} · {fmt(e.created_at)}</span></p>
+                      <p className="font-semibold">{e.full_name} <span className="font-normal text-muted-foreground">· {e.email} · {fmt(e.created_at)}</span></p>
                       <p className="text-muted-foreground">{e.message.slice(0, 160)}{e.message.length > 160 ? "…" : ""}</p>
                     </li>
                   ))}
