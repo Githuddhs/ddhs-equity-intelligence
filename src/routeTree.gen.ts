@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
+import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -53,6 +54,11 @@ const AuthRoute = AuthRouteImport.update({
 const Eea12Route = Eea12RouteImport.update({
   id: '/eea12',
   path: '/eea12',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Eea13PlanningRoute = Eea13PlanningRouteImport.update({
+  id: '/eea13-planning',
+  path: '/eea13-planning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/eea13-planning': typeof Eea13PlanningRoute
   '/pricing': typeof PricingRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/eea13-planning': typeof Eea13PlanningRoute
   '/pricing': typeof PricingRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
@@ -229,6 +237,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
+  '/eea13-planning': typeof Eea13PlanningRoute
   '/pricing': typeof PricingRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
@@ -258,6 +267,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/eea13-planning'
     | '/pricing'
     | '/set-password'
     | '/signup'
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/eea12'
+    | '/eea13-planning'
     | '/pricing'
     | '/set-password'
     | '/signup'
@@ -313,6 +324,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/eea12'
+    | '/eea13-planning'
     | '/pricing'
     | '/set-password'
     | '/signup'
@@ -342,6 +354,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   Eea12Route: typeof Eea12Route
+  Eea13PlanningRoute: typeof Eea13PlanningRoute
   PricingRoute: typeof PricingRoute
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
@@ -382,6 +395,13 @@ declare module '@tanstack/react-router' {
       path: '/eea12'
       fullPath: '/eea12'
       preLoaderRoute: typeof Eea12RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eea13-planning': {
+      id: '/eea13-planning'
+      path: '/eea13-planning'
+      fullPath: '/eea13-planning'
+      preLoaderRoute: typeof Eea13PlanningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -579,6 +599,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   Eea12Route: Eea12Route,
+  Eea13PlanningRoute: Eea13PlanningRoute,
   PricingRoute: PricingRoute,
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,

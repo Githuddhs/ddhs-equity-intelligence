@@ -4,7 +4,6 @@ import {
   CalendarClock,
   CheckCircle2,
   ClipboardCheck,
-  FileText,
   LineChart,
   Sparkles,
   Target,
