@@ -164,6 +164,48 @@ export async function exportLeadershipPdf(input: LeadershipReportInput) {
     });
   }
 
+  // ---------- Meeting calendar (forum dates + statutory deadlines, grouped by month) ----------
+  const forumMilestones = milestones.filter((m) => m.due && /forum|committee|meeting|review/i.test(m.title));
+  const statutory = buildDeadlines(input.plan ? { start_date: input.plan.start_date, end_date: input.plan.end_date } : null)
+    .filter((d) => d.id !== "plan-none");
+  const calendar = [
+    ...forumMilestones.map((m) => ({ title: m.title || "EE forum meeting", date: parse(m.due), type: "Forum / meeting", status: m.status })),
+    ...statutory.map((d) => ({ title: d.title, date: d.due, type: "Statutory deadline", status: "planned" as const })),
+  ].sort((a, b) => +a.date - +b.date);
+
+  const lastY2 = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? y;
+  y = Math.max(y, lastY2) + 10;
+  doc.setFontSize(13);
+  doc.setTextColor(...NAVY);
+  doc.text("6. Meeting calendar", 14, y);
+  if (!calendar.length) {
+    doc.setFontSize(9);
+    doc.setTextColor(...GREY);
+    doc.text("No forum meetings or statutory deadlines scheduled yet.", 14, y + 6);
+  } else {
+    type CalRow = { month: string } | { title: string; date: Date; type: string; status: string };
+    const rows: CalRow[] = [];
+    let lastMonth = "";
+    for (const c of calendar) {
+      const month = c.date.toLocaleDateString("en-ZA", { month: "long", year: "numeric" });
+      if (month !== lastMonth) { rows.push({ month }); lastMonth = month; }
+      rows.push(c);
+    }
+    autoTable(doc, {
+      startY: y + 3,
+      head: [["Date", "Item", "Type", "Status"]],
+      body: rows.map((r) =>
+        "month" in r
+          ? [{ content: r.month, colSpan: 4, styles: { fillColor: TEAL, textColor: [255, 255, 255], fontStyle: "bold" } }]
+          : [fmt(r.date), r.title, r.type, r.status === "done" ? "Done" : daysUntil(r.date) < 0 ? "Overdue" : "Scheduled"],
+      ),
+      theme: "grid",
+      headStyles: { fillColor: NAVY },
+      styles: { fontSize: 9 },
+      columnStyles: { 0: { cellWidth: 28 } },
+    });
+  }
+
   // ---------- Footer on every page ----------
   const pages = doc.getNumberOfPages();
   for (let i = 1; i <= pages; i++) {
