@@ -4,7 +4,7 @@ import { z } from "zod";
 import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
-  task: z.enum(["plan_section", "dg_assessment"]),
+  task: z.enum(["plan_section", "dg_assessment", "plan_gap"]),
   section: z.string().max(100).optional(),
   context: z.unknown(),
 });
@@ -21,6 +21,14 @@ You are preparing an employer for a Director-General review (sections 43–45 of
 ## Remediation actions — a numbered, prioritised list of concrete steps with suggested owners.
 ## Suggested response wording — 2–3 short paragraphs the employer could adapt when responding to a DG request.
 Keep it under 600 words. Note that this is guidance, not legal advice.`;
+
+const GAP = `${BASE}
+You are reviewing an employer's EXISTING Employment Equity Plan (text extracted from their uploaded document) against section 20 of the Act, the EE Regulations and their current workforce profile. Produce a gap analysis in Markdown:
+## Summary — one paragraph verdict and an overall compliance rating (Strong / Partial / Weak).
+## Compliance checklist — a table with columns: Requirement | Found in plan? (Yes/Partial/No) | Gap / comment. Cover: duration (1–5 years), annual objectives, barriers identified (s19), affirmative action measures (s15), numerical goals and sectoral targets, timetable, assigned senior manager (s24), consultation (s16–17), internal monitoring, dispute resolution, reasonable accommodation, income differentials (s27), skills development, succession.
+## Numerical gaps — compare any goals or targets in the plan with the current workforce profile provided (designated representation per level). Use only figures present in the inputs.
+## Priority actions — numbered, prioritised steps to close the gaps for the new plan.
+Keep it under 800 words. Note it is guidance, not legal advice.`;
 
 export const Route = createFileRoute("/api/ee-assist")({
   server: {
@@ -44,6 +52,7 @@ export const Route = createFileRoute("/api/ee-assist")({
         if (parsed.data.task === "plan_section") {
           return streamResponses(PLAN, `Section to draft: ${parsed.data.section ?? "Objectives"}\n\nPlan context (JSON):\n${ctx}`, request.signal);
         }
+        if (parsed.data.task === "plan_gap") return streamResponses(GAP, `Existing plan and workforce data (JSON):\n${ctx}`, request.signal);
         return streamResponses(DG, `Review data (JSON):\n${ctx}`, request.signal);
       },
     },
