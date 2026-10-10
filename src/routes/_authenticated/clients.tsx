@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil } from "@/lib/ee-plan";
 import { InviteClientForm } from "@/components/invite-client-form";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/clients")({
   head: () => ({
@@ -26,7 +27,7 @@ const fmt = (d: string | Date) => new Date(d).toLocaleDateString("en-ZA", { day:
 type Ev = { date: Date; title: string; client: string; ref: string };
 
 function ClientsDashboard() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["admin-clients"],
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
