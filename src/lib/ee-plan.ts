@@ -15,9 +15,10 @@ export type PlanContent = {
   disputes: string;
   consultation: string;
   goals: GoalRow[];
+  milestones: Milestone[];
 };
 
-export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals">; title: string; hint: string; ai: boolean }[] = [
+export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milestones">; title: string; hint: string; ai: boolean }[] = [
   { key: "seniorManager", title: "Assigned senior manager(s)", hint: "Name and role of the senior manager(s) responsible for the plan (s24).", ai: false },
   { key: "committee", title: "EE consultative forum", hint: "Committee members, representation of designated groups, unions (s16).", ai: false },
   { key: "objectives", title: "Objectives for each year of the plan", hint: "Annual objectives that are measurable and time-bound (s20(2)(a)).", ai: true },
@@ -31,7 +32,7 @@ export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals">; title: s
 
 export const emptyContent = (): PlanContent => ({
   seniorManager: "", committee: "", objectives: "", barriers: "", measures: "", timetable: "",
-  monitoring: "", disputes: "", consultation: "",
+  monitoring: "", disputes: "", consultation: "", milestones: [],
   goals: PLAN_LEVELS.map((level) => ({ level, baseline: "", males: "", females: "", total: "", notes: "" })),
 });
 
@@ -136,3 +137,6 @@ export const buildDeadlines = (plan: { end_date: string | null; start_date: stri
   return list.sort((a, b) => +a.due - +b.due);
 };
 export const daysUntil = (d: Date) => Math.ceil((+new Date(d.getFullYear(), d.getMonth(), d.getDate()) - +new Date(new Date().toDateString())) / 86400000);
+
+export type MilestoneKind = "goal" | "objective" | "measure";
+export type Milestone = { id: string; kind: MilestoneKind; title: string; owner: string; due: string; status: "planned" | "in_progress" | "done" };
