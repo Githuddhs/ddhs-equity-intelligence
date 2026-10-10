@@ -12,6 +12,7 @@ import { useLatestOrgUnits } from "@/components/org-unit-picker";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { autofillPlan, questionnaireSections } from "@/lib/plan-autofill";
+import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
 
@@ -38,6 +39,7 @@ function PlanBuilder() {
   const [analyses, setAnalyses] = useState<unknown[]>([]);
   const [focusLevel, setFocusLevel] = useState("Senior Management");
   const [rawAnalyses, setRawAnalyses] = useState<SavedAnalysis[]>([]);
+  const [wfLines, setWfLines] = useState<string[]>([]);
   const [barriers, setBarriers] = useState<{ answers: unknown; profile?: unknown; priorities?: unknown; open_feedback?: unknown }[]>([]);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -58,6 +60,7 @@ function PlanBuilder() {
       const { data: u } = await supabase.auth.getUser();
       const b = await supabase.from("barrier_responses").select("answers,profile,priorities,open_feedback").eq("user_id", u.user?.id ?? "");
       setBarriers(b.data ?? []);
+      const w = await latestWorkforce(); setWfLines(w ? workforceLines(w) : []);
     })();
   }, [id]);
 
@@ -117,14 +120,14 @@ function PlanBuilder() {
             Pulls numerical goals from your {rawAnalyses.length} saved EEA12 analyses, and writes barriers, measures, objectives and a month-by-month timetable (barriers flagged by most respondents first) from your goals and {barriers.length} Barrier Analysis response(s). Sections you've already written are kept.
           </p>
           <button disabled={!rawAnalyses.length && !barriers.length} onClick={() => {
-            const r = autofillPlan(content, rawAnalyses, barriers, { start: meta.start_date, end: meta.end_date });
+            const r = autofillPlan(content, rawAnalyses, barriers, { start: meta.start_date, end: meta.end_date }, wfLines);
             setContent(r.content); setDirty(true);
             toast.success(`Filled ${r.goalsFilled} goal level(s) and ${r.filled.length} section(s) — review, then Save plan.`);
           }} className="mt-3 rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Auto-fill plan</button>
           <button disabled={!barriers.length} onClick={() => {
             if ((content.objectives.trim() || content.barriers.trim() || content.measures.trim()) && !confirm("Replace Objectives, Barriers and Affirmative action measures with the questionnaire results?")) return;
             const gaps = content.goals.filter((r) => r.baseline && r.total && Number(r.baseline) < Number(r.total));
-            const q = questionnaireSections(barriers, gaps);
+            const q = questionnaireSections(barriers, gaps, wfLines);
             setContent({ ...content, barriers: q.barriers, measures: q.measures, objectives: q.objectives || content.objectives }); setDirty(true);
             toast.success(`Pulled objectives, barriers and measures from ${q.count} questionnaire response(s) — review, then Save plan.`);
           }} className="ml-2 mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50">Pull from EE questionnaire</button>

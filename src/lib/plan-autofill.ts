@@ -71,7 +71,7 @@ const texts = (rs: Resp[], ids: string[]) => {
 };
 
 /** Builds the Objectives, Barriers and Affirmative action measures sections directly from questionnaire answers. */
-export function questionnaireSections(responses: Resp[], gaps: { level: string; baseline: string; total: string }[] = []) {
+export function questionnaireSections(responses: Resp[], gaps: { level: string; baseline: string; total: string }[] = [], workforce: string[] = []) {
   const v2 = responses.filter((r) => (r.profile as BarrierProfile | null)?.version === QUESTIONNAIRE_VERSION);
   const freq = barrierFrequency(responses).filter((x) => x.title !== "Other");
   const sources = tally(v2.flatMap((r) => (r.profile as BarrierProfile).sources ?? []));
@@ -88,6 +88,7 @@ export function questionnaireSections(responses: Resp[], gaps: { level: string; 
     ...(sources.length ? ["", "**Where barriers originate:**", ...L(sources.map(([s, k]) => `${s} — ${k}`))] : []),
     ...((weak.length ? weak : scores.slice(0, 3)).length ? ["", "**Lowest-scoring areas:**", ...L((weak.length ? weak : scores.slice(0, 3)).map((s) => `${s.title} — ${s.avg.toFixed(1)}/5${s.avg < 2.5 ? " (significant barrier)" : s.avg < 3.5 ? " (barrier)" : ""}`))] : []),
     ...(texts(responses, ["9.4", "10.1", "11.o3", "12.o2"]).length ? ["", "**In respondents' words:**", ...L(texts(responses, ["9.4", "10.1", "11.o3", "12.o2"]).map((t) => `“${t}”`))] : []),
+    ...(workforce.length ? ["", "**Workforce profile (Workforce Foundation):**", ...L(workforce)] : []),
     ...(gaps.length ? ["", "**Under-representation against numerical goals (EEA12):**", ...L(gaps.map((r) => `${r.level}: ${r.baseline}% designated vs goal ${r.total}%`))] : []),
   ].join("\n");
 
@@ -111,7 +112,7 @@ export function questionnaireSections(responses: Resp[], gaps: { level: string; 
 }
 
 /** Fills goals from EEA12, and empty barrier/measure/objective/timetable sections from goals + barrier scores. */
-export function autofillPlan(content: PlanContent, analyses: SavedAnalysis[], barrierResponses: { answers: unknown; profile?: unknown }[], dates: { start: string; end: string } = { start: "", end: "" }) {
+export function autofillPlan(content: PlanContent, analyses: SavedAnalysis[], barrierResponses: { answers: unknown; profile?: unknown }[], dates: { start: string; end: string } = { start: "", end: "" }, workforce: string[] = []) {
   const g = goalsFromAnalyses(content.goals, analyses);
   const goals = g.goals;
   const scores = averageBarrierScores(barrierResponses).sort((a, b) => a.avg - b.avg);
@@ -124,7 +125,7 @@ export function autofillPlan(content: PlanContent, analyses: SavedAnalysis[], ba
   };
 
   if (barrierResponses.length) {
-    const q = questionnaireSections(barrierResponses as Resp[], gaps);
+    const q = questionnaireSections(barrierResponses as Resp[], gaps, workforce);
     set("barriers", q.barriers); set("measures", q.measures); if (q.objectives) set("objectives", q.objectives);
   }
   if (!scores.length) set("barriers", "No Barrier Analysis responses saved yet. Run the EEA13 Barrier Analysis questionnaire in My portal, then re-run Auto-fill to populate this section with scored barrier areas.");
