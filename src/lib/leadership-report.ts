@@ -124,7 +124,8 @@ export async function exportLeadershipPdf(input: LeadershipReportInput) {
   }
 
   // ---------- Sign-off trail ----------
-  y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+  const lastY = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 0;
+  y = Math.max(y, lastY) + 10;
   doc.setFontSize(13);
   doc.setTextColor(...NAVY);
   doc.text("4. Signature trail", 14, y);
