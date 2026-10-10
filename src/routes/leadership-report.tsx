@@ -3,7 +3,6 @@ import {
   ArrowRight,
   CheckCircle2,
   FileText,
-  PenLine,
   Printer,
   Signature,
   Users,
