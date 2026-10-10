@@ -133,6 +133,9 @@ function ManagerPortal() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  {content.orgSignoff
+                    ? <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">✓ Org sign-off: {content.orgSignoff.by}, {fmt(content.orgSignoff.at)}</span>
+                    : <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">No organisation sign-off yet</span>}
                   {content.signoff
                     ? <span className="rounded-full bg-teal/10 px-3 py-1 text-sm font-semibold text-teal">✓ Signed off by {content.signoff.by} on {fmt(content.signoff.at)}</span>
                     : <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">Not signed off</span>}

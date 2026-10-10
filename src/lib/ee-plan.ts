@@ -16,11 +16,13 @@ export type PlanContent = {
   consultation: string;
   goals: GoalRow[];
   milestones: Milestone[];
-  /** Overall plan sign-off by a senior manager. */
+  /** Overall plan sign-off by a senior manager (Review portal). */
   signoff?: { by: string; at: string } | undefined;
+  /** Organisation's own sign-off before the plan goes to the Review portal. */
+  orgSignoff?: { by: string; at: string } | undefined;
 };
 
-export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milestones" | "signoff">; title: string; hint: string; ai: boolean }[] = [
+export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milestones" | "signoff" | "orgSignoff">; title: string; hint: string; ai: boolean }[] = [
   { key: "seniorManager", title: "Assigned senior manager(s)", hint: "Name and role of the senior manager(s) responsible for the plan (s24).", ai: false },
   { key: "committee", title: "EE consultative forum", hint: "Committee members, representation of designated groups, unions (s16).", ai: false },
   { key: "objectives", title: "Objectives for each year of the plan", hint: "Annual objectives that are measurable and time-bound (s20(2)(a)).", ai: true },
