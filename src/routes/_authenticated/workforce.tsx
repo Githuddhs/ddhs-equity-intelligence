@@ -18,6 +18,7 @@ import {
   normaliseDisability,
   normaliseWorkforce,
   parseWorkforceFile,
+  parseWorkforceRows,
   templateCsv,
   type Counts,
   type ParsedFile,
@@ -130,8 +131,30 @@ function WorkforcePage() {
 
   const onFile = async (f: File) => {
     try {
-      const text = await f.text();
-      const parsed = parseWorkforceFile(text, f.name);
+      const ext = (f.name.split(".").pop() ?? "").toLowerCase();
+      let parsed: ParsedFile;
+      if (ext === "xlsx" || ext === "xls") {
+        const XLSX = await import("xlsx");
+        const wb = XLSX.read(await f.arrayBuffer(), { type: "array" });
+        const sheet = wb.Sheets[wb.SheetNames[0] ?? ""];
+        if (!sheet) throw new Error(`${f.name} has no sheets in it.`);
+        const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "" })
+          .map((r) => r.map((c) => String(c ?? "").trim()))
+          .filter((r) => r.some((c) => c.length > 0));
+        parsed = parseWorkforceRows(rows, f.name);
+      } else if (ext === "pdf") {
+        const buf = await f.arrayBuffer();
+        let bin = "";
+        new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
+        const res = await extractPdfText({ data: { fileName: f.name, base64: btoa(bin) } });
+        const rows = res.text
+          .split(/\r?\n/)
+          .map((l) => l.split(/\t| {2,}|,/).map((c) => c.trim()).filter((c) => c.length > 0))
+          .filter((r) => r.length > 0);
+        parsed = parseWorkforceRows(rows, f.name);
+      } else {
+        parsed = parseWorkforceFile(await f.text(), f.name);
+      }
       setPending({ ...parsed, fileName: f.name });
       if (parsed.total <= 0) toast.error("No headcount figures could be read from that file.");
     } catch (e) {
