@@ -3,7 +3,9 @@
 ## Open
 - Org personalisation: swap generic "the organisation" wording for real name, divisions, role titles — BLOCKED: waiting on Sello to supply details.
 - DG review price: confirm real price (placeholder R4,025 incl. VAT).
-- sdm@ddhs.co.za + demo@ddhs.co.za: confirm invite emails to activate accounts.
+- sdm@ddhs.co.za activation: password-reset link sent to a reachable address; Sello must open it and set a password before staff sign-in works.
+- GitHub sync: BLOCKED — Sello must connect it in the editor (+ menu → GitHub → Connect project); the agent cannot. Alternative offered: package the code as a downloadable archive for him to push.
+- Publish decision: published site still runs the older build (shows "Sign up"); preview is current.
 
 ## Done
 - Capability stack: 11 layers — added EE Plans (/plans), DG Review (/dg-review), Leadership Dashboard (/leadership-dashboard) and Leadership Report (/leadership-report); removed EEA12 Analysis / EE Plans / DG Review from the site top menu and the logged-in app header (clients reach them from My portal cards and the dashboard). Page eyebrows renumbered "Capability N of 11"; footer Platform list includes the leadership pages. Removed the duplicated "Sign in" header link from all eight capability pages (AuthCta already renders one).
@@ -15,6 +17,7 @@
 - Shared read-only client view (/view/$token): private expiring links created from My portal; reports downloadable without sign-in.
 - Demo run of shared client view with real data (sdm@sun.ac.za).
 - Upload real workforce data file — BLOCKED: no file supplied yet.
-- Admin dashboard: overview cards (clients, subscriptions, enquiries, quotes), AI usage panel (total/month/by feature/recent), latest enquiries — DONE, build clean. UI verify BLOCKED: staff account sdm@ddhs.co.za unconfirmed (redirects to /portal).
-- AI usage logging: ai_usage table + logging in both AI routes — DONE.
-- GitHub sync: user must connect via editor + menu → GitHub → Connect project (agent cannot).
+- Admin dashboard: overview cards (clients, subscriptions, enquiries, quotes), AI usage panel (total/month/by feature/recent), latest enquiries — verified on screen as staff (Clients 2, enquiries 2, AI calls 1).
+- AI usage logging: ai_usage table + logging in both AI routes — verified: a real EEA12 AI summary recorded feature/model and appeared in the panel.
+- Staff access restored: the demo-data cleanup had wiped public.user_roles, so sdm@ddhs.co.za lost its admin row and /staff redirected to /portal. Re-inserted the admin row (grant_staff_on_confirm's ON CONFLICT DO NOTHING keeps it safe on confirm).
+- Email links from auth.tsx now use publicOrigin() (localhost → preview domain) for password-reset and sign-up confirmation, so links are reachable by recipients.
