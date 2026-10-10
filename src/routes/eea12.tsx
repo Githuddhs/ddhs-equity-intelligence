@@ -60,7 +60,7 @@ const PROVINCE_EAP: Record<string, Record<Key, number>> = {
   "Northern Cape": { MA: 29.9, MC: 18.6, MI: 0.6, MW: 5.3, FA: 24.8, FC: 16.9, FI: 0.2, FW: 3.7, FNM: 0, FNF: 0 },
   "Western Cape": { MA: 22.5, MC: 22.4, MI: 0.8, MW: 7.2, FA: 20.7, FC: 19.8, FI: 0.6, FW: 6.0, FNM: 0, FNF: 0 },
 };
-const DEFAULT_EAP: Record<Key, number> = PROVINCE_EAP["National"];
+const DEFAULT_EAP: Record<Key, number> = PROVINCE_EAP["National"]!;
 
 const pct = (n: number) => `${n.toFixed(1)}%`;
 const sgn = (n: number) => `${n > 0 ? "+" : ""}${n.toFixed(2)}%`;
