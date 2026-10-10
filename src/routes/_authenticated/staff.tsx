@@ -42,7 +42,7 @@ function StaffDashboard() {
         supabase.from("dg_reviews").select("user_id,score,created_at,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category,file_name,created_at"),
         supabase.from("subscriptions").select("user_id,plan,status,created_at").neq("plan", "dg_review"),
-        supabase.from("contact_enquiries").select("id,name,email,message,created_at").order("created_at", { ascending: false }).limit(10),
+        supabase.from("contact_enquiries").select("id,full_name,email,message,created_at").order("created_at", { ascending: false }).limit(10),
         supabase.from("quote_requests").select("id,created_at").order("created_at", { ascending: false }),
         supabase.from("ai_usage").select("id,feature,model,created_at").order("created_at", { ascending: false }).limit(500),
       ]);
