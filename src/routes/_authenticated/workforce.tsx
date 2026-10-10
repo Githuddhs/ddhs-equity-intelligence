@@ -322,14 +322,14 @@ function WorkforcePage() {
         <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
           <h2 className="section-title text-primary">Or upload your HR export</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Upload an Excel spreadsheet (.xlsx or .xls), a CSV export or a PDF of your workforce table. We read
+            Upload an Excel spreadsheet (.xlsx or .xls), a Word document (.docx), a CSV export or a PDF of your workforce table. We read
             the levels and groups, show you every number we found, and only save it once you confirm.
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <input
               ref={file}
               type="file"
-              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,.docx,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               className="hidden"
               aria-label="Upload workforce file (Excel, CSV or PDF)"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }}
