@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { extractPdfText } from "@/lib/workforce.functions";
+import { ExistingPlanGap } from "@/components/existing-plan-gap";
 import { OrgUnitPicker } from "@/components/org-unit-picker";
 import { ALL_UNITS, aggregate, breakdown, describeFilter, normaliseUnits, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 import {
@@ -417,6 +418,8 @@ function WorkforcePage() {
             </div>
           )}
         </section>
+
+        <ExistingPlanGap workforce={counts} />
 
         <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-wrap items-end justify-between gap-4">
