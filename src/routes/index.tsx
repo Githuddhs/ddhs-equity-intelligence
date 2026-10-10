@@ -82,7 +82,7 @@ const lifecycle = [
 const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Workforce Data Foundation", href: "/workforce-foundation" },
   { name: "EEA12 Workforce Analysis", href: "/eea12" },
-  { name: "EEA13 Planning & Monitoring" },
+  { name: "EEA13 Planning & Monitoring", href: "/eea13-planning" },
   { name: "Accountability Management" },
   { name: "Evidence & Governance Repository" },
   { name: "Executive Intelligence" },
@@ -500,7 +500,7 @@ function Index() {
                 {[
                   { l: "Workforce Data Foundation", h: "/workforce-foundation" },
                   { l: "Workforce Analysis", h: "#platform" },
-                  { l: "EE Planning", h: "#platform" },
+                  { l: "EE Planning", h: "/eea13-planning" },
                   { l: "Accountability", h: "#platform" },
                   { l: "Evidence Management", h: "#platform" },
                   { l: "Executive Reporting", h: "#platform" },
