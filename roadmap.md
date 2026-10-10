@@ -20,3 +20,4 @@
 - [x] Homepage brand styling: "DDHS" navy, "Equity Intelligence" teal everywhere it appears
 - [x] Top menu links in teal; no overlap or stacking at narrow widths
 - [x] Standardise fonts across all pages: shared type scale (Sora headings, Manrope body) applied everywhere
+- [x] Workforce Data Foundation: capture page in My portal (type in or upload CSV, confirm before saving) + public capability page
