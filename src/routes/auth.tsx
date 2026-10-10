@@ -105,16 +105,21 @@ function AuthPage() {
             <input className={field} type="password" required minLength={8} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           )}
           <button disabled={busy} className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-            {busy ? "Please wait…" : mode === "in" ? "Sign in" : "Send reset link"}
+            {busy ? "Please wait…" : mode === "in" ? "Sign in" : mode === "up" ? "Create account" : "Send reset link"}
           </button>
         </form>
         {mode === "in" && (
           <div className="mt-4 space-y-2 text-sm">
             <button onClick={() => setMode("reset")} className="text-teal">Forgot password?</button>
-            <p className="text-muted-foreground">New to DDHS? Your account is created for you — ask your DDHS consultant for an invite, or <Link to="/" hash="contact" className="text-teal">contact us</Link>.</p>
+            <p className="text-muted-foreground">New to DDHS? <button onClick={() => setMode("up")} className="font-semibold text-teal">Create an account</button></p>
           </div>
         )}
+        {mode === "up" && (
+          <p className="mt-4 text-sm text-muted-foreground">Already have an account? <button onClick={() => setMode("in")} className="font-semibold text-teal">Sign in</button></p>
+        )}
         {mode === "reset" && <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Back to sign in</button>}
+        </>
+        )}
       </div>
     </div>
   );
