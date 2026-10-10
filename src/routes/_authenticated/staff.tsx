@@ -47,10 +47,16 @@ function StaffDashboard() {
         supabase.from("ai_usage").select("id,feature,model,created_at").order("created_at", { ascending: false }).limit(500),
       ]);
       for (const x of [c, p, r, d]) if (x.error) throw x.error;
+      const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+      const aiRows = ai.data ?? [];
       const overview = {
         subscriptions: (s.data ?? []).filter((x) => x.status === "active"),
         enquiries: e.data ?? [],
         quotes: q.data?.length ?? 0,
+        aiTotal: aiRows.length,
+        aiMonth: aiRows.filter((x) => +new Date(x.created_at) >= +monthStart).length,
+        aiByFeature: aiRows.reduce<Record<string, number>>((m, x) => { m[x.feature] = (m[x.feature] ?? 0) + 1; return m; }, {}),
+        aiRecent: aiRows.slice(0, 10),
       };
       return { overview, clients: (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
