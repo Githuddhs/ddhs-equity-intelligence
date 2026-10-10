@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil } from "@/lib/ee-plan";
 import { InviteClientForm } from "@/components/invite-client-form";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/clients")({
   head: () => ({
@@ -26,21 +27,23 @@ const fmt = (d: string | Date) => new Date(d).toLocaleDateString("en-ZA", { day:
 type Ev = { date: Date; title: string; client: string; ref: string };
 
 function ClientsDashboard() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["admin-clients"],
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
       if (!isAdmin) return null;
-      const [c, a, p, r, d, s] = await Promise.all([
+      const [c, a, p, r, d, s, m] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("eea12_analyses").select("user_id,created_at").order("created_at", { ascending: false }),
         supabase.from("ee_plans").select("user_id,title,start_date,end_date,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category"),
         supabase.from("subscriptions").select("user_id,plan,status,created_at").neq("plan", "dg_review").order("created_at", { ascending: false }),
+        supabase.from("user_roles").select("user_id,role").eq("role", "manager" as "admin"),
       ]);
-      for (const x of [c, a, p, r, d, s]) if (x.error) throw x.error;
+      for (const x of [c, a, p, r, d, s, m]) if (x.error) throw x.error;
+      const managers = new Set((m.data ?? []).map((x) => x.user_id));
       return (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
         const docPct = (area: keyof typeof DOC_TOTAL) => Math.round((new Set(docs.filter((x) => x.area === area).map((x) => x.category)).size / DOC_TOTAL[area]) * 100);
@@ -51,6 +54,7 @@ function ClientsDashboard() {
           review: (r.data ?? []).find((x) => x.user_id === cl.id) ?? null,
           sub: (s.data ?? []).find((x) => x.user_id === cl.id) ?? null,
           docs: { eea12: docPct("eea12"), plan: docPct("plan"), dg: docPct("dg") },
+          isManager: managers.has(cl.id),
         };
       });
     },
@@ -88,7 +92,9 @@ function ClientsDashboard() {
                   <tbody>
                     {data?.map((cl) => (
                       <tr key={cl.id} className="border-t border-border align-top">
-                        <td className="p-3"><p className="font-semibold">{cl.company || cl.full_name || "—"}</p><p className="text-muted-foreground">{cl.email}</p>{!cl.confirmed && <p className="text-xs font-semibold text-primary">Invite pending</p>}<Link to="/clients/$id" params={{ id: cl.id }} className="mt-1 inline-block text-sm font-semibold text-teal">Manage →</Link></td>
+                        <td className="p-3"><p className="font-semibold">{cl.company || cl.full_name || "—"}</p><p className="text-muted-foreground">{cl.email}</p>{!cl.confirmed && <p className="text-xs font-semibold text-primary">Invite pending</p>}<Link to="/clients/$id" params={{ id: cl.id }} className="mt-1 inline-block text-sm font-semibold text-teal">Manage →</Link>
+                          <button onClick={async () => { const { error } = await supabase.rpc("set_manager_role", { _user_id: cl.id, _make: !cl.isManager }); if (error) toast.error(error.message); else { toast.success(cl.isManager ? "Manager access removed." : "Manager access granted."); refetch(); } }}
+                            className={`mt-1 block text-xs font-semibold ${cl.isManager ? "text-teal" : "text-muted-foreground"}`}>{cl.isManager ? "✓ Senior manager" : "Make senior manager"}</button></td>
                         <td className="p-3"><p>{cl.analyses.length} saved{cl.analyses[0] ? ` · ${fmt(cl.analyses[0].created_at)}` : ""}</p><Bar pct={cl.docs.eea12} /></td>
                         <td className="p-3"><p>{cl.plan ? cl.plan.title : "No plan"}</p>{cl.plan?.end_date && <p className="text-muted-foreground">Ends {fmt(cl.plan.end_date)}</p>}<Bar pct={cl.docs.plan} /></td>
                         <td className="p-3">{cl.review ? <p className={`font-display text-lg font-bold ${cl.review.score >= 80 ? "text-teal" : cl.review.score >= 50 ? "text-primary" : "text-destructive"}`}>{cl.review.score}%</p> : <p>Not started</p>}<Bar pct={cl.docs.dg} /></td>

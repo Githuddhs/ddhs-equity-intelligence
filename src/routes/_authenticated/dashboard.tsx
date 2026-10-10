@@ -96,6 +96,7 @@ function Dashboard() {
   // Monitoring
   const milestones = content?.milestones ?? [];
   const done = milestones.filter((m) => m.status === "done").length;
+  const approvedMs = milestones.filter((m) => m.approvedAt).length;
   const overdue = milestones.filter((m) => m.status !== "done" && m.due && daysUntil(parse(m.due)) < 0);
   const monPct = milestones.length ? Math.round((done / milestones.length) * 100) : 0;
   const upcoming = [
@@ -173,6 +174,10 @@ function Dashboard() {
               <div><div className="flex justify-between"><span>Sections written</span><span className="text-muted-foreground">{sectionsDone}/{TEXT_SECTIONS.length}</span></div><Bar pct={(sectionsDone / TEXT_SECTIONS.length) * 100} /></div>
               <div><div className="flex justify-between"><span>Numerical goals set</span><span className="text-muted-foreground">{goalsSet}/{PLAN_LEVELS.length}</span></div><Bar pct={(goalsSet / PLAN_LEVELS.length) * 100} /></div>
               <div><div className="flex justify-between"><span>Milestones done</span><span className="text-muted-foreground">{done}/{milestones.length}</span></div><Bar pct={monPct} /></div>
+              <div><div className="flex justify-between"><span>Milestones approved by manager</span><span className="text-muted-foreground">{approvedMs}/{milestones.length}</span></div><Bar pct={milestones.length ? (approvedMs / milestones.length) * 100 : 0} /></div>
+              {content.signoff
+                ? <p className="rounded-lg bg-teal/10 px-3 py-2 text-xs font-semibold text-teal">✓ Plan signed off by {content.signoff.by} on {fmt(parse(content.signoff.at.slice(0, 10)))}</p>
+                : <p className="rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">Awaiting senior manager sign-off</p>}
             </div>
           )}
         </section>
