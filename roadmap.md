@@ -27,3 +27,4 @@
 - [x] Executive Intelligence public capability page (/executive-intelligence)
 - [x] Responsible AI Assistant public capability page (/responsible-ai)
 - [x] Session-aware Sign in / My portal link on all public pages (homepage, Pricing, EEA12, Workforce Data Foundation, EEA13 Planning)
+- [x] EEA13 barrier analysis questionnaire in My portal (/barrier-analysis): 15 scored areas + experiences, priorities, open feedback; saved responses, aggregate section scores; linked from header and portal
