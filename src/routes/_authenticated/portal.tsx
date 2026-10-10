@@ -64,6 +64,11 @@ function Portal() {
         <h1 className="page-title text-primary">Welcome{name ? `, ${name}` : ""}</h1>
         <p className="page-lead mt-1 text-muted-foreground">{meta["company"] ? `${meta["company"]} · ` : ""}Everything you've saved, visible only to you.</p>
 
+        <Link to="/dashboard" className="mt-6 flex items-center justify-between rounded-xl border border-teal/50 bg-muted/40 p-5 shadow-sm">
+          <span><span className="card-title block text-primary">Compliance dashboard</span><span className="text-sm text-muted-foreground">EEA12, Barrier Analysis, EE plan and monitoring calendar in one view.</span></span>
+          <span className="font-semibold text-teal">Open →</span>
+        </Link>
+
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           <Stat label="EEA12 analyses" value={data?.analyses.length} />
           <Stat label="EE plans" value={data?.plans.length} />
