@@ -10,6 +10,7 @@ import { normaliseContent, TEXT_SECTIONS, type PlanContent , goalsFromAnalyses, 
 import { SECTORS } from "@/lib/sectors";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
+import { autofillPlan } from "@/lib/plan-autofill";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
   head: () => ({
@@ -34,6 +35,7 @@ function PlanBuilder() {
   const [analyses, setAnalyses] = useState<unknown[]>([]);
   const [focusLevel, setFocusLevel] = useState("Senior Management");
   const [rawAnalyses, setRawAnalyses] = useState<SavedAnalysis[]>([]);
+  const [barriers, setBarriers] = useState<{ answers: unknown }[]>([]);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [drafting, setDrafting] = useState<string | null>(null);
@@ -48,6 +50,9 @@ function PlanBuilder() {
       const a = await supabase.from("eea12_analyses").select("sector,level,total_headcount,results,created_at").order("created_at", { ascending: false }).limit(10);
       setRawAnalyses(a.data ?? []);
       setAnalyses((a.data ?? []).map((x) => ({ sector: x.sector, level: x.level, headcount: x.total_headcount, sectoral: (x.results as { sectoral?: unknown }).sectoral, date: x.created_at })));
+      const { data: u } = await supabase.auth.getUser();
+      const b = await supabase.from("barrier_responses").select("answers").eq("user_id", u.user?.id ?? "");
+      setBarriers(b.data ?? []);
     })();
   }, [id]);
 
@@ -99,6 +104,19 @@ function PlanBuilder() {
             </button>
           </div>
         </div>
+
+        <section className="mb-6 rounded-xl border border-teal/50 bg-muted/40 p-6 shadow-sm">
+          <h2 className="section-title text-primary">Auto-fill from my data</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Pulls numerical goals from your {rawAnalyses.length} saved EEA12 analyses, and writes barriers, measures, objectives and timetable from your goals and {barriers.length} Barrier Analysis response(s). Sections you've already written are kept.
+          </p>
+          <button disabled={!rawAnalyses.length && !barriers.length} onClick={() => {
+            const r = autofillPlan(content, rawAnalyses, barriers);
+            setContent(r.content); setDirty(true);
+            toast.success(`Filled ${r.goalsFilled} goal level(s) and ${r.filled.length} section(s) — review, then Save plan.`);
+          }} className="mt-3 rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Auto-fill plan</button>
+          {!rawAnalyses.length && !barriers.length && <p className="mt-2 text-xs text-muted-foreground">Save an <Link to="/eea12" className="text-teal underline">EEA12 analysis</Link> or complete the <Link to="/barrier-analysis" className="text-teal underline">Barrier Analysis</Link> first.</p>}
+        </section>
 
         <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <h2 className="section-title text-primary">Plan details</h2>
