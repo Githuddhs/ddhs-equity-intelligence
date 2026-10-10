@@ -17,6 +17,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
+import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
@@ -71,6 +72,11 @@ const SignupRoute = SignupRouteImport.update({
 const StaffLoginRoute = StaffLoginRouteImport.update({
   id: '/staff-login',
   path: '/staff-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkforceFoundationRoute = WorkforceFoundationRouteImport.update({
+  id: '/workforce-foundation',
+  path: '/workforce-foundation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/workforce-foundation': typeof WorkforceFoundationRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/workforce-foundation': typeof WorkforceFoundationRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/workforce-foundation': typeof WorkforceFoundationRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/workforce-foundation'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/workforce-foundation'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -295,6 +306,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/workforce-foundation'
     | '/_authenticated/clients'
     | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
@@ -322,6 +334,7 @@ export interface RootRouteChildren {
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
   StaffLoginRoute: typeof StaffLoginRoute
+  WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       path: '/staff-login'
       fullPath: '/staff-login'
       preLoaderRoute: typeof StaffLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workforce-foundation': {
+      id: '/workforce-foundation'
+      path: '/workforce-foundation'
+      fullPath: '/workforce-foundation'
+      preLoaderRoute: typeof WorkforceFoundationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/clients': {
@@ -542,6 +562,7 @@ const rootRouteChildren: RootRouteChildren = {
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
   StaffLoginRoute: StaffLoginRoute,
+  WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   ApiPublicHooksComplianceRemindersRoute:
