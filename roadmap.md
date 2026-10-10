@@ -35,3 +35,5 @@
 - [ ] Sign-off trail: manager approved-by/date per milestone & objective, shown on dashboard
 - [ ] Senior-manager portal: review Barrier Analysis results, EE plan, monitoring calendar, with sign-off approval
 - [ ] E2E test: complete Barrier Analysis questionnaire, export Excel + PDF, confirm they match
+- [ ] Accept Word (.docx/.doc) files in workforce upload
+- [~] Org name/divisions/roles personalisation — user skipped; needs real details
