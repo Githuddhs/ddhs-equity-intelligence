@@ -209,7 +209,7 @@ function WorkforcePage() {
         <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
         <h1 className="page-title mt-2 text-primary">Workforce Data Foundation</h1>
         <p className="page-lead mt-1 text-muted-foreground">
-          Your headcount by occupational level, population group, gender and disability. Type it in or upload a
+          Your headcount by occupational level, population group, gender and disability. Type it in or upload
           an Excel, CSV or PDF export — nothing is saved until you have checked it.
         </p>
 
