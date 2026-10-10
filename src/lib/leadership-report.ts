@@ -111,7 +111,7 @@ export async function exportLeadershipPdf(input: LeadershipReportInput) {
     doc.setFontSize(9);
     doc.setTextColor(...GREY);
     doc.text("No Barrier Analysis responses saved yet.", 14, y + 6);
-    y += 12;
+    y += 16;
   } else {
     autoTable(doc, {
       startY: y + 3,
