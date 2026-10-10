@@ -113,8 +113,30 @@ function Dashboard() {
   return shell(
     <>
       <p className="text-sm font-semibold uppercase tracking-wide text-teal">Compliance dashboard</p>
-      <h1 className="page-title text-primary">{company || "Your organisation"} at a glance</h1>
-      <p className="page-lead mt-1 text-muted-foreground">EEA12, Barrier Analysis, EE plan and monitoring progress in one view.</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="page-title text-primary">{company || "Your organisation"} at a glance</h1>
+          <p className="page-lead mt-1 text-muted-foreground">EEA12, Barrier Analysis, EE plan and monitoring progress in one view.</p>
+        </div>
+        <button
+          type="button"
+          disabled={exporting}
+          onClick={async () => {
+            setExporting(true);
+            try {
+              await exportLeadershipPdf({ company: company || "Your organisation", analyses: data.analyses, barriers: data.barriers, plan: data.plan, content });
+              toast.success("Leadership report downloaded.");
+            } catch {
+              toast.error("Could not build the report. Please try again.");
+            } finally {
+              setExporting(false);
+            }
+          }}
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+        >
+          {exporting ? "Building report…" : "Download leadership report (PDF)"}
+        </button>
+      </div>
 
       <section className="mt-6 grid gap-4 rounded-xl border border-teal/50 bg-muted/40 p-6 sm:grid-cols-2 lg:grid-cols-5">
         <Ring pct={overall} label="Overall readiness" />
