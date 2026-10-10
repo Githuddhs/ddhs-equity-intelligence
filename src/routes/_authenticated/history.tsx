@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { renderMd } from "@/components/ai-insights";
 import { AppHeader } from "@/components/app-header";
+import { exportEea12Pdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
@@ -64,6 +65,7 @@ function HistoryPage() {
                   </div>
                   <div className="flex gap-2 text-sm">
                     <button onClick={() => setOpen(open === a.id ? null : a.id)} className="rounded-lg border border-border px-3 py-1.5 font-semibold">{open === a.id ? "Hide" : "View"}</button>
+                    <button onClick={async () => { try { await exportEea12Pdf(a); } catch { toast.error("Could not build the report."); } }} className="rounded-lg border border-teal px-3 py-1.5 font-semibold text-teal">Download PDF</button>
                     <button onClick={() => remove(a.id)} className="rounded-lg border border-border px-3 py-1.5 text-destructive">Delete</button>
                   </div>
                 </div>

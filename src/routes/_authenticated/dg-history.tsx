@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { DG_ITEMS, type DgAnswer } from "@/lib/ee-plan";
+import { exportDgReviewPdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/dg-history")({
   head: () => ({
@@ -72,6 +73,7 @@ function DgHistory() {
                   <div className="flex items-center gap-2 text-sm">
                     <span className={`font-display text-2xl font-bold ${tone}`}>{r.score}%</span>
                     {r.ai_assessment && <button onClick={() => setOpen(open === r.id ? null : r.id)} className="rounded-lg border border-border px-3 py-1.5 font-semibold">{open === r.id ? "Hide" : "View"} assessment</button>}
+                    <button onClick={async () => { try { await exportDgReviewPdf({ score: r.score, answers: r.answers, ai_assessment: r.ai_assessment, updated_at: r.updated_at, planTitle: r.ee_plans?.title ?? undefined, company: r.ee_plans?.company ?? undefined }); } catch { toast.error("Could not build the report."); } }} className="rounded-lg border border-border px-3 py-1.5 font-semibold">Download PDF</button>
                     <Link to="/dg-review" search={{ id: r.id }} className="rounded-lg border border-teal px-3 py-1.5 font-semibold text-teal">Open</Link>
                     <button onClick={() => del(r.id)} className="rounded-lg border border-border px-3 py-1.5 font-semibold text-destructive">Delete</button>
                   </div>
