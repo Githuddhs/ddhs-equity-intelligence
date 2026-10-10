@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseContent, PLAN_LEVELS, TEXT_SECTIONS, type SavedAnalysis } from "@/lib/ee-plan";
 import { completionPct, rolesFor, QUESTIONNAIRE_VERSION, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 import { averageBarrierScores } from "@/lib/plan-autofill";
+import { exportLeadershipPdf } from "@/lib/leadership-report";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
