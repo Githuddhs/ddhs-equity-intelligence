@@ -317,7 +317,19 @@ function BarrierAnalysisPage() {
 
         {responses.length > 0 && (
           <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-            <h2 className="section-title text-primary">Saved responses</h2>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="section-title text-primary">Saved responses</h2>
+              <div className="flex gap-2">
+                <button onClick={() => runExport("xlsx")} disabled={exporting !== null}
+                  className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal hover:bg-teal/10 disabled:opacity-50">
+                  {exporting === "xlsx" ? "Preparing…" : "Export Excel"}
+                </button>
+                <button onClick={() => runExport("pdf")} disabled={exporting !== null}
+                  className="rounded-lg border border-primary px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary/5 disabled:opacity-50">
+                  {exporting === "pdf" ? "Preparing…" : "Export PDF"}
+                </button>
+              </div>
+            </div>
             <div className="mt-3 space-y-2">
               {responses.map((r) => (
                 <div key={r.id} className="flex items-center justify-between rounded-lg border border-border p-3">
