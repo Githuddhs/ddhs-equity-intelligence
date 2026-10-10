@@ -295,6 +295,36 @@ export type Database = {
         }
         Relationships: []
       }
+      plan_gap_analyses: {
+        Row: {
+          created_at: string
+          file_name: string
+          id: string
+          plan_text: string
+          result: string
+          user_id: string
+          workforce: Json
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          id?: string
+          plan_text?: string
+          result: string
+          user_id?: string
+          workforce?: Json
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          id?: string
+          plan_text?: string
+          result?: string
+          user_id?: string
+          workforce?: Json
+        }
+        Relationships: []
+      }
       portal_documents: {
         Row: {
           area: string
