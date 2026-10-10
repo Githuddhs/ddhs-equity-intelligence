@@ -51,8 +51,8 @@ const GROUP_ALIASES: Record<string, Key> = {
   indianfemale: "FI", indianf: "FI", if: "FI", fi: "FI",
   whitemale: "MW", whitem: "MW", wm: "MW", mw: "MW",
   whitefemale: "FW", whitef: "FW", wf: "FW", fw: "FW",
-  foreignnationalmale: "FNM", foreignmale: "FNM", foreignmalem: "FNM", fnm: "FNM", foreignnationalm: "FNM",
-  foreignnationalfemale: "FNF", foreignfemale: "FNF", fnf: "FNF", foreignnationalf: "FNF",
+  foreignnationalmale: "FNM", foreignmale: "FNM", foreignm: "FNM", fnm: "FNM", foreignnationalm: "FNM",
+  foreignnationalfemale: "FNF", foreignfemale: "FNF", foreignf: "FNF", fnf: "FNF", foreignnationalf: "FNF",
 };
 
 const DISABILITY_ALIASES = new Set([
