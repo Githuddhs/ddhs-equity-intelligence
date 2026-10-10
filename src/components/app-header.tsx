@@ -15,6 +15,15 @@ export function AppHeader() {
       return !!data;
     },
   });
+  const { data: isManager } = useQuery({
+    queryKey: ["is-manager"],
+    queryFn: async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return false;
+      const { data } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "manager" as "admin" });
+      return !!data;
+    },
+  });
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const onStaffPage = STAFF_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
@@ -52,6 +61,7 @@ export function AppHeader() {
               <Link to="/plans" className={link} activeProps={active}>EE Plans</Link>
               <Link to="/dg-review" className={link} activeProps={active}>DG Review</Link>
               <Link to="/dg-history" className={link} activeProps={active}>DG History</Link>
+              {isManager && <Link to="/manager" className={link} activeProps={active}>Review portal</Link>}
             </>
           )}
           <button onClick={signOut} className="ml-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">Sign out</button>
