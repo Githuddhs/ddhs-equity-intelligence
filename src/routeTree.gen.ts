@@ -31,6 +31,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as AuthenticatedManagerRouteImport } from './routes/_authenticated/manager'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
@@ -155,6 +156,11 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedManagerRoute = AuthenticatedManagerRouteImport.update({
+  id: '/manager',
+  path: '/manager',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/manager': typeof AuthenticatedManagerRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
@@ -276,6 +283,7 @@ export interface FileRoutesByTo {
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/manager': typeof AuthenticatedManagerRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
@@ -313,6 +321,7 @@ export interface FileRoutesById {
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/manager': typeof AuthenticatedManagerRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/dg-history'
     | '/dg-review'
     | '/history'
+    | '/manager'
     | '/portal'
     | '/staff'
     | '/workforce'
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
     | '/dg-history'
     | '/dg-review'
     | '/history'
+    | '/manager'
     | '/portal'
     | '/staff'
     | '/workforce'
@@ -421,6 +432,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
     | '/_authenticated/history'
+    | '/_authenticated/manager'
     | '/_authenticated/portal'
     | '/_authenticated/staff'
     | '/_authenticated/workforce'
@@ -614,6 +626,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/manager': {
+      id: '/_authenticated/manager'
+      path: '/manager'
+      fullPath: '/manager'
+      preLoaderRoute: typeof AuthenticatedManagerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/portal': {
       id: '/_authenticated/portal'
       path: '/portal'
@@ -709,6 +728,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedManagerRoute: typeof AuthenticatedManagerRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
@@ -726,6 +746,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedManagerRoute: AuthenticatedManagerRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
