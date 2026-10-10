@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { extractPdfText } from "@/lib/workforce.functions";
 import {
   DISABILITY_COLUMN,
   GROUPS,
@@ -313,23 +314,23 @@ function WorkforcePage() {
         <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
           <h2 className="section-title text-primary">Or upload your HR export</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Save your spreadsheet as CSV (in Excel: File → Save As → CSV) and upload it here. We read the levels
-            and groups, show you every number we found, and only save it once you confirm.
+            Upload an Excel spreadsheet (.xlsx or .xls), a CSV export or a PDF of your workforce table. We read
+            the levels and groups, show you every number we found, and only save it once you confirm.
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <input
               ref={file}
               type="file"
-              accept=".csv,.tsv,.txt,text/csv"
+              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
               className="hidden"
-              aria-label="Upload workforce spreadsheet as CSV"
+              aria-label="Upload workforce file (Excel, CSV or PDF)"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }}
             />
             <button
               onClick={() => file.current?.click()}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              Choose a CSV file
+              Choose a file
             </button>
             <button onClick={downloadTemplate} className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">
               Download template
