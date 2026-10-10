@@ -83,8 +83,10 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Workforce Data Foundation", href: "/workforce-foundation" },
   { name: "EEA12 Workforce Analysis", href: "/eea12" },
   { name: "EEA13 Planning & Monitoring", href: "/eea13-planning" },
+  { name: "EE Plans", href: "/plans" },
   { name: "Accountability Management", href: "/accountability-management" },
   { name: "Evidence & Governance Repository", href: "/evidence-governance" },
+  { name: "DG Review", href: "/dg-review" },
   { name: "Executive Intelligence", href: "/executive-intelligence" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
@@ -178,9 +180,6 @@ function Index() {
             <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
             <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
             <a href="#pilots" className="whitespace-nowrap transition-colors hover:text-primary">Pilot Programme</a>
-            <a href="/eea12" className="whitespace-nowrap transition-colors hover:text-primary">EEA12 Analysis</a>
-            <a href="/plans" className="whitespace-nowrap transition-colors hover:text-primary">EE Plans</a>
-            <a href="/dg-review" className="whitespace-nowrap transition-colors hover:text-primary">DG Review</a>
           </nav>
           <div className="flex items-center gap-5">
             <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
