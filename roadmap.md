@@ -21,3 +21,5 @@
 - Staff access restored: the demo-data cleanup had wiped public.user_roles, so sdm@ddhs.co.za lost its admin row and /staff redirected to /portal. Re-inserted the admin row (grant_staff_on_confirm's ON CONFLICT DO NOTHING keeps it safe on confirm).
 - Email links from auth.tsx now use publicOrigin() (localhost → preview domain) for password-reset and sign-up confirmation, so links are reachable by recipients.
 - GitHub sync live: project connected to GitHub in the editor; the repository's main branch carries every change (verified latest local commit is on main, and Sello's README edit at 08:50 came back the other way — two-way sync working).
+
+- [ ] EEA12: auto-populate headcount from Workforce Data for every level/unit
