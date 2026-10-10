@@ -40,6 +40,7 @@ function PlanBuilder() {
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [drafting, setDrafting] = useState<string | null>(null);
+  const [signName, setSignName] = useState("");
   const ai = useAiStream();
 
   useEffect(() => {
@@ -198,6 +199,28 @@ function PlanBuilder() {
           </section>
         ))}
         <PlanTimeline content={content} start={meta.start_date} end={meta.end_date} onChange={(m) => upContent({ milestones: m })} />
+        <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h2 className="section-title text-primary">Organisation sign-off</h2>
+          {content.orgSignoff ? (
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <p className="rounded-lg bg-teal/10 px-4 py-2 text-sm font-semibold text-teal">
+                ✓ Signed off by {content.orgSignoff.by} on {new Date(content.orgSignoff.at).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}
+              </p>
+              <button onClick={() => upContent({ orgSignoff: undefined })} className="text-sm font-semibold text-muted-foreground">Remove sign-off</button>
+            </div>
+          ) : (
+            <>
+              <p className="mt-2 text-sm text-muted-foreground">
+                The responsible person signs off the plan on behalf of the organisation before it goes to a senior manager for review. Sign-off is recorded with the name and date.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <input value={signName} onChange={(e) => setSignName(e.target.value)} placeholder="Full name of the person signing off…" className={`${field} max-w-sm`} />
+                <button disabled={signName.trim().length < 2} onClick={() => { upContent({ orgSignoff: { by: signName.trim(), at: new Date().toISOString() } }); toast.success("Sign-off recorded — click Save plan to keep it."); }}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Sign off plan</button>
+              </div>
+            </>
+          )}
+        </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
       </main>
 
