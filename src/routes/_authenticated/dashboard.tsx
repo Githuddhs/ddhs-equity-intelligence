@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseContent, PLAN_LEVELS, TEXT_SECTIONS, type SavedAnalysis } from "@/lib/ee-plan";
-import { completionPct, type BarrierAnswers } from "@/lib/barrier";
+import { completionPct, rolesFor, QUESTIONNAIRE_VERSION, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 import { averageBarrierScores } from "@/lib/plan-autofill";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -60,7 +60,7 @@ function Dashboard() {
       const uid = u.user?.id ?? "";
       const [a, b, p] = await Promise.all([
         supabase.from("eea12_analyses").select("level,sector,created_at,results").eq("user_id", uid).order("created_at", { ascending: false }).limit(50),
-        supabase.from("barrier_responses").select("answers,updated_at").eq("user_id", uid),
+        supabase.from("barrier_responses").select("answers,profile,updated_at").eq("user_id", uid),
         supabase.from("ee_plans").select("id,title,start_date,end_date,content,updated_at").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
       ]);
       for (const x of [a, b, p]) if (x.error) throw x.error;
@@ -83,8 +83,9 @@ function Dashboard() {
 
   // Barrier Analysis
   const scores = averageBarrierScores(data.barriers).sort((x, y) => x.avg - y.avg);
-  const barrierPct = data.barriers.length
-    ? Math.round(data.barriers.reduce((n, r) => n + completionPct((r.answers ?? {}) as BarrierAnswers), 0) / data.barriers.length) : 0;
+  const current = data.barriers.filter((r) => (r.profile as BarrierProfile | null)?.version === QUESTIONNAIRE_VERSION);
+  const barrierPct = current.length
+    ? Math.round(current.reduce((n, r) => { const p = r.profile as BarrierProfile; return n + completionPct((r.answers ?? {}) as BarrierAnswers, rolesFor(p.participant?.["roles"] as string[] | undefined)); }, 0) / current.length) : 0;
 
   // EE plan
   const content = data.plan ? normaliseContent(data.plan.content) : null;

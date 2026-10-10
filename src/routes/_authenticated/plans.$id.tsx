@@ -36,7 +36,7 @@ function PlanBuilder() {
   const [analyses, setAnalyses] = useState<unknown[]>([]);
   const [focusLevel, setFocusLevel] = useState("Senior Management");
   const [rawAnalyses, setRawAnalyses] = useState<SavedAnalysis[]>([]);
-  const [barriers, setBarriers] = useState<{ answers: unknown }[]>([]);
+  const [barriers, setBarriers] = useState<{ answers: unknown; profile?: unknown }[]>([]);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [drafting, setDrafting] = useState<string | null>(null);
@@ -52,7 +52,7 @@ function PlanBuilder() {
       setRawAnalyses(a.data ?? []);
       setAnalyses((a.data ?? []).map((x) => ({ sector: x.sector, level: x.level, headcount: x.total_headcount, sectoral: (x.results as { sectoral?: unknown }).sectoral, date: x.created_at })));
       const { data: u } = await supabase.auth.getUser();
-      const b = await supabase.from("barrier_responses").select("answers").eq("user_id", u.user?.id ?? "");
+      const b = await supabase.from("barrier_responses").select("answers,profile").eq("user_id", u.user?.id ?? "");
       setBarriers(b.data ?? []);
     })();
   }, [id]);
@@ -109,7 +109,7 @@ function PlanBuilder() {
         <section className="mb-6 rounded-xl border border-teal/50 bg-muted/40 p-6 shadow-sm">
           <h2 className="section-title text-primary">Auto-fill from my data</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Pulls numerical goals from your {rawAnalyses.length} saved EEA12 analyses, and writes barriers, measures, objectives and a month-by-month timetable (most frequent 24-month experiences first) from your goals and {barriers.length} Barrier Analysis response(s). Sections you've already written are kept.
+            Pulls numerical goals from your {rawAnalyses.length} saved EEA12 analyses, and writes barriers, measures, objectives and a month-by-month timetable (barriers flagged by most respondents first) from your goals and {barriers.length} Barrier Analysis response(s). Sections you've already written are kept.
           </p>
           <button disabled={!rawAnalyses.length && !barriers.length} onClick={() => {
             const r = autofillPlan(content, rawAnalyses, barriers, { start: meta.start_date, end: meta.end_date });
