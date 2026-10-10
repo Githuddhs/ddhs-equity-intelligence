@@ -29,3 +29,5 @@
 - [x] EEA13 planning page (goals, targets, timeline) linked from Document evidence
 - [x] EEA13 goals pull headcount from Workforce Data
 - [ ] Test Document evidence with a real EE plan + scanned HR report (needs your files)
+- [ ] EEA13: button to copy goals/targets into the EE plan (keep in sync)
+- [ ] EEA13: gap analysis comparing goals with Workforce Data, flag mismatches
