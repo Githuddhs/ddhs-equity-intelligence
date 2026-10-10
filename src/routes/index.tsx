@@ -88,6 +88,8 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Evidence & Governance Repository", href: "/evidence-governance" },
   { name: "DG Review", href: "/dg-review" },
   { name: "Executive Intelligence", href: "/executive-intelligence" },
+  { name: "Leadership Dashboard", href: "/leadership-dashboard" },
+  { name: "Leadership Report", href: "/leadership-report" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
@@ -318,7 +320,7 @@ function Index() {
                   {layer.href && <ArrowRight className="ml-auto h-4 w-4 text-teal" />}
                 </>
               );
-              const style = { marginLeft: `${(capabilityLayers.length - 1 - i) * 1.25}rem`, marginRight: `${i * 1.25}rem` };
+              const style = { marginLeft: `min(12%, ${(capabilityLayers.length - 1 - i) * 1.25}rem)`, marginRight: `min(12%, ${i * 1.25}rem)` };
               return layer.href ? (
                 <a
                   key={layer.name}
@@ -502,6 +504,8 @@ function Index() {
                   { l: "Accountability", h: "/accountability-management" },
                   { l: "Evidence Management", h: "/evidence-governance" },
                   { l: "Executive Reporting", h: "/executive-intelligence" },
+                  { l: "Leadership Dashboard", h: "/leadership-dashboard" },
+                  { l: "Leadership Report", h: "/leadership-report" },
                 ].map((l) => (
                   <li key={l.l}><a href={l.h} className="transition-colors hover:text-primary">{l.l}</a></li>
                 ))}

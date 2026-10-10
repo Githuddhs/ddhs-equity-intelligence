@@ -17,6 +17,8 @@ import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
 import { Route as ExecutiveIntelligenceRouteImport } from './routes/executive-intelligence'
+import { Route as LeadershipDashboardRouteImport } from './routes/leadership-dashboard'
+import { Route as LeadershipReportRouteImport } from './routes/leadership-report'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
@@ -83,6 +85,16 @@ const EvidenceGovernanceRoute = EvidenceGovernanceRouteImport.update({
 const ExecutiveIntelligenceRoute = ExecutiveIntelligenceRouteImport.update({
   id: '/executive-intelligence',
   path: '/executive-intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadershipDashboardRoute = LeadershipDashboardRouteImport.update({
+  id: '/leadership-dashboard',
+  path: '/leadership-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadershipReportRoute = LeadershipReportRouteImport.update({
+  id: '/leadership-report',
+  path: '/leadership-report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -233,6 +245,8 @@ export interface FileRoutesByFullPath {
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
+  '/leadership-dashboard': typeof LeadershipDashboardRoute
+  '/leadership-report': typeof LeadershipReportRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
@@ -269,6 +283,8 @@ export interface FileRoutesByTo {
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
+  '/leadership-dashboard': typeof LeadershipDashboardRoute
+  '/leadership-report': typeof LeadershipReportRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
@@ -307,6 +323,8 @@ export interface FileRoutesById {
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
+  '/leadership-dashboard': typeof LeadershipDashboardRoute
+  '/leadership-report': typeof LeadershipReportRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
@@ -345,6 +363,8 @@ export interface FileRouteTypes {
     | '/eea13-planning'
     | '/evidence-governance'
     | '/executive-intelligence'
+    | '/leadership-dashboard'
+    | '/leadership-report'
     | '/pricing'
     | '/reset-password'
     | '/responsible-ai'
@@ -381,6 +401,8 @@ export interface FileRouteTypes {
     | '/eea13-planning'
     | '/evidence-governance'
     | '/executive-intelligence'
+    | '/leadership-dashboard'
+    | '/leadership-report'
     | '/pricing'
     | '/reset-password'
     | '/responsible-ai'
@@ -418,6 +440,8 @@ export interface FileRouteTypes {
     | '/eea13-planning'
     | '/evidence-governance'
     | '/executive-intelligence'
+    | '/leadership-dashboard'
+    | '/leadership-report'
     | '/pricing'
     | '/reset-password'
     | '/responsible-ai'
@@ -456,6 +480,8 @@ export interface RootRouteChildren {
   Eea13PlanningRoute: typeof Eea13PlanningRoute
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
   ExecutiveIntelligenceRoute: typeof ExecutiveIntelligenceRoute
+  LeadershipDashboardRoute: typeof LeadershipDashboardRoute
+  LeadershipReportRoute: typeof LeadershipReportRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ResponsibleAiRoute: typeof ResponsibleAiRoute
@@ -526,6 +552,20 @@ declare module '@tanstack/react-router' {
       path: '/executive-intelligence'
       fullPath: '/executive-intelligence'
       preLoaderRoute: typeof ExecutiveIntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leadership-dashboard': {
+      id: '/leadership-dashboard'
+      path: '/leadership-dashboard'
+      fullPath: '/leadership-dashboard'
+      preLoaderRoute: typeof LeadershipDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leadership-report': {
+      id: '/leadership-report'
+      path: '/leadership-report'
+      fullPath: '/leadership-report'
+      preLoaderRoute: typeof LeadershipReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -768,6 +808,8 @@ const rootRouteChildren: RootRouteChildren = {
   Eea13PlanningRoute: Eea13PlanningRoute,
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,
   ExecutiveIntelligenceRoute: ExecutiveIntelligenceRoute,
+  LeadershipDashboardRoute: LeadershipDashboardRoute,
+  LeadershipReportRoute: LeadershipReportRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ResponsibleAiRoute: ResponsibleAiRoute,

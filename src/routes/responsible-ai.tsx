@@ -87,8 +87,7 @@ function ResponsibleAiPage() {
           </Link>
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
-            <Link to="/auth" search={{ next: "/portal" }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Sign in</Link>
-            <AuthCta />
+                        <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">
               Schedule a Demonstration
             </Link>
@@ -99,7 +98,7 @@ function ResponsibleAiPage() {
       <main className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 7 of 7</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 11 of 11</p>
             <h1 className="display-title mt-2 text-balance text-primary">
               Responsible AI Assistant
             </h1>
