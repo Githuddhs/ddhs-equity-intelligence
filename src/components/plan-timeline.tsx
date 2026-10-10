@@ -162,6 +162,8 @@ export function PlanTimeline({ content, start, end, onChange }: {
                   <span className={`rounded px-2 py-0.5 text-xs ${KIND_CLASS[m.kind]}`}>{KIND_LABEL[m.kind]}</span>
                   <input aria-label="Milestone" className={`${field} min-w-48 flex-1`} placeholder="What must happen" value={m.title} onChange={(e) => up(m.id, { title: e.target.value })} />
                   <input aria-label="Owner" className={`${field} w-36`} placeholder="Owner" value={m.owner} onChange={(e) => up(m.id, { owner: e.target.value })} />
+                  <input aria-label="Budget (R)" type="number" min={0} className={`${field} w-28`} placeholder="Budget R" value={m.budget ?? ""} onChange={(e) => up(m.id, { budget: e.target.value === "" ? undefined : Math.max(0, Number(e.target.value)) })} />
+                  <input aria-label="Spent (R)" type="number" min={0} className={`${field} w-28`} placeholder="Spent R" value={m.spent ?? ""} onChange={(e) => up(m.id, { spent: e.target.value === "" ? undefined : Math.max(0, Number(e.target.value)) })} />
                   <input aria-label="Due date" type="date" className={field} value={m.due} onChange={(e) => { up(m.id, { due: e.target.value }); if (e.target.value) { const d = parse(e.target.value); setMonth(new Date(d.getFullYear(), d.getMonth(), 1)); } }} />
                   <select aria-label="Status" className={field} value={m.status} onChange={(e) => up(m.id, { status: e.target.value as Milestone["status"] })}>
                     <option value="planned">Planned</option><option value="in_progress">In progress</option><option value="done">Done</option>

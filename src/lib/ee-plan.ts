@@ -143,4 +143,4 @@ export const buildDeadlines = (plan: { end_date: string | null; start_date: stri
 export const daysUntil = (d: Date) => Math.ceil((+new Date(d.getFullYear(), d.getMonth(), d.getDate()) - +new Date(new Date().toDateString())) / 86400000);
 
 export type MilestoneKind = "goal" | "objective" | "measure";
-export type Milestone = { id: string; kind: MilestoneKind; title: string; owner: string; due: string; status: "planned" | "in_progress" | "done"; approvedBy?: string | undefined; approvedAt?: string | undefined };
+export type Milestone = { id: string; kind: MilestoneKind; title: string; owner: string; due: string; status: "planned" | "in_progress" | "done"; approvedBy?: string | undefined; approvedAt?: string | undefined; budget?: number | undefined; spent?: number | undefined };
