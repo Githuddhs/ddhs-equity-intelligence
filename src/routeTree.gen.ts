@@ -36,6 +36,7 @@ import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedEea13RouteImport } from './routes/_authenticated/eea13'
 import { Route as AuthenticatedEvidenceRouteImport } from './routes/_authenticated/evidence'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedManagerRouteImport } from './routes/_authenticated/manager'
 import { Route as AuthenticatedPlanReportRouteImport } from './routes/_authenticated/plan-report'
 import { Route as AuthenticatedPoliciesRouteImport } from './routes/_authenticated/policies'
@@ -189,6 +190,11 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedManagerRoute = AuthenticatedManagerRouteImport.update({
   id: '/manager',
   path: '/manager',
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/eea13': typeof AuthenticatedEea13Route
   '/evidence': typeof AuthenticatedEvidenceRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/invoices': typeof AuthenticatedInvoicesRoute
   '/manager': typeof AuthenticatedManagerRoute
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
@@ -344,6 +351,7 @@ export interface FileRoutesByTo {
   '/eea13': typeof AuthenticatedEea13Route
   '/evidence': typeof AuthenticatedEvidenceRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/invoices': typeof AuthenticatedInvoicesRoute
   '/manager': typeof AuthenticatedManagerRoute
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
@@ -390,6 +398,7 @@ export interface FileRoutesById {
   '/_authenticated/eea13': typeof AuthenticatedEea13Route
   '/_authenticated/evidence': typeof AuthenticatedEvidenceRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/manager': typeof AuthenticatedManagerRoute
   '/_authenticated/plan-report': typeof AuthenticatedPlanReportRoute
   '/_authenticated/policies': typeof AuthenticatedPoliciesRoute
@@ -436,6 +445,7 @@ export interface FileRouteTypes {
     | '/eea13'
     | '/evidence'
     | '/history'
+    | '/invoices'
     | '/manager'
     | '/plan-report'
     | '/policies'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/eea13'
     | '/evidence'
     | '/history'
+    | '/invoices'
     | '/manager'
     | '/plan-report'
     | '/policies'
@@ -525,6 +536,7 @@ export interface FileRouteTypes {
     | '/_authenticated/eea13'
     | '/_authenticated/evidence'
     | '/_authenticated/history'
+    | '/_authenticated/invoices'
     | '/_authenticated/manager'
     | '/_authenticated/plan-report'
     | '/_authenticated/policies'
@@ -761,6 +773,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/invoices': {
+      id: '/_authenticated/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/manager': {
       id: '/_authenticated/manager'
       path: '/manager'
@@ -886,6 +905,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEea13Route: typeof AuthenticatedEea13Route
   AuthenticatedEvidenceRoute: typeof AuthenticatedEvidenceRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedManagerRoute: typeof AuthenticatedManagerRoute
   AuthenticatedPlanReportRoute: typeof AuthenticatedPlanReportRoute
   AuthenticatedPoliciesRoute: typeof AuthenticatedPoliciesRoute
@@ -908,6 +928,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEea13Route: AuthenticatedEea13Route,
   AuthenticatedEvidenceRoute: AuthenticatedEvidenceRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedManagerRoute: AuthenticatedManagerRoute,
   AuthenticatedPlanReportRoute: AuthenticatedPlanReportRoute,
   AuthenticatedPoliciesRoute: AuthenticatedPoliciesRoute,

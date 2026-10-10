@@ -322,6 +322,54 @@ export type Database = {
         }
         Relationships: []
       }
+      invoices: {
+        Row: {
+          client_email: string
+          client_name: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          due_date: string | null
+          id: string
+          invoice_number: string
+          items: Json
+          notes: string
+          status: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          client_email?: string
+          client_name?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          items?: Json
+          notes?: string
+          status?: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          items?: Json
+          notes?: string
+          status?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       plan_gap_analyses: {
         Row: {
           created_at: string
