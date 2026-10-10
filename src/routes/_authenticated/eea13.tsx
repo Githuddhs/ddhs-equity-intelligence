@@ -86,6 +86,21 @@ function Eea13Page() {
   const yrs = years(plan);
   const setT = (l: string, k: keyof Targets, v: number) => setTargets((p) => ({ ...p, [l]: { ...(p[l] ?? { males: 0, females: 0, total: 0 }), [k]: v } }));
 
+  // Gap analysis: compare the goals with the live Workforce Data figures.
+  const gaps: string[] = rows.flatMap((r) => {
+    const out: string[] = [];
+    const now = pct(r.desig, r.n);
+    const femNow = pct(r.fem, r.n);
+    if (!r.n) out.push(`${r.level}: no headcount in Workforce Data — goals for this level can't be measured yet.`);
+    else {
+      if (r.target.total > 0 && now < r.target.total) out.push(`${r.level}: designated groups at ${now.toFixed(1)}% against a ${r.target.total.toFixed(1)}% target — shortfall of ${(r.target.total - now).toFixed(1)} points (${hiresNeeded(r.n, r.desig, r.target.total)} appointments needed).`);
+      if (r.target.females > 0 && femNow < r.target.females) out.push(`${r.level}: women at ${femNow.toFixed(1)}% against a ${r.target.females.toFixed(1)}% target — shortfall of ${(r.target.females - femNow).toFixed(1)} points.`);
+    }
+    const saved = plan?.content.goals.find((g) => g.level === r.level);
+    if (saved && Math.abs(num(saved.baseline, now) - now) > 0.5) out.push(`${r.level}: the plan's saved baseline (${num(saved.baseline, now).toFixed(1)}%) no longer matches Workforce Data (${now.toFixed(1)}%) — save the goals again to re-sync.`);
+    return out;
+  });
+
   const save = async (withTimeline: boolean) => {
     if (!plan) return;
     setSaving(true);
