@@ -26,7 +26,7 @@ export const LIKERT_SECTIONS: LikertSection[] = [
     { id: "q2.6", text: "Suitably qualified candidates from under-represented designated groups receive fair consideration." },
     { id: "q2.7", text: "Persons with disabilities are reasonably accommodated during recruitment and selection." },
     { id: "q2.8", text: "Recruitment and appointment decisions are free from unfair discrimination." },
-    { id: "q2.9", text: "Recruitment processes support the organisation"s Employment Equity objectives." },
+    { id: "q2.9", text: "Recruitment processes support the organisation's Employment Equity objectives." },
     { id: "q2.10", text: "Recruitment barriers and deviations from Employment Equity objectives are documented and addressed." },
   ] },
   { key: "development", num: 3, title: "Learning, development and career advancement", role: null, items: [
