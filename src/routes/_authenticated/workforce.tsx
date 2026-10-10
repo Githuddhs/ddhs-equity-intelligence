@@ -148,9 +148,17 @@ function WorkforcePage() {
         let bin = "";
         new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
         const res = await extractPdfText({ data: { fileName: f.name, base64: btoa(bin) } });
+        // PDF text loses its columns, so glue the known multi-word headings
+        // and level names together before splitting on whitespace.
+        const phrases = [DISABILITY_COLUMN, "Occupational level", ...LEVELS, ...GROUPS.map((g) => g.label)];
+        const glue = (l: string) => {
+          let out = l;
+          for (const p of phrases) out = out.replace(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), p.replace(/ /g, ""));
+          return out;
+        };
         const rows = res.text
           .split(/\r?\n/)
-          .map((l) => l.split(/\t| {2,}|,/).map((c) => c.trim()).filter((c) => c.length > 0))
+          .map((l) => glue(l).split(/\s+/).map((c) => c.trim().replace(/ /g, " ")).filter((c) => c.length > 0))
           .filter((r) => r.length > 0);
         parsed = parseWorkforceRows(rows, f.name);
       } else {
