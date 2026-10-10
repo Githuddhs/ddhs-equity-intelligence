@@ -92,7 +92,9 @@ function ClientsDashboard() {
                   <tbody>
                     {data?.map((cl) => (
                       <tr key={cl.id} className="border-t border-border align-top">
-                        <td className="p-3"><p className="font-semibold">{cl.company || cl.full_name || "—"}</p><p className="text-muted-foreground">{cl.email}</p>{!cl.confirmed && <p className="text-xs font-semibold text-primary">Invite pending</p>}<Link to="/clients/$id" params={{ id: cl.id }} className="mt-1 inline-block text-sm font-semibold text-teal">Manage →</Link></td>
+                        <td className="p-3"><p className="font-semibold">{cl.company || cl.full_name || "—"}</p><p className="text-muted-foreground">{cl.email}</p>{!cl.confirmed && <p className="text-xs font-semibold text-primary">Invite pending</p>}<Link to="/clients/$id" params={{ id: cl.id }} className="mt-1 inline-block text-sm font-semibold text-teal">Manage →</Link>
+                          <button onClick={async () => { const { error } = await supabase.rpc("set_manager_role", { _user_id: cl.id, _make: !cl.isManager }); if (error) toast.error(error.message); else { toast.success(cl.isManager ? "Manager access removed." : "Manager access granted."); refetch(); } }}
+                            className={`mt-1 block text-xs font-semibold ${cl.isManager ? "text-teal" : "text-muted-foreground"}`}>{cl.isManager ? "✓ Senior manager" : "Make senior manager"}</button></td>
                         <td className="p-3"><p>{cl.analyses.length} saved{cl.analyses[0] ? ` · ${fmt(cl.analyses[0].created_at)}` : ""}</p><Bar pct={cl.docs.eea12} /></td>
                         <td className="p-3"><p>{cl.plan ? cl.plan.title : "No plan"}</p>{cl.plan?.end_date && <p className="text-muted-foreground">Ends {fmt(cl.plan.end_date)}</p>}<Bar pct={cl.docs.plan} /></td>
                         <td className="p-3">{cl.review ? <p className={`font-display text-lg font-bold ${cl.review.score >= 80 ? "text-teal" : cl.review.score >= 50 ? "text-primary" : "text-destructive"}`}>{cl.review.score}%</p> : <p>Not started</p>}<Bar pct={cl.docs.dg} /></td>
