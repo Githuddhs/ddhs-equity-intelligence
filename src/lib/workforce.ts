@@ -265,3 +265,64 @@ export function parseWorkforceRows(rows: string[][], fileName: string): ParsedFi
     rowCount: levelsFound.length,
   };
 }
+
+// Per-employee HR exports: one row per person with level, gender and race columns.
+// Counts are built here in the browser; names, ID and passport columns are never read.
+const levelFromText = (raw: string): string | undefined => {
+  const n = norm(raw);
+  if (LEVEL_ALIASES[n]) return LEVEL_ALIASES[n];
+  if (n.startsWith("top")) return "Top Management";
+  if (n.startsWith("senior")) return "Senior Management";
+  if (n.startsWith("prof") || n.includes("midmanagement") || n.includes("middlemanagement")) return "Professionally Qualified";
+  if (n.startsWith("semi")) return "Semi-skilled";
+  if (n.startsWith("unskilled") || n.startsWith("lowskilled")) return "Unskilled";
+  if (n.startsWith("skilled") || n.includes("juniormanagement") || n.includes("jrmgmt")) return "Skilled Technical";
+  return undefined;
+};
+
+function parseEmployeeRows(rows: string[][]): ParsedFile | null {
+  for (let h = 0; h < Math.min(rows.length, 20); h++) {
+    const head = (rows[h] ?? []).map(norm);
+    const lvl = head.findIndex((x) => LEVEL_HEADER.has(x));
+    const gen = head.findIndex((x) => x === "gender" || x === "sex");
+    const eeRace = head.indexOf("eerace");
+    const race = eeRace >= 0 ? eeRace : head.findIndex((x) => x === "race" || x === "populationgroup");
+    if (lvl < 0 || gen < 0 || race < 0) continue;
+    const nat = head.indexOf("nationality");
+    const dis = head.findIndex((x) => DISABILITY_ALIASES.has(x));
+    const counts = emptyWorkforce();
+    const disability: Record<string, number> = {};
+    const found = new Set<string>();
+    const skipped: Record<string, number> = {};
+    let rowCount = 0;
+    for (let i = h + 1; i < rows.length; i++) {
+      const c = rows[i] ?? [];
+      const rawLevel = (c[lvl] ?? "").trim();
+      if (!rawLevel) continue;
+      const level = levelFromText(rawLevel);
+      if (!level) { skipped[rawLevel] = (skipped[rawLevel] ?? 0) + 1; continue; }
+      const g = norm(c[gen] ?? "");
+      const male = g.startsWith("m");
+      if (!male && !g.startsWith("f")) { skipped["missing gender"] = (skipped["missing gender"] ?? 0) + 1; continue; }
+      const r = norm(c[race] ?? "");
+      const foreign = r.startsWith("foreign") || (eeRace < 0 && nat >= 0 && !!c[nat] && !norm(c[nat] ?? "").includes("southafrican"));
+      const key: Key | undefined = foreign ? (male ? "FNM" : "FNF")
+        : r.startsWith("african") || r.startsWith("black") ? (male ? "MA" : "FA")
+        : r.startsWith("colo") ? (male ? "MC" : "FC")
+        : r.startsWith("indian") || r.startsWith("asian") ? (male ? "MI" : "FI")
+        : r.startsWith("white") ? (male ? "MW" : "FW") : undefined;
+      if (!key) { skipped["unknown race"] = (skipped["unknown race"] ?? 0) + 1; continue; }
+      counts[level]![key] += 1;
+      found.add(level);
+      rowCount++;
+      if (dis >= 0 && /^(y|yes|true|1)$/i.test((c[dis] ?? "").trim())) disability[level] = (disability[level] ?? 0) + 1;
+    }
+    if (!rowCount) return null;
+    const warnings = [`Read ${rowCount.toLocaleString("en-ZA")} employee rows and counted them per level and group.`];
+    for (const [k, v] of Object.entries(skipped)) warnings.push(`${v} row(s) skipped: ${k}.`);
+    const missing = LEVELS.filter((l) => !found.has(l));
+    if (missing.length) warnings.push(`No employees found for: ${missing.join(", ")}.`);
+    return { counts, disability, levelsFound: [...found], warnings: warnings.slice(0, 12), total: grandTotal(counts), unknownColumns: [], rowCount };
+  }
+  return null;
+}
