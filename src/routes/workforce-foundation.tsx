@@ -198,6 +198,14 @@ function WorkforceFoundationPage() {
           </section>
         </div>
 
+        <section className="mt-16 rounded-xl border border-teal/50 bg-card p-8 shadow-sm">
+          <h2 className="section-title text-primary">Upload your existing EE plan for gap analysis</h2>
+          <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+            Already have an Employment Equity Plan? Upload it (PDF or Word) and DDHS checks it against section 20 of the Act, compares its goals with your current workforce profile, and lists the gaps and priority actions for your next plan.
+          </p>
+          <Link to="/workforce" className="mt-4 inline-block rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground">Upload my EE plan →</Link>
+        </section>
+
         <section className="mt-16 rounded-xl border border-border bg-secondary/50 p-8">
           <h2 className="section-title text-primary">What the foundation holds</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
