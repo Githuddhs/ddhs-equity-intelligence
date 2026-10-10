@@ -143,20 +143,26 @@ function WorkforcePage() {
           .map((r) => r.map((c) => String(c ?? "").trim()))
           .filter((r) => r.some((c) => c.length > 0));
         parsed = parseWorkforceRows(rows, f.name);
-      } else if (ext === "pdf") {
-        const buf = await f.arrayBuffer();
-        let bin = "";
-        new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
-        const res = await extractPdfText({ data: { fileName: f.name, base64: btoa(bin) } });
-        // PDF text loses its columns, so glue the known multi-word headings
-        // and level names together before splitting on whitespace.
+      } else if (ext === "pdf" || ext === "docx") {
+        // Extracted text loses its columns, so glue the known multi-word
+        // headings and level names together before splitting on whitespace.
         const phrases = [DISABILITY_COLUMN, "Occupational level", ...LEVELS, ...GROUPS.map((g) => g.label)];
         const glue = (l: string) => {
           let out = l;
-          for (const p of phrases) out = out.replace(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), p.replace(/ /g, ""));
+          for (const p of phrases) out = out.replace(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), p.replace(/ /g, " "));
           return out;
         };
-        const rows = res.text
+        let text: string;
+        if (ext === "pdf") {
+          const buf = await f.arrayBuffer();
+          let bin = "";
+          new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
+          text = (await extractPdfText({ data: { fileName: f.name, base64: btoa(bin) } })).text;
+        } else {
+          const mammoth = await import("mammoth");
+          text = (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
+        }
+        const rows = text
           .split(/\r?\n/)
           .map((l) => glue(l).split(/\s+/).map((c) => c.trim().replace(/ /g, " ")).filter((c) => c.length > 0))
           .filter((r) => r.length > 0);
