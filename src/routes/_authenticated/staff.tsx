@@ -51,7 +51,7 @@ function StaffDashboard() {
         enquiries: e.data ?? [],
         quotes: q.data?.length ?? 0,
       };
-      return (c.data ?? []).map((cl) => {
+      return { overview, clients: (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
         const missing = (Object.keys(DOCS) as Area[]).map((a) => {
           const have = new Set(docs.filter((x) => x.area === a).map((x) => x.category));
