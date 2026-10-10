@@ -11,7 +11,7 @@ import { SECTORS } from "@/lib/sectors";
 import { useLatestOrgUnits } from "@/components/org-unit-picker";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
-import { autofillPlan, averageBarrierScores, questionnaireSections } from "@/lib/plan-autofill";
+import { autofillPlan, questionnaireSections } from "@/lib/plan-autofill";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
 
@@ -38,7 +38,7 @@ function PlanBuilder() {
   const [analyses, setAnalyses] = useState<unknown[]>([]);
   const [focusLevel, setFocusLevel] = useState("Senior Management");
   const [rawAnalyses, setRawAnalyses] = useState<SavedAnalysis[]>([]);
-  const [barriers, setBarriers] = useState<{ answers: unknown; profile?: unknown }[]>([]);
+  const [barriers, setBarriers] = useState<{ answers: unknown; profile?: unknown; priorities?: unknown; open_feedback?: unknown }[]>([]);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [drafting, setDrafting] = useState<string | null>(null);

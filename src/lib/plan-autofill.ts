@@ -127,18 +127,8 @@ export function autofillPlan(content: PlanContent, analyses: SavedAnalysis[], ba
     const q = questionnaireSections(barrierResponses as Resp[], gaps);
     set("barriers", q.barriers); set("measures", q.measures); if (q.objectives) set("objectives", q.objectives);
   }
-  if (false) {
-    set("barriers", [
-      `Barrier analysis based on ${barrierResponses.length} questionnaire response(s). Scores are averages on a 1–5 scale (lower = stronger barrier).`,
-      "",
-      ...(weak.length ? weak : scores.slice(0, 3)).map((s) => `- **${s.title}** — average ${s.avg.toFixed(1)}/5${s.avg < 2.5 ? " (significant barrier)" : s.avg < 3.5 ? " (barrier)" : " (lowest-scoring area)"}`),
-      ...(gaps.length ? ["", "Under-representation against numerical goals (EEA12):", ...gaps.map((r) => `- ${r.level}: ${r.baseline}% designated vs goal ${r.total}%`)] : []),
-    ].join("\n"));
-    set("measures", (weak.length ? weak : scores.slice(0, 3)).map((s) =>
-      `- **${s.title}:** review the related policy and practice, agree a corrective measure with the EE forum, and re-survey to confirm improvement.`).join("\n"));
-  }
   if (!scores.length) set("barriers", "No Barrier Analysis responses saved yet. Run the EEA13 Barrier Analysis questionnaire in My portal, then re-run Auto-fill to populate this section with scored barrier areas.");
-  if (gaps.length) set("objectives", gaps.map((r) => `- ${r.level}: move designated representation from ${r.baseline}% towards ${r.total}% by the end of the plan, with equal annual steps.`).join("\n"));
+  if (gaps.length && !barrierResponses.length) set("objectives", gaps.map((r) => `- ${r.level}: move designated representation from ${r.baseline}% towards ${r.total}% by the end of the plan, with equal annual steps.`).join("\n"));
   else set("objectives", "Current EEA12 analyses show all analysed levels at or above their sectoral targets. Objectives: maintain representivity, monitor quarterly, and prioritise under-represented designated groups in every new appointment.");
   const t = buildTimetable(barrierResponses, weak, gaps, dates.start, dates.end);
   set("timetable", t.text);
