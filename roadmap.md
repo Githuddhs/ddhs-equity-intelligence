@@ -23,7 +23,7 @@
 - [x] Workforce Data Foundation: capture page in My portal (type in or upload Excel, CSV or PDF, confirm before saving) + public capability page
 - [x] EEA13 Planning & Monitoring public capability page (/eea13-planning), linked from homepage capability stack and footer
 - [x] Accountability Management public capability page (/accountability-management), linked from homepage capability stack and footer
-- [ ] Evidence & Governance Repository public capability page (/evidence-governance)
-- [ ] Executive Intelligence public capability page (/executive-intelligence)
-- [ ] Responsible AI Assistant public capability page (/responsible-ai)
+- [x] Evidence & Governance Repository public capability page (/evidence-governance)
+- [x] Executive Intelligence public capability page (/executive-intelligence)
+- [x] Responsible AI Assistant public capability page (/responsible-ai)
 - [x] Session-aware Sign in / My portal link on all public pages (homepage, Pricing, EEA12, Workforce Data Foundation, EEA13 Planning)
