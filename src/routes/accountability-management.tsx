@@ -92,7 +92,7 @@ function AccountabilityPage() {
           </Link>
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
-            <Link to="/signup" className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Sign up</Link>
+            <Link to="/auth" search={{ next: "/portal" }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Sign in</Link>
             <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">
               Schedule a Demonstration
@@ -122,10 +122,10 @@ function AccountabilityPage() {
                 Schedule a Demonstration <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                to="/signup"
+                to="/auth" search={{ next: "/portal" }}
                 className="inline-flex items-center rounded-lg border border-input px-5 py-3 text-sm font-semibold text-primary hover:bg-accent"
               >
-                Create an account
+                Sign in to your portal
               </Link>
             </div>
           </div>

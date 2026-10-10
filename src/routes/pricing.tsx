@@ -109,7 +109,7 @@ function PricingPage() {
           <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
           <div className="flex items-center gap-4">
             <AuthCta />
-            <Link to="/signup" className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Sign up</Link>
+            <Link to="/auth" search={{ next: "/portal" }} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Sign in</Link>
           </div>
         </div>
       </header>
