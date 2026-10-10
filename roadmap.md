@@ -15,3 +15,6 @@
 - Shared read-only client view (/view/$token): private expiring links created from My portal; reports downloadable without sign-in.
 - Demo run of shared client view with real data (sdm@sun.ac.za).
 - Upload real workforce data file — BLOCKED: no file supplied yet.
+- Admin dashboard: overview cards (clients, subscriptions, enquiries, quotes), AI usage panel (total/month/by feature/recent), latest enquiries — DONE, build clean. UI verify BLOCKED: staff account sdm@ddhs.co.za unconfirmed (redirects to /portal).
+- AI usage logging: ai_usage table + logging in both AI routes — DONE.
+- GitHub sync: user must connect via editor + menu → GitHub → Connect project (agent cannot).
