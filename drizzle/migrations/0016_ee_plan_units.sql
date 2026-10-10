@@ -1,0 +1,1 @@
+ALTER TABLE public.ee_plans ADD COLUMN division text NOT NULL DEFAULT '', ADD COLUMN department text NOT NULL DEFAULT '', ADD COLUMN section text NOT NULL DEFAULT '';
