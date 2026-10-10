@@ -26,16 +26,18 @@ function Portal() {
   // Live subscription status: PayFast confirms payments in the background, so listen for changes.
   useEffect(() => {
     let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
     void supabase.auth.getUser().then(({ data: u }) => {
-      if (!u.user) return;
+      if (!u.user || cancelled) return;
+      // Unique topic per mount: reusing the same name can return an already-subscribed channel.
       channel = supabase
-        .channel(`subs-${u.user.id}`)
+        .channel(`subs-${u.user.id}-${Date.now()}`)
         .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${u.user.id}` }, () => {
           void qc.invalidateQueries({ queryKey: ["portal"] });
         })
         .subscribe();
     });
-    return () => { if (channel) void supabase.removeChannel(channel); };
+    return () => { cancelled = true; if (channel) void supabase.removeChannel(channel); };
   }, [qc]);
   const { data } = useQuery({
     queryKey: ["portal"],
