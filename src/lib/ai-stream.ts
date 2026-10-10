@@ -1,6 +1,14 @@
 // Server-side helper: streams a Lovable AI Gateway Gemini chat call as plain text.
 export const AI_MODEL = "google/gemini-3.8-flash";
 
+// Logs one AI call for the admin usage dashboard. Never throws.
+export async function logAiUsage(feature: string, userId: string | null): Promise<void> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await supabaseAdmin.from("ai_usage").insert({ user_id: userId, feature, model: AI_MODEL });
+  } catch { /* logging must never break the AI call */ }
+}
+
 export async function streamResponses(instructions: string, input: string, signal: AbortSignal): Promise<Response> {
   const key = process.env["LOVABLE_API_KEY"];
   if (!key) return Response.json({ error: "AI is not configured." }, { status: 500 });

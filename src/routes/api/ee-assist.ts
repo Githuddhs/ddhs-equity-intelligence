@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import { streamResponses } from "@/lib/ai-stream";
+import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
   task: z.enum(["plan_section", "dg_assessment"]),

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { streamResponses } from "@/lib/ai-stream";
+import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const num = z.number().finite().min(-1000).max(1000000);
 const Body = z.object({
