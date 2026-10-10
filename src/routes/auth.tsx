@@ -24,7 +24,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { next } = Route.useSearch();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"in" | "up" | "reset">("in");
+  const [mode, setMode] = useState<"in" | "reset">("in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -47,12 +47,9 @@ function AuthPage() {
       setMode("in");
       return;
     }
-    const res = mode === "in"
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + next } });
+    const res = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (res.error) { toast.error(res.error.message); return; }
-    if (mode === "up" && !res.data.session) { toast.success("Check your email to confirm your account."); return; }
     navigate({ to: next });
   };
 
@@ -68,9 +65,9 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
         <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
-        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : mode === "up" ? "Create account" : "Reset password"}</h1>
+        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : "Reset password"}</h1>
         <p className="page-lead mt-1 text-muted-foreground">
-          {mode === "reset" ? "Enter your account email and we'll send you a reset link." : "Save your EEA12 analyses and view their history."}
+          {mode === "reset" ? "Enter your account email and we'll send you a reset link." : "One sign-in for every capability — EEA12 analysis, EE plans, DG review and your portal."}
         </p>
         {mode !== "reset" && (
           <button onClick={google} className="mt-6 w-full rounded-lg border border-border px-4 py-2 text-sm font-semibold">Continue with Google</button>
@@ -81,16 +78,15 @@ function AuthPage() {
             <input className={field} type="password" required minLength={8} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           )}
           <button disabled={busy} className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-            {busy ? "Please wait…" : mode === "in" ? "Sign in" : mode === "up" ? "Create account" : "Send reset link"}
+            {busy ? "Please wait…" : mode === "in" ? "Sign in" : "Send reset link"}
           </button>
         </form>
         {mode === "in" && (
-          <div className="mt-4 flex items-center justify-between text-sm">
-            <Link to="/signup" className="text-teal">No account? Create one</Link>
+          <div className="mt-4 space-y-2 text-sm">
             <button onClick={() => setMode("reset")} className="text-teal">Forgot password?</button>
+            <p className="text-muted-foreground">New to DDHS? Your account is created for you — ask your DDHS consultant for an invite, or <Link to="/" hash="contact" className="text-teal">contact us</Link>.</p>
           </div>
         )}
-        {mode === "up" && <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Have an account? Sign in</button>}
         {mode === "reset" && <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Back to sign in</button>}
       </div>
     </div>
