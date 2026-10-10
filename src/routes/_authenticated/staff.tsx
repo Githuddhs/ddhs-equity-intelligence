@@ -97,9 +97,65 @@ function StaffDashboard() {
         {isLoading && <p className="mt-8 text-muted-foreground">Loading…</p>}
         {error && <p className="mt-8 text-destructive">Could not load the dashboard.</p>}
         {data === null && <p className="mt-8 text-muted-foreground">This page is for DDHS staff only.</p>}
-        {data && (
+        {data && ov && (
           <>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { label: "Clients", value: all.length },
+                { label: "Active subscriptions", value: ov.subscriptions.length },
+                { label: "Contact enquiries", value: ov.enquiries.length },
+                { label: "Quote requests", value: ov.quotes },
+              ].map((s) => (
+                <div key={s.label} className="rounded-xl border border-border bg-card p-4 shadow-sm">
+                  <p className="text-sm font-semibold text-muted-foreground">{s.label}</p>
+                  <p className="mt-1 font-display text-3xl font-bold text-primary">{s.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+              <h2 className="section-title text-primary">AI usage</h2>
+              <div className="mt-3 grid gap-4 sm:grid-cols-3">
+                <div><p className="text-sm text-muted-foreground">Total AI calls</p><p className="font-display text-2xl font-bold">{ov.aiTotal}</p></div>
+                <div><p className="text-sm text-muted-foreground">This month</p><p className="font-display text-2xl font-bold">{ov.aiMonth}</p></div>
+                <div>
+                  <p className="text-sm text-muted-foreground">By feature</p>
+                  <ul className="mt-1 text-sm">
+                    {Object.entries(ov.aiByFeature).map(([f, n]) => (
+                      <li key={f}><span className="font-semibold">{n}×</span> {f === "eea12_insights" ? "EEA12 insights" : f === "plan_section" ? "EE plan drafts" : f === "dg_assessment" ? "DG assessments" : f}</li>
+                    ))}
+                    {ov.aiTotal === 0 && <li className="text-muted-foreground">No AI calls yet.</li>}
+                  </ul>
+                </div>
+              </div>
+              {ov.aiRecent.length > 0 && (
+                <ul className="mt-4 divide-y divide-border border-t border-border text-sm">
+                  {ov.aiRecent.map((r) => (
+                    <li key={r.id} className="flex justify-between gap-2 py-1.5">
+                      <span>{r.feature === "eea12_insights" ? "EEA12 insights" : r.feature === "plan_section" ? "EE plan draft" : r.feature === "dg_assessment" ? "DG assessment" : r.feature}</span>
+                      <span className="text-muted-foreground">{new Date(r.created_at).toLocaleString("en-ZA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            {ov.enquiries.length > 0 && (
+              <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+                <h2 className="section-title text-primary">Latest enquiries</h2>
+                <ul className="mt-3 divide-y divide-border text-sm">
+                  {ov.enquiries.map((e) => (
+                    <li key={e.id} className="py-2">
+                      <p className="font-semibold">{e.name} <span className="font-normal text-muted-foreground">· {e.email} · {fmt(e.created_at)}</span></p>
+                      <p className="text-muted-foreground">{e.message.slice(0, 160)}{e.message.length > 160 ? "…" : ""}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <h2 className="section-title mt-10 text-primary">Needs attention</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {tabBtn("pending", "Pending invites", pending.length)}
               {tabBtn("docs", "Incomplete documents", incomplete.length)}
               {tabBtn("dg", "Overdue DG reviews", overdue.length)}
