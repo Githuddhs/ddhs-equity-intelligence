@@ -40,7 +40,7 @@ function AuthPage() {
     setBusy(true);
     if (mode === "reset") {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/reset-password",
+        redirectTo: publicOrigin() + "/reset-password",
       });
       setBusy(false);
       if (error) { toast.error(error.message); return; }
@@ -52,7 +52,7 @@ function AuthPage() {
       const res = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: window.location.origin + "/portal" },
+        options: { emailRedirectTo: publicOrigin() + "/portal" },
       });
       setBusy(false);
       if (res.error) { toast.error(res.error.message); return; }
