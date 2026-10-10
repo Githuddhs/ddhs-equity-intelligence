@@ -53,6 +53,7 @@ function ClientsDashboard() {
           review: (r.data ?? []).find((x) => x.user_id === cl.id) ?? null,
           sub: (s.data ?? []).find((x) => x.user_id === cl.id) ?? null,
           docs: { eea12: docPct("eea12"), plan: docPct("plan"), dg: docPct("dg") },
+          isManager: managers.has(cl.id),
         };
       });
     },
