@@ -184,6 +184,7 @@ function Index() {
           <div className="flex items-center gap-5">
             <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
             <a href="/signup" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Sign up</a>
+            <AuthCta />
             <a
               href="#contact"
               className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
