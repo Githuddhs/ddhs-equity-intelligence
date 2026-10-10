@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseContent, PLAN_LEVELS, TEXT_SECTIONS, type SavedAnalysis } from "@/lib/ee-plan";
 import { completionPct, rolesFor, QUESTIONNAIRE_VERSION, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 import { averageBarrierScores } from "@/lib/plan-autofill";
+import { exportLeadershipPdf } from "@/lib/leadership-report";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -53,6 +56,7 @@ function Card({ title, to, cta, children }: { title: string; to: "/eea12" | "/ba
 }
 
 function Dashboard() {
+  const [exporting, setExporting] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
@@ -109,8 +113,30 @@ function Dashboard() {
   return shell(
     <>
       <p className="text-sm font-semibold uppercase tracking-wide text-teal">Compliance dashboard</p>
-      <h1 className="page-title text-primary">{company || "Your organisation"} at a glance</h1>
-      <p className="page-lead mt-1 text-muted-foreground">EEA12, Barrier Analysis, EE plan and monitoring progress in one view.</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="page-title text-primary">{company || "Your organisation"} at a glance</h1>
+          <p className="page-lead mt-1 text-muted-foreground">EEA12, Barrier Analysis, EE plan and monitoring progress in one view.</p>
+        </div>
+        <button
+          type="button"
+          disabled={exporting}
+          onClick={async () => {
+            setExporting(true);
+            try {
+              await exportLeadershipPdf({ company: company || "Your organisation", analyses: data.analyses, barriers: data.barriers, plan: data.plan, content });
+              toast.success("Leadership report downloaded.");
+            } catch {
+              toast.error("Could not build the report. Please try again.");
+            } finally {
+              setExporting(false);
+            }
+          }}
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+        >
+          {exporting ? "Building report…" : "Download leadership report (PDF)"}
+        </button>
+      </div>
 
       <section className="mt-6 grid gap-4 rounded-xl border border-teal/50 bg-muted/40 p-6 sm:grid-cols-2 lg:grid-cols-5">
         <Ring pct={overall} label="Overall readiness" />
