@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      barrier_responses: {
+        Row: {
+          answers: Json
+          comments: Json
+          created_at: string
+          id: string
+          open_feedback: Json
+          org_name: string | null
+          priorities: Json
+          profile: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          comments?: Json
+          created_at?: string
+          id?: string
+          open_feedback?: Json
+          org_name?: string | null
+          priorities?: Json
+          profile?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          answers?: Json
+          comments?: Json
+          created_at?: string
+          id?: string
+          open_feedback?: Json
+          org_name?: string | null
+          priorities?: Json
+          profile?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_enquiries: {
         Row: {
           company: string
