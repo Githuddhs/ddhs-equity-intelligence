@@ -73,6 +73,7 @@ function Eea12Page() {
   const [saving, setSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
   const [eap, setEap] = useState(DEFAULT_EAP);
+  const [province, setProvince] = useState("National");
   const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
   const { data: wf } = useLatestOrgUnits();
   const loadFromWorkforce = (lvl = level, f = unitFilter) => {
