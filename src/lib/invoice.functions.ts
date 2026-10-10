@@ -14,7 +14,7 @@ const itemSchema = z.object({ description: z.string().min(1).max(300), amount: z
 
 export const createInvoice = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { userId: string; clientName: string; clientEmail: string; items: InvoiceItem[]; dueDate?: string; notes?: string }) =>
+  .inputValidator((input: { userId: string; clientName: string; clientEmail: string; items: InvoiceItem[]; dueDate?: string | undefined; notes?: string | undefined }) =>
     z
       .object({
         userId: z.string().uuid(),

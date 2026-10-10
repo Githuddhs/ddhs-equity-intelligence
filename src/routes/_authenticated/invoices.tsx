@@ -196,7 +196,10 @@ function InvoicesPage() {
               <button
                 onClick={() => {
                   const a = Number(amount);
-                  if (!desc.trim() || !(a > 0)) return toast.error("Enter a description and amount.");
+                  if (!desc.trim() || !(a > 0)) {
+                    toast.error("Enter a description and amount.");
+                    return;
+                  }
                   setItems((xs) => [...xs, { description: desc.trim(), amount: a }]);
                   setDesc("");
                   setAmount("");

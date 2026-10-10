@@ -1,6 +1,7 @@
 import type { InvoiceItem } from "@/lib/invoice.functions";
 
 export type InvoiceForPdf = {
+  id: string;
   invoice_number: string;
   client_name: string;
   client_email: string;
