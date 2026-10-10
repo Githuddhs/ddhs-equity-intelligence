@@ -33,6 +33,7 @@ import { Route as AuthenticatedComplianceRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
+import { Route as AuthenticatedEea13RouteImport } from './routes/_authenticated/eea13'
 import { Route as AuthenticatedEvidenceRouteImport } from './routes/_authenticated/evidence'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedManagerRouteImport } from './routes/_authenticated/manager'
@@ -173,6 +174,11 @@ const AuthenticatedDgReviewRoute = AuthenticatedDgReviewRouteImport.update({
   path: '/dg-review',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEea13Route = AuthenticatedEea13RouteImport.update({
+  id: '/eea13',
+  path: '/eea13',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEvidenceRoute = AuthenticatedEvidenceRouteImport.update({
   id: '/evidence',
   path: '/evidence',
@@ -291,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
+  '/eea13': typeof AuthenticatedEea13Route
   '/evidence': typeof AuthenticatedEvidenceRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/manager': typeof AuthenticatedManagerRoute
@@ -334,6 +341,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
+  '/eea13': typeof AuthenticatedEea13Route
   '/evidence': typeof AuthenticatedEvidenceRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/manager': typeof AuthenticatedManagerRoute
@@ -379,6 +387,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
+  '/_authenticated/eea13': typeof AuthenticatedEea13Route
   '/_authenticated/evidence': typeof AuthenticatedEvidenceRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/manager': typeof AuthenticatedManagerRoute
@@ -424,6 +433,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dg-history'
     | '/dg-review'
+    | '/eea13'
     | '/evidence'
     | '/history'
     | '/manager'
@@ -467,6 +477,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dg-history'
     | '/dg-review'
+    | '/eea13'
     | '/evidence'
     | '/history'
     | '/manager'
@@ -511,6 +522,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
+    | '/_authenticated/eea13'
     | '/_authenticated/evidence'
     | '/_authenticated/history'
     | '/_authenticated/manager'
@@ -728,6 +740,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDgReviewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/eea13': {
+      id: '/_authenticated/eea13'
+      path: '/eea13'
+      fullPath: '/eea13'
+      preLoaderRoute: typeof AuthenticatedEea13RouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/evidence': {
       id: '/_authenticated/evidence'
       path: '/evidence'
@@ -864,6 +883,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
+  AuthenticatedEea13Route: typeof AuthenticatedEea13Route
   AuthenticatedEvidenceRoute: typeof AuthenticatedEvidenceRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedManagerRoute: typeof AuthenticatedManagerRoute
@@ -885,6 +905,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
+  AuthenticatedEea13Route: AuthenticatedEea13Route,
   AuthenticatedEvidenceRoute: AuthenticatedEvidenceRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedManagerRoute: AuthenticatedManagerRoute,
