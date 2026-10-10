@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { extractPdfText } from "@/lib/workforce.functions";
@@ -96,6 +97,12 @@ function WorkforcePage() {
     setUnits(normaliseUnits(latest.units));
     setSeeded(true);
   }, [snapshots, seeded]);
+
+  const refreshData = async () => {
+    setSeeded(false);
+    await qc.invalidateQueries({ queryKey: ["workforce"] });
+    toast.success("Workforce data refreshed.");
+  };
 
   const total = useMemo(() => grandTotal(counts), [counts]);
   const view = useMemo(() => (units.length && (filter.division || filter.department || filter.section) ? aggregate(units, filter).counts : counts), [units, filter, counts]);
@@ -231,7 +238,16 @@ function WorkforcePage() {
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
       <main className="mx-auto max-w-6xl px-6 py-10">
-        <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
+        <div className="flex items-center justify-between gap-4">
+          <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
+          <button
+            type="button"
+            onClick={refreshData}
+            className="inline-flex items-center gap-2 rounded-lg border border-input px-3 py-1.5 text-sm font-semibold text-primary hover:bg-accent"
+          >
+            <RefreshCw className="h-4 w-4" /> Refresh data
+          </button>
+        </div>
         <h1 className="page-title mt-2 text-primary">Workforce Data Foundation</h1>
         <p className="page-lead mt-1 text-muted-foreground">
           Your headcount by occupational level, population group, gender and disability. Type it in or upload
