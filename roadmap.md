@@ -1,39 +1,13 @@
-# Roadmap
-- [x] Employment Equity (EEA13) plan builder — awaiting scope answers
-- [x] DG review (Director-General review, s43–45 EEA) readiness feature — awaiting scope answers
-- [x] Compliance dashboard: EE sections due, countdowns, reminders, linked to DG Review
-- [x] Auto-fill plan goals and DG review progress from saved EEA12 analyses
+# DDHS roadmap
 
-- [x] Subscription page (no online payments yet; real prices needed from user)
-- [ ] PayFast checkout: request merchant credentials, test sandbox payment end to end
-- [ ] Confirm sign-up accounts persist in the user database after email confirmation (verify + report)
-- [x] Sign-up persistence: confirmed — accounts are stored in the real user database and persist after email confirmation
-- [ ] PayFast: user to register at payfast.io, then re-request merchant ID, key and passphrase to activate checkout
-- [ ] PayFast live: merchant ID + key wired in; waiting on live passphrase (PAYFAST_LIVE_PASSPHRASE) and a real test payment by the user
-- [ ] Staff dashboard: sdm@ddhs.co.za gets staff access automatically once that account is signed up and confirmed (waiting on user)
-- [x] Staff alerts: pending invites, incomplete documents, overdue DG reviews
-- [x] DG review deadline per EE plan; overdue alerts use it
-- [x] Invite sent to sdm@ddhs.co.za (user accepts via email)
-- [x] DG review submission triggers a PayFast once-off payment
-- [x] Full staff dashboard page (pending invites, incomplete docs, overdue DG) with clickable details
-- [x] Client DG review form in My portal; Manage page shows submission date
-- [x] Homepage brand styling: "DDHS" navy, "Equity Intelligence" teal everywhere it appears
-- [x] Top menu links in teal; no overlap or stacking at narrow widths
-- [x] Standardise fonts across all pages: shared type scale (Sora headings, Manrope body) applied everywhere
-- [x] Workforce Data Foundation: capture page in My portal (type in or upload Excel, CSV or PDF, confirm before saving) + public capability page
-- [x] EEA13 Planning & Monitoring public capability page (/eea13-planning), linked from homepage capability stack and footer
-- [x] Accountability Management public capability page (/accountability-management), linked from homepage capability stack and footer
-- [x] Evidence & Governance Repository public capability page (/evidence-governance)
-- [x] Executive Intelligence public capability page (/executive-intelligence)
-- [x] Responsible AI Assistant public capability page (/responsible-ai)
-- [x] Session-aware Sign in / My portal link on all public pages (homepage, Pricing, EEA12, Workforce Data Foundation, EEA13 Planning)
-- [x] EEA13 barrier analysis questionnaire in My portal (/barrier-analysis): 15 scored areas + experiences, priorities, open feedback; saved responses, aggregate section scores; linked from header and portal
-- [x] EE plan live monitoring calendar (goals, objectives, measures)
-- [x] Auto-fill builds month/quarter timetable from 24-month experiences
-- [x] My portal compliance dashboard (/dashboard)
-- [x] Barrier Analysis replaced with consolidated 12-section consultation questionnaire
-- [ ] Sign-off trail: manager approved-by/date per milestone & objective, shown on dashboard
-- [ ] Senior-manager portal: review Barrier Analysis results, EE plan, monitoring calendar, with sign-off approval
-- [ ] E2E test: complete Barrier Analysis questionnaire, export Excel + PDF, confirm they match
-- [ ] Accept Word (.docx/.doc) files in workforce upload
-- [~] Org name/divisions/roles personalisation — user skipped; needs real details
+## Open
+- Org personalisation: swap generic "the organisation" wording for real name, divisions, role titles — BLOCKED: waiting on Sello to supply details.
+- DG review price: confirm real price (placeholder R4,025 incl. VAT).
+- sdm@ddhs.co.za + demo@ddhs.co.za: confirm invite emails to activate accounts.
+
+## Done
+- Sign-off trail: milestones carry approvedBy/approvedAt; plan-level signoff; dashboard shows approvals + banner.
+- Manager review portal (/manager): managers read all clients' barrier results, plans, milestones; approve/revoke per milestone; whole-plan sign-off. Staff grant manager role from Clients page.
+- Barrier questionnaire v2 E2E: completed, saved, Excel + PDF exports verified matching (all sections 4.0 avg).
+- Workforce upload: Excel, CSV/TSV, PDF, Word (.docx).
+- Auto-fill plan: dated month/quarter timetable from barrier data; fills empty sections only.
