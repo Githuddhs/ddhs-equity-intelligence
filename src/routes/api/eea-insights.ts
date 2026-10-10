@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { streamResponses } from "@/lib/ai-stream";
+import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const num = z.number().finite().min(-1000).max(1000000);
 const Body = z.object({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/api/eea-insights")({
       POST: async ({ request }) => {
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
+        void logAiUsage("eea12_insights", null);
         return streamResponses(SYSTEM, `Workforce data (JSON):\n${JSON.stringify(parsed.data)}`, request.signal);
       },
     },

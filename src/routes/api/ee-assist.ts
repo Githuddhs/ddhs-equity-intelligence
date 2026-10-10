@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import { streamResponses } from "@/lib/ai-stream";
+import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
   task: z.enum(["plan_section", "dg_assessment"]),
@@ -40,6 +40,7 @@ export const Route = createFileRoute("/api/ee-assist")({
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
         const ctx = JSON.stringify(parsed.data.context).slice(0, 40000);
+        void logAiUsage(parsed.data.task, u.user.id);
         if (parsed.data.task === "plan_section") {
           return streamResponses(PLAN, `Section to draft: ${parsed.data.section ?? "Objectives"}\n\nPlan context (JSON):\n${ctx}`, request.signal);
         }

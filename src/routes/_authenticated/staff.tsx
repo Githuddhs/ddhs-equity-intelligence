@@ -36,14 +36,29 @@ function StaffDashboard() {
       const { data: u } = await supabase.auth.getUser();
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
       if (!isAdmin) return null;
-      const [c, p, r, d] = await Promise.all([
+      const [c, p, r, d, s, e, q, ai] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("ee_plans").select("user_id,title,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,created_at,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category,file_name,created_at"),
+        supabase.from("subscriptions").select("user_id,plan,status,created_at").neq("plan", "dg_review"),
+        supabase.from("contact_enquiries").select("id,full_name,email,message,created_at").order("created_at", { ascending: false }).limit(10),
+        supabase.from("quote_requests").select("id,created_at").order("created_at", { ascending: false }),
+        supabase.from("ai_usage").select("id,feature,model,created_at").order("created_at", { ascending: false }).limit(500),
       ]);
       for (const x of [c, p, r, d]) if (x.error) throw x.error;
-      return (c.data ?? []).map((cl) => {
+      const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+      const aiRows = ai.data ?? [];
+      const overview = {
+        subscriptions: (s.data ?? []).filter((x) => x.status === "active"),
+        enquiries: e.data ?? [],
+        quotes: q.data?.length ?? 0,
+        aiTotal: aiRows.length,
+        aiMonth: aiRows.filter((x) => +new Date(x.created_at) >= +monthStart).length,
+        aiByFeature: aiRows.reduce<Record<string, number>>((m, x) => { m[x.feature] = (m[x.feature] ?? 0) + 1; return m; }, {}),
+        aiRecent: aiRows.slice(0, 10),
+      };
+      return { overview, clients: (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
         const missing = (Object.keys(DOCS) as Area[]).map((a) => {
           const have = new Set(docs.filter((x) => x.area === a).map((x) => x.category));
@@ -56,11 +71,12 @@ function StaffDashboard() {
           ? new Date(`${due}T23:59:59`) < new Date() && (!review || review.updated_at.slice(0, 10) < due)
           : !review || daysSince(review.updated_at) > 365;
         return { ...cl, docs, missing, plan, review, due, overdue, docCount: docs.length };
-      });
+      }) };
     },
   });
 
-  const all = data ?? [];
+  const all = data?.clients ?? [];
+  const ov = data?.overview;
   const pending = all.filter((c) => !c.confirmed);
   const incomplete = all.filter((c) => c.confirmed && c.missing.some((m) => m.uploaded < DOCS[m.area].items.length));
   const overdue = all.filter((c) => c.confirmed && c.overdue);
@@ -81,9 +97,65 @@ function StaffDashboard() {
         {isLoading && <p className="mt-8 text-muted-foreground">Loading…</p>}
         {error && <p className="mt-8 text-destructive">Could not load the dashboard.</p>}
         {data === null && <p className="mt-8 text-muted-foreground">This page is for DDHS staff only.</p>}
-        {data && (
+        {data && ov && (
           <>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { label: "Clients", value: all.length },
+                { label: "Active subscriptions", value: ov.subscriptions.length },
+                { label: "Contact enquiries", value: ov.enquiries.length },
+                { label: "Quote requests", value: ov.quotes },
+              ].map((s) => (
+                <div key={s.label} className="rounded-xl border border-border bg-card p-4 shadow-sm">
+                  <p className="text-sm font-semibold text-muted-foreground">{s.label}</p>
+                  <p className="mt-1 font-display text-3xl font-bold text-primary">{s.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+              <h2 className="section-title text-primary">AI usage</h2>
+              <div className="mt-3 grid gap-4 sm:grid-cols-3">
+                <div><p className="text-sm text-muted-foreground">Total AI calls</p><p className="font-display text-2xl font-bold">{ov.aiTotal}</p></div>
+                <div><p className="text-sm text-muted-foreground">This month</p><p className="font-display text-2xl font-bold">{ov.aiMonth}</p></div>
+                <div>
+                  <p className="text-sm text-muted-foreground">By feature</p>
+                  <ul className="mt-1 text-sm">
+                    {Object.entries(ov.aiByFeature).map(([f, n]) => (
+                      <li key={f}><span className="font-semibold">{n}×</span> {f === "eea12_insights" ? "EEA12 insights" : f === "plan_section" ? "EE plan drafts" : f === "dg_assessment" ? "DG assessments" : f}</li>
+                    ))}
+                    {ov.aiTotal === 0 && <li className="text-muted-foreground">No AI calls yet.</li>}
+                  </ul>
+                </div>
+              </div>
+              {ov.aiRecent.length > 0 && (
+                <ul className="mt-4 divide-y divide-border border-t border-border text-sm">
+                  {ov.aiRecent.map((r) => (
+                    <li key={r.id} className="flex justify-between gap-2 py-1.5">
+                      <span>{r.feature === "eea12_insights" ? "EEA12 insights" : r.feature === "plan_section" ? "EE plan draft" : r.feature === "dg_assessment" ? "DG assessment" : r.feature}</span>
+                      <span className="text-muted-foreground">{new Date(r.created_at).toLocaleString("en-ZA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            {ov.enquiries.length > 0 && (
+              <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+                <h2 className="section-title text-primary">Latest enquiries</h2>
+                <ul className="mt-3 divide-y divide-border text-sm">
+                  {ov.enquiries.map((e) => (
+                    <li key={e.id} className="py-2">
+                      <p className="font-semibold">{e.full_name} <span className="font-normal text-muted-foreground">· {e.email} · {fmt(e.created_at)}</span></p>
+                      <p className="text-muted-foreground">{e.message.slice(0, 160)}{e.message.length > 160 ? "…" : ""}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <h2 className="section-title mt-10 text-primary">Needs attention</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {tabBtn("pending", "Pending invites", pending.length)}
               {tabBtn("docs", "Incomplete documents", incomplete.length)}
               {tabBtn("dg", "Overdue DG reviews", overdue.length)}
