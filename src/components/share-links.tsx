@@ -46,7 +46,7 @@ export function ShareLinks() {
             <li key={l.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
               <span>{l.label} · {active ? `until ${new Date(l.expires_at).toLocaleDateString("en-ZA")}` : "off"}</span>
               {active && <span className="flex gap-2">
-                <button className="text-accent underline" onClick={() => { void navigator.clipboard.writeText(url(l.token)); toast.success("Link copied"); }}>Copy link</button>
+                <button className="text-teal underline" onClick={() => { void navigator.clipboard.writeText(url(l.token)); toast.success("Link copied"); }}>Copy link</button>
                 <button className="text-destructive underline" onClick={() => revoke(l.id)}>Switch off</button>
               </span>}
             </li>

@@ -30,7 +30,7 @@ function ClientView() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold"><span className="text-primary">DDHS</span> <span className="text-accent">Equity Intelligence</span></Link>
+          <Link to="/" className="font-display text-lg font-bold"><span className="text-primary">DDHS</span> <span className="text-teal">Equity Intelligence</span></Link>
           <AuthCta />
         </div>
       </header>
