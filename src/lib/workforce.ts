@@ -68,7 +68,7 @@ const LEVEL_HEADER = new Set([
 const LEVEL_ALIASES: Record<string, string> = {
   topmanagement: "Top Management", topmgmt: "Top Management", topm: "Top Management",
   executivemanagement: "Top Management", top: "Top Management",
-  senioremanagement: "Senior Management", senioremanagement: "Senior Management",
+  senioremanagement: "Senior Management", seniormgmt: "Senior Management",
   seniormanagement: "Senior Management", senioremgmt: "Senior Management", senior: "Senior Management",
   professionallyqualified: "Professionally Qualified", pqm: "Professionally Qualified",
   professionallyqualifiedandmiddlemanagement: "Professionally Qualified",
