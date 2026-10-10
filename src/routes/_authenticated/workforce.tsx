@@ -101,20 +101,28 @@ function WorkforcePage() {
       return { ...prev, [level]: row };
     });
 
-  const save = async (opts?: { source: "manual" | "upload"; fileName?: string }) => {
-    if (total <= 0) { toast.error("Enter at least one headcount before saving."); return; }
+  const save = async (opts?: { source: "manual" | "upload"; fileName?: string; from?: ParsedFile }) => {
+    const countsToSave = opts?.from?.counts ?? counts;
+    const disabilityToSave = opts?.from?.disability ?? disability;
+    const totalToSave = opts?.from ? opts.from.total : total;
+    if (totalToSave <= 0) { toast.error("Enter at least one headcount before saving."); return; }
     if (!date) { toast.error("Please give the snapshot a date."); return; }
     setSaving(true);
     const { error } = await supabase.from("workforce_snapshots").insert({
       snapshot_date: date,
       source: opts?.source ?? "manual",
       file_name: opts?.fileName ?? null,
-      total_headcount: total,
-      counts,
-      disability,
+      total_headcount: totalToSave,
+      counts: countsToSave,
+      disability: disabilityToSave,
     });
     setSaving(false);
     if (error) { toast.error("Could not save: " + error.message); return; }
+    if (opts?.from) {
+      setCounts(opts.from.counts);
+      setDisability(opts.from.disability);
+      setSeeded(true);
+    }
     setPending(null);
     qc.invalidateQueries({ queryKey: ["workforce"] });
     toast.success("Workforce snapshot saved.");
@@ -340,7 +348,7 @@ function WorkforcePage() {
               )}
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
-                  onClick={() => void save({ source: "upload", fileName: pending.fileName })}
+                  onClick={() => void save({ source: "upload", fileName: pending.fileName, from: pending })}
                   disabled={saving || pending.total <= 0}
                   className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
                 >
