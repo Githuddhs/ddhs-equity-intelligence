@@ -109,10 +109,10 @@ function PlanBuilder() {
         <section className="mb-6 rounded-xl border border-teal/50 bg-muted/40 p-6 shadow-sm">
           <h2 className="section-title text-primary">Auto-fill from my data</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Pulls numerical goals from your {rawAnalyses.length} saved EEA12 analyses, and writes barriers, measures, objectives and timetable from your goals and {barriers.length} Barrier Analysis response(s). Sections you've already written are kept.
+            Pulls numerical goals from your {rawAnalyses.length} saved EEA12 analyses, and writes barriers, measures, objectives and a month-by-month timetable (most frequent 24-month experiences first) from your goals and {barriers.length} Barrier Analysis response(s). Sections you've already written are kept.
           </p>
           <button disabled={!rawAnalyses.length && !barriers.length} onClick={() => {
-            const r = autofillPlan(content, rawAnalyses, barriers);
+            const r = autofillPlan(content, rawAnalyses, barriers, { start: meta.start_date, end: meta.end_date });
             setContent(r.content); setDirty(true);
             toast.success(`Filled ${r.goalsFilled} goal level(s) and ${r.filled.length} section(s) — review, then Save plan.`);
           }} className="mt-3 rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Auto-fill plan</button>

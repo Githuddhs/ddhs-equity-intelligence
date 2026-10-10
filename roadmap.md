@@ -29,4 +29,4 @@
 - [x] Session-aware Sign in / My portal link on all public pages (homepage, Pricing, EEA12, Workforce Data Foundation, EEA13 Planning)
 - [x] EEA13 barrier analysis questionnaire in My portal (/barrier-analysis): 15 scored areas + experiences, priorities, open feedback; saved responses, aggregate section scores; linked from header and portal
 - [x] EE plan live monitoring calendar (goals, objectives, measures)
-- [ ] Auto-fill builds month/quarter timetable from 24-month experiences
+- [x] Auto-fill builds month/quarter timetable from 24-month experiences
