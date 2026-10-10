@@ -12,6 +12,7 @@ import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { autofillPlan } from "@/lib/plan-autofill";
 import { PlanTimeline } from "@/components/plan-timeline";
+import { exportPlanPdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
   head: () => ({
@@ -100,7 +101,8 @@ function PlanBuilder() {
           <Link to="/plans" className="text-sm text-teal">← All plans</Link>
           <div className="flex gap-2 text-sm">
             <button onClick={del} className="rounded-lg border border-border px-3 py-2 text-destructive">Delete</button>
-            <button onClick={() => window.print()} className="rounded-lg border border-border px-3 py-2 font-semibold">Print / PDF</button>
+            <button onClick={async () => { try { await exportPlanPdf(meta, content); } catch { toast.error("Could not build the report."); } }} className="rounded-lg border border-teal px-3 py-2 font-semibold text-teal">Download plan PDF</button>
+            <button onClick={() => window.print()} className="rounded-lg border border-border px-3 py-2 font-semibold">Print</button>
             <button onClick={save} disabled={saving || !dirty} className="rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-50">
               {saving ? "Saving…" : dirty ? "Save plan" : "Saved"}
             </button>

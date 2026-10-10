@@ -7,6 +7,7 @@ import { sendTestReminder } from "@/lib/reminders.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil, DG_ITEMS, type Deadline, type DgAnswer } from "@/lib/ee-plan";
+import { exportComplianceExcel } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/compliance")({
   head: () => ({
