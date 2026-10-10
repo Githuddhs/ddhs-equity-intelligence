@@ -24,6 +24,7 @@ export const Route = createFileRoute("/api/eea-insights")({
       POST: async ({ request }) => {
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
+        void logAiUsage("eea12_insights", null);
         return streamResponses(SYSTEM, `Workforce data (JSON):\n${JSON.stringify(parsed.data)}`, request.signal);
       },
     },
