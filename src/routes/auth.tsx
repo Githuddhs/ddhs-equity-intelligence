@@ -24,7 +24,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { next } = Route.useSearch();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"in" | "up">("in");
+  const [mode, setMode] = useState<"in" | "up" | "reset">("in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -37,6 +37,16 @@ function AuthPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
+    if (mode === "reset") {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/reset-password",
+      });
+      setBusy(false);
+      if (error) { toast.error(error.message); return; }
+      toast.success("Check your email for a password reset link.");
+      setMode("in");
+      return;
+    }
     const res = mode === "in"
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + next } });
@@ -58,19 +68,30 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
         <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
-        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : "Create account"}</h1>
-        <p className="page-lead mt-1 text-muted-foreground">Save your EEA12 analyses and view their history.</p>
-        <button onClick={google} className="mt-6 w-full rounded-lg border border-border px-4 py-2 text-sm font-semibold">Continue with Google</button>
+        <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : mode === "up" ? "Create account" : "Reset password"}</h1>
+        <p className="page-lead mt-1 text-muted-foreground">
+          {mode === "reset" ? "Enter your account email and we'll send you a reset link." : "Save your EEA12 analyses and view their history."}
+        </p>
+        {mode !== "reset" && (
+          <button onClick={google} className="mt-6 w-full rounded-lg border border-border px-4 py-2 text-sm font-semibold">Continue with Google</button>
+        )}
         <form onSubmit={submit} className="mt-4 space-y-3">
           <input className={field} type="email" required placeholder="Work email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input className={field} type="password" required minLength={8} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          {mode !== "reset" && (
+            <input className={field} type="password" required minLength={8} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          )}
           <button disabled={busy} className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-            {busy ? "Please wait…" : mode === "in" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : mode === "in" ? "Sign in" : mode === "up" ? "Create account" : "Send reset link"}
           </button>
         </form>
-        {mode === "in"
-          ? <Link to="/signup" className="mt-4 inline-block text-sm text-teal">No account? Create one</Link>
-          : <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Have an account? Sign in</button>}
+        {mode === "in" && (
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <Link to="/signup" className="text-teal">No account? Create one</Link>
+            <button onClick={() => setMode("reset")} className="text-teal">Forgot password?</button>
+          </div>
+        )}
+        {mode === "up" && <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Have an account? Sign in</button>}
+        {mode === "reset" && <button onClick={() => setMode("in")} className="mt-4 text-sm text-teal">Back to sign in</button>}
       </div>
     </div>
   );

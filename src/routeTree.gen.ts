@@ -18,6 +18,7 @@ import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
 import { Route as ExecutiveIntelligenceRouteImport } from './routes/executive-intelligence'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -85,6 +86,11 @@ const ExecutiveIntelligenceRoute = ExecutiveIntelligenceRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResponsibleAiRoute = ResponsibleAiRouteImport.update({
@@ -216,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByTo {
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
@@ -284,6 +292,7 @@ export interface FileRoutesById {
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
@@ -319,6 +328,7 @@ export interface FileRouteTypes {
     | '/evidence-governance'
     | '/executive-intelligence'
     | '/pricing'
+    | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
     | '/signup'
@@ -352,6 +362,7 @@ export interface FileRouteTypes {
     | '/evidence-governance'
     | '/executive-intelligence'
     | '/pricing'
+    | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
     | '/signup'
@@ -386,6 +397,7 @@ export interface FileRouteTypes {
     | '/evidence-governance'
     | '/executive-intelligence'
     | '/pricing'
+    | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
     | '/signup'
@@ -421,6 +433,7 @@ export interface RootRouteChildren {
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
   ExecutiveIntelligenceRoute: typeof ExecutiveIntelligenceRoute
   PricingRoute: typeof PricingRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ResponsibleAiRoute: typeof ResponsibleAiRoute
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
@@ -496,6 +509,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/responsible-ai': {
@@ -707,6 +727,7 @@ const rootRouteChildren: RootRouteChildren = {
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,
   ExecutiveIntelligenceRoute: ExecutiveIntelligenceRoute,
   PricingRoute: PricingRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ResponsibleAiRoute: ResponsibleAiRoute,
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
