@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { latestEvidence, type SavedEvidence } from "@/lib/evidence";
 import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseContent, PLAN_LEVELS, TEXT_SECTIONS, type SavedAnalysis } from "@/lib/ee-plan";
 import { completionPct, rolesFor, QUESTIONNAIRE_VERSION, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 import { averageBarrierScores } from "@/lib/plan-autofill";
@@ -162,6 +163,7 @@ function Dashboard() {
         </p>
       )}
 
+      <EvidenceHighlights />
       <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -274,5 +276,25 @@ function Dashboard() {
         </section>
       </div>
     </>,
+  );
+}
+
+function EvidenceHighlights() {
+  const [ev, setEv] = useState<SavedEvidence | null>(null);
+  useEffect(() => { void latestEvidence().then(setEv); }, []);
+  if (!ev) return null;
+  const h = ev.data.executive?.highlights ?? [], r = ev.data.executive?.risks ?? [];
+  if (!h.length && !r.length) return null;
+  return (
+    <section className="mt-6 rounded-xl border border-teal/50 bg-card p-6 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="card-title text-primary">Executive highlights from your documents</h2>
+        <Link to="/evidence" className="text-sm font-semibold text-teal">Document evidence →</Link>
+      </div>
+      <div className="mt-3 grid gap-4 md:grid-cols-2 text-sm">
+        <div><p className="font-semibold">Highlights</p><ul className="mt-1 list-disc pl-5">{h.map((x, i) => <li key={i}>{x}</li>)}</ul></div>
+        <div><p className="font-semibold">Risks</p><ul className="mt-1 list-disc pl-5">{r.map((x, i) => <li key={i}>{x}</li>)}</ul></div>
+      </div>
+    </section>
   );
 }

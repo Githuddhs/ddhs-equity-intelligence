@@ -4,7 +4,7 @@ import { z } from "zod";
 import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
-  task: z.enum(["plan_section", "dg_assessment", "plan_gap"]),
+  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract"]),
   section: z.string().max(100).optional(),
   context: z.unknown(),
 });
@@ -30,6 +30,16 @@ You are reviewing an employer's EXISTING Employment Equity Plan (text extracted 
 ## Priority actions — numbered, prioritised steps to close the gaps for the new plan.
 Keep it under 800 words. Note it is guidance, not legal advice.`;
 
+const EVIDENCE = `${BASE}
+You are extracting Employment Equity evidence from a client's uploaded documents (HR reports, policies, EEA2/EEA4, minutes, plans) plus data already saved in the app. Return ONLY a JSON object (no prose, no code fences) with this shape:
+{"summary_markdown": string (Markdown, <700 words, sections: ## EE workforce analysis, ## EEA13 planning, ## DG review, ## Executive reporting — each citing which document the evidence came from),
+ "workforce": {"findings": string[], "headcount_notes": string},
+ "plan": {"seniorManager": string, "committee": string, "objectives": string, "barriers": string, "measures": string, "monitoring": string, "disputes": string, "consultation": string, "reasonableGrounds": string, "incomeDifferentials": string},
+ "dg": {"<item id>": {"status": "yes"|"partial"|"no"|"", "evidence": string}},
+ "executive": {"highlights": string[], "risks": string[]}}
+DG item ids: consult, analysis, plan, manager, reports, income, display, records, goals, sectoral, barriers, pool, accommodation, harassment.
+Use "" or [] where the documents give no evidence. Never invent figures; cite document names in evidence strings. Plan fields are Markdown text ready to paste into the plan.`;
+
 export const Route = createFileRoute("/api/ee-assist")({
   server: {
     handlers: {
@@ -47,11 +57,12 @@ export const Route = createFileRoute("/api/ee-assist")({
 
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
-        const ctx = JSON.stringify(parsed.data.context).slice(0, 40000);
+        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" ? 150000 : 40000);
         void logAiUsage(parsed.data.task, u.user.id);
         if (parsed.data.task === "plan_section") {
           return streamResponses(PLAN, `Section to draft: ${parsed.data.section ?? "Objectives"}\n\nPlan context (JSON):\n${ctx}`, request.signal);
         }
+        if (parsed.data.task === "evidence_extract") return streamResponses(EVIDENCE, `Documents and app data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "plan_gap") return streamResponses(GAP, `Existing plan and workforce data (JSON):\n${ctx}`, request.signal);
         return streamResponses(DG, `Review data (JSON):\n${ctx}`, request.signal);
       },

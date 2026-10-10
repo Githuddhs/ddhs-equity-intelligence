@@ -11,6 +11,7 @@ import { SECTORS } from "@/lib/sectors";
 import { useLatestOrgUnits } from "@/components/org-unit-picker";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
+import { latestEvidence, planFromEvidence } from "@/lib/evidence";
 import { autofillPlan, questionnaireSections } from "@/lib/plan-autofill";
 import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
 import { PlanTimeline } from "@/components/plan-timeline";
@@ -131,6 +132,13 @@ function PlanBuilder() {
             setContent({ ...content, barriers: q.barriers, measures: q.measures, objectives: q.objectives || content.objectives }); setDirty(true);
             toast.success(`Pulled objectives, barriers and measures from ${q.count} questionnaire response(s) — review, then Save plan.`);
           }} className="ml-2 mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50">Pull from EE questionnaire</button>
+          <button onClick={async () => {
+            const e = await latestEvidence();
+            if (!e) { toast.error("No document evidence yet — run it on the Document evidence page."); return; }
+            const r = planFromEvidence(content, e.data);
+            if (!r.filled.length) { toast.info("No empty sections could be filled from your documents."); return; }
+            setContent(r.content); setDirty(true); toast.success(`Filled ${r.filled.length} empty section(s) from your documents — review, then Save plan.`);
+          }} className="ml-2 mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">Fill from documents</button>
           {!rawAnalyses.length && !barriers.length && <p className="mt-2 text-xs text-muted-foreground">Save an <Link to="/eea12" className="text-teal underline">EEA12 analysis</Link> or complete the <Link to="/barrier-analysis" className="text-teal underline">Barrier Analysis</Link> first.</p>}
         </section>
 
