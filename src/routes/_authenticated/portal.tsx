@@ -37,7 +37,7 @@ function Portal() {
         })
         .subscribe();
     });
-    return () => { if (channel) void supabase.removeChannel(channel); };
+    return () => { cancelled = true; if (channel) void supabase.removeChannel(channel); };
   }, [qc]);
   const { data } = useQuery({
     queryKey: ["portal"],
