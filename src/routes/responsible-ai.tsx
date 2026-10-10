@@ -45,7 +45,7 @@ const assists = [
     body: "Drafts the objectives, barriers, measures and monitoring sections of your EE plan from your sector, level and baseline.",
   },
   {
-    icon: ClipboardCheckIcon,
+    icon: Sparkles,
     title: "Review readiness",
     body: "Assesses your DG review answers and points at the gaps most likely to draw a finding.",
   },
@@ -76,9 +76,6 @@ const notFor = [
   "It does not guess: where figures are missing, it says so rather than filling the gap.",
 ];
 
-function ClipboardCheckIcon(props: { className?: string }) {
-  return <Sparkles {...props} />;
-}
 
 function ResponsibleAiPage() {
   return (

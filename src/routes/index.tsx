@@ -84,9 +84,9 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "EEA12 Workforce Analysis", href: "/eea12" },
   { name: "EEA13 Planning & Monitoring", href: "/eea13-planning" },
   { name: "Accountability Management", href: "/accountability-management" },
-  { name: "Evidence & Governance Repository" },
-  { name: "Executive Intelligence" },
-  { name: "Responsible AI Assistant" },
+  { name: "Evidence & Governance Repository", href: "/evidence-governance" },
+  { name: "Executive Intelligence", href: "/executive-intelligence" },
+  { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
 const trustCards = [
@@ -502,8 +502,8 @@ function Index() {
                   { l: "Workforce Analysis", h: "#platform" },
                   { l: "EE Planning", h: "/eea13-planning" },
                   { l: "Accountability", h: "/accountability-management" },
-                  { l: "Evidence Management", h: "#platform" },
-                  { l: "Executive Reporting", h: "#platform" },
+                  { l: "Evidence Management", h: "/evidence-governance" },
+                  { l: "Executive Reporting", h: "/executive-intelligence" },
                 ].map((l) => (
                   <li key={l.l}><a href={l.h} className="transition-colors hover:text-primary">{l.l}</a></li>
                 ))}

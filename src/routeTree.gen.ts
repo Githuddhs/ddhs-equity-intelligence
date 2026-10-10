@@ -15,7 +15,10 @@ import { Route as AccountabilityManagementRouteImport } from './routes/accountab
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
+import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
+import { Route as ExecutiveIntelligenceRouteImport } from './routes/executive-intelligence'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
@@ -68,9 +71,24 @@ const Eea13PlanningRoute = Eea13PlanningRouteImport.update({
   path: '/eea13-planning',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EvidenceGovernanceRoute = EvidenceGovernanceRouteImport.update({
+  id: '/evidence-governance',
+  path: '/evidence-governance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExecutiveIntelligenceRoute = ExecutiveIntelligenceRouteImport.update({
+  id: '/executive-intelligence',
+  path: '/executive-intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsibleAiRoute = ResponsibleAiRouteImport.update({
+  id: '/responsible-ai',
+  path: '/responsible-ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SetPasswordRoute = SetPasswordRouteImport.update({
@@ -188,7 +206,10 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
+  '/evidence-governance': typeof EvidenceGovernanceRoute
+  '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/pricing': typeof PricingRoute
+  '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
@@ -217,7 +238,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
+  '/evidence-governance': typeof EvidenceGovernanceRoute
+  '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/pricing': typeof PricingRoute
+  '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
@@ -248,7 +272,10 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
+  '/evidence-governance': typeof EvidenceGovernanceRoute
+  '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/pricing': typeof PricingRoute
+  '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
@@ -279,7 +306,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/eea12'
     | '/eea13-planning'
+    | '/evidence-governance'
+    | '/executive-intelligence'
     | '/pricing'
+    | '/responsible-ai'
     | '/set-password'
     | '/signup'
     | '/staff-login'
@@ -308,7 +338,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/eea12'
     | '/eea13-planning'
+    | '/evidence-governance'
+    | '/executive-intelligence'
     | '/pricing'
+    | '/responsible-ai'
     | '/set-password'
     | '/signup'
     | '/staff-login'
@@ -338,7 +371,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/eea12'
     | '/eea13-planning'
+    | '/evidence-governance'
+    | '/executive-intelligence'
     | '/pricing'
+    | '/responsible-ai'
     | '/set-password'
     | '/signup'
     | '/staff-login'
@@ -369,7 +405,10 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   Eea12Route: typeof Eea12Route
   Eea13PlanningRoute: typeof Eea13PlanningRoute
+  EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
+  ExecutiveIntelligenceRoute: typeof ExecutiveIntelligenceRoute
   PricingRoute: typeof PricingRoute
+  ResponsibleAiRoute: typeof ResponsibleAiRoute
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
   StaffLoginRoute: typeof StaffLoginRoute
@@ -425,11 +464,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Eea13PlanningRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/evidence-governance': {
+      id: '/evidence-governance'
+      path: '/evidence-governance'
+      fullPath: '/evidence-governance'
+      preLoaderRoute: typeof EvidenceGovernanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/executive-intelligence': {
+      id: '/executive-intelligence'
+      path: '/executive-intelligence'
+      fullPath: '/executive-intelligence'
+      preLoaderRoute: typeof ExecutiveIntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/responsible-ai': {
+      id: '/responsible-ai'
+      path: '/responsible-ai'
+      fullPath: '/responsible-ai'
+      preLoaderRoute: typeof ResponsibleAiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/set-password': {
@@ -622,7 +682,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   Eea12Route: Eea12Route,
   Eea13PlanningRoute: Eea13PlanningRoute,
+  EvidenceGovernanceRoute: EvidenceGovernanceRoute,
+  ExecutiveIntelligenceRoute: ExecutiveIntelligenceRoute,
   PricingRoute: PricingRoute,
+  ResponsibleAiRoute: ResponsibleAiRoute,
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
   StaffLoginRoute: StaffLoginRoute,
