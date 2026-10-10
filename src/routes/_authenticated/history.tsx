@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { renderMd } from "@/components/ai-insights";
 import { AppHeader } from "@/components/app-header";
+import { exportEea12Pdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({

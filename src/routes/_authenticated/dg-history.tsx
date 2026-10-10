@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { renderMd } from "@/components/ai-insights";
 import { DG_ITEMS, type DgAnswer } from "@/lib/ee-plan";
+import { exportDgReviewPdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/dg-history")({
   head: () => ({
