@@ -5,6 +5,9 @@ import { AiInsights } from "@/components/ai-insights";
 import { AuthCta } from "@/components/auth-cta";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
+import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org-units";
+import { normaliseWorkforce } from "@/lib/workforce";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -57,6 +60,16 @@ function Eea12Page() {
   const [saving, setSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
   const [eap, setEap] = useState(DEFAULT_EAP);
+  const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
+  const { data: wf } = useLatestOrgUnits();
+  const loadFromWorkforce = (lvl = level, f = unitFilter) => {
+    if (!wf) return;
+    const filtered = !!(f.division || f.department || f.section);
+    const w = wf.units.length && filtered ? aggregate(wf.units, f).counts : normaliseWorkforce(wf.counts);
+    const row = w[lvl];
+    if (row) setCounts({ ...DEFAULT_COUNTS, ...row });
+    toast.success(`Loaded ${lvl} for ${describeFilter(f)}.`);
+  };
   const [targetsByLevel, setTargetsByLevel] = useState<Record<string, Targets>>(() =>
     Object.fromEntries(LEVELS.map((l) => [l, { males: 30.5, females: 46.1, total: 76.6 }])));
   const targets = targetsByLevel[level] ?? { males: 30.5, females: 46.1, total: 76.6 };
@@ -173,6 +186,16 @@ function Eea12Page() {
               </select>
             </label>
           </div>
+          {wf && (
+            <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-teal/40 bg-muted/40 p-3">
+              {wf.units.length > 0 && <OrgUnitPicker units={wf.units} value={unitFilter} onChange={setUnitFilter} />}
+              <button type="button" onClick={() => loadFromWorkforce()}
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+                Use my workforce data
+              </button>
+              <p className="w-full text-xs text-muted-foreground">Fills the headcount for the selected level from your latest workforce snapshot ({describeFilter(unitFilter)}).</p>
+            </div>
+          )}
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] border-collapse">
               <thead>
