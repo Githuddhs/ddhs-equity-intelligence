@@ -10,6 +10,7 @@ import {
   GROUP_KEYS,
   LEVELS,
   disabilityTotal,
+  emptyCounts,
   emptyWorkforce,
   grandTotal,
   groupTotals,
@@ -94,7 +95,11 @@ function WorkforcePage() {
   const designated = byGroup ? GROUPS.filter((g) => g.designated).reduce((a, g) => a + (byGroup[g.key] ?? 0), 0) : 0;
 
   const setCell = (level: string, key: keyof Counts, v: number) =>
-    setCounts((prev) => ({ ...prev, [level]: { ...(prev[level] ?? {}), [key]: Math.max(0, Math.floor(v) || 0) } }));
+    setCounts((prev) => {
+      const row: Counts = { ...emptyCounts(), ...(prev[level] ?? {}) };
+      row[key] = Math.max(0, Math.floor(v) || 0);
+      return { ...prev, [level]: row };
+    });
 
   const save = async (opts?: { source: "manual" | "upload"; fileName?: string }) => {
     if (total <= 0) { toast.error("Enter at least one headcount before saving."); return; }
