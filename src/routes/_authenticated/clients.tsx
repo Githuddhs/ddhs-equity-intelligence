@@ -32,15 +32,17 @@ function ClientsDashboard() {
       const { data: u } = await supabase.auth.getUser();
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
       if (!isAdmin) return null;
-      const [c, a, p, r, d, s] = await Promise.all([
+      const [c, a, p, r, d, s, m] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("eea12_analyses").select("user_id,created_at").order("created_at", { ascending: false }),
         supabase.from("ee_plans").select("user_id,title,start_date,end_date,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,updated_at").order("updated_at", { ascending: false }),
         supabase.from("portal_documents").select("user_id,area,category"),
         supabase.from("subscriptions").select("user_id,plan,status,created_at").neq("plan", "dg_review").order("created_at", { ascending: false }),
+        supabase.from("user_roles").select("user_id,role").eq("role", "manager" as "admin"),
       ]);
-      for (const x of [c, a, p, r, d, s]) if (x.error) throw x.error;
+      for (const x of [c, a, p, r, d, s, m]) if (x.error) throw x.error;
+      const managers = new Set((m.data ?? []).map((x) => x.user_id));
       return (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
         const docPct = (area: keyof typeof DOC_TOTAL) => Math.round((new Set(docs.filter((x) => x.area === area).map((x) => x.category)).size / DOC_TOTAL[area]) * 100);
