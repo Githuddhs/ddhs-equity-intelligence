@@ -37,6 +37,16 @@ function AuthPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
+    if (mode === "reset") {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/reset-password",
+      });
+      setBusy(false);
+      if (error) { toast.error(error.message); return; }
+      toast.success("Check your email for a password reset link.");
+      setMode("in");
+      return;
+    }
     const res = mode === "in"
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + next } });
