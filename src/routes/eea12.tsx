@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SECTORS, LEVEL_TO_TARGET_KEY, type Targets, type TargetKey } from "@/lib/sectors";
 import { useMemo, useState } from "react";
 import { AiInsights } from "@/components/ai-insights";
+import { AuthCta } from "@/components/auth-cta";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -127,9 +128,12 @@ function Eea12Page() {
           <Link to="/" className="font-display text-lg font-bold text-primary">
             DDHS <span className="text-teal">Equity Intelligence</span>
           </Link>
-          <Link to="/" hash="contact" className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-            Schedule a Demonstration
-          </Link>
+          <div className="flex items-center gap-4">
+            <AuthCta />
+            <Link to="/" hash="contact" className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+              Schedule a Demonstration
+            </Link>
+          </div>
         </div>
       </header>
 
