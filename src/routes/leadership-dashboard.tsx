@@ -79,8 +79,7 @@ function LeadershipDashboardPage() {
           </Link>
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
-            <Link to="/auth" search={{ next: "/portal" }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Sign in</Link>
-            <AuthCta />
+                        <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">
               Schedule a Demonstration
             </Link>
