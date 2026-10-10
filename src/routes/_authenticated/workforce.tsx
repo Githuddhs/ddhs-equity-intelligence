@@ -202,7 +202,7 @@ function WorkforcePage() {
         <h1 className="page-title mt-2 text-primary">Workforce Data Foundation</h1>
         <p className="page-lead mt-1 text-muted-foreground">
           Your headcount by occupational level, population group, gender and disability. Type it in or upload a
-          spreadsheet export — nothing is saved until you have checked it.
+          an Excel, CSV or PDF export — nothing is saved until you have checked it.
         </p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">

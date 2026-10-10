@@ -102,7 +102,7 @@ const entryWays = [
   {
     icon: FileSpreadsheet,
     title: "Upload your export",
-    body: "Save your HR extract or spreadsheet as CSV and upload it. We read the levels and groups, show you every number we found, and list anything we could not match.",
+    body: "Upload your HR extract as Excel, CSV or PDF. We read the levels and groups, show you every number we found, and list anything we could not match.",
   },
   {
     icon: CheckCircle2,
