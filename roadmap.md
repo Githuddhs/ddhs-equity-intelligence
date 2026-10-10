@@ -4,7 +4,6 @@
 - Org personalisation: swap generic "the organisation" wording for real name, divisions, role titles — BLOCKED: waiting on Sello to supply details.
 - DG review price: confirm real price (placeholder R4,025 incl. VAT).
 - sdm@ddhs.co.za activation: password-reset link sent to a reachable address; Sello must open it and set a password before staff sign-in works.
-- GitHub sync: BLOCKED — Sello must connect it in the editor (+ menu → GitHub → Connect project); the agent cannot. Alternative offered: package the code as a downloadable archive for him to push.
 - Publish decision: published site still runs the older build (shows "Sign up"); preview is current.
 
 ## Done
@@ -21,3 +20,4 @@
 - AI usage logging: ai_usage table + logging in both AI routes — verified: a real EEA12 AI summary recorded feature/model and appeared in the panel.
 - Staff access restored: the demo-data cleanup had wiped public.user_roles, so sdm@ddhs.co.za lost its admin row and /staff redirected to /portal. Re-inserted the admin row (grant_staff_on_confirm's ON CONFLICT DO NOTHING keeps it safe on confirm).
 - Email links from auth.tsx now use publicOrigin() (localhost → preview domain) for password-reset and sign-up confirmation, so links are reachable by recipients.
+- GitHub sync live: project connected to GitHub in the editor; the repository's main branch carries every change (verified latest local commit is on main, and Sello's README edit at 08:50 came back the other way — two-way sync working).
