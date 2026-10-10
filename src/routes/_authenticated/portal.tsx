@@ -39,16 +39,17 @@ function Portal() {
   const { data } = useQuery({
     queryKey: ["portal"],
     queryFn: async () => {
-      const [u, a, p, r, s] = await Promise.all([
+      const [u, a, p, r, s, w] = await Promise.all([
         supabase.auth.getUser(),
         supabase.from("eea12_analyses").select("id,sector,level,total_headcount,created_at").order("created_at", { ascending: false }).limit(5),
         supabase.from("ee_plans").select("id,title,company,start_date,end_date,updated_at").order("updated_at", { ascending: false }).limit(5),
         supabase.from("dg_reviews").select("id,score,updated_at,ee_plans(title)").order("updated_at", { ascending: false }).limit(5),
         supabase.from("subscriptions").select("plan,status,amount,created_at").neq("plan", "dg_review").order("created_at", { ascending: false }).limit(1),
+        supabase.from("workforce_snapshots").select("snapshot_date,total_headcount,source").order("created_at", { ascending: false }).limit(1),
       ]);
       const d = await supabase.from("portal_documents").select("area,category");
-      for (const x of [a, p, r, s, d]) if (x.error) throw x.error;
-      return { docs: d.data ?? [], user: u.data.user, analyses: a.data ?? [], plans: p.data ?? [], reviews: r.data ?? [], sub: s.data?.[0] ?? null };
+      for (const x of [a, p, r, s, w, d]) if (x.error) throw x.error;
+      return { docs: d.data ?? [], user: u.data.user, analyses: a.data ?? [], plans: p.data ?? [], reviews: r.data ?? [], sub: s.data?.[0] ?? null, snapshot: w.data?.[0] ?? null };
     },
   });
 
@@ -76,6 +77,19 @@ function Portal() {
             )}
           </div>
         </div>
+
+        <Link to="/workforce" className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
+          <div>
+            <p className="label-title text-teal">Workforce Data Foundation</p>
+            <p className="mt-1 font-semibold text-primary">
+              {data?.snapshot
+                ? `Latest snapshot: ${new Date(data.snapshot.snapshot_date).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })} · ${data.snapshot.total_headcount.toLocaleString("en-ZA")} employees`
+                : "Capture your headcount by level, group, gender and disability"}
+            </p>
+            <p className="text-sm text-muted-foreground">Type it in or upload your HR export — you check it before it is saved.</p>
+          </div>
+          <span className="text-sm font-semibold text-teal">{data?.snapshot ? "Update workforce data →" : "Capture workforce data →"}</span>
+        </Link>
 
         <h2 className="section-title mt-8 text-primary">Compliance documents & progress</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-3">

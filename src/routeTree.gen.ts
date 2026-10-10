@@ -17,6 +17,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
+import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
@@ -24,6 +25,7 @@ import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
+import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
@@ -73,6 +75,11 @@ const StaffLoginRoute = StaffLoginRouteImport.update({
   path: '/staff-login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkforceFoundationRoute = WorkforceFoundationRouteImport.update({
+  id: '/workforce-foundation',
+  path: '/workforce-foundation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
   id: '/clients',
   path: '/clients',
@@ -106,6 +113,11 @@ const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
 const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedWorkforceRoute = AuthenticatedWorkforceRouteImport.update({
+  id: '/workforce',
+  path: '/workforce',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiEeAssistRoute = ApiEeAssistRouteImport.update({
@@ -165,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/workforce-foundation': typeof WorkforceFoundationRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -172,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/staff': typeof AuthenticatedStaffRoute
+  '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
@@ -190,6 +204,7 @@ export interface FileRoutesByTo {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/workforce-foundation': typeof WorkforceFoundationRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -197,6 +212,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/staff': typeof AuthenticatedStaffRoute
+  '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
@@ -217,6 +233,7 @@ export interface FileRoutesById {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/workforce-foundation': typeof WorkforceFoundationRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
@@ -224,6 +241,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
+  '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
@@ -244,6 +262,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/workforce-foundation'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -251,6 +270,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/portal'
     | '/staff'
+    | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/clients/$id'
@@ -269,6 +289,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/workforce-foundation'
     | '/clients'
     | '/compliance'
     | '/dg-history'
@@ -276,6 +297,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/portal'
     | '/staff'
+    | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/clients/$id'
@@ -295,6 +317,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/workforce-foundation'
     | '/_authenticated/clients'
     | '/_authenticated/compliance'
     | '/_authenticated/dg-history'
@@ -302,6 +325,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/portal'
     | '/_authenticated/staff'
+    | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/_authenticated/clients_/$id'
@@ -322,6 +346,7 @@ export interface RootRouteChildren {
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
   StaffLoginRoute: typeof StaffLoginRoute
+  WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
@@ -387,6 +412,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/workforce-foundation': {
+      id: '/workforce-foundation'
+      path: '/workforce-foundation'
+      fullPath: '/workforce-foundation'
+      preLoaderRoute: typeof WorkforceFoundationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/clients': {
       id: '/_authenticated/clients'
       path: '/clients'
@@ -434,6 +466,13 @@ declare module '@tanstack/react-router' {
       path: '/staff'
       fullPath: '/staff'
       preLoaderRoute: typeof AuthenticatedStaffRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/workforce': {
+      id: '/_authenticated/workforce'
+      path: '/workforce'
+      fullPath: '/workforce'
+      preLoaderRoute: typeof AuthenticatedWorkforceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/ee-assist': {
@@ -510,6 +549,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
+  AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
   AuthenticatedClientsIdRoute: typeof AuthenticatedClientsIdRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
   AuthenticatedPortalAreaRoute: typeof AuthenticatedPortalAreaRoute
@@ -524,6 +564,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
+  AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
   AuthenticatedClientsIdRoute: AuthenticatedClientsIdRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
   AuthenticatedPortalAreaRoute: AuthenticatedPortalAreaRoute,
@@ -542,6 +583,7 @@ const rootRouteChildren: RootRouteChildren = {
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
   StaffLoginRoute: StaffLoginRoute,
+  WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   ApiPublicHooksComplianceRemindersRoute:

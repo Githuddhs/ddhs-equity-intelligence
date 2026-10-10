@@ -337,6 +337,48 @@ export type Database = {
         }
         Relationships: []
       }
+      workforce_snapshots: {
+        Row: {
+          counts: Json
+          created_at: string
+          disability: Json
+          file_name: string | null
+          id: string
+          notes: string | null
+          snapshot_date: string
+          source: string
+          total_headcount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          counts?: Json
+          created_at?: string
+          disability?: Json
+          file_name?: string | null
+          id?: string
+          notes?: string | null
+          snapshot_date?: string
+          source?: string
+          total_headcount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          counts?: Json
+          created_at?: string
+          disability?: Json
+          file_name?: string | null
+          id?: string
+          notes?: string | null
+          snapshot_date?: string
+          source?: string
+          total_headcount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
