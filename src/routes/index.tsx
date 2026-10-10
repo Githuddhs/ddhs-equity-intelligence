@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AuthCta } from "@/components/auth-cta";
 import {
   ArrowRight,
   BarChart3,

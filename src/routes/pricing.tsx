@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { startPayfastCheckout, type PayfastPlan } from "@/lib/payfast.functions";
 import { QuoteForm } from "@/components/quote-form";
+import { AuthCta } from "@/components/auth-cta";
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: (search: Record<string, unknown>) => ({
