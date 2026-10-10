@@ -12,3 +12,4 @@
 - Barrier questionnaire v2 E2E: completed, saved, Excel + PDF exports verified matching (all sections 4.0 avg).
 - Workforce upload: Excel, CSV/TSV, PDF, Word (.docx).
 - Auto-fill plan: dated month/quarter timetable from barrier data; fills empty sections only.
+- Shared read-only client view (/view/$token): private expiring links created from My portal; reports downloadable without sign-in.

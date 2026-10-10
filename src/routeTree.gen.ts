@@ -39,6 +39,7 @@ import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
+import { Route as ViewTokenRouteImport } from './routes/view.$token'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
@@ -198,6 +199,11 @@ const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   path: '/api/eea-insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ViewTokenRoute = ViewTokenRouteImport.update({
+  id: '/view/$token',
+  path: '/view/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedClientsIdRoute = AuthenticatedClientsIdRouteImport.update({
   id: '/clients_/$id',
   path: '/clients/$id',
@@ -267,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
@@ -305,6 +312,7 @@ export interface FileRoutesByTo {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
@@ -345,6 +353,7 @@ export interface FileRoutesById {
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/view/$token': typeof ViewTokenRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
@@ -385,6 +394,7 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/view/$token'
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
@@ -423,6 +433,7 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/view/$token'
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
@@ -462,6 +473,7 @@ export interface FileRouteTypes {
     | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/view/$token'
     | '/_authenticated/clients_/$id'
     | '/_authenticated/plans/$id'
     | '/_authenticated/portal_/$area'
@@ -491,6 +503,7 @@ export interface RootRouteChildren {
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
+  ViewTokenRoute: typeof ViewTokenRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
   ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -708,6 +721,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEeaInsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/view/$token': {
+      id: '/view/$token'
+      path: '/view/$token'
+      fullPath: '/view/$token'
+      preLoaderRoute: typeof ViewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/clients_/$id': {
       id: '/_authenticated/clients_/$id'
       path: '/clients/$id'
@@ -819,6 +839,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
+  ViewTokenRoute: ViewTokenRoute,
   ApiPublicHooksComplianceRemindersRoute:
     ApiPublicHooksComplianceRemindersRoute,
   ApiPublicHooksPayfastItnRoute: ApiPublicHooksPayfastItnRoute,
