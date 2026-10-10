@@ -88,6 +88,8 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Evidence & Governance Repository", href: "/evidence-governance" },
   { name: "DG Review", href: "/dg-review" },
   { name: "Executive Intelligence", href: "/executive-intelligence" },
+  { name: "Leadership Dashboard", href: "/leadership-dashboard" },
+  { name: "Leadership Report", href: "/leadership-report" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
