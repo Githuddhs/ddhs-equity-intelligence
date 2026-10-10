@@ -23,3 +23,6 @@
 - GitHub sync live: project connected to GitHub in the editor; the repository's main branch carries every change (verified latest local commit is on main, and Sello's README edit at 08:50 came back the other way — two-way sync working).
 
 - [x] EEA12: auto-populate headcount from Workforce Data for every level/unit
+
+- [ ] Save EE plan gap analyses and list previous ones
+- [ ] EE analysis questionnaire response document, populated from Workforce Foundation, feeding the EE plan
