@@ -32,3 +32,5 @@
 - [x] Auto-fill builds month/quarter timetable from 24-month experiences
 - [x] My portal compliance dashboard (/dashboard)
 - [x] Barrier Analysis replaced with consolidated 12-section consultation questionnaire
+- [ ] Sign-off trail: manager approved-by/date per milestone & objective, shown on dashboard
+- [ ] Senior-manager portal: review Barrier Analysis results, EE plan, monitoring calendar, with sign-off approval
