@@ -208,6 +208,8 @@ export function parseWorkforceRows(rows: string[][], fileName: string): ParsedFi
     }
   }
   if (headerIdx === -1) {
+    const perEmployee = parseEmployeeRows(rows);
+    if (perEmployee) return perEmployee;
     throw new Error(
       `${fileName} doesn't look like a workforce table. It needs an "Occupational level" column and at least three group columns such as "African male", "African female" and "Coloured male".`,
     );

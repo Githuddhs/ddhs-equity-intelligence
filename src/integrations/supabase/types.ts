@@ -53,6 +53,36 @@ export type Database = {
         }
         Relationships: []
       }
+      client_share_links: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          label: string
+          revoked: boolean
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          label?: string
+          revoked?: boolean
+          token?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          label?: string
+          revoked?: boolean
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_enquiries: {
         Row: {
           company: string
@@ -465,6 +495,7 @@ export type Database = {
         Args: { _make: boolean; _user_id: string }
         Returns: undefined
       }
+      shared_portal: { Args: { _token: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user" | "manager"
