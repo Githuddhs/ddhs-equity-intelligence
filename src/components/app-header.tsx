@@ -48,6 +48,7 @@ export function AppHeader() {
             <>
               <Link to="/staff" className={link} activeProps={active}>Dashboard</Link>
               <Link to="/clients" className={link} activeProps={active}>Clients, invites &amp; deadlines</Link>
+              <Link to="/invoices" className={link} activeProps={active}>Invoices</Link>
             </>
           ) : (
             <>
