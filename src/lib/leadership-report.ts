@@ -1,6 +1,8 @@
 import type { PlanContent, SavedAnalysis } from "@/lib/ee-plan";
 import { goalsFromAnalyses, emptyContent, buildDeadlines, daysUntil } from "@/lib/ee-plan";
 import { averageBarrierScores } from "@/lib/plan-autofill";
+import { breakdown, describeFilter, type OrgUnit, type UnitFilter } from "@/lib/org-units";
+import { GROUPS, grandTotal, groupTotals, type Workforce } from "@/lib/workforce";
 import { QUESTIONNAIRE_VERSION, completionPct, rolesFor, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -16,6 +18,7 @@ export type LeadershipReportInput = {
   barriers: { answers: unknown; profile: unknown; updated_at: string }[];
   plan: { title: string; start_date: string | null; end_date: string | null; content: unknown; updated_at: string } | null;
   content: PlanContent | null;
+  workforce?: { date: string; counts: Workforce; units: OrgUnit[]; filter: UnitFilter } | null;
 };
 
 export async function exportLeadershipPdf(input: LeadershipReportInput) {
@@ -204,6 +207,47 @@ export async function exportLeadershipPdf(input: LeadershipReportInput) {
       styles: { fontSize: 9 },
       columnStyles: { 0: { cellWidth: 28 } },
     });
+  }
+
+  // ---------- Workforce by organisational unit ----------
+  if (input.workforce && grandTotal(input.workforce.counts) > 0) {
+    const w = input.workforce;
+    doc.addPage();
+    doc.setFontSize(13);
+    doc.setTextColor(...NAVY);
+    doc.text(`Workforce profile — ${describeFilter(w.filter)}`, 14, 20);
+    doc.setFontSize(9);
+    doc.setTextColor(...GREY);
+    doc.text(`From the workforce snapshot dated ${fmt(parse(w.date))}.`, 14, 26);
+    const share = (c: Workforce) => {
+      const t = grandTotal(c), g = groupTotals(c);
+      const des = GROUPS.filter((x) => x.designated).reduce((a, x) => a + g[x.key], 0);
+      const fem = g.FA + g.FC + g.FI + g.FW + g.FNF;
+      const p = (n: number) => (t ? `${((n / t) * 100).toFixed(1)}%` : "—");
+      return { t, des: p(des), fem: p(fem) };
+    };
+    const tot = share(w.counts);
+    const g = groupTotals(w.counts);
+    autoTable(doc, {
+      startY: 30,
+      head: [["Population group", "Employees", "Share"]],
+      body: [...GROUPS.map((x) => [x.label, String(g[x.key]), tot.t ? `${((g[x.key] / tot.t) * 100).toFixed(1)}%` : "—"]),
+        ["All employees", String(tot.t), "100%"]],
+      theme: "grid", headStyles: { fillColor: NAVY }, styles: { fontSize: 9 },
+    });
+    if (w.units.length && !w.filter.section) {
+      const b = breakdown(w.units, w.filter);
+      const yy = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+      doc.setFontSize(13);
+      doc.setTextColor(...NAVY);
+      doc.text(`By ${b.field}`, 14, yy);
+      autoTable(doc, {
+        startY: yy + 3,
+        head: [[b.field[0]!.toUpperCase() + b.field.slice(1), "Employees", "Designated groups", "Female", "Disabled"]],
+        body: b.rows.map((r) => { const x = share(r.counts); return [r.name, String(x.t), x.des, x.fem, String(Object.values(r.disability).reduce((a, n) => a + n, 0))]; }),
+        theme: "grid", headStyles: { fillColor: NAVY }, styles: { fontSize: 9 },
+      });
+    }
   }
 
   // ---------- Footer on every page ----------

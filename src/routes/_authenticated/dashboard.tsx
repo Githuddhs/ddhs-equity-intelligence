@@ -8,6 +8,9 @@ import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseCo
 import { completionPct, rolesFor, QUESTIONNAIRE_VERSION, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 import { averageBarrierScores } from "@/lib/plan-autofill";
 import { exportLeadershipPdf } from "@/lib/leadership-report";
+import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
+import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org-units";
+import { GROUPS, grandTotal, groupTotals, normaliseWorkforce } from "@/lib/workforce";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -57,6 +60,8 @@ function Card({ title, to, cta, children }: { title: string; to: "/eea12" | "/ba
 
 function Dashboard() {
   const [exporting, setExporting] = useState(false);
+  const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
+  const { data: wf } = useLatestOrgUnits();
   const { data, isLoading, error } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
@@ -108,6 +113,11 @@ function Dashboard() {
     ...buildDeadlines(data.plan ? { start_date: data.plan.start_date, end_date: data.plan.end_date } : null).filter((d) => d.id !== "plan-none").map((d) => ({ id: d.id, title: d.title, date: d.due, kind: "statutory", owner: "" })),
   ].filter((x) => daysUntil(x.date) >= -60).sort((x, y) => +x.date - +y.date).slice(0, 8);
 
+  const filtered = !!(unitFilter.division || unitFilter.department || unitFilter.section);
+  const wfCounts = wf ? (wf.units.length && filtered ? aggregate(wf.units, unitFilter).counts : normaliseWorkforce(wf.counts)) : null;
+  const wfTotal = wfCounts ? grandTotal(wfCounts) : 0;
+  const wfGroups = wfCounts ? groupTotals(wfCounts) : null;
+
   const overall = Math.round((eeaPct + barrierPct + planPct + monPct) / 4);
 
   return shell(
@@ -124,7 +134,7 @@ function Dashboard() {
           onClick={async () => {
             setExporting(true);
             try {
-              await exportLeadershipPdf({ company: company || "Your organisation", analyses: data.analyses, barriers: data.barriers, plan: data.plan, content });
+              await exportLeadershipPdf({ company: company || "Your organisation", analyses: data.analyses, barriers: data.barriers, plan: data.plan, content, workforce: wf && wfCounts ? { date: wf.date, counts: wfCounts, units: wf.units, filter: unitFilter } : null });
               toast.success("Leadership report downloaded.");
             } catch {
               toast.error("Could not build the report. Please try again.");
@@ -151,6 +161,32 @@ function Dashboard() {
           {overdue.length} milestone{overdue.length > 1 ? "s are" : " is"} overdue — open the EE plan to update them.
         </p>
       )}
+
+      <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 className="card-title text-primary">Workforce profile</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{describeFilter(unitFilter)}{wf ? ` · ${wfTotal.toLocaleString("en-ZA")} employees` : ""}</p>
+          </div>
+          {wf && wf.units.length > 0 && <OrgUnitPicker units={wf.units} value={unitFilter} onChange={setUnitFilter} />}
+        </div>
+        {!wf || !wfGroups || wfTotal <= 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">No workforce data yet. <Link to="/workforce" className="font-semibold text-teal">Add your workforce numbers →</Link></p>
+        ) : (
+          <div className="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
+            {GROUPS.map((g) => {
+              const n = wfGroups[g.key], pc = (n / wfTotal) * 100;
+              return (
+                <div key={g.key}>
+                  <div className="flex justify-between text-sm"><span>{g.label}</span><span className="text-muted-foreground tabular-nums">{n.toLocaleString("en-ZA")} · {pc.toFixed(1)}%</span></div>
+                  <Bar pct={pc} />
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <p className="mt-3 text-xs text-muted-foreground">The leadership report uses the unit selected here.</p>
+      </section>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Card title="EEA12 workforce analysis" to="/eea12" cta={levelsDone ? "New analysis" : "Start"}>
