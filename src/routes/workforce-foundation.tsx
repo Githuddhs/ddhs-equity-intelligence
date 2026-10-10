@@ -75,8 +75,8 @@ const unlocks = [
     icon: Target,
     title: "EEA13 planning",
     body: "Targets, actions and owners in a plan you can sign, with the workforce position it was built from alongside it.",
-    to: "/plans",
-    cta: "See the plan builder",
+    to: "/eea13-planning",
+    cta: "See EEA13 planning",
   },
   {
     icon: ClipboardCheck,
