@@ -19,9 +19,19 @@ export async function remindersFor(sb: Sb, userId: string, filter: (days: number
     }));
 }
 
+const STAFF_COPY = "sdm@ddhs.co.za";
+
 export async function sendReminder(to: string, items: Awaited<ReturnType<typeof remindersFor>>, origin: string, key: string) {
-  return sendTemplateEmail("compliance-reminder", to, {
+  const result = await sendTemplateEmail("compliance-reminder", to, {
     templateData: { items, dashboardUrl: `${origin}/compliance` },
     idempotencyKey: key,
   });
+  // Staff get a copy of every client reminder.
+  if (to.toLowerCase() !== STAFF_COPY) {
+    await sendTemplateEmail("compliance-reminder", STAFF_COPY, {
+      templateData: { items, dashboardUrl: `${origin}/compliance` },
+      idempotencyKey: `${key}-staff-copy`,
+    }).catch((e) => console.error("staff reminder copy failed", e));
+  }
+  return result;
 }
