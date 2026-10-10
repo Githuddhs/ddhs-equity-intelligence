@@ -9,6 +9,7 @@ import {
   BARRIER_TEXT, EFFECTIVENESS, FINAL_TEXT, QUESTIONNAIRE_VERSION, rolesFor, barrierFrequency,
   sectionScores, completionPct, type BarrierAnswers, type BarrierComments, type BarrierProfile,
 } from "@/lib/barrier";
+import { exportBarrierExcel, exportBarrierPdf } from "@/lib/barrier-export";
 
 export const Route = createFileRoute("/_authenticated/barrier-analysis")({
   head: () => ({
@@ -41,6 +42,20 @@ function BarrierAnalysisPage() {
   const [sources, setSources] = useState<string[]>([]);
   const [effectiveness, setEffectiveness] = useState("");
   const [saving, setSaving] = useState(false);
+  const [exporting, setExporting] = useState<"xlsx" | "pdf" | null>(null);
+
+  const runExport = async (kind: "xlsx" | "pdf") => {
+    if (!responses.length) { toast.error("No saved responses to export yet."); return; }
+    setExporting(kind);
+    try {
+      if (kind === "xlsx") await exportBarrierExcel(responses); else await exportBarrierPdf(responses);
+      toast.success(kind === "xlsx" ? "Excel report downloaded." : "PDF report downloaded.");
+    } catch (e) {
+      toast.error("Could not create the report: " + (e instanceof Error ? e.message : "unknown error"));
+    } finally {
+      setExporting(null);
+    }
+  };
   const roles = rolesFor(participant["roles"] as string[] | undefined);
   const visibleSections = LIKERT_SECTIONS.filter((s) => !s.role || roles.includes(s.role));
 
@@ -302,7 +317,19 @@ function BarrierAnalysisPage() {
 
         {responses.length > 0 && (
           <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-            <h2 className="section-title text-primary">Saved responses</h2>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="section-title text-primary">Saved responses</h2>
+              <div className="flex gap-2">
+                <button onClick={() => runExport("xlsx")} disabled={exporting !== null}
+                  className="rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal hover:bg-teal/10 disabled:opacity-50">
+                  {exporting === "xlsx" ? "Preparing…" : "Export Excel"}
+                </button>
+                <button onClick={() => runExport("pdf")} disabled={exporting !== null}
+                  className="rounded-lg border border-primary px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary/5 disabled:opacity-50">
+                  {exporting === "pdf" ? "Preparing…" : "Export PDF"}
+                </button>
+              </div>
+            </div>
             <div className="mt-3 space-y-2">
               {responses.map((r) => (
                 <div key={r.id} className="flex items-center justify-between rounded-lg border border-border p-3">
