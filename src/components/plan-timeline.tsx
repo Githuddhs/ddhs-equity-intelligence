@@ -167,6 +167,9 @@ export function PlanTimeline({ content, start, end, onChange }: {
                     <option value="planned">Planned</option><option value="in_progress">In progress</option><option value="done">Done</option>
                   </select>
                   <span className={`w-24 text-xs ${late ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{m.status === "done" ? "Completed" : late ? `${-days}d overdue` : days === 0 ? "Due today" : `in ${days}d`}</span>
+                  {m.approvedAt && (
+                    <span className="w-full text-xs text-teal">✓ Approved by {m.approvedBy} on {new Date(m.approvedAt).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })}</span>
+                  )}
                   <button aria-label="Remove" onClick={() => onChange(milestones.filter((x) => x.id !== m.id))} className="text-sm text-destructive">✕</button>
                 </div>
               ) : (
