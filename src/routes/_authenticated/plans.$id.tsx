@@ -8,6 +8,7 @@ import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
 import { normaliseContent, TEXT_SECTIONS, type PlanContent , goalsFromAnalyses, type SavedAnalysis } from "@/lib/ee-plan";
 import { SECTORS } from "@/lib/sectors";
+import { useLatestOrgUnits } from "@/components/org-unit-picker";
 import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { autofillPlan } from "@/lib/plan-autofill";
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/plans/$id")({
   component: PlanBuilder,
 });
 
-type Meta = { title: string; company: string; sector: string; start_date: string; end_date: string };
+type Meta = { title: string; company: string; sector: string; start_date: string; end_date: string; division: string; department: string; section: string };
 
 function PlanBuilder() {
   const { id } = Route.useParams();
@@ -43,12 +44,13 @@ function PlanBuilder() {
   const [drafting, setDrafting] = useState<string | null>(null);
   const [signName, setSignName] = useState("");
   const ai = useAiStream();
+  const { data: wf } = useLatestOrgUnits();
 
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase.from("ee_plans").select("*").eq("id", id).maybeSingle();
       if (error || !data) { toast.error("Plan not found."); return; }
-      setMeta({ title: data.title, company: data.company, sector: data.sector, start_date: data.start_date ?? "", end_date: data.end_date ?? "" });
+      setMeta({ title: data.title, company: data.company, sector: data.sector, start_date: data.start_date ?? "", end_date: data.end_date ?? "", division: data.division, department: data.department, section: data.section });
       setContent(normaliseContent(data.content));
       const a = await supabase.from("eea12_analyses").select("sector,level,total_headcount,results,created_at").order("created_at", { ascending: false }).limit(10);
       setRawAnalyses(a.data ?? []);
@@ -137,6 +139,15 @@ function PlanBuilder() {
               <label className="text-sm">End date<input type="date" className={field} value={meta.end_date} onChange={(e) => upMeta({ end_date: e.target.value })} /></label>
             </div>
           </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {(["division", "department", "section"] as const).map((k) => (
+              <label key={k} className="text-sm capitalize">{k}
+                <input className={field} list={`units-${k}`} placeholder="Leave blank for the whole organisation" value={meta[k]} onChange={(e) => upMeta({ [k]: e.target.value })} />
+                <datalist id={`units-${k}`}>{[...new Set((wf?.units ?? []).map((u) => u[k]))].map((v) => <option key={v} value={v} />)}</datalist>
+              </label>
+            ))}
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">Which unit this plan covers. Names come from your workforce upload so plans line up with the organisation report.</p>
           <div className="mt-4 flex flex-wrap items-end gap-3 rounded-lg border border-dashed border-teal/50 bg-muted/40 p-3">
             <label className="text-sm">Focus occupational level<select className={field} value={focusLevel} onChange={(e) => setFocusLevel(e.target.value)}>
               {PLAN_LEVELS.map((l) => <option key={l}>{l}</option>)}

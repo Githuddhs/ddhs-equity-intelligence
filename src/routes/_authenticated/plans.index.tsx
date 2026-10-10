@@ -51,7 +51,8 @@ function PlansPage() {
             <h1 className="page-title text-primary">Employment Equity plans</h1>
             <p className="page-lead mt-2 text-muted-foreground">Build a section 20 compliant plan, draft sections with AI, and print it for consultation and sign-off.</p>
           </div>
-          <button onClick={create} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">New plan</button>
+          <div className="flex gap-2"><Link to="/plan-report" className="rounded-lg border border-teal px-5 py-2.5 text-sm font-semibold text-teal">Organisation plan report</Link>
+          <button onClick={create} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">New plan</button></div>
         </div>
         {isLoading && <p className="mt-6 text-sm text-muted-foreground">Loading…</p>}
         {data?.length === 0 && <p className="mt-8 text-sm">No plans yet — click <strong>New plan</strong> to start.</p>}

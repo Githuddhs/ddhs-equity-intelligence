@@ -192,9 +192,12 @@ export type Database = {
           company: string
           content: Json
           created_at: string
+          department: string
           dg_review_due: string | null
+          division: string
           end_date: string | null
           id: string
+          section: string
           sector: string
           start_date: string | null
           title: string
@@ -205,9 +208,12 @@ export type Database = {
           company?: string
           content?: Json
           created_at?: string
+          department?: string
           dg_review_due?: string | null
+          division?: string
           end_date?: string | null
           id?: string
+          section?: string
           sector?: string
           start_date?: string | null
           title?: string
@@ -218,9 +224,12 @@ export type Database = {
           company?: string
           content?: Json
           created_at?: string
+          department?: string
           dg_review_due?: string | null
+          division?: string
           end_date?: string | null
           id?: string
+          section?: string
           sector?: string
           start_date?: string | null
           title?: string

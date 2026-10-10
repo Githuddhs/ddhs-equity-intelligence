@@ -35,6 +35,7 @@ import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedManagerRouteImport } from './routes/_authenticated/manager'
+import { Route as AuthenticatedPlanReportRouteImport } from './routes/_authenticated/plan-report'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
@@ -180,6 +181,11 @@ const AuthenticatedManagerRoute = AuthenticatedManagerRouteImport.update({
   path: '/manager',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPlanReportRoute = AuthenticatedPlanReportRouteImport.update({
+  id: '/plan-report',
+  path: '/plan-report',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
@@ -275,6 +281,7 @@ export interface FileRoutesByFullPath {
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/manager': typeof AuthenticatedManagerRoute
+  '/plan-report': typeof AuthenticatedPlanReportRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
@@ -315,6 +322,7 @@ export interface FileRoutesByTo {
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/manager': typeof AuthenticatedManagerRoute
+  '/plan-report': typeof AuthenticatedPlanReportRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
@@ -357,6 +365,7 @@ export interface FileRoutesById {
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/manager': typeof AuthenticatedManagerRoute
+  '/_authenticated/plan-report': typeof AuthenticatedPlanReportRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
@@ -399,6 +408,7 @@ export interface FileRouteTypes {
     | '/dg-review'
     | '/history'
     | '/manager'
+    | '/plan-report'
     | '/portal'
     | '/staff'
     | '/workforce'
@@ -439,6 +449,7 @@ export interface FileRouteTypes {
     | '/dg-review'
     | '/history'
     | '/manager'
+    | '/plan-report'
     | '/portal'
     | '/staff'
     | '/workforce'
@@ -480,6 +491,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dg-review'
     | '/_authenticated/history'
     | '/_authenticated/manager'
+    | '/_authenticated/plan-report'
     | '/_authenticated/portal'
     | '/_authenticated/staff'
     | '/_authenticated/workforce'
@@ -706,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManagerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/plan-report': {
+      id: '/_authenticated/plan-report'
+      path: '/plan-report'
+      fullPath: '/plan-report'
+      preLoaderRoute: typeof AuthenticatedPlanReportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/portal': {
       id: '/_authenticated/portal'
       path: '/portal'
@@ -809,6 +828,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedManagerRoute: typeof AuthenticatedManagerRoute
+  AuthenticatedPlanReportRoute: typeof AuthenticatedPlanReportRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
@@ -827,6 +847,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedManagerRoute: AuthenticatedManagerRoute,
+  AuthenticatedPlanReportRoute: AuthenticatedPlanReportRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
