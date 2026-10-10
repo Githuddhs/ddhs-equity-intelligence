@@ -21,11 +21,11 @@ export function normaliseUnits(raw: unknown): OrgUnit[] {
     if (!u || typeof u !== "object") return [];
     const o = u as Record<string, unknown>;
     return [{
-      division: String(o.division ?? "") || UNASSIGNED,
-      department: String(o.department ?? "") || UNASSIGNED,
-      section: String(o.section ?? "") || UNASSIGNED,
-      counts: normaliseWorkforce(o.counts),
-      disability: normaliseDisability(o.disability),
+      division: String(o["division"] ?? "") || UNASSIGNED,
+      department: String(o["department"] ?? "") || UNASSIGNED,
+      section: String(o["section"] ?? "") || UNASSIGNED,
+      counts: normaliseWorkforce(o["counts"]),
+      disability: normaliseDisability(o["disability"]),
     }];
   });
 }

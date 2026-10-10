@@ -344,7 +344,7 @@ function parseEmployeeRows(rows: string[][]): ParsedFile | null {
     for (const [k, v] of Object.entries(skipped)) warnings.push(`${v} row(s) skipped: ${k}.`);
     const missing = LEVELS.filter((l) => !found.has(l));
     if (missing.length) warnings.push(`No employees found for: ${missing.join(", ")}.`);
-    return { counts, disability, levelsFound: [...found], warnings: warnings.slice(0, 12), total: grandTotal(counts), unknownColumns: [], rowCount, units: hasUnits ? [...unitMap.values()] : undefined };
+    return { counts, disability, levelsFound: [...found], warnings: warnings.slice(0, 12), total: grandTotal(counts), unknownColumns: [], rowCount, ...(hasUnits ? { units: [...unitMap.values()] } : {}) };
   }
   return null;
 }
