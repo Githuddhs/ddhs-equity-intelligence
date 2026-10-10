@@ -280,6 +280,33 @@ export type Database = {
         }
         Relationships: []
       }
+      evidence_extractions: {
+        Row: {
+          created_at: string
+          data: Json
+          file_names: string[]
+          id: string
+          summary: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          file_names?: string[]
+          id?: string
+          summary?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          file_names?: string[]
+          id?: string
+          summary?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       internal_tokens: {
         Row: {
           name: string
