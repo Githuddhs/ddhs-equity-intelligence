@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { DISABILITY_COLUMN, GROUPS, LEVELS, TEMPLATE_HEADER } from "@/lib/workforce";
+import { AuthCta } from "@/components/auth-cta";
 
 export const Route = createFileRoute("/workforce-foundation")({
   head: () => ({
@@ -122,6 +123,7 @@ function WorkforceFoundationPage() {
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
             <Link to="/signup" className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Sign up</Link>
+            <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">
               Schedule a Demonstration
             </Link>
