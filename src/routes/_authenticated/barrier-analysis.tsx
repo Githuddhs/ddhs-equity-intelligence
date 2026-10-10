@@ -149,7 +149,7 @@ function BarrierAnalysisPage() {
                       </button>
                     ))}
                   </div>
-                  {answers[i.id] !== undefined && answers[i.id] <= 2 && (
+                  {(answers[i.id] ?? 99) <= 2 && (
                     <input className="mt-2 w-full rounded border border-border bg-background px-2 py-1 text-xs" placeholder="Comment (helps us understand the barrier)…"
                       value={comments[i.id] ?? ""} onChange={(e) => setComments((c) => ({ ...c, [i.id]: e.target.value }))} />
                   )}
