@@ -6,6 +6,15 @@ import { lovable } from "@/integrations/lovable";
 
 const safeNext = (n: unknown) => (typeof n === "string" && n.startsWith("/") && !n.startsWith("//") ? n : "/portal");
 
+// Email links must open on an address the recipient can actually reach, so dev/sandbox
+// origins are mapped to the project's public preview address.
+const publicOrigin = () => {
+  const o = window.location.origin;
+  return /localhost|127\.0\.0\.1/.test(o)
+    ? "https://id-preview--878b594a-f0cd-417b-a23a-aefeb59a767b.lovable.app"
+    : o;
+};
+
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s["next"]) }),
   head: () => ({
