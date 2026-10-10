@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { extractPdfText } from "@/lib/workforce.functions";
+import { OrgUnitPicker } from "@/components/org-unit-picker";
+import { ALL_UNITS, aggregate, breakdown, describeFilter, normaliseUnits, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 import {
   DISABILITY_COLUMN,
   GROUPS,
@@ -53,6 +55,7 @@ type Snapshot = {
   total_headcount: number;
   counts: unknown;
   disability: unknown;
+  units: unknown;
   created_at: string;
 };
 
@@ -63,7 +66,7 @@ function WorkforcePage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("workforce_snapshots")
-        .select("id,snapshot_date,source,file_name,total_headcount,counts,disability,created_at")
+        .select("id,snapshot_date,source,file_name,total_headcount,counts,disability,units,created_at")
         .order("created_at", { ascending: false })
         .limit(20);
       if (error) throw error;
@@ -77,6 +80,8 @@ function WorkforcePage() {
   const [saving, setSaving] = useState(false);
   const [pending, setPending] = useState<(ParsedFile & { fileName: string }) | null>(null);
   const [seeded, setSeeded] = useState(false);
+  const [units, setUnits] = useState<OrgUnit[]>([]);
+  const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
   const file = useRef<HTMLInputElement>(null);
 
   // Start the form from the most recent snapshot so an update is an edit, not a retype.
@@ -87,10 +92,15 @@ function WorkforcePage() {
     setCounts(normaliseWorkforce(latest.counts));
     setDisability(normaliseDisability(latest.disability));
     setDate(latest.snapshot_date);
+    setUnits(normaliseUnits(latest.units));
     setSeeded(true);
   }, [snapshots, seeded]);
 
   const total = useMemo(() => grandTotal(counts), [counts]);
+  const view = useMemo(() => (units.length && (filter.division || filter.department || filter.section) ? aggregate(units, filter).counts : counts), [units, filter, counts]);
+  const viewTotal = useMemo(() => grandTotal(view), [view]);
+  const viewByGroup = useMemo(() => groupTotals(view), [view]);
+  const split = useMemo(() => breakdown(units, filter), [units, filter]);
   const byGroup = useMemo(() => groupTotals(counts), [counts]);
   const disabled = useMemo(() => disabilityTotal(disability), [disability]);
   const levelsFilled = LEVELS.filter((l) => levelTotal(counts[l]) > 0).length;
@@ -117,12 +127,15 @@ function WorkforcePage() {
       total_headcount: totalToSave,
       counts: countsToSave,
       disability: disabilityToSave,
+      units: (opts?.from ? opts.from.units ?? [] : []) as never,
     });
     setSaving(false);
     if (error) { toast.error("Could not save: " + error.message); return; }
     if (opts?.from) {
       setCounts(opts.from.counts);
       setDisability(opts.from.disability);
+      setUnits(opts.from.units ?? []);
+      setFilter(ALL_UNITS);
       setSeeded(true);
     }
     setPending(null);
@@ -204,6 +217,8 @@ function WorkforcePage() {
     setCounts(normaliseWorkforce(s.counts));
     setDisability(normaliseDisability(s.disability));
     setDate(s.snapshot_date);
+    setUnits(normaliseUnits(s.units));
+    setFilter(ALL_UNITS);
     toast.success("Loaded into the form. Edit it, then save as a new snapshot.");
   };
 
@@ -404,14 +419,23 @@ function WorkforcePage() {
         </section>
 
         <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="section-title text-primary">Representation at a glance</h2>
-          {total <= 0 ? (
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="section-title text-primary">Representation at a glance</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{describeFilter(filter)} · {viewTotal.toLocaleString("en-ZA")} employees</p>
+            </div>
+            {units.length > 0 && <OrgUnitPicker units={units} value={filter} onChange={setFilter} />}
+          </div>
+          {units.length === 0 && total > 0 && (
+            <p className="mt-2 text-xs text-muted-foreground">Upload a per-employee file with Division, Department and Section columns to report per unit.</p>
+          )}
+          {viewTotal <= 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">Save a snapshot to see your representation.</p>
           ) : (
             <div className="mt-4 space-y-2">
               {GROUPS.map((g) => {
-                const n = byGroup[g.key] ?? 0;
-                const pct = total ? (n / total) * 100 : 0;
+                const n = viewByGroup[g.key] ?? 0;
+                const pct = viewTotal ? (n / viewTotal) * 100 : 0;
                 return (
                   <div key={g.key} className="flex items-center gap-3">
                     <span className="w-44 shrink-0 text-sm text-muted-foreground">{g.label}</span>
@@ -422,6 +446,40 @@ function WorkforcePage() {
                   </div>
                 );
               })}
+            </div>
+          )}
+          {units.length > 0 && split.rows.length > 0 && !filter.section && (
+            <div className="mt-6 overflow-x-auto">
+              <table className="w-full min-w-[640px] border-collapse">
+                <thead>
+                  <tr className="bg-muted">
+                    <th className={`${th} text-left capitalize`}>{split.field}</th>
+                    <th className={th}>Employees</th>
+                    <th className={th}>Designated</th>
+                    <th className={th}>Female</th>
+                    <th className={th}>Disabled</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {split.rows.map((r) => {
+                    const t = grandTotal(r.counts), g = groupTotals(r.counts);
+                    const des = GROUPS.filter((x) => x.designated).reduce((a, x) => a + g[x.key], 0);
+                    const fem = g.FA + g.FC + g.FI + g.FW + g.FNF;
+                    const p = (n: number) => (t ? `${((n / t) * 100).toFixed(1)}%` : "–");
+                    return (
+                      <tr key={r.name}>
+                        <td className={`${td} text-left`}>
+                          <button className="font-medium text-teal hover:underline" onClick={() => setFilter({ ...filter, [split.field]: r.name })}>{r.name}</button>
+                        </td>
+                        <td className={td}>{t.toLocaleString("en-ZA")}</td>
+                        <td className={td}>{p(des)}</td>
+                        <td className={td}>{p(fem)}</td>
+                        <td className={td}>{disabilityTotal(r.disability)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
           <div className="mt-6 flex flex-wrap gap-2">
