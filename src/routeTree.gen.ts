@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AccountabilityManagementRouteImport } from './routes/accountability-management'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ClientViewRouteImport } from './routes/client-view'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
@@ -39,6 +40,7 @@ import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
+import { Route as ViewTokenRouteImport } from './routes/view.$token'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
@@ -65,6 +67,11 @@ const AccountabilityManagementRoute =
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientViewRoute = ClientViewRouteImport.update({
+  id: '/client-view',
+  path: '/client-view',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Eea12Route = Eea12RouteImport.update({
@@ -198,6 +205,11 @@ const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   path: '/api/eea-insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ViewTokenRoute = ViewTokenRouteImport.update({
+  id: '/view/$token',
+  path: '/view/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedClientsIdRoute = AuthenticatedClientsIdRouteImport.update({
   id: '/clients_/$id',
   path: '/clients/$id',
@@ -241,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
+  '/client-view': typeof ClientViewRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -267,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
@@ -279,6 +293,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
+  '/client-view': typeof ClientViewRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -305,6 +320,7 @@ export interface FileRoutesByTo {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
@@ -319,6 +335,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
+  '/client-view': typeof ClientViewRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -345,6 +362,7 @@ export interface FileRoutesById {
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/view/$token': typeof ViewTokenRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
@@ -359,6 +377,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accountability-management'
     | '/auth'
+    | '/client-view'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -385,6 +404,7 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/view/$token'
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
@@ -397,6 +417,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accountability-management'
     | '/auth'
+    | '/client-view'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -423,6 +444,7 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/view/$token'
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
@@ -436,6 +458,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/accountability-management'
     | '/auth'
+    | '/client-view'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -462,6 +485,7 @@ export interface FileRouteTypes {
     | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/view/$token'
     | '/_authenticated/clients_/$id'
     | '/_authenticated/plans/$id'
     | '/_authenticated/portal_/$area'
@@ -476,6 +500,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AccountabilityManagementRoute: typeof AccountabilityManagementRoute
   AuthRoute: typeof AuthRoute
+  ClientViewRoute: typeof ClientViewRoute
   Eea12Route: typeof Eea12Route
   Eea13PlanningRoute: typeof Eea13PlanningRoute
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
@@ -491,6 +516,7 @@ export interface RootRouteChildren {
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
+  ViewTokenRoute: typeof ViewTokenRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
   ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -524,6 +550,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client-view': {
+      id: '/client-view'
+      path: '/client-view'
+      fullPath: '/client-view'
+      preLoaderRoute: typeof ClientViewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eea12': {
@@ -708,6 +741,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEeaInsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/view/$token': {
+      id: '/view/$token'
+      path: '/view/$token'
+      fullPath: '/view/$token'
+      preLoaderRoute: typeof ViewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/clients_/$id': {
       id: '/_authenticated/clients_/$id'
       path: '/clients/$id'
@@ -804,6 +844,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AccountabilityManagementRoute: AccountabilityManagementRoute,
   AuthRoute: AuthRoute,
+  ClientViewRoute: ClientViewRoute,
   Eea12Route: Eea12Route,
   Eea13PlanningRoute: Eea13PlanningRoute,
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,
@@ -819,6 +860,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
+  ViewTokenRoute: ViewTokenRoute,
   ApiPublicHooksComplianceRemindersRoute:
     ApiPublicHooksComplianceRemindersRoute,
   ApiPublicHooksPayfastItnRoute: ApiPublicHooksPayfastItnRoute,

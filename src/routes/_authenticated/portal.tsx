@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { ShareLinks } from "@/components/share-links";
 
 export const Route = createFileRoute("/_authenticated/portal")({
   head: () => ({
@@ -147,6 +148,7 @@ function Portal() {
             ))}
           </Panel>
         </div>
+        <ShareLinks />
       </main>
     </div>
   );
