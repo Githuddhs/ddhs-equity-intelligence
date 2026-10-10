@@ -134,6 +134,9 @@ function WorkforcePage() {
     try {
       const ext = (f.name.split(".").pop() ?? "").toLowerCase();
       let parsed: ParsedFile;
+      if (ext === "doc") {
+        throw new Error("That's an old-style Word file (.doc). Open it in Word, choose “Save As → Word Document (.docx)”, and upload the .docx instead.");
+      }
       if (ext === "xlsx" || ext === "xls") {
         const XLSX = await import("xlsx");
         const wb = XLSX.read(await f.arrayBuffer(), { type: "array" });
@@ -335,7 +338,7 @@ function WorkforcePage() {
             <input
               ref={file}
               type="file"
-              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,.docx,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,.docx,.doc,text/csv,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               className="hidden"
               aria-label="Upload workforce file (Excel, CSV or PDF)"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }}
