@@ -43,7 +43,7 @@ const LEVELS = ["Top Management", "Senior Management", "Professionally Qualified
 
 
 
-const DEFAULT_COUNTS: Record<Key, number> = { MA: 1, MC: 4, MI: 1, MW: 3, FA: 0, FC: 2, FI: 1, FW: 8, FNM: 1, FNF: 0 };
+const DEFAULT_COUNTS: Record<Key, number> = { MA: 0, MC: 0, MI: 0, MW: 0, FA: 0, FC: 0, FI: 0, FW: 0, FNM: 0, FNF: 0 };
 const DEFAULT_EAP: Record<Key, number> = { MA: 22.5, MC: 22.4, MI: 0.8, MW: 0, FA: 20.7, FC: 19.8, FI: 0.6, FW: 6, FNM: 0, FNF: 0 };
 
 const pct = (n: number) => `${n.toFixed(1)}%`;
