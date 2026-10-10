@@ -1,13 +1,5 @@
-import { EXPERIENCE_ITEMS, FREQUENCY, LIKERT_SECTIONS, sectionScores, type BarrierAnswers } from "@/lib/barrier";
+import { barrierFrequency, LIKERT_SECTIONS, sectionScores, type BarrierAnswers } from "@/lib/barrier";
 import { goalsFromAnalyses, type Milestone, type PlanContent, type SavedAnalysis } from "@/lib/ee-plan";
-
-/** Average 24-month experience frequency per item (1 = Never … 5 = Very often), most frequent first. */
-export function averageExperiences(responses: { answers: unknown }[]) {
-  return EXPERIENCE_ITEMS.map((title, k) => {
-    const vals = responses.map((r) => ((r.answers ?? {}) as Record<string, number | undefined>)[`exp-${k}`]).filter((v): v is number => typeof v === "number");
-    return { title, avg: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null, n: vals.length };
-  }).filter((x): x is { title: string; avg: number; n: number } => x.avg !== null).sort((a, b) => b.avg - a.avg);
-}
 
 type Row = { action: string; owner: string; start: number; end: number; kind: Milestone["kind"] };
 const quarter = (m: number) => `Q${Math.ceil(m / 3)}`;
@@ -15,19 +7,18 @@ const addMonths = (d: Date, m: number) => new Date(d.getFullYear(), d.getMonth()
 const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const monthName = (d: Date) => d.toLocaleDateString("en-ZA", { month: "short", year: "numeric" });
 
-/** Builds a dated month/quarter timetable: most-frequent 24-month experiences first, then weak areas, then goal gaps. */
-export function buildTimetable(responses: { answers: unknown }[], weak: { title: string; avg: number }[], gaps: { level: string; baseline: string; total: string }[], startDate: string, endDate: string) {
+/** Builds a dated month/quarter timetable: most-flagged barriers first, then weak areas, then goal gaps. */
+export function buildTimetable(responses: { answers: unknown; profile?: unknown }[], weak: { title: string; avg: number }[], gaps: { level: string; baseline: string; total: string }[], startDate: string, endDate: string) {
   const start = startDate ? new Date(startDate) : new Date();
   const end = endDate ? new Date(endDate) : addMonths(start, 60);
   const months = Math.max(12, Math.min(60, Math.round((+end - +start) / (30.44 * 86400000))));
   const rows: Row[] = [
     { action: "Adopt plan, brief EE forum and assigned senior manager", owner: "CEO / assigned senior manager", start: 1, end: 1, kind: "objective" },
   ];
-  for (const e of averageExperiences(responses).filter((x) => x.avg >= 1.5)) {
-    const urgent = e.avg >= 3, medium = e.avg >= 2;
+  for (const e of barrierFrequency(responses).filter((x) => x.title !== "Other")) {
+    const urgent = e.share >= 0.5, medium = e.share >= 0.25;
     const s = urgent ? 1 : medium ? 4 : 7;
-    const label = FREQUENCY[Math.round(e.avg) - 1] ?? "Sometimes";
-    rows.push({ action: `Respond to reported ${e.title.toLowerCase()} (reported "${label}" on average over 24 months): investigate, fix process, communicate`, owner: e.title.match(/harass|bully|victim|discrim/i) ? "HR / Employee relations" : "HR / Line managers", start: s, end: s + (urgent ? 2 : 5), kind: "measure" });
+    rows.push({ action: `Address barrier: ${e.title} (flagged by ${Math.round(e.share * 100)}% of respondents) — agree measure, implement, track indicator`, owner: /leadership|accountab/i.test(e.title) ? "Assigned senior manager" : /culture|diversity|communication/i.test(e.title) ? "EE forum / HR" : "HR / Line managers", start: s, end: s + (urgent ? 2 : 5), kind: "measure" });
   }
   weak.slice(0, 5).forEach((w, i) => {
     const s = 4 + i * 3;
@@ -35,7 +26,7 @@ export function buildTimetable(responses: { answers: unknown }[], weak: { title:
   });
   for (const g of gaps) rows.push({ action: `Targeted recruitment & promotion — ${g.level} (${g.baseline}% → ${g.total}%)`, owner: "Assigned senior manager / HR", start: 1, end: months, kind: "goal" });
   for (let m = 3; m <= months; m += 3) rows.push({ action: `Quarterly EE forum progress review (${quarter(((m - 1) % 12) + 1)} of year ${Math.ceil(m / 12)})`, owner: "EE forum", start: m, end: m, kind: "objective" });
-  rows.push({ action: "Re-run Barrier Analysis to measure change against 24-month baseline", owner: "HR", start: 12, end: 12, kind: "objective" });
+  rows.push({ action: "Re-run consultation questionnaire to measure change against baseline", owner: "HR", start: 12, end: 12, kind: "objective" });
   if (months >= 24) rows.push({ action: "Second Barrier Analysis re-survey and mid-plan review", owner: "EE forum", start: 24, end: 24, kind: "objective" });
   const span = (r: Row) => {
     const a = addMonths(start, r.start - 1), b = addMonths(start, r.end - 1);
@@ -44,7 +35,7 @@ export function buildTimetable(responses: { answers: unknown }[], weak: { title:
   };
   const sorted = rows.filter((r) => r.start <= months).sort((a, b) => a.start - b.start || a.end - b.end);
   const text = [
-    `Timetable built from ${responses.length} Barrier Analysis response(s); most frequently reported 24-month experiences are scheduled first.`, "",
+    `Timetable built from ${responses.length} Barrier Analysis response(s); barriers flagged by the most respondents are scheduled first.`, "",
     "| Action | Responsible | When |", "|---|---|---|",
     ...sorted.map((r) => `| ${r.action} | ${r.owner} | ${span(r)} |`),
   ].join("\n");
@@ -53,7 +44,7 @@ export function buildTimetable(responses: { answers: unknown }[], weak: { title:
 }
 
 /** Average scores per area across all saved barrier responses (1–5, higher = fewer barriers). */
-export function averageBarrierScores(responses: { answers: unknown }[]) {
+export function averageBarrierScores(responses: { answers: unknown; profile?: unknown }[]) {
   const sums = new Map<string, { sum: number; n: number }>();
   for (const r of responses) {
     for (const s of sectionScores((r.answers ?? {}) as BarrierAnswers)) {
@@ -69,7 +60,7 @@ export function averageBarrierScores(responses: { answers: unknown }[]) {
 }
 
 /** Fills goals from EEA12, and empty barrier/measure/objective/timetable sections from goals + barrier scores. */
-export function autofillPlan(content: PlanContent, analyses: SavedAnalysis[], barrierResponses: { answers: unknown }[], dates: { start: string; end: string } = { start: "", end: "" }) {
+export function autofillPlan(content: PlanContent, analyses: SavedAnalysis[], barrierResponses: { answers: unknown; profile?: unknown }[], dates: { start: string; end: string } = { start: "", end: "" }) {
   const g = goalsFromAnalyses(content.goals, analyses);
   const goals = g.goals;
   const scores = averageBarrierScores(barrierResponses).sort((a, b) => a.avg - b.avg);

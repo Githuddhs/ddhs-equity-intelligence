@@ -31,3 +31,4 @@
 - [x] EE plan live monitoring calendar (goals, objectives, measures)
 - [x] Auto-fill builds month/quarter timetable from 24-month experiences
 - [x] My portal compliance dashboard (/dashboard)
+- [x] Barrier Analysis replaced with consolidated 12-section consultation questionnaire
