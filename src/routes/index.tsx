@@ -78,14 +78,14 @@ const lifecycle = [
   { icon: Layers, title: "Report", body: "Generate leadership-ready reporting and dashboards." },
 ];
 
-const capabilityLayers = [
-  "Workforce Data Foundation",
-  "EEA12 Workforce Analysis",
-  "EEA13 Planning & Monitoring",
-  "Accountability Management",
-  "Evidence & Governance Repository",
-  "Executive Intelligence",
-  "Responsible AI Assistant",
+const capabilityLayers: { name: string; href?: string }[] = [
+  { name: "Workforce Data Foundation", href: "/workforce-foundation" },
+  { name: "EEA12 Workforce Analysis", href: "/eea12" },
+  { name: "EEA13 Planning & Monitoring" },
+  { name: "Accountability Management" },
+  { name: "Evidence & Governance Repository" },
+  { name: "Executive Intelligence" },
+  { name: "Responsible AI Assistant" },
 ];
 
 const trustCards = [
@@ -308,18 +308,32 @@ function Index() {
             body="Purpose-built workflows help organisations manage transformation from workforce analysis through implementation and executive reporting."
           />
           <div className="mt-14 space-y-3">
-            {capabilityLayers.map((layer, i) => (
-              <div
-                key={layer}
-                className="flex items-center gap-4 rounded-xl border bg-card px-6 py-4 shadow-sm"
-                style={{ marginLeft: `${(capabilityLayers.length - 1 - i) * 1.25}rem`, marginRight: `${i * 1.25}rem` }}
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-soft text-sm font-bold text-teal">
-                  {i + 1}
-                </span>
-                <span className="font-semibold text-primary">{layer}</span>
-              </div>
-            ))}
+            {capabilityLayers.map((layer, i) => {
+              const inner = (
+                <>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-soft text-sm font-bold text-teal">
+                    {i + 1}
+                  </span>
+                  <span className="font-semibold text-primary">{layer.name}</span>
+                  {layer.href && <ArrowRight className="ml-auto h-4 w-4 text-teal" />}
+                </>
+              );
+              const style = { marginLeft: `${(capabilityLayers.length - 1 - i) * 1.25}rem`, marginRight: `${i * 1.25}rem` };
+              return layer.href ? (
+                <a
+                  key={layer.name}
+                  href={layer.href}
+                  style={style}
+                  className="flex items-center gap-4 rounded-xl border bg-card px-6 py-4 shadow-sm transition-colors hover:border-teal"
+                >
+                  {inner}
+                </a>
+              ) : (
+                <div key={layer.name} style={style} className="flex items-center gap-4 rounded-xl border bg-card px-6 py-4 shadow-sm">
+                  {inner}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -481,8 +495,15 @@ function Index() {
             <div>
               <h4 className="label-title text-primary">Platform</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {["Workforce Analysis", "EE Planning", "Accountability", "Evidence Management", "Executive Reporting"].map((l) => (
-                  <li key={l}><a href="#platform" className="transition-colors hover:text-primary">{l}</a></li>
+                {[
+                  { l: "Workforce Data Foundation", h: "/workforce-foundation" },
+                  { l: "Workforce Analysis", h: "#platform" },
+                  { l: "EE Planning", h: "#platform" },
+                  { l: "Accountability", h: "#platform" },
+                  { l: "Evidence Management", h: "#platform" },
+                  { l: "Executive Reporting", h: "#platform" },
+                ].map((l) => (
+                  <li key={l.l}><a href={l.h} className="transition-colors hover:text-primary">{l.l}</a></li>
                 ))}
               </ul>
             </div>
