@@ -10,6 +10,7 @@ import { GROUPS, LEVELS, levelTotal, normaliseWorkforce, type Workforce } from "
 import { SECTORS, LEVEL_TO_TARGET_KEY, type Targets } from "@/lib/sectors";
 import { normaliseContent, type GoalRow, type Milestone, type PlanContent } from "@/lib/ee-plan";
 import { latestEvidence, type Evidence } from "@/lib/evidence";
+import { exportEea13Pdf } from "@/lib/eea13-report";
 
 export const Route = createFileRoute("/_authenticated/eea13")({
   head: () => ({
@@ -172,8 +173,39 @@ function Eea13Page() {
               <div className="mt-4 flex flex-wrap gap-3">
                 <button disabled={saving} onClick={() => save(false)} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Save goals to plan</button>
                 <button disabled={saving} onClick={() => save(true)} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Save goals + add yearly milestones</button>
+                <button
+                  disabled={!plan}
+                  onClick={() =>
+                    void exportEea13Pdf({
+                      planTitle: plan?.title ?? "EE plan",
+                      sector: plan?.sector ?? "",
+                      startDate: plan?.start_date ?? null,
+                      endDate: plan?.end_date ?? null,
+                      filter,
+                      workforceDate: wf?.date,
+                      rows: rows.map((r) => ({ level: r.level, n: r.n, desigPct: pct(r.desig, r.n), femPct: pct(r.fem, r.n), target: r.target, hires: hiresNeeded(r.n, r.desig, r.target.total) })),
+                      years: yrs,
+                      gaps,
+                    }).catch(() => toast.error("Couldn't build the PDF."))
+                  }
+                  className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50"
+                >
+                  Download EEA13 report (PDF)
+                </button>
                 {plan && <Link to="/plans/$id" params={{ id: plan.id }} className="self-center text-sm text-teal">Open plan →</Link>}
               </div>
+            </section>
+
+            <section className={`${card} mt-6`}>
+              <h2 className="section-title text-primary">Gap analysis — goals vs Workforce Data</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Flags where your goals don't match the live workforce figures.</p>
+              {gaps.length === 0 ? (
+                <p className="mt-3 text-sm text-teal">No gaps — every level with headcount is on target and the plan is in sync.</p>
+              ) : (
+                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
+                  {gaps.map((g, i) => <li key={i}>{g}</li>)}
+                </ul>
+              )}
             </section>
 
             {ev?.plan?.objectives || ev?.plan?.measures ? (
