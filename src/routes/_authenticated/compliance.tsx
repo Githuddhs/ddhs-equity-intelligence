@@ -60,11 +60,22 @@ function Compliance() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Employment Equity Act</p>
-        <h1 className="page-title text-primary">Compliance dashboard</h1>
-        <p className="page-lead mt-2 text-muted-foreground">
-          {data?.plan ? <>Tracking <strong>{data.plan.title}</strong>. </> : "No EE plan yet. "}
-          {data?.review ? <>Latest DG review: <strong>{data.review.score}%</strong> ({new Date(data.review.updated_at).toLocaleDateString("en-ZA")}).</> : "No DG review saved yet."}
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h1 className="page-title text-primary">Compliance dashboard</h1>
+            <p className="page-lead mt-2 text-muted-foreground">
+              {data?.plan ? <>Tracking <strong>{data.plan.title}</strong>. </> : "No EE plan yet. "}
+              {data?.review ? <>Latest DG review: <strong>{data.review.score}%</strong> ({new Date(data.review.updated_at).toLocaleDateString("en-ZA")}).</> : "No DG review saved yet."}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={async () => { try { await exportComplianceExcel(deadlines, answers, data?.plan?.title ?? ""); toast.success("Compliance calendar downloaded."); } catch { toast.error("Could not build the report."); } }}
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+          >
+            Download calendar (Excel)
+          </button>
+        </div>
 
         {soon.length > 0 && (
           <div role="alert" className="mt-6 rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-sm">
