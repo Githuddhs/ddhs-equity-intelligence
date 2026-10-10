@@ -47,6 +47,62 @@ function sectionTitle(doc: JsPdf, y: number, text: string) {
   doc.text(text, 14, y);
 }
 
+
+// ---------- Workforce Foundation (shared by every EE report) ----------
+type WfSnap = { date: string; counts: import("@/lib/workforce").Workforce; disability: Record<string, number>; units: import("@/lib/org-units").OrgUnit[] };
+
+/** Latest Workforce Foundation snapshot for the signed-in client (null on shared/public views). */
+export async function loadWorkforceSnapshot(): Promise<WfSnap | null> {
+  try {
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return null;
+    const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,disability,units")
+      .eq("user_id", u.user.id).order("created_at", { ascending: false }).limit(1);
+    const s = data?.[0];
+    if (!s) return null;
+    const { normaliseWorkforce, normaliseDisability } = await import("@/lib/workforce");
+    const { normaliseUnits } = await import("@/lib/org-units");
+    return { date: s.snapshot_date, counts: normaliseWorkforce(s.counts), disability: normaliseDisability(s.disability), units: normaliseUnits(s.units) };
+  } catch { return null; }
+}
+
+async function appendWorkforce(doc: JsPdf, autoTable: AutoTable, wf: WfSnap | null) {
+  if (!wf) return;
+  const { LEVELS, GROUPS, levelTotal } = await import("@/lib/workforce");
+  doc.addPage();
+  sectionTitle(doc, 20, "Workforce Foundation profile (EEA12 data)");
+  doc.setFontSize(9); doc.setTextColor(...GREY);
+  doc.text(`Source: latest Workforce Data snapshot dated ${fmt(parse(wf.date))}.`, 14, 26);
+  const pct = (n: number, d: number) => (d ? `${((n / d) * 100).toFixed(1)}%` : "—");
+  const tot: Record<string, number> = {}; let all = 0, des = 0, fem = 0, dis = 0;
+  const body = LEVELS.map((l) => {
+    const row = wf.counts[l]; const t = levelTotal(row);
+    const d = GROUPS.filter((g) => g.designated).reduce((a, g) => a + (row?.[g.key] ?? 0), 0);
+    const f = GROUPS.filter((g) => g.gender === "Female" || g.key === "FNF").reduce((a, g) => a + (row?.[g.key] ?? 0), 0);
+    const pd = wf.disability[l] ?? 0;
+    GROUPS.forEach((g) => { tot[g.key] = (tot[g.key] ?? 0) + (row?.[g.key] ?? 0); });
+    all += t; des += d; fem += f; dis += pd;
+    return [l, ...GROUPS.map((g) => row?.[g.key] ?? 0), t, pct(d, t), pct(f, t), pd];
+  });
+  body.push(["Total", ...GROUPS.map((g) => tot[g.key] ?? 0), all, pct(des, all), pct(fem, all), dis]);
+  autoTable(doc, {
+    startY: 30,
+    head: [["Level", "AM", "CM", "IM", "WM", "AF", "CF", "IF", "WF", "FN M", "FN F", "Total", "Desig.", "Women", "PwD"]],
+    body, theme: "grid", headStyles: { fillColor: NAVY, fontSize: 7 }, styles: { fontSize: 7 }, columnStyles: { 0: { cellWidth: 30 } },
+  });
+  const y = lastY(doc) + 6;
+  doc.setFontSize(9); doc.setTextColor(30, 41, 59);
+  doc.text(`People with disabilities: ${dis} (${pct(dis, all)}) — ${all && dis / all < 0.03 ? "below" : "at or above"} the 3% guideline.`, 14, y);
+  if (wf.units.length) {
+    const map = new Map<string, number>();
+    for (const u of wf.units) map.set(u.division, (map.get(u.division) ?? 0) + LEVELS.reduce((a, l) => a + levelTotal(u.counts[l]), 0));
+    autoTable(doc, { startY: y + 5, head: [["Division", "Headcount", "Share"]],
+      body: [...map].sort((a, b) => b[1] - a[1]).map(([d, n]) => [d, n, pct(n, all)]),
+      theme: "grid", headStyles: { fillColor: NAVY }, styles: { fontSize: 8 } });
+  }
+}
+
 // ---------- EEA12 workforce analysis ----------
 export type Eea12Export = {
   level: string; sector: string | null; created_at: string; total_headcount: number | null;
@@ -93,6 +149,7 @@ export async function exportEea12Pdf(a: Eea12Export) {
     doc.text(lines, 14, y + 6);
   }
 
+  await appendWorkforce(doc, autoTable, await loadWorkforceSnapshot());
   footers(doc, `EEA12 Analysis — ${a.level}`);
   doc.save(`ddhs-eea12-${a.level.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${stamp()}.pdf`);
 }
@@ -145,6 +202,7 @@ export async function exportDgReviewPdf(r: DgExport) {
     doc.text(lines, 14, y + 6);
   }
 
+  await appendWorkforce(doc, autoTable, await loadWorkforceSnapshot());
   footers(doc, "DG Review Readiness");
   doc.save(`ddhs-dg-review-${stamp()}.pdf`);
 }
@@ -226,13 +284,14 @@ export async function exportPlanPdf(meta: PlanExportMeta, content: PlanContent) 
     theme: "grid", headStyles: { fillColor: NAVY }, styles: { fontSize: 9 },
   });
 
+  await appendWorkforce(doc, autoTable, await loadWorkforceSnapshot());
   footers(doc, `EE Plan — ${meta.title}`);
   doc.save(`ddhs-ee-plan-${stamp()}.pdf`);
 }
 
 // ---------- Compliance calendar ----------
 export function exportComplianceExcel(deadlines: Deadline[], answers: Record<string, DgAnswer>, planTitle: string) {
-  return import("xlsx").then((XLSX) => {
+  return Promise.all([import("xlsx"), loadWorkforceSnapshot(), import("@/lib/workforce")]).then(([XLSX, wf, { LEVELS, GROUPS, levelTotal }]) => {
     const wb = XLSX.utils.book_new();
     const rows: (string | number)[][] = [
       ["DDHS Equity Intelligence — EE compliance calendar"],
@@ -250,6 +309,11 @@ export function exportComplianceExcel(deadlines: Deadline[], answers: Record<str
     const ws = XLSX.utils.aoa_to_sheet(rows);
     ws["!cols"] = [{ wch: 45 }, { wch: 14 }, { wch: 12 }, { wch: 9 }, { wch: 50 }, { wch: 55 }, { wch: 12 }];
     XLSX.utils.book_append_sheet(wb, ws, "Compliance calendar");
+    if (wf) {
+      const rows2: (string | number)[][] = [["Workforce Foundation snapshot", wf.date], [], ["Level", ...GROUPS.map((g) => g.label), "Total", "People with disabilities"],
+        ...LEVELS.map((l) => [l, ...GROUPS.map((g) => wf.counts[l]?.[g.key] ?? 0), levelTotal(wf.counts[l]), wf.disability[l] ?? 0])];
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows2), "Workforce profile");
+    }
     XLSX.writeFile(wb, `ddhs-compliance-calendar-${stamp()}.xlsx`);
   });
 }
