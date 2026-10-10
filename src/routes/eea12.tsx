@@ -273,7 +273,14 @@ function Eea12Page() {
               </tbody>
             </table>
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">Default EAP figures are the Western Cape values from your spreadsheet — edit them for your province or sector.</p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <label className="text-sm font-medium" htmlFor="eap-province">EAP province</label>
+            <select id="eap-province" value={province} onChange={(e) => { setProvince(e.target.value); setEap(PROVINCE_EAP[e.target.value] ?? DEFAULT_EAP); }}
+              className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm">
+              {Object.keys(PROVINCE_EAP).map((p) => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">EAP figures are the official Statistics South Africa QLFS Q3 2024 values per province — pick your province above, or edit any cell for your sector.</p>
         </section>
 
         <div className="grid gap-6 lg:grid-cols-2">
