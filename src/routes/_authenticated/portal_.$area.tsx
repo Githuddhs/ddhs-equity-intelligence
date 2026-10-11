@@ -188,12 +188,15 @@ function DraftsCard() {
       <p className="mt-1 text-sm text-muted-foreground">
         All four drafts are generated on the spot from your latest Workforce Data snapshot, EE plan, sector targets and provincial EAP — so the numbers agree across EEA12, EEA13, EEA2 and EEA4.
       </p>
-      <div className="mt-4 flex flex-wrap gap-3">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {(["EEA12", "EEA13", "EEA2", "EEA4"] as const).map((f) => (
-          <button key={f} disabled={!!busy} onClick={() => void download(f)} className={btn}>{busy === f ? "Building…" : `Download ${f} draft (PDF)`}</button>
+          <div key={f} className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card p-3">
+            <button disabled={!!busy} onClick={() => void download(f)} className={btn}>{busy === f ? "Building…" : `Download ${f} draft (PDF)`}</button>
+            <a href={DOEL_PORTAL_URL} target="_blank" rel="noreferrer" className="text-xs font-semibold text-teal underline">Submit on the DoEL portal →</a>
+          </div>
         ))}
       </div>
-      <p className="mt-3 text-xs text-muted-foreground">EEA2 movement tables (recruitment, promotion, terminations, skills) and EEA4 remuneration figures come from uploaded reports — use DoEL submissions &amp; auto-fill to complete them.</p>
+      <p className="mt-3 text-xs text-muted-foreground">EEA2 movement tables (recruitment, promotion, terminations, skills) and EEA4 remuneration figures come from uploaded reports — use DoEL submissions &amp; auto-fill to complete them. The DoEL portal link opens the official Department of Employment and Labour online reporting system in a new tab — sign in there with your organisation's DoEL credentials to submit.</p>
     </section>
   );
 }
