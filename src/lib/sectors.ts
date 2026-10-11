@@ -31,3 +31,26 @@ export const LEVEL_TO_TARGET_KEY: Partial<Record<string, TargetKey>> = {
   "Professionally Qualified": "pqm",
   "Skilled Technical": "skilled",
 };
+
+// EAP by province — Statistics South Africa, QLFS Q3 2024.
+export type EapKey = "MA" | "MC" | "MI" | "MW" | "FA" | "FC" | "FI" | "FW" | "FNM" | "FNF";
+export const PROVINCE_EAP: Record<string, Record<EapKey, number>> = {
+  "National": { MA: 43.5, MC: 4.6, MI: 1.7, MW: 4.1, FA: 37.5, FC: 4.2, FI: 1.0, FW: 3.4, FNM: 0, FNF: 0 },
+  "Eastern Cape": { MA: 43.3, MC: 5.7, MI: 0.8, MW: 2.8, FA: 39.8, FC: 4.9, FI: 0.3, FW: 2.4, FNM: 0, FNF: 0 },
+  "Free State": { MA: 50.6, MC: 1.6, MI: 0.3, MW: 2.1, FA: 41.8, FC: 1.9, FI: 0.0, FW: 1.7, FNM: 0, FNF: 0 },
+  "Gauteng": { MA: 46.6, MC: 1.2, MI: 1.7, MW: 5.8, FA: 37.4, FC: 1.2, FI: 1.1, FW: 5.0, FNM: 0, FNF: 0 },
+  "KwaZulu-Natal": { MA: 43.7, MC: 0.6, MI: 4.6, MW: 1.9, FA: 43.4, FC: 0.7, FI: 3.5, FW: 1.6, FNM: 0, FNF: 0 },
+  "Limpopo": { MA: 51.1, MC: 0.1, MI: 0.3, MW: 2.0, FA: 44.9, FC: 0.0, FI: 0.0, FW: 1.6, FNM: 0, FNF: 0 },
+  "Mpumalanga": { MA: 51.2, MC: 0.3, MI: 0.4, MW: 2.6, FA: 43.1, FC: 0.2, FI: 0.2, FW: 2.0, FNM: 0, FNF: 0 },
+  "North West": { MA: 52.7, MC: 1.0, MI: 1.9, MW: 2.9, FA: 38.5, FC: 1.0, FI: 0.1, FW: 1.9, FNM: 0, FNF: 0 },
+  "Northern Cape": { MA: 29.9, MC: 18.6, MI: 0.6, MW: 5.3, FA: 24.8, FC: 16.9, FI: 0.2, FW: 3.7, FNM: 0, FNF: 0 },
+  "Western Cape": { MA: 22.5, MC: 22.4, MI: 0.8, MW: 7.2, FA: 20.7, FC: 19.8, FI: 0.6, FW: 6.0, FNM: 0, FNF: 0 },
+};
+
+/** Designated-group EAP target for a province: designated males, women, and all designated groups (%). */
+export function eapTargets(province: string): Targets {
+  const e = PROVINCE_EAP[province] ?? PROVINCE_EAP["National"]!;
+  const r = (n: number) => Math.round(n * 10) / 10;
+  const males = e.MA + e.MC + e.MI, females = e.FA + e.FC + e.FI + e.FW;
+  return { males: r(males), females: r(females), total: r(males + females) };
+}
