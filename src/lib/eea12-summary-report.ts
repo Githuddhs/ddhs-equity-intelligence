@@ -17,6 +17,7 @@ export type Eea12ReportInput = {
   counts: Record<string, Row>;
   eap: Row;
   targetsFor: (level: string) => { males: number; females: number; total: number };
+  dgFindings?: string[];
 };
 
 function analyse(c: Row, eap: Row, t: { males: number; females: number; total: number }) {
@@ -94,6 +95,17 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
         : `Next appointment (primary): ${a.optimal.map((k, n) => `${n + 1}. ${NAMES[k]}`).join(", ") || "none — all designated groups at or above EAP"}.\n` +
           `Next appointment (secondary): ${a.under.map((k, n) => `${n + 1}. ${NAMES[k]}`).join(", ") || "none"}.`, 182);
     doc.text(lines, 14, y); y += lines.length * 5;
+  }
+  if (i.dgFindings?.length) {
+    doc.addPage();
+    header("Latest DG review — corrective actions to address");
+    doc.setFontSize(10);
+    let y = 44;
+    for (const f of i.dgFindings) {
+      const lines = doc.splitTextToSize(`• ${f}`, 182);
+      if (y + lines.length * 5 > 285) { doc.addPage(); y = 20; }
+      doc.text(lines, 14, y); y += lines.length * 5 + 1;
+    }
   }
   doc.save(`EEA12-summary-${i.scope.replace(/[^a-z0-9]+/gi, "-")}-${new Date().toISOString().slice(0, 10)}.pdf`);
 }
