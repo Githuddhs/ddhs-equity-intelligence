@@ -33,6 +33,13 @@ const pct = (a: number, b: number) => (b ? (a / b) * 100 : 0);
 const desigCount = (r: Record<string, number> | undefined) => GROUPS.filter((g) => g.designated).reduce((a, g) => a + (r?.[g.key] ?? 0), 0);
 const femCount = (r: Record<string, number> | undefined) => GROUPS.filter((g) => g.gender === "Female").reduce((a, g) => a + (r?.[g.key] ?? 0), 0);
 const hiresNeeded = (n: number, d: number, t: number) => (t >= 100 || pct(d, n) >= t ? 0 : Math.ceil(((t / 100) * n - d) / (1 - t / 100)));
+function autoTargets(sector: string, province: string): Record<string, { t: Targets; src: string }> {
+  const s = SECTORS.find((x) => x.name === sector); const eap = eapTargets(province);
+  return Object.fromEntries(LEVELS.map((l) => {
+    const key = LEVEL_TO_TARGET_KEY[l]; const st = s && key ? s.targets[key] : null;
+    return [l, st ? { t: st, src: "Sector target" } : { t: eap, src: `${province} EAP` }];
+  }));
+}
 const num = (s: string | undefined, fb: number) => { const v = parseFloat(s ?? ""); return Number.isFinite(v) ? v : fb; };
 
 function years(p: Plan | undefined) {
@@ -160,7 +167,7 @@ function Eea13Page() {
                 <thead><tr className="bg-muted text-left"><th className="p-2">Level</th><th className="p-2">Target source</th><th className="p-2 text-right">Headcount</th><th className="p-2 text-right">Designated now</th><th className="p-2 text-right">Women now</th><th className="p-2 text-right">Target des. males %</th><th className="p-2 text-right">Target women %</th><th className="p-2 text-right">Target designated %</th><th className="p-2 text-right">Gap</th><th className="p-2 text-right">Appointments needed</th></tr></thead>
                 <tbody>{rows.map((r) => { const now = pct(r.desig, r.n); const gap = now - r.target.total; return (
                   <tr key={r.level} className="border-t border-border">
-                    <td className="p-2 font-medium">{r.level}</td><td className="p-2 text-right">{r.n}</td>
+                    <td className="p-2 font-medium">{r.level}</td><td className="p-2 text-xs text-muted-foreground">{auto[r.level]?.src}</td><td className="p-2 text-right">{r.n}</td>
                     <td className="p-2 text-right">{now.toFixed(1)}%</td><td className="p-2 text-right">{pct(r.fem, r.n).toFixed(1)}%</td>
                     {(["males", "females", "total"] as const).map((k) => <td key={k} className="p-2 text-right"><input type="number" step="0.1" className={inp} value={r.target[k]} onChange={(e) => setT(r.level, k, parseFloat(e.target.value) || 0)} /></td>)}
                     <td className={`p-2 text-right ${gap < 0 ? "text-destructive" : "text-teal"}`}>{gap.toFixed(1)}</td>
