@@ -35,16 +35,35 @@ function toDoelGrid(counts: Record<string, Record<string, number>>): Grid {
   return g;
 }
 
+export type DgFindings = { date: string; actions: string[] } | null;
+
+/** Latest DG review outcome analysis — corrective actions pulled out as one-line items for every form. */
+export async function latestDgFindings(): Promise<DgFindings> {
+  const { data } = await supabase.from("dg_outcome_analyses").select("result,created_at").order("created_at", { ascending: false }).limit(1).maybeSingle();
+  if (!data?.result) return null;
+  const lines = data.result.split("\n");
+  const start = lines.findIndex((l) => /^#+.*corrective action/i.test(l));
+  const body = start >= 0 ? lines.slice(start + 1) : lines;
+  const end = body.findIndex((l) => /^#+\s/.test(l));
+  const actions = (end >= 0 ? body.slice(0, end) : body)
+    .map((l) => l.replace(/^\s*(?:\d+[.)]|[-*•])\s+/, "").replace(/\*\*/g, "").trim())
+    .filter((l, idx, arr) => l.length > 8 && !l.startsWith("|") && arr.indexOf(l) === idx)
+    .slice(0, 15);
+  return actions.length ? { date: data.created_at.slice(0, 10), actions } : null;
+}
+
 /** Draft EEA2 + EEA4 from the latest Workforce Data snapshot and EE plan — no AI, same numbers everywhere. */
 export async function buildFormDrafts(): Promise<DoelForms | null> {
-  const [w, planRes, userRes] = await Promise.all([
+  const [w, planRes, userRes, dg] = await Promise.all([
     latestWorkforce(),
     supabase.from("ee_plans").select("company,sector,start_date,end_date").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     supabase.auth.getUser(),
+    latestDgFindings(),
   ]);
   if (!w) return null;
   const meta = (userRes.data.user?.user_metadata ?? {}) as Record<string, string>;
   const plan = planRes.data;
+  const dgText = dg ? `DG review corrective actions (analysis ${dg.date}):\n${dg.actions.map((a) => `- ${a}`).join("\n")}` : "";
   const profile = toDoelGrid(w.counts as Record<string, Record<string, number>>);
   const disabled: Grid = {};
   for (const lvl of DOEL_LEVELS) disabled[lvl] = {};
@@ -56,7 +75,7 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
     profile,
     disabled,
   };
-  eea2!.notes = `Draft from Workforce Data snapshot ${w.date}. Recruitment, promotion, termination and skills tables need the year's movement data — fill them on the DoEL submissions page or upload the reports there.`;
+  eea2!.notes = `Draft from Workforce Data snapshot ${w.date}. Recruitment, promotion, termination and skills tables need the year's movement data — fill them on the DoEL submissions page or upload the reports there.${dgText ? `\n\n${dgText}` : ""}`;
   return {
     employer: {
       name: plan?.company || meta["company"] || "",
@@ -68,8 +87,9 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
     eea4: {
       headcount: profile,
       narrative: "Remuneration figures are not in Workforce Data — upload the payroll report on the DoEL submissions page to fill this table.",
+      measures: dgText || undefined,
     },
-    sources: [`Workforce Data snapshot ${w.date}`, plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan"].filter(Boolean) as string[],
+    sources: [`Workforce Data snapshot ${w.date}`, plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
   };
 }
 
@@ -81,19 +101,22 @@ type SharedSources = {
   planTitle: string;
   startDate: string | null;
   endDate: string | null;
+  dg: DgFindings;
 };
 
 /** The single source of truth for every form: latest Workforce Data snapshot + latest EE plan + account province. */
 async function sharedSources(): Promise<SharedSources | null> {
-  const [w, planRes, userRes] = await Promise.all([
+  const [w, planRes, userRes, dg] = await Promise.all([
     latestWorkforce(),
     supabase.from("ee_plans").select("title,company,sector,start_date,end_date").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     supabase.auth.getUser(),
+    latestDgFindings(),
   ]);
   if (!w) return null;
   const meta = (userRes.data.user?.user_metadata ?? {}) as Record<string, string>;
   const plan = planRes.data;
   return {
+    dg,
     counts: w.counts as Record<string, Record<string, number>>,
     snapshotDate: w.date,
     sector: plan?.sector || meta["sector"] || "",
@@ -133,6 +156,7 @@ export async function buildEea12Draft(): Promise<Eea12ReportInput | null> {
     counts: s.counts,
     eap: PROVINCE_EAP[s.province]!,
     targetsFor: (level) => targetFor(s.sector, s.province, level),
+    dgFindings: s.dg?.actions.map((a) => `${a} (DG review analysis ${s.dg!.date})`),
   };
 }
 
@@ -153,6 +177,7 @@ export async function buildEea13Draft(): Promise<Eea13PdfInput | null> {
     .filter((r) => r.n > 0 && r.desigPct < r.target.total)
     .map((r) => `${r.level}: designated ${r.desigPct}% vs ${r.target.total}% target — about ${r.hires} appointment(s) needed`);
   for (const r of rows.filter((x) => x.n === 0)) gaps.push(`${r.level}: no headcount in the Workforce Data snapshot`);
+  for (const a of s.dg?.actions ?? []) gaps.push(`DG review (${s.dg!.date}): ${a}`);
   return {
     planTitle: s.planTitle,
     sector: s.sector,
