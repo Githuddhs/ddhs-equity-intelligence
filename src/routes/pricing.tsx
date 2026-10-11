@@ -113,10 +113,10 @@ function PricingPage() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-6 py-16">
+      <main className="mx-auto max-w-6xl px-6 py-10">
         <h1 className="page-title text-center text-primary">Subscription plans</h1>
         <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
-        <h2 className="section-title mt-14 text-primary">Managed compliance packages</h2>
+        <h2 className="section-title mt-8 text-primary">Managed compliance packages</h2>
         <p className="mt-1 text-muted-foreground">We run your Employment Equity programme with you. Your first online payment covers the setup fee plus the first month.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {PACKAGES.map((p) => (
