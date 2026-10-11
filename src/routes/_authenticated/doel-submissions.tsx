@@ -163,6 +163,10 @@ function DoelSubmissionsPage() {
           report and the EEA4 income differentials statement. Keep each submission's period, status and DoEL reference
           in one place.
         </p>
+        <a href={DOEL_PORTAL_URL} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+          Open the official DoEL online reporting portal →
+        </a>
+        <p className="mt-1 text-xs text-muted-foreground">Sign in there with your organisation's DoEL credentials to submit EEA2 and EEA4 online, then record the reference number below.</p>
 
         <DoelAutofill />
 
