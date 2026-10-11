@@ -2,8 +2,11 @@
 // the latest Workforce Data snapshot, the latest EE plan and the account profile.
 import { supabase } from "@/integrations/supabase/client";
 import { latestWorkforce } from "@/lib/barrier-response-doc";
-import { LEVELS, type Key } from "@/lib/workforce";
+import { GROUPS, LEVELS, levelTotal, type Key } from "@/lib/workforce";
 import { DOEL_LEVELS, type DoelForms, type Grid } from "@/lib/doel-forms";
+import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS, eapTargets, type Targets } from "@/lib/sectors";
+import type { Eea12ReportInput } from "@/lib/eea12-summary-report";
+import type { Eea13PdfInput, Eea13Row } from "@/lib/eea13-report";
 
 const KEY_TO_DOEL: Record<Key, string> = {
   MA: "AM", MC: "CM", MI: "IM", MW: "WM", FA: "AF", FC: "CF", FI: "IF", FW: "WF", FNM: "FNM", FNF: "FNF",
