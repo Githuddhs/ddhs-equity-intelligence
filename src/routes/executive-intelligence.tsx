@@ -81,7 +81,7 @@ function ExecutiveIntelligencePage() {
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
                         <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">
-              Schedule a Demonstration
+              Request demonstration
             </Link>
           </div>
         </div>
@@ -105,7 +105,7 @@ function ExecutiveIntelligencePage() {
                 hash="contact"
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
               >
-                Schedule a Demonstration <ArrowRight className="h-4 w-4" />
+                Request demonstration <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/auth" search={{ next: "/portal" }}
@@ -185,7 +185,7 @@ function ExecutiveIntelligencePage() {
               hash="contact"
               className="inline-flex items-center gap-2 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-teal-foreground hover:bg-teal/90"
             >
-              Book an Executive Demonstration <ArrowRight className="h-4 w-4" />
+              Request demonstration <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/pricing"

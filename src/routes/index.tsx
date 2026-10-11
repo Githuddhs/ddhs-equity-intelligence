@@ -184,7 +184,7 @@ function Index() {
               href="#contact"
               className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Schedule a Demonstration
+              Request demonstration
             </a>
           </div>
         </div>
@@ -218,7 +218,7 @@ function Index() {
               href="#contact"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Schedule an Executive Demonstration <ArrowRight className="h-4 w-4" />
+              Request demonstration <ArrowRight className="h-4 w-4" />
             </a>
             <a
               href="#pilots"
@@ -539,7 +539,7 @@ function Index() {
               href="#contact"
               className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Schedule a Demonstration
+              Request demonstration
             </a>
           </div>
         </div>
