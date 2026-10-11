@@ -200,7 +200,7 @@ function Index() {
 
 
       {/* Section 1: Hero */}
-      <section className="mx-auto max-w-7xl px-6 pt-12 pb-16">
+      <section className="mx-auto max-w-7xl px-6 pt-8 pb-10">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
             Take Control of Employment Equity Implementation
@@ -243,13 +243,13 @@ function Index() {
 
 
       {/* Section 2: The Problem */}
-      <section className="bg-secondary/40 py-20">
+      <section className="bg-secondary/40 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             title="Employment Equity Shouldn't Be Managed Across Spreadsheets, Emails and Shared Drives"
             body="Disconnected processes make it difficult to manage targets, assign accountability, maintain evidence and demonstrate progress."
           />
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {painCards.map((card) => (
               <div key={card.title} className="rounded-2xl border bg-card p-8 shadow-sm">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-soft">
@@ -264,7 +264,7 @@ function Index() {
       </section>
 
       {/* Section 3: The Solution */}
-      <section id="platform" className="py-20">
+      <section id="platform" className="py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="The Platform"
@@ -304,14 +304,14 @@ function Index() {
       </section>
 
       {/* Section 4: Capability Stack */}
-      <section id="capabilities" className="bg-secondary/40 py-20">
+      <section id="capabilities" className="bg-secondary/40 py-8">
         <div className="mx-auto max-w-5xl px-6">
           <SectionHeading
             eyebrow="Capability Stack"
             title="Built for the Complete Employment Equity Lifecycle"
             body="Purpose-built workflows help organisations manage transformation from workforce analysis through implementation and executive reporting."
           />
-          <div className="mt-14 space-y-3">
+          <div className="mt-8 space-y-3">
             {capabilityLayers.map((layer, i) => {
               const inner = (
                 <>
@@ -343,10 +343,10 @@ function Index() {
       </section>
 
       {/* Section 5: Trust & Credibility */}
-      <section id="governance" className="bg-primary py-20">
+      <section id="governance" className="bg-primary py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading dark title="Built for Compliance You Can Explain and Defend" />
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {trustCards.map((card) => (
               <div key={card.title} className="rounded-2xl border border-navy-foreground/10 bg-navy-foreground/5 p-7">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal">
@@ -369,13 +369,13 @@ function Index() {
       </section>
 
       {/* Section 6: Who It Is For */}
-      <section className="py-20">
+      <section className="py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             title="Designed for Complex Employment Environments"
             body="Ideal for organisations with formal Employment Equity obligations, multiple workforce-data sources and recurring governance reporting requirements."
           />
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {industries.map((ind) => (
               <div
                 key={ind.title}
@@ -392,7 +392,7 @@ function Index() {
       </section>
 
       {/* Section 7: Compliance Readiness */}
-      <section className="bg-secondary/40 py-20">
+      <section className="bg-secondary/40 py-8">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
           <div className="rounded-2xl border bg-card p-8 shadow-sm">
             <div className="space-y-4">
@@ -423,9 +423,9 @@ function Index() {
       </section>
 
       {/* Section 8: Founding Customer Programme */}
-      <section id="pilots" className="py-20">
+      <section id="pilots" className="py-8">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-16 text-center shadow-xl sm:px-16">
+          <div className="rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-10 text-center shadow-xl sm:px-16">
             <h2 className="display-title text-balance text-navy-foreground">
               Help Shape the Enterprise Standard for EE Intelligence
             </h2>
@@ -452,7 +452,7 @@ function Index() {
       </section>
 
       {/* Section 9: Final Conversion */}
-      <section id="contact" className="bg-primary py-24">
+      <section id="contact" className="bg-primary py-10">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="display-title text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence
@@ -477,7 +477,7 @@ function Index() {
       </section>
 
       {/* Section 10: Footer */}
-      <footer className="border-t bg-background py-14">
+      <footer className="border-t bg-background py-10">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-10 md:grid-cols-4">
             <div>

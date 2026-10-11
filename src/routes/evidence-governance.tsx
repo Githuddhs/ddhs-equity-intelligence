@@ -96,7 +96,7 @@ function EvidencePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 py-12">
+      <main className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 6 of 11</p>
@@ -184,7 +184,7 @@ function EvidencePage() {
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-14 text-center">
+        <section className="mt-10 rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-10 text-center">
           <h2 className="display-title text-balance text-navy-foreground">
             Your next review is already half answered
           </h2>
