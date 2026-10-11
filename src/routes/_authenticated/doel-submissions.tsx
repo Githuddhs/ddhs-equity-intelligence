@@ -83,7 +83,7 @@ function DoelSubmissionsPage() {
     mutationFn: () =>
       saveDoelSubmission({
         data: {
-          id: form.id,
+          ...(form.id ? { id: form.id } : {}),
           formType: form.formType,
           periodStart: form.periodStart,
           periodEnd: form.periodEnd,
@@ -126,7 +126,7 @@ function DoelSubmissionsPage() {
   };
 
   const downloadEea4Summary = () => {
-    const income = (plan?.content as Record<string, unknown> | null)?.incomeDifferentials;
+    const income = (plan?.content as Record<string, unknown> | null)?.["incomeDifferentials"];
     const lines = [
       "EEA4 — INCOME DIFFERENTIALS SUMMARY",
       "Prepared for submission to the Department of Employment and Labour",
