@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { BarrierDocUpload } from "@/components/barrier-doc-upload";
+import { BarrierSurveyLinks } from "@/components/barrier-survey-links";
 import {
   LIKERT, LIKERT_SECTIONS, PRIORITY_OPTIONS, PRIORITY_LIMIT, OPEN_QUESTIONS, PARTICIPANT_FIELDS, BARRIER_CHECKLIST, BARRIER_SOURCES,
   BARRIER_TEXT, EFFECTIVENESS, FINAL_TEXT, QUESTIONNAIRE_VERSION, rolesFor, barrierFrequency,
@@ -124,6 +125,7 @@ function BarrierAnalysisPage() {
           Participation is voluntary, responses are confidential and reported only in aggregate. Takes 15-20 minutes. Managers also complete Section 11; EE Committee members and representatives also complete Section 12.
         </p>
 
+        <BarrierSurveyLinks counts={responses.reduce<Record<string, number>>((m, r) => { const id = (r.profile as { link_id?: string } | null)?.link_id; if (id) m[id] = (m[id] ?? 0) + 1; return m; }, {})} />
         <BarrierDocUpload onSaved={() => void load()} />
 
         {aggregate && (
