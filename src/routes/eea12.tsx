@@ -12,6 +12,7 @@ import { normaliseWorkforce } from "@/lib/workforce";
 import { useQuery } from "@tanstack/react-query";
 import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
 import { EeaCrosswalk } from "@/components/eea-crosswalk";
+import { latestDgFindings } from "@/lib/form-drafts";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -95,6 +96,7 @@ function Eea12Page() {
       return data ?? [];
     },
   });
+  const { data: dg } = useQuery({ queryKey: ["eea12-dg-findings"], queryFn: latestDgFindings });
   const downloadSummary = async () => {
     if (!wf) return;
     const filtered = !!(unitFilter.division || unitFilter.department || unitFilter.section);
@@ -106,6 +108,7 @@ function Eea12Page() {
         const s = SECTORS.find((x) => x.name === sector); const k = LEVEL_TO_TARGET_KEY[l];
         return (s && k ? s.targets[k] : undefined) ?? targetsByLevel[l] ?? { males: 0, females: 0, total: 0 };
       },
+      dgFindings: dg?.actions.map((a) => `${a} (DG review analysis ${dg.date})`) ?? [],
     });
     toast.success("EEA12 summary report downloaded");
   };
@@ -385,6 +388,21 @@ function Eea12Page() {
           }} onComplete={(t) => { setSummary(t); setSavedId(null); }} />
 
           <EeaCrosswalk />
+
+          {dg && (
+            <section className="rounded-xl border border-border bg-card p-6 shadow-sm lg:col-span-2">
+              <h2 className="section-title text-primary">Latest DG review — corrective actions to address</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                From the DG review outcome analysis of {new Date(dg.date).toLocaleDateString("en-ZA")}. These actions also appear in the EEA12 summary report and the EEA13, EEA2 and EEA4 drafts.
+              </p>
+              <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm">
+                {dg.actions.map((a, i) => <li key={i}>{a}</li>)}
+              </ol>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Run a new analysis on the <Link to="/dg-review" className="font-semibold text-teal underline">DG review page</Link> to update this list.
+              </p>
+            </section>
+          )}
 
           <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-6 shadow-sm">
             <div>
