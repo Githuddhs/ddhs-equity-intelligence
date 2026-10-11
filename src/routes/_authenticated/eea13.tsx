@@ -11,6 +11,7 @@ import { SECTORS, LEVEL_TO_TARGET_KEY, PROVINCE_EAP, eapTargets, type Targets } 
 import { normaliseContent, type GoalRow, type Milestone, type PlanContent } from "@/lib/ee-plan";
 import { latestEvidence, type Evidence } from "@/lib/evidence";
 import { exportEea13Pdf } from "@/lib/eea13-report";
+import { latestDgFindings, type DgFindings } from "@/lib/form-drafts";
 
 export const Route = createFileRoute("/_authenticated/eea13")({
   head: () => ({
@@ -60,6 +61,7 @@ function Eea13Page() {
   const [province, setProvince] = useState("National");
   useEffect(() => { void supabase.auth.getUser().then(({ data }) => { const p = data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }); }, []);
   const [ev, setEv] = useState<Evidence | null>(null);
+  const [dg, setDg] = useState<DgFindings>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -68,6 +70,7 @@ function Eea13Page() {
       setPlans(ps); if (ps[0]) setPlanId(ps[0].id);
     });
     void latestEvidence().then((e) => setEv(e?.data ?? null));
+    void latestDgFindings().then(setDg);
   }, []);
   const companies = useMemo(() => [...new Set(plans.map((p) => p.company).filter(Boolean))].sort(), [plans]);
   const scopedPlans = company ? plans.filter((p) => p.company === company) : plans;
@@ -115,6 +118,10 @@ function Eea13Page() {
     if (saved && Math.abs(num(saved.baseline, now) - now) > 0.5) out.push(`${r.level}: the plan's saved baseline (${num(saved.baseline, now).toFixed(1)}%) no longer matches Workforce Data (${now.toFixed(1)}%) — save the goals again to re-sync.`);
     return out;
   });
+
+  // DG corrective actions feed the gap list automatically once an analysis has been run.
+  const dgGaps = (dg?.actions ?? []).map((a) => `DG review (${dg!.date}): ${a}`);
+  const allGaps = [...gaps, ...dgGaps];
 
   const save = async (withTimeline: boolean) => {
     if (!plan) return;
@@ -211,7 +218,7 @@ function Eea13Page() {
                       workforceDate: wf?.date,
                       rows: rows.map((r) => ({ level: r.level, n: r.n, desigPct: pct(r.desig, r.n), femPct: pct(r.fem, r.n), target: r.target, hires: hiresNeeded(r.n, r.desig, r.target.total) })),
                       years: yrs,
-                      gaps,
+                      gaps: allGaps,
                     }).catch(() => toast.error("Couldn't build the PDF."))
                   }
                   className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50"
@@ -223,15 +230,16 @@ function Eea13Page() {
             </section>
 
             <section className={`${card} mt-6`}>
-              <h2 className="section-title text-primary">Gap analysis — goals vs Workforce Data</h2>
-              <p className="mt-1 text-xs text-muted-foreground">Flags where your goals don't match the live workforce figures.</p>
-              {gaps.length === 0 ? (
+              <h2 className="section-title text-primary">Gap analysis — goals vs Workforce Data{dg ? " + DG review" : ""}</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Flags where your goals don't match the live workforce figures{dg ? `, plus the corrective actions from your latest DG review analysis (${dg.date})` : ""}.</p>
+              {allGaps.length === 0 ? (
                 <p className="mt-3 text-sm text-teal">No gaps — every level with headcount is on target and the plan is in sync.</p>
               ) : (
                 <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
-                  {gaps.map((g, i) => <li key={i}>{g}</li>)}
+                  {allGaps.map((g, i) => <li key={i}>{g}</li>)}
                 </ul>
               )}
+              {dg && <p className="mt-3 text-xs text-muted-foreground">Run a new analysis on the <Link to="/dg-review" className="text-teal underline">DG review page</Link> and this list updates automatically.</p>}
             </section>
 
             {ev?.plan?.objectives || ev?.plan?.measures ? (
