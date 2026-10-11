@@ -13,6 +13,7 @@ export type DoelSubmission = {
   status: "draft" | "ready" | "submitted" | "acknowledged";
   reference: string;
   notes: string;
+  form_data: Record<string, unknown>;
   created_at: string;
 };
 
@@ -24,6 +25,7 @@ const submissionSchema = z.object({
   status: z.enum(["draft", "ready", "submitted", "acknowledged"]),
   reference: z.string().max(200).optional(),
   notes: z.string().max(4000).optional(),
+  formData: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const listMyDoelSubmissions = createServerFn({ method: "GET" })
@@ -31,7 +33,7 @@ export const listMyDoelSubmissions = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("doel_submissions")
-      .select("id, user_id, form_type, period_start, period_end, submission_date, status, reference, notes, created_at")
+      .select("id, user_id, form_type, period_start, period_end, submission_date, status, reference, notes, form_data, created_at")
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false });
     if (error) throw new Error("We couldn't load your DoEL submissions.");
@@ -52,6 +54,7 @@ export const saveDoelSubmission = createServerFn({ method: "POST" })
       status: data.status,
       reference: data.reference ?? "",
       notes: data.notes ?? "",
+      ...(data.formData ? { form_data: data.formData as never } : {}),
       updated_at: new Date().toISOString(),
     };
     if (data.id) {

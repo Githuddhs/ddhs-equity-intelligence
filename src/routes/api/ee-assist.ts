@@ -4,7 +4,7 @@ import { z } from "zod";
 import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
-  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract"]),
+  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract", "doel_forms"]),
   section: z.string().max(100).optional(),
   context: z.unknown(),
 });
@@ -40,6 +40,15 @@ You are extracting Employment Equity evidence from a client's uploaded documents
 DG item ids: consult, analysis, plan, manager, reports, income, display, records, goals, sectoral, barriers, pool, accommodation, harassment.
 Use "" or [] where the documents give no evidence. Never invent figures; cite document names in evidence strings. Plan fields are Markdown text ready to paste into the plan.`;
 
+const DOEL = `${BASE}
+You are completing the South African EEA2 (Employment Equity Report) and EEA4 (Income Differential Statement) from the client's uploaded documents and saved app data. Return ONLY a JSON object (no prose, no code fences):
+{"employer": {"name","registration","doelRef","sector","sic","address","ceo","seniorManager","contact","period"} (strings),
+ "eea2": {"profile": GRID, "disabled": GRID, "recruitment": GRID, "promotion": GRID, "termination": GRID, "skills": GRID, "notes": string},
+ "eea4": {"remuneration": GRID, "headcount": GRID, "narrative": string (Markdown analysis of income differentials by level, race and gender, s27), "measures": string (measures to reduce disproportionate differentials)},
+ "missing": string[] (information the documents did not provide), "sources": string[] (document names used)}
+GRID = {"<level>": {"AM","CM","IM","WM","AF","CF","IF","WF","FNM","FNF": integer}} with levels exactly: "Top management","Senior management","Professionally qualified","Skilled technical","Semi-skilled","Unskilled","Temporary employees". A=African, C=Coloured, I=Indian, W=White, FN=Foreign national, M/F = male/female. Remuneration values are annual Rand totals (integers).
+Count employees from row-level data carefully. Never invent figures: use 0 and list the gap in "missing" when not available.`;
+
 export const Route = createFileRoute("/api/ee-assist")({
   server: {
     handlers: {
@@ -57,11 +66,12 @@ export const Route = createFileRoute("/api/ee-assist")({
 
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
-        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" ? 150000 : 40000);
+        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" || parsed.data.task === "doel_forms" ? 150000 : 40000);
         void logAiUsage(parsed.data.task, u.user.id);
         if (parsed.data.task === "plan_section") {
           return streamResponses(PLAN, `Section to draft: ${parsed.data.section ?? "Objectives"}\n\nPlan context (JSON):\n${ctx}`, request.signal);
         }
+        if (parsed.data.task === "doel_forms") return streamResponses(DOEL, `Documents and app data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "evidence_extract") return streamResponses(EVIDENCE, `Documents and app data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "plan_gap") return streamResponses(GAP, `Existing plan and workforce data (JSON):\n${ctx}`, request.signal);
         return streamResponses(DG, `Review data (JSON):\n${ctx}`, request.signal);
