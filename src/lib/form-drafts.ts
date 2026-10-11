@@ -87,7 +87,7 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
     eea4: {
       headcount: profile,
       narrative: "Remuneration figures are not in Workforce Data — upload the payroll report on the DoEL submissions page to fill this table.",
-      measures: dgText || undefined,
+      measures: dgText,
     },
     sources: [`Workforce Data snapshot ${w.date}`, plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
   };
@@ -156,7 +156,7 @@ export async function buildEea12Draft(): Promise<Eea12ReportInput | null> {
     counts: s.counts,
     eap: PROVINCE_EAP[s.province]!,
     targetsFor: (level) => targetFor(s.sector, s.province, level),
-    dgFindings: s.dg?.actions.map((a) => `${a} (DG review analysis ${s.dg!.date})`),
+    dgFindings: s.dg?.actions.map((a) => `${a} (DG review analysis ${s.dg!.date})`) ?? [],
   };
 }
 
