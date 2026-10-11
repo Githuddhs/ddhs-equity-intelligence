@@ -13,7 +13,7 @@ export type DoelSubmission = {
   status: "draft" | "ready" | "submitted" | "acknowledged";
   reference: string;
   notes: string;
-  form_data: Record<string, unknown>;
+  form_data: import("@/integrations/supabase/types").Json;
   created_at: string;
 };
 
