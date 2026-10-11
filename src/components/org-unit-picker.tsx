@@ -23,13 +23,14 @@ export function useLatestOrgUnits(enabled = true) {
   });
 }
 
-export function OrgUnitPicker({ units, value, onChange }: { units: OrgUnit[]; value: UnitFilter; onChange: (f: UnitFilter) => void }) {
+export function OrgUnitPicker({ units, value, onChange, labels }: { units: OrgUnit[]; value: UnitFilter; onChange: (f: UnitFilter) => void; labels?: [string, string, string] }) {
   const o = unitOptions(units, value);
+  const [l1, l2, l3] = labels ?? ["Division", "Department", "Section"];
   const sel = "rounded-lg border border-border bg-background px-3 py-2 text-sm";
   return (
     <div className="flex flex-wrap items-end gap-3">
       <label className="text-xs font-semibold text-primary">
-        Division
+        {l1}
         <select aria-label="Division" className={`${sel} mt-1 block min-w-44`} value={value.division}
           onChange={(e) => onChange({ division: e.target.value, department: "", section: "" })}>
           <option value="">Entire organisation</option>
@@ -37,7 +38,7 @@ export function OrgUnitPicker({ units, value, onChange }: { units: OrgUnit[]; va
         </select>
       </label>
       <label className="text-xs font-semibold text-primary">
-        Department
+        {l2}
         <select aria-label="Department" className={`${sel} mt-1 block min-w-44`} value={value.department}
           onChange={(e) => onChange({ ...value, department: e.target.value, section: "" })}>
           <option value="">All departments</option>
@@ -45,7 +46,7 @@ export function OrgUnitPicker({ units, value, onChange }: { units: OrgUnit[]; va
         </select>
       </label>
       <label className="text-xs font-semibold text-primary">
-        Section
+        {l3}
         <select aria-label="Section" className={`${sel} mt-1 block min-w-44`} value={value.section}
           onChange={(e) => onChange({ ...value, section: e.target.value })}>
           <option value="">All sections</option>
