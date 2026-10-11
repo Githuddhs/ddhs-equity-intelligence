@@ -4,7 +4,7 @@ import { z } from "zod";
 import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
-  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract", "doel_forms", "barrier_doc"]),
+  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract", "doel_forms", "barrier_doc", "dg_outcome"]),
   section: z.string().max(100).optional(),
   context: z.unknown(),
 });
@@ -60,6 +60,15 @@ You are reading an employer's existing Employment Equity barrier analysis docume
  "summary": string (under 150 words)}
 Use only what the document says; never invent findings.`;
 
+const DG_OUTCOME = `${BASE}
+You are analysing an employer's latest Director-General review documents (the DG's assessment report, the recommendations or compliance order issued under sections 43–45, and the company's written response) together with the employer's saved EE data. Produce Markdown:
+## Summary of the DG assessment — key findings, citing the document and section of the Act.
+## DG recommendations — a table: Recommendation | Deadline (if stated) | Addressed in company response? (Yes/Partial/No) | Gap.
+## Assessment of the company response — strengths, weaknesses, and risk of escalation to a compliance order or Labour Court referral (s45).
+## Recommended corrective actions — a numbered, prioritised list; each with the action, responsible owner (e.g. assigned senior manager, HR, EE committee), timeframe, evidence of completion, and the finding it resolves.
+## Suggested follow-up wording — 2–3 short paragraphs the employer could adapt in a further response to the DG.
+Base everything on the documents; never invent findings, dates or figures. Under 1000 words. Note it is guidance, not legal advice.`;
+
 export const Route = createFileRoute("/api/ee-assist")({
   server: {
     handlers: {
@@ -77,11 +86,12 @@ export const Route = createFileRoute("/api/ee-assist")({
 
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
-        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" || parsed.data.task === "doel_forms" || parsed.data.task === "barrier_doc" ? 150000 : 40000);
+        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" || parsed.data.task === "doel_forms" || parsed.data.task === "barrier_doc" || parsed.data.task === "dg_outcome" ? 150000 : 40000);
         void logAiUsage(parsed.data.task, u.user.id);
         if (parsed.data.task === "plan_section") {
           return streamResponses(PLAN, `Section to draft: ${parsed.data.section ?? "Objectives"}\n\nPlan context (JSON):\n${ctx}`, request.signal);
         }
+        if (parsed.data.task === "dg_outcome") return streamResponses(DG_OUTCOME, `DG review documents and EE data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "barrier_doc") return streamResponses(BARRIER_DOC, `Document and questionnaire structure (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "doel_forms") return streamResponses(DOEL, `Documents and app data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "evidence_extract") return streamResponses(EVIDENCE, `Documents and app data (JSON):\n${ctx}`, request.signal);

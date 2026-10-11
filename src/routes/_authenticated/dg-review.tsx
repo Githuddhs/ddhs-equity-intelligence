@@ -5,6 +5,7 @@ import { startDgReviewPayment } from "@/lib/payfast.functions";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
+import { DgOutcome } from "@/components/dg-outcome";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
 import { dgFromEvidence, latestEvidence } from "@/lib/evidence";
@@ -115,6 +116,8 @@ function DgReviewPage() {
         <h1 className="page-title text-primary">Director-General review readiness</h1>
         <div className="mt-3 flex gap-2 text-sm"><Link to="/dg-history" className="rounded-lg border border-border px-3 py-1.5 font-semibold">Past reviews</Link><Link to="/dg-review" search={{}} className="rounded-lg border border-border px-3 py-1.5 font-semibold">New review</Link>{reviewId && <span className="self-center text-xs text-muted-foreground">Editing a saved review</span>}</div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Assess your organisation against what the Director-General checks, get AI advice on weak areas, and print an evidence pack.</p>
+
+        <DgOutcome />
 
         <section className="mt-8 grid gap-4 md:grid-cols-[1fr_auto]">
           <label className="rounded-xl border border-border bg-card p-5 text-sm shadow-sm">

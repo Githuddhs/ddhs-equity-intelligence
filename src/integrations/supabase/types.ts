@@ -179,6 +179,30 @@ export type Database = {
         }
         Relationships: []
       }
+      dg_outcome_analyses: {
+        Row: {
+          created_at: string
+          file_names: string[]
+          id: string
+          result: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_names?: string[]
+          id?: string
+          result?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          file_names?: string[]
+          id?: string
+          result?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       dg_reviews: {
         Row: {
           ai_assessment: string | null
