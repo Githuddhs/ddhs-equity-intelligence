@@ -4,10 +4,12 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { buildFormDrafts } from "@/lib/form-drafts";
+import { exportDoelPdf } from "@/lib/doel-forms";
 
-type Area = "eea12" | "plan" | "dg" | "hr";
+type Area = "eea12" | "plan" | "dg" | "hr" | "forms";
 
-const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/plans" | "/dg-review" | "/policies"; toolLabel: string; docs: { key: string; label: string; hint: string }[] }> = {
+const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/plans" | "/dg-review" | "/policies" | "/doel-submissions" | "/eea13-planning"; toolLabel: string; docs: { key: string; label: string; hint: string }[] }> = {
   eea12: {
     title: "EEA12 analysis",
     intro: "Upload the workforce data behind your analysis and track how complete your workforce picture is.",
@@ -58,6 +60,18 @@ const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/pla
       { key: "training_report", label: "Training report", hint: "Workplace Skills Plan / Annual Training Report" },
       { key: "disciplinary", label: "Disciplinary & grievance report", hint: "Cases by designated group" },
       { key: "other_hr", label: "Other HR reports", hint: "Any additional HR reports" },
+    ],
+  },
+  forms: {
+    title: "EEA forms library",
+    intro: "Upload and download your EEA12, EEA13, EEA2 and EEA4 forms in one place. Drafts are generated from the same sources — your latest Workforce Data snapshot, EE plan and provincial EAP — so the figures match across every form.",
+    tool: "/doel-submissions",
+    toolLabel: "DoEL submissions & auto-fill",
+    docs: [
+      { key: "eea12", label: "EEA12 — workforce analysis", hint: "Analysis of workforce profile vs sector targets and EAP" },
+      { key: "eea13", label: "EEA13 — plan goals & targets", hint: "Numerical goals, targets and yearly timelines" },
+      { key: "eea2", label: "EEA2 — annual report", hint: "Workforce profile and movement report to the DoEL" },
+      { key: "eea4", label: "EEA4 — income differentials", hint: "Remuneration differentials statement (s27)" },
     ],
   },
 };
@@ -135,9 +149,40 @@ function AreaPage() {
               }} />
           ))}
         </div>
+        {area === "forms" && <DraftsCard />}
         <p className="mt-6 text-sm text-muted-foreground">Files are private to your account. Word, Excel, PDF, images and most other formats are accepted — maximum 20 MB per file.</p>
       </main>
     </div>
+  );
+}
+
+function DraftsCard() {
+  const [busy, setBusy] = useState("");
+  async function download(form: "EEA2" | "EEA4") {
+    setBusy(form);
+    try {
+      const drafts = await buildFormDrafts();
+      if (!drafts) { toast.error("Save a Workforce Data snapshot first — every form reads its figures from there."); return; }
+      await exportDoelPdf(form, drafts);
+      toast.success(`${form} draft downloaded — same figures as your Workforce Data and EE plan.`);
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Could not build the draft"); }
+    finally { setBusy(""); }
+  }
+  const btn = "rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal hover:bg-teal/10 disabled:opacity-50";
+  return (
+    <section className="mt-6 rounded-xl border border-teal/50 bg-muted/40 p-5 shadow-sm">
+      <h2 className="font-display text-lg font-semibold text-primary">Current drafts — same data, every form</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        These drafts are generated on the spot from your latest Workforce Data snapshot, EE plan and account details — the same sources behind the EEA12 analysis and EEA13 planning — so the numbers agree across all four forms.
+      </p>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <button disabled={!!busy} onClick={() => void download("EEA2")} className={btn}>{busy === "EEA2" ? "Building…" : "Download EEA2 draft (PDF)"}</button>
+        <button disabled={!!busy} onClick={() => void download("EEA4")} className={btn}>{busy === "EEA4" ? "Building…" : "Download EEA4 draft (PDF)"}</button>
+        <Link to="/eea12" className={btn}>EEA12 summary report →</Link>
+        <Link to="/eea13-planning" className={btn}>EEA13 report →</Link>
+      </div>
+      <p className="mt-3 text-xs text-muted-foreground">EEA2 movement tables (recruitment, promotion, terminations, skills) and EEA4 remuneration figures come from uploaded reports — use DoEL submissions &amp; auto-fill to complete them.</p>
+    </section>
   );
 }
 

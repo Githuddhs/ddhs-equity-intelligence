@@ -32,3 +32,5 @@
 - [x] EEA13: button to copy goals/targets into the EE plan (already existed: Save goals to plan)
 - [x] EEA13: gap analysis comparing goals with Workforce Data, flag mismatches
 - [x] EEA13: downloadable PDF report (goals, targets, timelines) for submission
+- [x] EEA forms library (EEA12/EEA13/EEA2/EEA4) upload/download area in My portal
+- [x] All four forms read from the same sources (Workforce Data, EE plan, provincial EAP) — draft EEA2/EEA4 PDFs built on the spot

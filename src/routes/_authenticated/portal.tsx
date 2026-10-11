@@ -114,8 +114,8 @@ function Portal() {
         <Link to="/invoices" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">Invoices — view and download, with EFT payment details →</Link>
         <Link to="/doel-submissions" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">DoEL submissions — track your EEA2 and EEA4 reports to the Department of Employment and Labour →</Link>
         <Link to="/account" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">My account — update profile, organisation details, email and password →</Link>
-        <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6], ["hr", "HR reports", 5]] as const).map(([k, label, total]) => {
+        <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6], ["hr", "HR reports", 5], ["forms", "EEA forms", 4]] as const).map(([k, label, total]) => {
             const n = new Set((data?.docs ?? []).filter((x) => x.area === k).map((x) => x.category)).size;
             const pct = Math.round((n / total) * 100);
             return (
