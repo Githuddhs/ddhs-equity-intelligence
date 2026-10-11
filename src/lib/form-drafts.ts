@@ -49,18 +49,19 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
     const n = w.disability[lvl] ?? 0;
     if (n) disabled[LEVEL_TO_DOEL[lvl] ?? lvl]!["AM"] = n; // split unknown — recorded as a single figure to edit
   }
+  const eea2: DoelForms["eea2"] = {
+    profile,
+    disabled,
+  };
+  eea2!.notes = `Draft from Workforce Data snapshot ${w.date}. Recruitment, promotion, termination and skills tables need the year's movement data — fill them on the DoEL submissions page or upload the reports there.`;
   return {
     employer: {
-      name: plan?.company || meta.company || "",
-      sector: plan?.sector || meta.sector || "",
+      name: plan?.company || meta["company"] || "",
+      sector: plan?.sector || meta["sector"] || "",
       contact: userRes.data.user?.email ?? "",
       period: plan?.start_date && plan?.end_date ? `${plan.start_date} to ${plan.end_date}` : "",
     },
-    eea2: {
-      profile,
-      disabled,
-      notes: `Draft from Workforce Data snapshot ${w.date}. Recruitment, promotion, termination and skills tables need the year's movement data — fill them on the DoEL submissions page or upload the reports there.`,
-    },
+    eea2,
     eea4: {
       headcount: profile,
       narrative: "Remuneration figures are not in Workforce Data — upload the payroll report on the DoEL submissions page to fill this table.",
