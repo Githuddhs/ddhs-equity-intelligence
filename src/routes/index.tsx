@@ -197,40 +197,38 @@ function Index() {
       </header>
 
       {/* Section 1: Hero */}
-      <section className="mx-auto max-w-7xl px-6 pt-20 pb-16">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <h1 className="hero-title text-primary text-balance">
-              Take Control of Employment Equity Implementation
-            </h1>
-            <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
-              Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
-              and executive insight.{" "}
-              <span className="font-semibold text-primary">DDHS</span>{" "}
-              <span className="font-semibold text-teal">Equity Intelligence</span> helps South
-              African employers manage Employment Equity analysis, planning, monitoring, governance
-              and reporting from a single platform.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                Schedule an Executive Demonstration <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#pilots"
-                className="inline-flex items-center rounded-lg border border-input px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-accent"
-              >
-                Request an Enterprise Briefing
-              </a>
-            </div>
-          </div>
-          <div className="relative">
-            <DashboardMock />
+      <section className="mx-auto max-w-7xl px-6 pt-12 pb-16">
+        <div className="max-w-3xl">
+          <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
+            Take Control of Employment Equity Implementation
+          </h1>
+          <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
+            Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
+            and executive insight.{" "}
+            <span className="font-semibold text-primary">DDHS</span>{" "}
+            <span className="font-semibold text-teal">Equity Intelligence</span> helps South
+            African employers manage Employment Equity analysis, planning, monitoring, governance
+            and reporting from a single platform.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Schedule an Executive Demonstration <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href="#pilots"
+              className="inline-flex items-center rounded-lg border border-input px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-accent"
+            >
+              Request an Enterprise Briefing
+            </a>
           </div>
         </div>
-        <div className="mt-14 grid gap-4 rounded-2xl border bg-secondary/50 p-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="relative mt-10">
+          <DashboardMock />
+        </div>
+        <div className="mt-10 grid gap-4 rounded-2xl border bg-secondary/50 p-6 sm:grid-cols-2 lg:grid-cols-4">
           {trustStrip.map((item) => (
             <div key={item} className="flex items-start gap-2 text-sm font-medium text-primary">
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
@@ -239,6 +237,7 @@ function Index() {
           ))}
         </div>
       </section>
+
 
       {/* Section 2: The Problem */}
       <section className="bg-secondary/40 py-20">
