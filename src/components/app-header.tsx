@@ -27,10 +27,9 @@ export function AppHeader() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const onStaffPage = STAFF_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
-  // Staff accounts stay staff-only; clients can't reach staff pages.
+  // Clients can't reach staff pages; staff may browse client pages directly.
   useEffect(() => {
     if (!isFetched) return;
-    if (isAdmin && !onStaffPage) navigate({ to: "/staff", replace: true });
     if (!isAdmin && onStaffPage) navigate({ to: "/portal", replace: true });
   }, [isFetched, isAdmin, onStaffPage, navigate]);
   const signOut = async () => { await supabase.auth.signOut(); window.location.href = isAdmin ? "/staff-login" : "/"; };
