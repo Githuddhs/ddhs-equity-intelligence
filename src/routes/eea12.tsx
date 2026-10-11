@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
 import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org-units";
 import { normaliseWorkforce } from "@/lib/workforce";
+import { useQuery } from "@tanstack/react-query";
+import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -81,6 +83,30 @@ function Eea12Page() {
     const s = SECTORS.find((x) => x.name === sectorName);
     const key = s ? LEVEL_TO_TARGET_KEY[lvl] : undefined;
     if (s && key) setTargetsByLevel((prev) => ({ ...prev, [lvl]: s.targets[key] }));
+  };
+
+  const [planId, setPlanId] = useState("");
+  const { data: plans = [] } = useQuery({
+    queryKey: ["eea12-plan-units"],
+    enabled: !!wf,
+    queryFn: async () => {
+      const { data } = await supabase.from("ee_plans").select("id,title,sector,division,department,section").order("updated_at", { ascending: false });
+      return data ?? [];
+    },
+  });
+  const downloadSummary = async () => {
+    if (!wf) return;
+    const filtered = !!(unitFilter.division || unitFilter.department || unitFilter.section);
+    const w = wf.units.length && filtered ? aggregate(wf.units, unitFilter).counts : normaliseWorkforce(wf.counts);
+    await exportEea12SummaryPdf({
+      scope: describeFilter(unitFilter), sector, province, snapshotDate: wf.date,
+      levels: LEVELS, counts: w as Record<string, Record<string, number>>, eap,
+      targetsFor: (l) => {
+        const s = SECTORS.find((x) => x.name === sector); const k = LEVEL_TO_TARGET_KEY[l];
+        return (s && k ? s.targets[k] : undefined) ?? targetsByLevel[l] ?? { males: 0, females: 0, total: 0 };
+      },
+    });
+    toast.success("EEA12 summary report downloaded");
   };
 
   const r = useMemo(() => {
@@ -191,12 +217,40 @@ function Eea12Page() {
           </div>
           {wf && (
             <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-teal/40 bg-muted/40 p-3">
-              {wf.units.length > 0 && <OrgUnitPicker units={wf.units} value={unitFilter} onChange={setUnitFilter} />}
+              {plans.length > 0 && (
+                <label className="text-xs font-semibold text-primary">
+                  EE plan responsibility centre
+                  <select aria-label="EE plan responsibility centre" className="mt-1 block min-w-52 rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                    value={planId}
+                    onChange={(e) => {
+                      const v = e.target.value; setPlanId(v);
+                      const p = plans.find((x) => x.id === v);
+                      setUnitFilter(p ? { division: p.division, department: p.department, section: p.section } : ALL_UNITS);
+                      if (p?.sector && SECTORS.some((s) => s.name === p.sector)) { setSector(p.sector); LEVELS.forEach((l) => applySectorTargets(p.sector, l)); }
+                    }}>
+                    <option value="">Entire organisation</option>
+                    {plans.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title} — {describeFilter({ division: p.division, department: p.department, section: p.section })}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              {wf.units.length > 0 && (
+                <OrgUnitPicker units={wf.units} value={unitFilter}
+                  onChange={(f) => { setPlanId(""); setUnitFilter(f); }}
+                  labels={["Faculty / Division", "Department", "Centre / Subsection"]} />
+              )}
               <button type="button" onClick={() => loadFromWorkforce()}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
                 Reset to workforce data
               </button>
-              <p className="w-full text-xs text-muted-foreground">Headcount for each level is filled automatically from your latest workforce snapshot ({describeFilter(unitFilter)}).</p>
+              <button type="button" onClick={downloadSummary}
+                className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground">
+                Download EEA12 summary report (PDF)
+              </button>
+              <p className="w-full text-xs text-muted-foreground">Headcount for each level is filled automatically from your latest workforce snapshot ({describeFilter(unitFilter)}). The summary report covers all occupational levels together, then one page per level, for the selected unit.</p>
             </div>
           )}
           <div className="overflow-x-auto">
