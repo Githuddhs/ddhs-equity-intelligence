@@ -70,6 +70,7 @@ function Eea13Page() {
       setPlans(ps); if (ps[0]) setPlanId(ps[0].id);
     });
     void latestEvidence().then((e) => setEv(e?.data ?? null));
+    void latestDgFindings().then(setDg);
   }, []);
   const companies = useMemo(() => [...new Set(plans.map((p) => p.company).filter(Boolean))].sort(), [plans]);
   const scopedPlans = company ? plans.filter((p) => p.company === company) : plans;
@@ -117,6 +118,10 @@ function Eea13Page() {
     if (saved && Math.abs(num(saved.baseline, now) - now) > 0.5) out.push(`${r.level}: the plan's saved baseline (${num(saved.baseline, now).toFixed(1)}%) no longer matches Workforce Data (${now.toFixed(1)}%) — save the goals again to re-sync.`);
     return out;
   });
+
+  // DG corrective actions feed the gap list automatically once an analysis has been run.
+  const dgGaps = (dg?.actions ?? []).map((a) => `DG review (${dg!.date}): ${a}`);
+  const allGaps = [...gaps, ...dgGaps];
 
   const save = async (withTimeline: boolean) => {
     if (!plan) return;
