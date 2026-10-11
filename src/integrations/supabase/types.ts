@@ -77,6 +77,39 @@ export type Database = {
         }
         Relationships: []
       }
+      barrier_survey_links: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          label: string
+          org_name: string
+          revoked: boolean
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          label?: string
+          org_name?: string
+          revoked?: boolean
+          token: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          label?: string
+          org_name?: string
+          revoked?: boolean
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       client_share_links: {
         Row: {
           created_at: string
@@ -682,6 +715,18 @@ export type Database = {
         Returns: undefined
       }
       shared_portal: { Args: { _token: string }; Returns: Json }
+      submit_barrier_survey: {
+        Args: {
+          _answers: Json
+          _comments: Json
+          _open_feedback: Json
+          _priorities: Json
+          _profile: Json
+          _token: string
+        }
+        Returns: boolean
+      }
+      survey_link_info: { Args: { _token: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user" | "manager"
