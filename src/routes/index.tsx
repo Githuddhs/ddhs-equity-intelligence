@@ -198,7 +198,7 @@ function Index() {
 
       {/* Section 1: Hero */}
       <section className="mx-auto max-w-7xl px-6 pt-12 pb-16">
-        <div className="max-w-3xl">
+        <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
             Take Control of Employment Equity Implementation
           </h1>
@@ -210,7 +210,7 @@ function Index() {
             African employers manage Employment Equity analysis, planning, monitoring, governance
             and reporting from a single platform.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a
               href="#contact"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
