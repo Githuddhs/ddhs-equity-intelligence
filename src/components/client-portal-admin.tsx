@@ -19,7 +19,7 @@ export function ClientProfileAdmin({ id }: { id: string }) {
   const save = async (profile: Profile, newEmail?: string) => {
     setBusy(true);
     try {
-      const r = await upd({ data: { id, profile, email: newEmail } });
+      const r = await upd({ data: newEmail ? { id, profile, email: newEmail } : { id, profile } });
       if (!r.ok) toast.error(r.error); else { toast.success("Client details saved"); setEmail(""); qc.invalidateQueries({ queryKey: ["admin-client-profile", id] }); qc.invalidateQueries({ queryKey: ["staff-client", id] }); }
     } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save."); }
     setBusy(false);
