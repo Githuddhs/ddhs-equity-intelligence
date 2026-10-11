@@ -4,8 +4,10 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
-import { buildFormDrafts } from "@/lib/form-drafts";
+import { buildEea12Draft, buildEea13Draft, buildFormDrafts } from "@/lib/form-drafts";
 import { exportDoelPdf } from "@/lib/doel-forms";
+import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
+import { exportEea13Pdf } from "@/lib/eea13-report";
 
 type Area = "eea12" | "plan" | "dg" | "hr" | "forms";
 
@@ -158,12 +160,23 @@ function AreaPage() {
 
 function DraftsCard() {
   const [busy, setBusy] = useState("");
-  async function download(form: "EEA2" | "EEA4") {
+  const noData = () => toast.error("Save a Workforce Data snapshot first — every form reads its figures from there.");
+  async function download(form: "EEA12" | "EEA13" | "EEA2" | "EEA4") {
     setBusy(form);
     try {
-      const drafts = await buildFormDrafts();
-      if (!drafts) { toast.error("Save a Workforce Data snapshot first — every form reads its figures from there."); return; }
-      await exportDoelPdf(form, drafts);
+      if (form === "EEA12") {
+        const d = await buildEea12Draft();
+        if (!d) { noData(); return; }
+        await exportEea12SummaryPdf(d);
+      } else if (form === "EEA13") {
+        const d = await buildEea13Draft();
+        if (!d) { noData(); return; }
+        await exportEea13Pdf(d);
+      } else {
+        const drafts = await buildFormDrafts();
+        if (!drafts) { noData(); return; }
+        await exportDoelPdf(form, drafts);
+      }
       toast.success(`${form} draft downloaded — same figures as your Workforce Data and EE plan.`);
     } catch (e) { toast.error(e instanceof Error ? e.message : "Could not build the draft"); }
     finally { setBusy(""); }
@@ -173,13 +186,12 @@ function DraftsCard() {
     <section className="mt-6 rounded-xl border border-teal/50 bg-muted/40 p-5 shadow-sm">
       <h2 className="font-display text-lg font-semibold text-primary">Current drafts — same data, every form</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        These drafts are generated on the spot from your latest Workforce Data snapshot, EE plan and account details — the same sources behind the EEA12 analysis and EEA13 planning — so the numbers agree across all four forms.
+        All four drafts are generated on the spot from your latest Workforce Data snapshot, EE plan, sector targets and provincial EAP — so the numbers agree across EEA12, EEA13, EEA2 and EEA4.
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button disabled={!!busy} onClick={() => void download("EEA2")} className={btn}>{busy === "EEA2" ? "Building…" : "Download EEA2 draft (PDF)"}</button>
-        <button disabled={!!busy} onClick={() => void download("EEA4")} className={btn}>{busy === "EEA4" ? "Building…" : "Download EEA4 draft (PDF)"}</button>
-        <Link to="/eea12" className={btn}>EEA12 summary report →</Link>
-        <Link to="/eea13-planning" className={btn}>EEA13 report →</Link>
+        {(["EEA12", "EEA13", "EEA2", "EEA4"] as const).map((f) => (
+          <button key={f} disabled={!!busy} onClick={() => void download(f)} className={btn}>{busy === f ? "Building…" : `Download ${f} draft (PDF)`}</button>
+        ))}
       </div>
       <p className="mt-3 text-xs text-muted-foreground">EEA2 movement tables (recruitment, promotion, terminations, skills) and EEA4 remuneration figures come from uploaded reports — use DoEL submissions &amp; auto-fill to complete them.</p>
     </section>
