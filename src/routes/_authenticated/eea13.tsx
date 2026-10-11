@@ -54,6 +54,7 @@ function Eea13Page() {
   const wf = wfq.data;
   const [plans, setPlans] = useState<Plan[]>([]);
   const [planId, setPlanId] = useState("");
+  const [company, setCompany] = useState("");
   const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
   const [targets, setTargets] = useState<Record<string, Targets>>({});
   const [province, setProvince] = useState("National");
