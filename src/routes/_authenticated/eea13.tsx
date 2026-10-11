@@ -218,7 +218,7 @@ function Eea13Page() {
                       workforceDate: wf?.date,
                       rows: rows.map((r) => ({ level: r.level, n: r.n, desigPct: pct(r.desig, r.n), femPct: pct(r.fem, r.n), target: r.target, hires: hiresNeeded(r.n, r.desig, r.target.total) })),
                       years: yrs,
-                      gaps,
+                      gaps: allGaps,
                     }).catch(() => toast.error("Couldn't build the PDF."))
                   }
                   className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50"
@@ -230,15 +230,16 @@ function Eea13Page() {
             </section>
 
             <section className={`${card} mt-6`}>
-              <h2 className="section-title text-primary">Gap analysis — goals vs Workforce Data</h2>
-              <p className="mt-1 text-xs text-muted-foreground">Flags where your goals don't match the live workforce figures.</p>
-              {gaps.length === 0 ? (
+              <h2 className="section-title text-primary">Gap analysis — goals vs Workforce Data{dg ? " + DG review" : ""}</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Flags where your goals don't match the live workforce figures{dg ? `, plus the corrective actions from your latest DG review analysis (${dg.date})` : ""}.</p>
+              {allGaps.length === 0 ? (
                 <p className="mt-3 text-sm text-teal">No gaps — every level with headcount is on target and the plan is in sync.</p>
               ) : (
                 <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
-                  {gaps.map((g, i) => <li key={i}>{g}</li>)}
+                  {allGaps.map((g, i) => <li key={i}>{g}</li>)}
                 </ul>
               )}
+              {dg && <p className="mt-3 text-xs text-muted-foreground">Run a new analysis on the <Link to="/dg-review" className="text-teal underline">DG review page</Link> and this list updates automatically.</p>}
             </section>
 
             {ev?.plan?.objectives || ev?.plan?.measures ? (
