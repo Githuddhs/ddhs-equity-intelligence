@@ -60,6 +60,18 @@ const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/pla
       { key: "other_hr", label: "Other HR reports", hint: "Any additional HR reports" },
     ],
   },
+  forms: {
+    title: "EEA forms library",
+    intro: "Upload and download your EEA12, EEA13, EEA2 and EEA4 forms in one place. Drafts are generated from the same sources — your latest Workforce Data snapshot, EE plan and provincial EAP — so the figures match across every form.",
+    tool: "/doel-submissions",
+    toolLabel: "DoEL submissions & auto-fill",
+    docs: [
+      { key: "eea12", label: "EEA12 — workforce analysis", hint: "Analysis of workforce profile vs sector targets and EAP" },
+      { key: "eea13", label: "EEA13 — plan goals & targets", hint: "Numerical goals, targets and yearly timelines" },
+      { key: "eea2", label: "EEA2 — annual report", hint: "Workforce profile and movement report to the DoEL" },
+      { key: "eea4", label: "EEA4 — income differentials", hint: "Remuneration differentials statement (s27)" },
+    ],
+  },
 };
 
 export const Route = createFileRoute("/_authenticated/portal_/$area")({
