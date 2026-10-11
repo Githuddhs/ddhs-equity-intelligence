@@ -63,13 +63,15 @@ function Eea13Page() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    void supabase.from("ee_plans").select("id,title,sector,start_date,end_date,division,department,section,content").order("updated_at", { ascending: false }).then(({ data }) => {
+    void supabase.from("ee_plans").select("id,title,company,sector,start_date,end_date,division,department,section,content").order("updated_at", { ascending: false }).then(({ data }) => {
       const ps = (data ?? []).map((p) => ({ ...p, content: normaliseContent(p.content) }));
       setPlans(ps); if (ps[0]) setPlanId(ps[0].id);
     });
     void latestEvidence().then((e) => setEv(e?.data ?? null));
   }, []);
-  const plan = plans.find((p) => p.id === planId);
+  const companies = useMemo(() => [...new Set(plans.map((p) => p.company).filter(Boolean))].sort(), [plans]);
+  const scopedPlans = company ? plans.filter((p) => p.company === company) : plans;
+  const plan = scopedPlans.find((p) => p.id === planId) ?? scopedPlans[0];
 
   // When the plan changes: adopt its unit and its saved targets (else the gazetted sector targets).
   useEffect(() => {
