@@ -5,9 +5,9 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 
-type Area = "eea12" | "plan" | "dg" | "hr";
+type Area = "eea12" | "plan" | "dg" | "hr" | "forms";
 
-const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/plans" | "/dg-review" | "/policies"; toolLabel: string; docs: { key: string; label: string; hint: string }[] }> = {
+const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/plans" | "/dg-review" | "/policies" | "/doel-submissions" | "/eea13-planning"; toolLabel: string; docs: { key: string; label: string; hint: string }[] }> = {
   eea12: {
     title: "EEA12 analysis",
     intro: "Upload the workforce data behind your analysis and track how complete your workforce picture is.",
