@@ -7,7 +7,7 @@ import { AppHeader } from "@/components/app-header";
 import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
 import { aggregate, ALL_UNITS, describeFilter, type UnitFilter } from "@/lib/org-units";
 import { GROUPS, LEVELS, levelTotal, normaliseWorkforce, type Workforce } from "@/lib/workforce";
-import { SECTORS, LEVEL_TO_TARGET_KEY, type Targets } from "@/lib/sectors";
+import { SECTORS, LEVEL_TO_TARGET_KEY, PROVINCE_EAP, eapTargets, type Targets } from "@/lib/sectors";
 import { normaliseContent, type GoalRow, type Milestone, type PlanContent } from "@/lib/ee-plan";
 import { latestEvidence, type Evidence } from "@/lib/evidence";
 import { exportEea13Pdf } from "@/lib/eea13-report";
@@ -49,6 +49,8 @@ function Eea13Page() {
   const [planId, setPlanId] = useState("");
   const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
   const [targets, setTargets] = useState<Record<string, Targets>>({});
+  const [province, setProvince] = useState("National");
+  useEffect(() => { void supabase.auth.getUser().then(({ data }) => { const p = data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }); }, []);
   const [ev, setEv] = useState<Evidence | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -65,9 +67,9 @@ function Eea13Page() {
   useEffect(() => {
     if (!plan) return;
     setFilter({ division: plan.division, department: plan.department, section: plan.section });
-    const s = SECTORS.find((x) => x.name === plan.sector);
+    const auto = autoTargets(plan.sector, province);
     setTargets(Object.fromEntries(LEVELS.map((l) => {
-      const key = LEVEL_TO_TARGET_KEY[l]; const def = (s && key ? s.targets[key] : null) ?? { males: 0, females: 0, total: 0 };
+      const def = auto[l]!.t;
       const g = plan.content.goals.find((x) => x.level === l);
       return [l, { males: num(g?.males, def.males), females: num(g?.females, def.females), total: num(g?.total, def.total) }];
     })));
@@ -85,6 +87,8 @@ function Eea13Page() {
     return { level: l, n, desig: desigCount(r), fem, male: n - fem, target: targets[l] ?? { males: 0, females: 0, total: 0 } };
   });
   const yrs = years(plan);
+  const auto = autoTargets(plan?.sector ?? "", province);
+  const applyAuto = () => { setTargets(Object.fromEntries(LEVELS.map((l) => [l, auto[l]!.t]))); toast.success(`Targets set from ${plan?.sector || "EAP"} sector targets and ${province} EAP.`); };
   const setT = (l: string, k: keyof Targets, v: number) => setTargets((p) => ({ ...p, [l]: { ...(p[l] ?? { males: 0, females: 0, total: 0 }), [k]: v } }));
 
   // Gap analysis: compare the goals with the live Workforce Data figures.
@@ -147,9 +151,13 @@ function Eea13Page() {
 
             <section className={`${card} mt-6 overflow-x-auto`}>
               <h2 className="section-title text-primary">Goals and targets — {describeFilter(filter)}</h2>
-              <p className="mt-1 text-xs text-muted-foreground">Targets start from the gazetted sector targets ({plan?.sector || "no sector"}); edit any figure.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Targets are set automatically per level: gazetted sector targets ({plan?.sector || "no sector"}) for top, senior, professionally qualified and skilled levels; {province} EAP for semi-skilled, unskilled and any level without a sector target. Edit any figure.</p>
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+                <label className="text-muted-foreground">EAP province <select aria-label="EAP province" value={province} onChange={(e) => setProvince(e.target.value)} className="ml-1 rounded border border-input bg-background px-2 py-1">{Object.keys(PROVINCE_EAP).map((p) => <option key={p}>{p}</option>)}</select></label>
+                <button type="button" onClick={applyAuto} className="rounded-lg border border-teal px-3 py-1.5 font-semibold text-teal">Auto-set targets</button>
+              </div>
               <table className="mt-3 w-full min-w-[820px] text-sm">
-                <thead><tr className="bg-muted text-left"><th className="p-2">Level</th><th className="p-2 text-right">Headcount</th><th className="p-2 text-right">Designated now</th><th className="p-2 text-right">Women now</th><th className="p-2 text-right">Target des. males %</th><th className="p-2 text-right">Target women %</th><th className="p-2 text-right">Target designated %</th><th className="p-2 text-right">Gap</th><th className="p-2 text-right">Appointments needed</th></tr></thead>
+                <thead><tr className="bg-muted text-left"><th className="p-2">Level</th><th className="p-2">Target source</th><th className="p-2 text-right">Headcount</th><th className="p-2 text-right">Designated now</th><th className="p-2 text-right">Women now</th><th className="p-2 text-right">Target des. males %</th><th className="p-2 text-right">Target women %</th><th className="p-2 text-right">Target designated %</th><th className="p-2 text-right">Gap</th><th className="p-2 text-right">Appointments needed</th></tr></thead>
                 <tbody>{rows.map((r) => { const now = pct(r.desig, r.n); const gap = now - r.target.total; return (
                   <tr key={r.level} className="border-t border-border">
                     <td className="p-2 font-medium">{r.level}</td><td className="p-2 text-right">{r.n}</td>
@@ -165,7 +173,7 @@ function Eea13Page() {
               <h2 className="section-title text-primary">Yearly timeline — designated %</h2>
               <p className="mt-1 text-xs text-muted-foreground">Even steps from today's position to the target by the plan end date.</p>
               <table className="mt-3 w-full text-sm">
-                <thead><tr className="bg-muted text-left"><th className="p-2">Level</th><th className="p-2 text-right">Now</th>{yrs.map((d, i) => <th key={d} className="p-2 text-right">Y{i + 1}<br /><span className="text-xs font-normal">{d}</span></th>)}</tr></thead>
+                <thead><tr className="bg-muted text-left"><th className="p-2">Level</th><th className="p-2">Target source</th><th className="p-2 text-right">Now</th>{yrs.map((d, i) => <th key={d} className="p-2 text-right">Y{i + 1}<br /><span className="text-xs font-normal">{d}</span></th>)}</tr></thead>
                 <tbody>{rows.map((r) => { const b = pct(r.desig, r.n); return (
                   <tr key={r.level} className="border-t border-border"><td className="p-2">{r.level}</td><td className="p-2 text-right">{b.toFixed(1)}</td>
                     {yrs.map((d, i) => <td key={d} className="p-2 text-right">{Math.max(b, b + ((r.target.total - b) * (i + 1)) / yrs.length).toFixed(1)}</td>)}</tr>); })}</tbody>
