@@ -158,7 +158,7 @@ export async function buildEea13Draft(): Promise<Eea13PdfInput | null> {
     sector: s.sector,
     startDate: s.startDate,
     endDate: s.endDate,
-    filter: {},
+    filter: { division: "", department: "", section: "" },
     workforceDate: s.snapshotDate,
     rows,
     years,
