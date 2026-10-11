@@ -47,6 +47,7 @@ import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
+import { Route as SurveyTokenRouteImport } from './routes/survey.$token'
 import { Route as ViewTokenRouteImport } from './routes/view.$token'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
@@ -248,6 +249,11 @@ const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   path: '/api/eea-insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SurveyTokenRoute = SurveyTokenRouteImport.update({
+  id: '/survey/$token',
+  path: '/survey/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ViewTokenRoute = ViewTokenRouteImport.update({
   id: '/view/$token',
   path: '/view/$token',
@@ -330,6 +336,7 @@ export interface FileRoutesByFullPath {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
@@ -377,6 +384,7 @@ export interface FileRoutesByTo {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
@@ -426,6 +434,7 @@ export interface FileRoutesById {
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
@@ -475,6 +484,7 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/survey/$token'
     | '/view/$token'
     | '/clients/$id'
     | '/plans/$id'
@@ -522,6 +532,7 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/survey/$token'
     | '/view/$token'
     | '/clients/$id'
     | '/plans/$id'
@@ -570,6 +581,7 @@ export interface FileRouteTypes {
     | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/survey/$token'
     | '/view/$token'
     | '/_authenticated/clients_/$id'
     | '/_authenticated/plans/$id'
@@ -601,6 +613,7 @@ export interface RootRouteChildren {
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
+  SurveyTokenRoute: typeof SurveyTokenRoute
   ViewTokenRoute: typeof ViewTokenRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
   ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
@@ -875,6 +888,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEeaInsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/survey/$token': {
+      id: '/survey/$token'
+      path: '/survey/$token'
+      fullPath: '/survey/$token'
+      preLoaderRoute: typeof SurveyTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/view/$token': {
       id: '/view/$token'
       path: '/view/$token'
@@ -1008,6 +1028,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
+  SurveyTokenRoute: SurveyTokenRoute,
   ViewTokenRoute: ViewTokenRoute,
   ApiPublicHooksComplianceRemindersRoute:
     ApiPublicHooksComplianceRemindersRoute,
