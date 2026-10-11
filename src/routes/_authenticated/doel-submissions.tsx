@@ -12,6 +12,7 @@ import {
   saveDoelSubmission,
   type DoelSubmission,
 } from "@/lib/doel.functions";
+import { DOEL_PORTAL_URL } from "@/lib/doel-forms";
 
 export const Route = createFileRoute("/_authenticated/doel-submissions")({
   head: () => ({
