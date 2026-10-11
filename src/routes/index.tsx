@@ -452,7 +452,7 @@ function Index() {
       </section>
 
       {/* Section 9: Final Conversion */}
-      <section id="contact" className="bg-primary py-14">
+      <section id="contact" className="bg-primary py-10">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="display-title text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence
@@ -477,7 +477,7 @@ function Index() {
       </section>
 
       {/* Section 10: Footer */}
-      <footer className="border-t bg-background py-14">
+      <footer className="border-t bg-background py-10">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-10 md:grid-cols-4">
             <div>

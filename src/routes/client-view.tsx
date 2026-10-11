@@ -34,7 +34,7 @@ function ClientView() {
           <AuthCta />
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-6 py-14">
+      <main className="mx-auto max-w-2xl px-6 py-10">
         <h1 className="font-display text-3xl font-bold text-primary">Client view</h1>
         <p className="mt-3 text-[17px] text-muted-foreground">View your organisation's EE data and download its reports without signing in. Paste the private link your organisation created in My portal.</p>
         <form onSubmit={open} className="mt-6 flex flex-col gap-3 sm:flex-row">

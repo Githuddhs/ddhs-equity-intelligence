@@ -172,7 +172,7 @@ function LeadershipReportPage() {
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-14 text-center">
+        <section className="mt-10 rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-10 text-center">
           <h2 className="display-title text-balance text-navy-foreground">
             Table a report your managers can sign
           </h2>
