@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/eea13")({
   component: Eea13Page,
 });
 
-type Plan = { id: string; title: string; sector: string; start_date: string | null; end_date: string | null; division: string; department: string; section: string; content: PlanContent };
+type Plan = { id: string; title: string; company: string; sector: string; start_date: string | null; end_date: string | null; division: string; department: string; section: string; content: PlanContent };
 type Row = { level: string; n: number; desig: number; fem: number; male: number; target: Targets };
 
 const pct = (a: number, b: number) => (b ? (a / b) * 100 : 0);
