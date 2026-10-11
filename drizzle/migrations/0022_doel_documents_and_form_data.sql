@@ -1,0 +1,3 @@
+ALTER TABLE public.portal_documents DROP CONSTRAINT portal_documents_area_check;
+ALTER TABLE public.portal_documents ADD CONSTRAINT portal_documents_area_check CHECK (area = ANY (ARRAY['eea12','plan','dg','doel']));
+ALTER TABLE public.doel_submissions ADD COLUMN IF NOT EXISTS form_data jsonb NOT NULL DEFAULT '{}'::jsonb;

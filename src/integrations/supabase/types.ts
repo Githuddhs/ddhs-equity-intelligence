@@ -190,6 +190,7 @@ export type Database = {
       doel_submissions: {
         Row: {
           created_at: string
+          form_data: Json
           form_type: string
           id: string
           notes: string
@@ -203,6 +204,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          form_data?: Json
           form_type: string
           id?: string
           notes?: string
@@ -216,6 +218,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          form_data?: Json
           form_type?: string
           id?: string
           notes?: string
