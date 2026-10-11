@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/eea13")({
   component: Eea13Page,
 });
 
-type Plan = { id: string; title: string; sector: string; start_date: string | null; end_date: string | null; division: string; department: string; section: string; content: PlanContent };
+type Plan = { id: string; title: string; company: string; sector: string; start_date: string | null; end_date: string | null; division: string; department: string; section: string; content: PlanContent };
 type Row = { level: string; n: number; desig: number; fem: number; male: number; target: Targets };
 
 const pct = (a: number, b: number) => (b ? (a / b) * 100 : 0);
@@ -54,6 +54,7 @@ function Eea13Page() {
   const wf = wfq.data;
   const [plans, setPlans] = useState<Plan[]>([]);
   const [planId, setPlanId] = useState("");
+  const [company, setCompany] = useState("");
   const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
   const [targets, setTargets] = useState<Record<string, Targets>>({});
   const [province, setProvince] = useState("National");
@@ -62,13 +63,15 @@ function Eea13Page() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    void supabase.from("ee_plans").select("id,title,sector,start_date,end_date,division,department,section,content").order("updated_at", { ascending: false }).then(({ data }) => {
+    void supabase.from("ee_plans").select("id,title,company,sector,start_date,end_date,division,department,section,content").order("updated_at", { ascending: false }).then(({ data }) => {
       const ps = (data ?? []).map((p) => ({ ...p, content: normaliseContent(p.content) }));
       setPlans(ps); if (ps[0]) setPlanId(ps[0].id);
     });
     void latestEvidence().then((e) => setEv(e?.data ?? null));
   }, []);
-  const plan = plans.find((p) => p.id === planId);
+  const companies = useMemo(() => [...new Set(plans.map((p) => p.company).filter(Boolean))].sort(), [plans]);
+  const scopedPlans = company ? plans.filter((p) => p.company === company) : plans;
+  const plan = scopedPlans.find((p) => p.id === planId) ?? scopedPlans[0];
 
   // When the plan changes: adopt its unit and its saved targets (else the gazetted sector targets).
   useEffect(() => {
@@ -149,8 +152,16 @@ function Eea13Page() {
         {!plans.length ? <p className="mt-6 text-sm">Create an EE plan first. <Link to="/plans" className="text-teal">EE plans →</Link></p> : (
           <>
             <div className="mt-6 flex flex-wrap items-end gap-4">
+              {companies.length > 1 && (
+                <label className="text-sm">Company<br />
+                  <select aria-label="Company" value={company} onChange={(e) => { setCompany(e.target.value); const first = (e.target.value ? plans.filter((p) => p.company === e.target.value) : plans)[0]; if (first) setPlanId(first.id); }} className="mt-1 rounded border border-input bg-background px-2 py-1">
+                    <option value="">All companies</option>
+                    {companies.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </label>
+              )}
               <label className="text-sm">Plan<br />
-                <select value={planId} onChange={(e) => setPlanId(e.target.value)} className="mt-1 rounded border border-input bg-background px-2 py-1">{plans.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}</select>
+                <select value={plan?.id ?? ""} onChange={(e) => setPlanId(e.target.value)} className="mt-1 rounded border border-input bg-background px-2 py-1">{scopedPlans.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}</select>
               </label>
               {wf?.units.length ? <OrgUnitPicker units={wf.units} value={filter} onChange={setFilter} /> : null}
             </div>
