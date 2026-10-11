@@ -108,7 +108,7 @@ function Eea12Page() {
         const s = SECTORS.find((x) => x.name === sector); const k = LEVEL_TO_TARGET_KEY[l];
         return (s && k ? s.targets[k] : undefined) ?? targetsByLevel[l] ?? { males: 0, females: 0, total: 0 };
       },
-      dgFindings: dg?.actions.map((a) => `${a} (DG review analysis ${dg.date})`),
+      dgFindings: dg?.actions.map((a) => `${a} (DG review analysis ${dg.date})`) ?? [],
     });
     toast.success("EEA12 summary report downloaded");
   };
