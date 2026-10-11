@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
+import { BarrierDocUpload } from "@/components/barrier-doc-upload";
 import {
   LIKERT, LIKERT_SECTIONS, PRIORITY_OPTIONS, PRIORITY_LIMIT, OPEN_QUESTIONS, PARTICIPANT_FIELDS, BARRIER_CHECKLIST, BARRIER_SOURCES,
   BARRIER_TEXT, EFFECTIVENESS, FINAL_TEXT, QUESTIONNAIRE_VERSION, rolesFor, barrierFrequency,
@@ -122,6 +123,8 @@ function BarrierAnalysisPage() {
           Gathers information to develop, review or update the Employment Equity Plan: barriers, employment practices and culture, and the measures, goals, priorities and monitoring that follow.
           Participation is voluntary, responses are confidential and reported only in aggregate. Takes 15-20 minutes. Managers also complete Section 11; EE Committee members and representatives also complete Section 12.
         </p>
+
+        <BarrierDocUpload onSaved={() => void load()} />
 
         {aggregate && (
           <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">

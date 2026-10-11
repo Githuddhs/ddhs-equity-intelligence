@@ -4,7 +4,7 @@ import { z } from "zod";
 import { streamResponses, logAiUsage } from "@/lib/ai-stream";
 
 const Body = z.object({
-  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract", "doel_forms"]),
+  task: z.enum(["plan_section", "dg_assessment", "plan_gap", "evidence_extract", "doel_forms", "barrier_doc"]),
   section: z.string().max(100).optional(),
   context: z.unknown(),
 });
@@ -49,6 +49,17 @@ You are completing the South African EEA2 (Employment Equity Report) and EEA4 (I
 GRID = {"<level>": {"AM","CM","IM","WM","AF","CF","IF","WF","FNM","FNF": integer}} with levels exactly: "Top management","Senior management","Professionally qualified","Skilled technical","Semi-skilled","Unskilled","Temporary employees". A=African, C=Coloured, I=Indian, W=White, FN=Foreign national, M/F = male/female. Remuneration values are annual Rand totals (integers).
 Count employees from row-level data carefully. Never invent figures: use 0 and list the gap in "missing" when not available.`;
 
+const BARRIER_DOC = `${BASE}
+You are reading an employer's existing Employment Equity barrier analysis document (report, survey results or consultation findings) and mapping it onto a standard questionnaire. Return ONLY a JSON object (no prose, no code fences):
+{"org_name": string, "respondents": integer|null,
+ "section_scores": {"<section key>": number 1-5 or null} (1 = strong barrier, 5 = no barrier; null when the document gives no evidence for that area; convert percentages or other scales proportionally),
+ "barriers": string[] (exact items from barrierChecklist that the document identifies as barriers),
+ "sources": string[] (exact items from barrierSources),
+ "priorities": string[] (up to 5 exact items from priorityOptions),
+ "open_feedback": {"<open question id>": string} (answers drawn from the document, Markdown allowed, "" if none),
+ "summary": string (under 150 words)}
+Use only what the document says; never invent findings.`;
+
 export const Route = createFileRoute("/api/ee-assist")({
   server: {
     handlers: {
@@ -66,11 +77,12 @@ export const Route = createFileRoute("/api/ee-assist")({
 
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid input." }, { status: 400 });
-        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" || parsed.data.task === "doel_forms" ? 150000 : 40000);
+        const ctx = JSON.stringify(parsed.data.context).slice(0, parsed.data.task === "evidence_extract" || parsed.data.task === "doel_forms" || parsed.data.task === "barrier_doc" ? 150000 : 40000);
         void logAiUsage(parsed.data.task, u.user.id);
         if (parsed.data.task === "plan_section") {
           return streamResponses(PLAN, `Section to draft: ${parsed.data.section ?? "Objectives"}\n\nPlan context (JSON):\n${ctx}`, request.signal);
         }
+        if (parsed.data.task === "barrier_doc") return streamResponses(BARRIER_DOC, `Document and questionnaire structure (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "doel_forms") return streamResponses(DOEL, `Documents and app data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "evidence_extract") return streamResponses(EVIDENCE, `Documents and app data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "plan_gap") return streamResponses(GAP, `Existing plan and workforce data (JSON):\n${ctx}`, request.signal);
