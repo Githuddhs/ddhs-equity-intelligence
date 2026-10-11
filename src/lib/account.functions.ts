@@ -38,7 +38,7 @@ export const adminGetClientProfile = createServerFn({ method: "POST" })
 
 export const adminUpdateClientProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { id: string; profile: Profile; email?: string }) =>
+  .inputValidator((d: { id: string; profile: Profile; email?: string | undefined }) =>
     z.object({ id: z.string().uuid(), profile: profileSchema, email: z.string().trim().toLowerCase().email().max(255).optional() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);

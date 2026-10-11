@@ -112,6 +112,7 @@ function Portal() {
         <Link to="/policies" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">EE policies, senior manager letter & HR report uploads →</Link>
         <Link to="/evidence" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">Pull evidence from all my documents (workforce, EEA13, DG review, executive reporting) →</Link>
         <Link to="/invoices" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">Invoices — view and download, with EFT payment details →</Link>
+        <Link to="/account" className="mt-3 block rounded-xl border border-teal/50 bg-muted/40 p-4 text-sm font-semibold text-teal hover:border-teal">My account — update profile, organisation details, email and password →</Link>
         <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {([["eea12", "EEA12 analysis", 4], ["plan", "EE plan", 5], ["dg", "DG review", 6], ["hr", "HR reports", 5]] as const).map(([k, label, total]) => {
             const n = new Set((data?.docs ?? []).filter((x) => x.area === k).map((x) => x.category)).size;

@@ -60,6 +60,7 @@ export function AppHeader() {
               <Link to="/history" className={link} activeProps={active}>History</Link>
               <Link to="/dg-history" className={link} activeProps={active}>DG History</Link>
               {isManager && <Link to="/manager" className={link} activeProps={active}>Review portal</Link>}
+              <Link to="/account" className={link} activeProps={active}>My account</Link>
             </>
           )}
           <button onClick={signOut} className="ml-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">Sign out</button>
