@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { ClientProfileAdmin, ClientPortalData } from "@/components/client-portal-admin";
 
 export const Route = createFileRoute("/_authenticated/clients_/$id")({
   head: () => ({
@@ -59,6 +60,17 @@ function ManageClient() {
     <Shell>
       <h1 className="page-title text-primary">{cl.company || cl.full_name || cl.email}</h1>
       <p className="page-lead text-muted-foreground">{cl.full_name ? `${cl.full_name} · ` : ""}{cl.email} · {cl.confirmed ? "Active" : "Invite pending"}</p>
+
+      <section className="mt-6">
+        <h2 className="section-title text-primary">Profile & organisation details</h2>
+        <div className="mt-3"><ClientProfileAdmin id={id} /></div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="section-title text-primary">Client portal</h2>
+        <div className="mt-3"><ClientPortalData id={id} /></div>
+      </section>
+
 
       <section className="mt-8">
         <div className="flex items-center justify-between">
