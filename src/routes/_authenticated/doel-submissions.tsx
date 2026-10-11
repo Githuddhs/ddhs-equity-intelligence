@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { AppHeader } from "@/components/app-header";
+import { DoelAutofill } from "@/components/doel-autofill";
 import { supabase } from "@/integrations/supabase/client";
 import {
   deleteDoelSubmission,
@@ -162,6 +163,8 @@ function DoelSubmissionsPage() {
           report and the EEA4 income differentials statement. Keep each submission's period, status and DoEL reference
           in one place.
         </p>
+
+        <DoelAutofill />
 
         <section className="mt-6 rounded-xl border border-border bg-card p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
