@@ -11,6 +11,7 @@ import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org
 import { normaliseWorkforce } from "@/lib/workforce";
 import { useQuery } from "@tanstack/react-query";
 import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
+import { EeaCrosswalk } from "@/components/eea-crosswalk";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -382,6 +383,8 @@ function Eea12Page() {
             })),
             sectoral: r.sectoral.map((s) => ({ name: s.name, target: s.target, actual: +(s.actual || 0).toFixed(1) })),
           }} onComplete={(t) => { setSummary(t); setSavedId(null); }} />
+
+          <EeaCrosswalk />
 
           <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-6 shadow-sm">
             <div>
