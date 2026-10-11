@@ -148,6 +148,13 @@
       "when": 1791708904646,
       "tag": "0020_admin_manage_client_portals",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1791710934224,
+      "tag": "0021_doel_submissions",
+      "breakpoints": true
     }
   ]
 }
