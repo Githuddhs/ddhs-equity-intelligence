@@ -27,6 +27,7 @@ import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
 import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedBarrierAnalysisRouteImport } from './routes/_authenticated/barrier-analysis'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
@@ -143,6 +144,11 @@ const WorkforceFoundationRoute = WorkforceFoundationRouteImport.update({
   id: '/workforce-foundation',
   path: '/workforce-foundation',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedBarrierAnalysisRoute =
   AuthenticatedBarrierAnalysisRouteImport.update({
@@ -297,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
@@ -342,6 +349,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
@@ -389,6 +397,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
@@ -436,6 +445,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/workforce-foundation'
+    | '/account'
     | '/barrier-analysis'
     | '/clients'
     | '/compliance'
@@ -481,6 +491,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/workforce-foundation'
+    | '/account'
     | '/barrier-analysis'
     | '/clients'
     | '/compliance'
@@ -527,6 +538,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/workforce-foundation'
+    | '/_authenticated/account'
     | '/_authenticated/barrier-analysis'
     | '/_authenticated/clients'
     | '/_authenticated/compliance'
@@ -709,6 +721,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/workforce-foundation'
       preLoaderRoute: typeof WorkforceFoundationRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/barrier-analysis': {
       id: '/_authenticated/barrier-analysis'
@@ -896,6 +915,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedBarrierAnalysisRoute: typeof AuthenticatedBarrierAnalysisRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedComplianceRoute: typeof AuthenticatedComplianceRoute
@@ -919,6 +939,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedBarrierAnalysisRoute: AuthenticatedBarrierAnalysisRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedComplianceRoute: AuthenticatedComplianceRoute,
