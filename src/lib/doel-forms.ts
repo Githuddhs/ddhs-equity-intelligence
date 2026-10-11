@@ -1,4 +1,6 @@
 // EEA2 / EEA4 form structures, AI result parsing and PDF output.
+// Official Department of Employment and Labour online reporting portal.
+export const DOEL_PORTAL_URL = "https://ees.labour.gov.za";
 export const DOEL_LEVELS = [
   "Top management",
   "Senior management",
