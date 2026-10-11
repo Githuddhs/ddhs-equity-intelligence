@@ -11,6 +11,7 @@ import { SECTORS, LEVEL_TO_TARGET_KEY, PROVINCE_EAP, eapTargets, type Targets } 
 import { normaliseContent, type GoalRow, type Milestone, type PlanContent } from "@/lib/ee-plan";
 import { latestEvidence, type Evidence } from "@/lib/evidence";
 import { exportEea13Pdf } from "@/lib/eea13-report";
+import { latestDgFindings, type DgFindings } from "@/lib/form-drafts";
 
 export const Route = createFileRoute("/_authenticated/eea13")({
   head: () => ({
@@ -60,6 +61,7 @@ function Eea13Page() {
   const [province, setProvince] = useState("National");
   useEffect(() => { void supabase.auth.getUser().then(({ data }) => { const p = data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }); }, []);
   const [ev, setEv] = useState<Evidence | null>(null);
+  const [dg, setDg] = useState<DgFindings>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
