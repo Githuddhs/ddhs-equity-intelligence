@@ -2,8 +2,11 @@
 // the latest Workforce Data snapshot, the latest EE plan and the account profile.
 import { supabase } from "@/integrations/supabase/client";
 import { latestWorkforce } from "@/lib/barrier-response-doc";
-import { LEVELS, type Key } from "@/lib/workforce";
+import { GROUPS, LEVELS, levelTotal, type Key } from "@/lib/workforce";
 import { DOEL_LEVELS, type DoelForms, type Grid } from "@/lib/doel-forms";
+import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS, eapTargets, type Targets } from "@/lib/sectors";
+import type { Eea12ReportInput } from "@/lib/eea12-summary-report";
+import type { Eea13PdfInput, Eea13Row } from "@/lib/eea13-report";
 
 const KEY_TO_DOEL: Record<Key, string> = {
   MA: "AM", MC: "CM", MI: "IM", MW: "WM", FA: "AF", FC: "CF", FI: "IF", FW: "WF", FNM: "FNM", FNF: "FNF",
@@ -67,5 +70,98 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
       narrative: "Remuneration figures are not in Workforce Data — upload the payroll report on the DoEL submissions page to fill this table.",
     },
     sources: [`Workforce Data snapshot ${w.date}`, plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan"].filter(Boolean) as string[],
+  };
+}
+
+type SharedSources = {
+  counts: Record<string, Record<string, number>>;
+  snapshotDate: string;
+  sector: string;
+  province: string;
+  planTitle: string;
+  startDate: string | null;
+  endDate: string | null;
+};
+
+/** The single source of truth for every form: latest Workforce Data snapshot + latest EE plan + account province. */
+async function sharedSources(): Promise<SharedSources | null> {
+  const [w, planRes, userRes] = await Promise.all([
+    latestWorkforce(),
+    supabase.from("ee_plans").select("title,company,sector,start_date,end_date").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+    supabase.auth.getUser(),
+  ]);
+  if (!w) return null;
+  const meta = (userRes.data.user?.user_metadata ?? {}) as Record<string, string>;
+  const plan = planRes.data;
+  return {
+    counts: w.counts as Record<string, Record<string, number>>,
+    snapshotDate: w.date,
+    sector: plan?.sector || meta["sector"] || "",
+    province: meta["province"] && PROVINCE_EAP[meta["province"]] ? meta["province"] : "National",
+    planTitle: plan?.title || plan?.company || "EE plan",
+    startDate: plan?.start_date ?? null,
+    endDate: plan?.end_date ?? null,
+  };
+}
+
+/** Same rule as EEA13 planning: official sector target where one exists, otherwise the provincial EAP. */
+function targetFor(sector: string, province: string, level: string): Targets {
+  const key = LEVEL_TO_TARGET_KEY[level];
+  const s = SECTORS.find((x) => x.name === sector);
+  if (key && s) return s.targets[key];
+  return eapTargets(province);
+}
+
+const desigShare = (row: Record<string, number> | undefined) => {
+  const t = levelTotal(row as never);
+  if (!t) return { desig: 0, fem: 0, total: 0 };
+  const d = GROUPS.filter((g) => g.designated).reduce((a, g) => a + (row?.[g.key] ?? 0), 0);
+  const f = GROUPS.filter((g) => g.gender === "Female").reduce((a, g) => a + (row?.[g.key] ?? 0), 0);
+  return { desig: (d / t) * 100, fem: (f / t) * 100, total: t };
+};
+
+/** EEA12 summary report input — same Workforce Data, sector targets and provincial EAP as the EEA12 page. */
+export async function buildEea12Draft(): Promise<Eea12ReportInput | null> {
+  const s = await sharedSources();
+  if (!s) return null;
+  return {
+    scope: "Whole organisation",
+    sector: s.sector,
+    province: s.province,
+    snapshotDate: s.snapshotDate,
+    levels: [...LEVELS],
+    counts: s.counts,
+    eap: PROVINCE_EAP[s.province]!,
+    targetsFor: (level) => targetFor(s.sector, s.province, level),
+  };
+}
+
+/** EEA13 report input — goals and targets derived from the same sources, with an even yearly timeline to the plan end. */
+export async function buildEea13Draft(): Promise<Eea13PdfInput | null> {
+  const s = await sharedSources();
+  if (!s) return null;
+  const rows: Eea13Row[] = LEVELS.map((level) => {
+    const { desig, fem, total } = desigShare(s.counts[level]);
+    const target = targetFor(s.sector, s.province, level);
+    const hires = Math.max(0, Math.ceil(((target.total - desig) / 100) * total));
+    return { level, n: total, desigPct: Math.round(desig * 10) / 10, femPct: Math.round(fem * 10) / 10, target, hires };
+  });
+  const startYear = new Date().getFullYear();
+  const endYear = s.endDate ? new Date(s.endDate).getFullYear() : startYear + 4;
+  const years = Array.from({ length: Math.max(1, endYear - startYear + 1) }, (_, i) => String(startYear + i));
+  const gaps = rows
+    .filter((r) => r.n > 0 && r.desigPct < r.target.total)
+    .map((r) => `${r.level}: designated ${r.desigPct}% vs ${r.target.total}% target — about ${r.hires} appointment(s) needed`);
+  for (const r of rows.filter((x) => x.n === 0)) gaps.push(`${r.level}: no headcount in the Workforce Data snapshot`);
+  return {
+    planTitle: s.planTitle,
+    sector: s.sector,
+    startDate: s.startDate,
+    endDate: s.endDate,
+    filter: { division: "", department: "", section: "" },
+    workforceDate: s.snapshotDate,
+    rows,
+    years,
+    gaps,
   };
 }
