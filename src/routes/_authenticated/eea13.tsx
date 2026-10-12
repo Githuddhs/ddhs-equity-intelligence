@@ -4,8 +4,9 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
-import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
-import { aggregate, ALL_UNITS, describeFilter, type UnitFilter } from "@/lib/org-units";
+import { useLatestOrgUnits } from "@/components/org-unit-picker";
+import { useOrgFilter } from "@/components/org-filter";
+import { aggregate, describeFilter } from "@/lib/org-units";
 import { GROUPS, LEVELS, levelTotal, normaliseWorkforce, type Workforce } from "@/lib/workforce";
 import { SECTORS, LEVEL_TO_TARGET_KEY, PROVINCE_EAP, eapTargets, type Targets } from "@/lib/sectors";
 import { normaliseContent, type GoalRow, type Milestone, type PlanContent } from "@/lib/ee-plan";
@@ -56,7 +57,7 @@ function Eea13Page() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [planId, setPlanId] = useState("");
   const [company, setCompany] = useState("");
-  const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
+  const [filter, setFilter] = useOrgFilter();
   const [targets, setTargets] = useState<Record<string, Targets>>({});
   const [province, setProvince] = useState("National");
   useEffect(() => { void supabase.auth.getUser().then(({ data }) => { const p = data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }); }, []);
@@ -170,7 +171,6 @@ function Eea13Page() {
               <label className="text-sm">Plan<br />
                 <select value={plan?.id ?? ""} onChange={(e) => setPlanId(e.target.value)} className="mt-1 rounded border border-input bg-background px-2 py-1">{scopedPlans.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}</select>
               </label>
-              {wf?.units.length ? <OrgUnitPicker units={wf.units} value={filter} onChange={setFilter} /> : null}
             </div>
             {!wf && <p className="mt-4 text-sm text-destructive">No Workforce Data yet — <Link to="/workforce" className="underline">upload it</Link> so headcount fills in.</p>}
 

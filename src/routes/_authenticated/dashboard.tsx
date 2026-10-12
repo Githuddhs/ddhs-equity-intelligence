@@ -9,8 +9,9 @@ import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseCo
 import { completionPct, rolesFor, QUESTIONNAIRE_VERSION, type BarrierAnswers, type BarrierProfile } from "@/lib/barrier";
 import { averageBarrierScores } from "@/lib/plan-autofill";
 import { exportLeadershipPdf } from "@/lib/leadership-report";
-import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
-import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org-units";
+import { useLatestOrgUnits } from "@/components/org-unit-picker";
+import { useOrgFilter } from "@/components/org-filter";
+import { aggregate, describeFilter } from "@/lib/org-units";
 import { GROUPS, grandTotal, groupTotals, normaliseWorkforce } from "@/lib/workforce";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -61,7 +62,7 @@ function Card({ title, to, cta, children }: { title: string; to: "/eea12" | "/ba
 
 function Dashboard() {
   const [exporting, setExporting] = useState(false);
-  const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
+  const [unitFilter, setUnitFilter] = useOrgFilter();
   const { data: wf } = useLatestOrgUnits();
   const { data, isLoading, error } = useQuery({
     queryKey: ["dashboard"],
@@ -170,7 +171,6 @@ function Dashboard() {
             <h2 className="card-title text-primary">Workforce profile</h2>
             <p className="mt-1 text-sm text-muted-foreground">{describeFilter(unitFilter)}{wf ? ` · ${wfTotal.toLocaleString("en-ZA")} employees` : ""}</p>
           </div>
-          {wf && wf.units.length > 0 && <OrgUnitPicker units={wf.units} value={unitFilter} onChange={setUnitFilter} />}
         </div>
         {!wf || !wfGroups || wfTotal <= 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">No workforce data yet. <Link to="/workforce" className="font-semibold text-teal">Add your workforce numbers →</Link></p>

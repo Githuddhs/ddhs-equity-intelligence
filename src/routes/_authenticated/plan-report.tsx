@@ -4,8 +4,9 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
-import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
-import { ALL_UNITS, describeFilter, type OrgUnit, type UnitFilter } from "@/lib/org-units";
+import { useLatestOrgUnits } from "@/components/org-unit-picker";
+import { useOrgFilter } from "@/components/org-filter";
+import { describeFilter, type OrgUnit } from "@/lib/org-units";
 import { daysUntil, normaliseContent, type Milestone } from "@/lib/ee-plan";
 import { emptyWorkforce } from "@/lib/workforce";
 
@@ -34,7 +35,7 @@ type Row = {
 };
 
 function PlanReport() {
-  const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
+  const [filter, setFilter] = useOrgFilter();
   const [exporting, setExporting] = useState(false);
   const { data: wf } = useLatestOrgUnits();
   const { data: plans = [], isLoading } = useQuery({
@@ -140,10 +141,11 @@ function PlanReport() {
           </button>
         </div>
 
-        <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-sm">
-          {units.length ? <OrgUnitPicker units={units} value={filter} onChange={setFilter} />
-            : <p className="text-sm text-muted-foreground">Upload a workforce file with Division, Department and Section columns, or set the unit on each plan, to filter this report.</p>}
-        </div>
+        {!units.length && (
+          <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-sm">
+            <p className="text-sm text-muted-foreground">Upload a workforce file with Division, Department and Section columns, or set the unit on each plan, to filter this report.</p>
+          </div>
+        )}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           {[["Plans", String(shown.length)], ["Milestones done", `${tot.done}/${tot.ms} · ${pct(tot.done, tot.ms)}%`], ["Budget / spent", `${rand(tot.budget)} / ${rand(tot.spent)}`], ["Overdue", String(tot.overdue)]].map(([l, v]) => (
