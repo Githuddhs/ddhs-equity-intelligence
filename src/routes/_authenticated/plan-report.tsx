@@ -4,8 +4,9 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
-import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
-import { ALL_UNITS, describeFilter, type OrgUnit, type UnitFilter } from "@/lib/org-units";
+import { useLatestOrgUnits } from "@/components/org-unit-picker";
+import { useOrgFilter } from "@/components/org-filter";
+import { describeFilter, type OrgUnit } from "@/lib/org-units";
 import { daysUntil, normaliseContent, type Milestone } from "@/lib/ee-plan";
 import { emptyWorkforce } from "@/lib/workforce";
 
