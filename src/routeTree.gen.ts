@@ -27,6 +27,7 @@ import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
 import { Route as TourRouteImport } from './routes/tour'
+import { Route as VirtualConsultantRouteImport } from './routes/virtual-consultant'
 import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedBarrierAnalysisRouteImport } from './routes/_authenticated/barrier-analysis'
@@ -146,6 +147,11 @@ const StaffLoginRoute = StaffLoginRouteImport.update({
 const TourRoute = TourRouteImport.update({
   id: '/tour',
   path: '/tour',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VirtualConsultantRoute = VirtualConsultantRouteImport.update({
+  id: '/virtual-consultant',
+  path: '/virtual-consultant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkforceFoundationRoute = WorkforceFoundationRouteImport.update({
@@ -322,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/tour': typeof TourRoute
+  '/virtual-consultant': typeof VirtualConsultantRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
   '/account': typeof AuthenticatedAccountRoute
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
@@ -371,6 +378,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/tour': typeof TourRoute
+  '/virtual-consultant': typeof VirtualConsultantRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
   '/account': typeof AuthenticatedAccountRoute
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
@@ -422,6 +430,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
   '/tour': typeof TourRoute
+  '/virtual-consultant': typeof VirtualConsultantRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
@@ -473,6 +482,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/tour'
+    | '/virtual-consultant'
     | '/workforce-foundation'
     | '/account'
     | '/barrier-analysis'
@@ -522,6 +532,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/tour'
+    | '/virtual-consultant'
     | '/workforce-foundation'
     | '/account'
     | '/barrier-analysis'
@@ -572,6 +583,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/staff-login'
     | '/tour'
+    | '/virtual-consultant'
     | '/workforce-foundation'
     | '/_authenticated/account'
     | '/_authenticated/barrier-analysis'
@@ -623,6 +635,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   StaffLoginRoute: typeof StaffLoginRoute
   TourRoute: typeof TourRoute
+  VirtualConsultantRoute: typeof VirtualConsultantRoute
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
@@ -759,6 +772,13 @@ declare module '@tanstack/react-router' {
       path: '/tour'
       fullPath: '/tour'
       preLoaderRoute: typeof TourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/virtual-consultant': {
+      id: '/virtual-consultant'
+      path: '/virtual-consultant'
+      fullPath: '/virtual-consultant'
+      preLoaderRoute: typeof VirtualConsultantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/workforce-foundation': {
@@ -1046,6 +1066,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   StaffLoginRoute: StaffLoginRoute,
   TourRoute: TourRoute,
+  VirtualConsultantRoute: VirtualConsultantRoute,
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,

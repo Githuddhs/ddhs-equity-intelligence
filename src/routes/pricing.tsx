@@ -219,7 +219,7 @@ function PricingPage() {
             ].map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
           </ul>
           <p className="mt-6 text-sm text-muted-foreground">Rate: R1,500 per hour (see specialist consulting rates above). Consultant guidance is not legal advice — we recommend confirming material positions with your own legal advisers.</p>
-          <a href="#quote" className="mt-4 inline-block text-sm font-semibold text-teal">Book a consultant — request a quote →</a>
+          <Link to="/virtual-consultant" className="mt-4 inline-block text-sm font-semibold text-teal">View consultant profile & book a session →</Link>
         </section>
 
         <section id="quote" className="mt-16 scroll-mt-8 rounded-xl border border-border bg-card p-8">
