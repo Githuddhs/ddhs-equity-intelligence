@@ -121,7 +121,7 @@ function BarrierAnalysisPage() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">EEA13 · Consultation</p>
-        <h1 className="page-title text-primary">Consultation and barrier analysis questionnaire</h1>
+        <h1 className="page-title text-primary">{isQ ? "Consultation and barrier analysis questionnaire" : "Barrier analysis"}</h1>
         <p className="page-lead mt-1 max-w-3xl text-muted-foreground">
           Gathers information to develop, review or update the Employment Equity Plan: barriers, employment practices and culture, and the measures, goals, priorities and monitoring that follow.
           Participation is voluntary, responses are confidential and reported only in aggregate. Takes 15-20 minutes. Managers also complete Section 11; EE Committee members and representatives also complete Section 12.
