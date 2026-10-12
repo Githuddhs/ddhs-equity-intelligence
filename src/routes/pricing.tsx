@@ -25,17 +25,31 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-type Pkg = { name: string; market: string; price: string; setup: string; annual: string; intro?: string; features: string[]; featured?: boolean; payfast?: PayfastPlan };
+type Pkg = { name: string; market: string; price: string; annual: string; setup: string; featured?: boolean };
 
 const PACKAGES: Pkg[] = [
-  { name: "Essential Compliance", market: "Small employers (50–150 employees)", price: "R4,995", setup: "R9,500 once-off setup", annual: "R59,940 per year", payfast: "essential",
-    features: ["Workforce profile analysis", "EE compliance assessment", "Annual EEA2 and EEA4 submission support", "One EE Committee workshop annually", "EE compliance dashboard", "Quarterly compliance review", "Email support"] },
-  { name: "Professional EE Management", market: "Medium-sized employers (150–500 employees)", price: "R12,500", setup: "R18,500 once-off setup", annual: "R150,000 per year", intro: "Everything in Essential, plus:", featured: true, payfast: "professional",
-    features: ["EEA12 workforce analysis", "EEA13 EE Plan development", "Quarterly committee support", "Barrier analysis", "Recruitment monitoring", "Management reports", "Numerical target tracking", "Online document repository", "Quarterly executive dashboard"] },
-  { name: "Enterprise Transformation", market: "Large employers (500–5,000 employees)", price: "R29,500", setup: "R45,000 once-off setup", annual: "R354,000 per year", intro: "Everything in Professional, plus:", payfast: "enterprise",
-    features: ["Monthly EE Committee support", "DG Review preparation", "Sectoral target analysis", "Strategic transformation planning", "Executive presentations", "Audit readiness assessments", "Unlimited support requests", "Advanced analytics dashboard", "Board reporting"] },
-  { name: "Enterprise Plus", market: "Universities, municipalities, SOEs, listed companies", price: "R49,500–R85,000", setup: "R75,000–R150,000 setup", annual: "R594,000–R1,020,000 per year",
-    features: ["Dedicated EE Consultant", "Dedicated Data Analyst", "Transformation strategy support", "Multi-campus / site management", "Advanced predictive analytics", "Custom reporting", "DG Review support", "Executive workshops", "Unlimited users"] },
+  { name: "Essential 1", market: "Small employers (50–149 employees)", price: "R4,500–R12,500", annual: "R54,000–R150,000 per year", setup: "R12,500 once-off" },
+  { name: "Essential 2", market: "Employers (50–249 employees)", price: "R12,500–R25,500", annual: "R150,000–R300,000 per year", setup: "R20,000 once-off", featured: true },
+  { name: "Professional", market: "Medium-sized employers (150–999 employees)", price: "R12,500–R25,000", annual: "R150,000–R300,000 per year", setup: "R25,000 once-off" },
+  { name: "Enterprise", market: "Large employers and public entities (1,000+ employees)", price: "R25,000–R75,000", annual: "R270,000–R810,000 per year", setup: "R30,000 once-off" },
+];
+
+const IMPLEMENTATION = [
+  "Workforce data setup and platform configuration",
+  "Access to compliance dashboards, EE analytics, EE Plan, DG Review readiness reporting, and barrier analysis tools",
+  "End-to-end support in developing and configuring the EE Plan (EEA13)",
+  "Administration and analysis of barrier analysis questionnaires",
+  "Migration and uploading of EE and compliance documentation",
+  "Support with EEA2 and EEA4 reporting and submission processes",
+  "Multi-site, divisional, and group-wide reporting capability",
+  "Executive, EXCO, Board, and management dashboards",
+  "Workforce forecasting and scenario planning",
+  "Audit and DG Review readiness support",
+  "Employment Equity Committee portal and committee administration support",
+  "Centralised policy and procedure repository",
+  "HRIS and API integration options",
+  "Dedicated customer success and technical support",
+  "Quarterly strategic review and compliance advisory sessions",
 ];
 
 const SAAS: { size: string; price: string; payfast?: PayfastPlan }[] = [
