@@ -200,6 +200,28 @@ function PricingPage() {
           ))}
         </div>
 
+        <section className="mt-16 rounded-xl border border-border bg-card p-8">
+          <h2 className="section-title text-primary">Virtual EE Consultant</h2>
+          <p className="mt-2 max-w-3xl text-muted-foreground">Remote, on-demand Employment Equity expertise by the hour — senior consultant guidance when you need it, with no monthly commitment. Every session works from your own data on the platform: your workforce profile, EE plan, barrier analysis results and compliance deadlines.</p>
+          <h3 className="card-title mt-6 text-primary">What a consultant helps with</h3>
+          <ul className="mt-3 grid gap-x-8 gap-y-2 text-sm md:grid-cols-2">
+            {[
+              "Understanding and interpreting your EEA12 workforce analysis",
+              "Developing and refining your EE Plan (EEA13) — objectives, barriers, affirmative action measures and numerical targets",
+              "Setting and defending targets against sector targets and the provincial economically active population (EAP)",
+              "Designing barrier analysis surveys and interpreting the results",
+              "Preparing and running Employment Equity Committee meetings",
+              "Director-General (DG) review readiness and drafting responses to findings",
+              "EEA2 and EEA4 reporting and submission support",
+              "Policies on unfair discrimination, harassment and reasonable accommodation",
+              "Workforce forecasting and transformation scenarios",
+              "Briefing executives, EXCO and boards on progress and risk",
+            ].map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
+          </ul>
+          <p className="mt-6 text-sm text-muted-foreground">Rate: R1,500 per hour (see specialist consulting rates above). Consultant guidance is not legal advice — we recommend confirming material positions with your own legal advisers.</p>
+          <a href="#quote" className="mt-4 inline-block text-sm font-semibold text-teal">Book a consultant — request a quote →</a>
+        </section>
+
         <section id="quote" className="mt-16 scroll-mt-8 rounded-xl border border-border bg-card p-8">
           <h2 className="section-title text-primary">Request a quote</h2>
           <p className="mt-1 text-muted-foreground">Tell us what you need and our team will come back to you with a quote. Every request goes straight to our consulting team.</p>
