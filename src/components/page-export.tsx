@@ -25,7 +25,7 @@ function extract(root: HTMLElement): { title: string; blocks: Block[]; fields: [
   const blocks: Block[] = []; const fields: [string, string][] = [];
   let lastHeading = "";
   const walk = (node: Element) => {
-    if (!(node instanceof HTMLElement) || node.dataset.noExport !== undefined) return;
+    if (!(node instanceof HTMLElement) || node.dataset["noExport"] !== undefined) return;
     const cs = getComputedStyle(node);
     if (cs.display === "none" || cs.visibility === "hidden") return;
     const tag = node.tagName;
@@ -61,7 +61,7 @@ async function toPdf(d: ReturnType<typeof extract>) {
   for (const b of d.blocks) {
     if (b.kind === "h") { need(10); doc.setFontSize(13); doc.setFont("helvetica", "bold"); doc.setTextColor(15, 39, 71); doc.text(doc.splitTextToSize(b.text, W - 28), 14, y); doc.setTextColor(0); doc.setFont("helvetica", "normal"); y += 8; }
     else if (b.kind !== "table") { doc.setFontSize(9.5); const lines = doc.splitTextToSize(b.text, W - 28) as string[]; for (const l of lines) { need(5); doc.text(l, 14, y); y += 4.6; } y += 1.5; }
-    else { autoTable(doc, { startY: y, head: b.head.length ? [b.head] : undefined, body: b.body, styles: { fontSize: 8 }, headStyles: { fillColor: [15, 39, 71] }, margin: { left: 14, right: 14 } }); y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6; }
+    else { autoTable(doc, { startY: y, head: b.head.length ? [b.head] : [], body: b.body, styles: { fontSize: 8 }, headStyles: { fillColor: [15, 39, 71] }, margin: { left: 14, right: 14 } }); y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6; }
   }
   doc.save(fileBase(d.title) + ".pdf");
 }
