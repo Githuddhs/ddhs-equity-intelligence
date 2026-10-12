@@ -67,7 +67,7 @@ async function toPdf(d: ReturnType<typeof extract>) {
 }
 
 function toWord(d: ReturnType<typeof extract>) {
-  const body = d.blocks.map((b) => b.kind === "h" ? `<h2>${esc(b.text)}</h2>` : b.kind === "p" ? `<p>${esc(b.text)}</p>`
+  const body = d.blocks.map((b) => b.kind !== "table" ? (b.kind === "h" ? `<h2>${esc(b.text)}</h2>` : `<p>${esc(b.text)}</p>`)
     : `<table>${b.head.length ? `<tr>${b.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr>` : ""}${b.body.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table>`).join("\n");
   const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${esc(d.title)}</title><style>body{font-family:Arial;font-size:10.5pt}h2{color:#0f2747;font-size:14pt}table{border-collapse:collapse;width:100%;margin:6pt 0}th{background:#0f2747;color:#fff}th,td{border:1px solid #bbb;padding:3pt;font-size:9pt}</style></head><body><p style="color:#0d9488">DDHS Equity Intelligence · ${new Date().toLocaleDateString("en-ZA")}</p>${body}</body></html>`;
   save(new Blob(["\ufeff", html], { type: "application/msword" }), fileBase(d.title) + ".doc");
