@@ -194,7 +194,8 @@ function Index() {
             <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
             <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
             <a href="#pilots" className="whitespace-nowrap transition-colors hover:text-primary">Pilot Programme</a>
-            <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site tour</a>
+            <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site Tour</a>
+            <a href="/virtual-consultant" className="whitespace-nowrap transition-colors hover:text-primary">Virtual Consultant</a>
           </nav>
         </div>
       </header>
