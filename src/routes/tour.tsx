@@ -1,8 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+const shareOrigin = () => (/localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
+
 export const Route = createFileRoute("/tour")({
+  validateSearch: (search: Record<string, unknown>) => {
+    const out: { for?: string; from?: string } = {};
+    if (typeof search.for === "string" && search.for.trim()) out.for = search.for.trim().slice(0, 140);
+    if (typeof search.from === "string" && search.from.trim()) out.from = search.from.trim().slice(0, 140);
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Platform tour — DDHS Equity Intelligence" },
@@ -30,8 +39,14 @@ const STEPS: { kicker: string; title: string; body: string; points: string[]; to
 
 function TourPage() {
   const [i, setI] = useState(0);
+  const { for: invitedFor, from: invitedFrom } = Route.useSearch();
   const s = STEPS[i]!;
   const last = i === STEPS.length - 1;
+  const inviteUrl = `${shareOrigin()}/tour?for=${encodeURIComponent(invitedFor ?? "your team")}${invitedFrom ? `&from=${encodeURIComponent(invitedFrom)}` : ""}`;
+  const copyInvite = async () => {
+    try { await navigator.clipboard.writeText(inviteUrl); toast.success("Tour link copied — send it to whoever you'd like to invite."); }
+    catch { toast.error("Could not copy automatically. Copy the address in the bar instead."); }
+  };
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") setI((n) => Math.min(n + 1, STEPS.length - 1));
@@ -44,9 +59,12 @@ function TourPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-6 py-4">
           <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
-          <Link to="/" className="text-sm font-semibold text-teal hover:text-primary">Exit tour</Link>
+          <div className="flex items-center gap-3">
+            <button onClick={() => void copyInvite()} className="rounded-lg border border-teal px-3 py-1.5 text-xs font-semibold text-teal hover:bg-teal/10">Copy invite link</button>
+            <Link to="/" className="text-sm font-semibold text-teal hover:text-primary">Exit tour</Link>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-6 py-10">
@@ -55,7 +73,13 @@ function TourPage() {
             <button key={x.title} aria-label={`Go to ${x.title}`} onClick={() => setI(n)} className={`h-1.5 flex-1 rounded-full ${n <= i ? "bg-teal" : "bg-muted"}`} />
           ))}
         </div>
-        <section className="mt-8 rounded-2xl border border-border bg-card p-8 shadow-sm">
+        {invitedFor && (
+          <div className="mt-6 rounded-xl border border-teal/40 bg-teal/5 p-4">
+            <p className="text-sm font-semibold text-teal">You're invited to take the site tour</p>
+            <p className="mt-1 text-sm text-muted-foreground">Invitation for <span className="font-semibold text-primary">{invitedFor}</span>{invitedFrom ? ` · from ${invitedFrom}` : ""} · about five minutes, no sign-in needed.</p>
+          </div>
+        )}
+        <section className={`rounded-2xl border border-border bg-card p-8 shadow-sm ${invitedFor ? "mt-4" : "mt-8"}`}>
           <p className="text-sm font-semibold uppercase tracking-wide text-teal">{s.kicker} · {i + 1} of {STEPS.length}</p>
           <h1 className="mt-2 font-display text-2xl font-extrabold text-primary sm:text-3xl">{s.title}</h1>
           <p className="mt-3 leading-relaxed text-muted-foreground">{s.body}</p>
