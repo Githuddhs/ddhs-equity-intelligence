@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-const shareOrigin = () => (/localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
+const shareOrigin = () => (typeof window === "undefined" || /localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
 
 type Props = {
   /** Company or person the invitation is for — prefilled when opened from a client record. */
@@ -50,7 +50,7 @@ export function TourInvite({ defaultCompany = "", defaultEmail = "", defaultName
         <label className="text-xs">Client or person<input className={`${input} mt-0.5 block`} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Acme (Pty) Ltd" maxLength={140} /></label>
         <label className="text-xs">Their email (optional)<input type="email" className={`${input} mt-0.5 block`} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@company.co.za" maxLength={200} /></label>
         <label className="text-xs">Your name (optional)<input className={`${input} mt-0.5 block`} value={from} onChange={(e) => setFrom(e.target.value)} placeholder="e.g. Sello Molapo" maxLength={140} /></label>
-        {!compact && <label className="text-xs">Add a note (optional)<input className={`${input} mt-0.5 block`} value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. We can book a demonstration afterwards" maxLength={200} /></label>}
+        {!compact && <label className="text-xs">Add a note (optional)<input className={`${input} mt-0.5 block`} value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. We can book a demo after" maxLength={200} /></label>}
       </div>
       <p className="mt-3 truncate rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground" title={link}>{link}</p>
       <div className="mt-3 flex flex-wrap gap-2">

@@ -37,3 +37,4 @@
 - [x] EEA13: yearly timeline columns aligned — added the missing Target source cell so each figure sits under its own year (verified on screen: Now 52.9, Y1 57.1 … Y5 73.7 under correct headers)
 
 - [x] Shared org/faculty/division/department/section dropdown bar at top of all signed-in pages (OrgFilterBar in _authenticated layout; dashboard, EEA13, plan-report wired to shared persisted filter; verified with test data, cleaned up)
+- [x] Site-tour invitation link (src/components/tour-invite.tsx): staff dashboard card, prefilled on the client detail page, compact "Share the site tour with your team" on My portal; /tour?for=&from= shows an invitation banner; copy link, copy email message, mailto, WhatsApp, preview. Verified signed in as sdm@ddhs.co.za: link and message copy correctly, banner shows, plain /tour unaffected, no page errors (shareOrigin made SSR-safe)
