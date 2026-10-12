@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { DgOutcome } from "@/components/dg-outcome";
+import { DgItemEvidence, loadDgEvidence, type EvidenceDoc } from "@/components/dg-item-evidence";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
 import { dgFromEvidence, latestEvidence } from "@/lib/evidence";
@@ -40,6 +41,9 @@ function DgReviewPage() {
   const [assessment, setAssessment] = useState("");
   const [saving, setSaving] = useState(false);
   const ai = useAiStream();
+  const [evDocs, setEvDocs] = useState<EvidenceDoc[]>([]);
+  useEffect(() => { void loadDgEvidence().then(setEvDocs); }, []);
+
 
   useEffect(() => {
     (async () => {
@@ -146,6 +150,7 @@ function DgReviewPage() {
                     <p className="text-sm font-medium">{i.text} <span className="text-xs text-muted-foreground">({i.ref})</span></p>
                     <input className="mt-2 w-full rounded border border-border bg-background px-2 py-1 text-xs" placeholder="Evidence (document, date, location)…"
                       value={answers[i.id]?.evidence ?? ""} onChange={(e) => setA(i.id, { evidence: e.target.value })} />
+                    {(g === "Process" || g === "Reporting") && <DgItemEvidence itemId={i.id} docs={evDocs} onChange={() => void loadDgEvidence().then(setEvDocs)} />}
                   </div>
                   <div className="flex items-start gap-1">
                     {(["yes", "partial", "no"] as const).map((s) => (
