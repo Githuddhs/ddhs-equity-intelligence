@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { ClientProfileAdmin, ClientPortalData } from "@/components/client-portal-admin";
+import { TourInvite } from "@/components/tour-invite";
 
 export const Route = createFileRoute("/_authenticated/clients_/$id")({
   head: () => ({
@@ -70,6 +71,12 @@ function ManageClient() {
         <h2 className="section-title text-primary">Client portal</h2>
         <div className="mt-3"><ClientPortalData id={id} /></div>
       </section>
+
+      <section className="mt-8">
+        <TourInvite defaultCompany={cl.company || cl.full_name || ""} defaultEmail={cl.email} />
+      </section>
+
+
 
 
       <section className="mt-8">

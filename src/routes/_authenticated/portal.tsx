@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { ShareLinks } from "@/components/share-links";
+import { TourInvite } from "@/components/tour-invite";
 
 export const Route = createFileRoute("/_authenticated/portal")({
   head: () => ({
@@ -155,6 +156,7 @@ function Portal() {
             ))}
           </Panel>
         </div>
+        <div className="mt-8"><TourInvite compact title="Share the site tour with your team" defaultCompany={meta["company"] ?? ""} defaultName={meta["full_name"] ?? ""} /></div>
         <ShareLinks />
       </main>
     </div>

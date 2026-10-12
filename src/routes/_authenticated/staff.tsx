@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { TourInvite } from "@/components/tour-invite";
 
 export const Route = createFileRoute("/_authenticated/staff")({
   head: () => ({
@@ -112,6 +113,8 @@ function StaffDashboard() {
                 </div>
               ))}
             </div>
+
+            <div className="mt-6"><TourInvite /></div>
 
             <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
               <h2 className="section-title text-primary">AI usage</h2>
