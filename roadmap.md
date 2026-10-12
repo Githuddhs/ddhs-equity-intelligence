@@ -35,3 +35,5 @@
 - [x] EEA forms library (EEA12/EEA13/EEA2/EEA4) upload/download area in My portal
 - [x] All four forms read from the same sources (Workforce Data, EE plan, provincial EAP) — draft EEA2/EEA4 PDFs built on the spot
 - [x] EEA13: yearly timeline columns aligned — added the missing Target source cell so each figure sits under its own year (verified on screen: Now 52.9, Y1 57.1 … Y5 73.7 under correct headers)
+
+- [x] Shared org/faculty/division/department/section dropdown bar at top of all signed-in pages (OrgFilterBar in _authenticated layout; dashboard, EEA13, plan-report wired to shared persisted filter; verified with test data, cleaned up)
