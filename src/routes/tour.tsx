@@ -8,8 +8,10 @@ const shareOrigin = () => (/localhost|127\.0\.0\.1/.test(window.location.origin)
 export const Route = createFileRoute("/tour")({
   validateSearch: (search: Record<string, unknown>) => {
     const out: { for?: string; from?: string } = {};
-    if (typeof search.for === "string" && search.for.trim()) out.for = search.for.trim().slice(0, 140);
-    if (typeof search.from === "string" && search.from.trim()) out.from = search.from.trim().slice(0, 140);
+    const f = search["for"];
+    const r = search["from"];
+    if (typeof f === "string" && f.trim()) out.for = f.trim().slice(0, 140);
+    if (typeof r === "string" && r.trim()) out.from = r.trim().slice(0, 140);
     return out;
   },
   head: () => ({
