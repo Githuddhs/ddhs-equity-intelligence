@@ -293,11 +293,13 @@ function parseEmployeeRows(rows: string[][]): ParsedFile | null {
     const nat = head.indexOf("nationality");
     const dis = head.findIndex((x) => DISABILITY_ALIASES.has(x));
     const col = (names: string[]) => head.findIndex((x) => names.includes(x));
-    const divCol = col(["division", "divisionname", "businessunit", "cluster", "faculty", "branch"]);
+    const orgCol = col(["organisation", "organization", "organisationname", "organizationname", "company", "companyname", "entity", "employer", "legalentity", "subsidiary"]);
+    const facCol = col(["faculty", "facultyname", "responsibilitycentre", "responsibilitycenter", "costcentre", "costcenter"]);
+    const divCol = col(["division", "divisionname", "businessunit", "cluster", "branch"]);
     const depCol = col(["department", "departmentname", "dept", "deptname", "school"]);
-    const secCol = col(["section", "sectionname", "subdepartment", "unit", "unitname", "team"]);
-    const hasUnits = divCol >= 0 || depCol >= 0 || secCol >= 0;
-    const unitMap = new Map<string, { division: string; department: string; section: string; counts: Workforce; disability: Record<string, number> }>();
+    const secCol = col(["section", "sectionname", "subdepartment", "unit", "unitname", "team", "centre", "center", "subsection"]);
+    const hasUnits = orgCol >= 0 || facCol >= 0 || divCol >= 0 || depCol >= 0 || secCol >= 0;
+    const unitMap = new Map<string, { organisation: string; faculty: string; division: string; department: string; section: string; counts: Workforce; disability: Record<string, number> }>();
     const counts = emptyWorkforce();
     const disability: Record<string, number> = {};
     const found = new Set<string>();
@@ -324,10 +326,11 @@ function parseEmployeeRows(rows: string[][]): ParsedFile | null {
       const isDisabled = dis >= 0 && /^(y|yes|true|1)$/i.test((c[dis] ?? "").trim());
       if (hasUnits) {
         const pick = (i: number) => (i >= 0 ? (c[i] ?? "").trim() : "") || "Not specified";
+        const organisation = pick(orgCol), faculty = pick(facCol);
         const division = pick(divCol), department = pick(depCol), section = pick(secCol);
-        const id = `${division}\u0000${department}\u0000${section}`;
+        const id = [organisation, faculty, division, department, section].join("\u0000");
         let u = unitMap.get(id);
-        if (!u) { u = { division, department, section, counts: emptyWorkforce(), disability: {} }; unitMap.set(id, u); }
+        if (!u) { u = { organisation, faculty, division, department, section, counts: emptyWorkforce(), disability: {} }; unitMap.set(id, u); }
         u.counts[level]![key] += 1;
         if (isDisabled) u.disability[level] = (u.disability[level] ?? 0) + 1;
       }
@@ -338,8 +341,8 @@ function parseEmployeeRows(rows: string[][]): ParsedFile | null {
     if (!rowCount) return null;
     const warnings = [`Read ${rowCount.toLocaleString("en-ZA")} employee rows and counted them per level and group.`];
     if (hasUnits) {
-      const n = (k: "division" | "department" | "section") => new Set([...unitMap.values()].map((u) => u[k])).size;
-      warnings.push(`Found ${n("division")} division(s), ${n("department")} department(s) and ${n("section")} section(s).`);
+      const n = (k: "organisation" | "faculty" | "division" | "department" | "section") => new Set([...unitMap.values()].map((u) => u[k])).size;
+      warnings.push(`Found ${n("organisation")} organisation(s), ${n("faculty")} faculty/faculties, ${n("division")} division(s), ${n("department")} department(s) and ${n("section")} section(s).`);
     }
     for (const [k, v] of Object.entries(skipped)) warnings.push(`${v} row(s) skipped: ${k}.`);
     const missing = LEVELS.filter((l) => !found.has(l));

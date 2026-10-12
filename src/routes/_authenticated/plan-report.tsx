@@ -68,6 +68,7 @@ function PlanReport() {
   const units: OrgUnit[] = useMemo(() => [
     ...(wf?.units ?? []),
     ...rows.filter((r) => r.division || r.department || r.section).map((r) => ({
+      organisation: "Not specified", faculty: "Not specified",
       division: r.division || "Not specified", department: r.department || "Not specified", section: r.section || "Not specified",
       counts: emptyWorkforce(), disability: {},
     })),
