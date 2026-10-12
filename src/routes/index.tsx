@@ -194,6 +194,7 @@ function Index() {
             <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
             <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
             <a href="#pilots" className="whitespace-nowrap transition-colors hover:text-primary">Pilot Programme</a>
+            <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site tour</a>
           </nav>
         </div>
       </header>
@@ -225,6 +226,9 @@ function Index() {
               className="inline-flex items-center rounded-lg border border-input px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-accent"
             >
               Request an Enterprise Briefing
+            </a>
+            <a href="/tour" className="inline-flex items-center rounded-lg border border-teal px-5 py-2.5 text-sm font-semibold text-teal transition-colors hover:bg-teal/10">
+              Take the site tour
             </a>
           </div>
         </div>
