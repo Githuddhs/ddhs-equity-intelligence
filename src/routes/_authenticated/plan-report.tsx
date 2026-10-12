@@ -141,10 +141,11 @@ function PlanReport() {
           </button>
         </div>
 
-        <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-sm">
-          {units.length ? <OrgUnitPicker units={units} value={filter} onChange={setFilter} />
-            : <p className="text-sm text-muted-foreground">Upload a workforce file with Division, Department and Section columns, or set the unit on each plan, to filter this report.</p>}
-        </div>
+        {!units.length && (
+          <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-sm">
+            <p className="text-sm text-muted-foreground">Upload a workforce file with Division, Department and Section columns, or set the unit on each plan, to filter this report.</p>
+          </div>
+        )}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           {[["Plans", String(shown.length)], ["Milestones done", `${tot.done}/${tot.ms} · ${pct(tot.done, tot.ms)}%`], ["Budget / spent", `${rand(tot.budget)} / ${rand(tot.spent)}`], ["Overdue", String(tot.overdue)]].map(([l, v]) => (
