@@ -25,6 +25,7 @@ export const Route = createFileRoute("/_authenticated/barrier-analysis")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { mode?: "questionnaire" } => (s["mode"] === "questionnaire" ? { mode: "questionnaire" } : {}),
   component: BarrierAnalysisPage,
 });
 
@@ -34,6 +35,7 @@ type Saved = {
 };
 
 function BarrierAnalysisPage() {
+  const isQ = Route.useSearch().mode === "questionnaire";
   const [responses, setResponses] = useState<Saved[]>([]);
   const [orgName, setOrgName] = useState("");
   const [answers, setAnswers] = useState<BarrierAnswers>({});
@@ -119,12 +121,15 @@ function BarrierAnalysisPage() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">EEA13 · Consultation</p>
-        <h1 className="page-title text-primary">Consultation and barrier analysis questionnaire</h1>
+        <h1 className="page-title text-primary">{isQ ? "Consultation and barrier analysis questionnaire" : "Barrier analysis"}</h1>
         <p className="page-lead mt-1 max-w-3xl text-muted-foreground">
           Gathers information to develop, review or update the Employment Equity Plan: barriers, employment practices and culture, and the measures, goals, priorities and monitoring that follow.
           Participation is voluntary, responses are confidential and reported only in aggregate. Takes 15-20 minutes. Managers also complete Section 11; EE Committee members and representatives also complete Section 12.
         </p>
 
+        {isQ ? (
+          <p className="mt-4 text-sm text-muted-foreground">Complete the questionnaire below and click Save response. Results appear on the <Link to="/barrier-analysis" className="font-semibold text-teal underline">Barriers</Link> page.</p>
+        ) : (<>
         <BarrierSurveyLinks counts={responses.reduce<Record<string, number>>((m, r) => { const id = (r.profile as { link_id?: string } | null)?.link_id; if (id) m[id] = (m[id] ?? 0) + 1; return m; }, {})} />
         <BarrierDocUpload onSaved={() => void load()} />
 
@@ -156,6 +161,8 @@ function BarrierAnalysisPage() {
           </section>
         )}
 
+        </>)}
+        {isQ && (<>
         <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="section-title text-primary">New response</h2>
@@ -320,8 +327,9 @@ function BarrierAnalysisPage() {
             {saving ? "Saving…" : "Save response"}
           </button>
         </section>
+        </>)}
 
-        {responses.length > 0 && (
+        {!isQ && responses.length > 0 && (
           <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="section-title text-primary">Saved responses</h2>
