@@ -34,3 +34,4 @@
 - [x] EEA13: downloadable PDF report (goals, targets, timelines) for submission
 - [x] EEA forms library (EEA12/EEA13/EEA2/EEA4) upload/download area in My portal
 - [x] All four forms read from the same sources (Workforce Data, EE plan, provincial EAP) — draft EEA2/EEA4 PDFs built on the spot
+- [x] EEA13: yearly timeline columns aligned — added the missing Target source cell so each figure sits under its own year (verified on screen: Now 52.9, Y1 57.1 … Y5 73.7 under correct headers)

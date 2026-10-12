@@ -200,7 +200,7 @@ function Eea13Page() {
               <table className="mt-3 w-full text-sm">
                 <thead><tr className="bg-muted text-left"><th className="p-2">Level</th><th className="p-2">Target source</th><th className="p-2 text-right">Now</th>{yrs.map((d, i) => <th key={d} className="p-2 text-right">Y{i + 1}<br /><span className="text-xs font-normal">{d}</span></th>)}</tr></thead>
                 <tbody>{rows.map((r) => { const b = pct(r.desig, r.n); return (
-                  <tr key={r.level} className="border-t border-border"><td className="p-2">{r.level}</td><td className="p-2 text-right">{b.toFixed(1)}</td>
+                  <tr key={r.level} className="border-t border-border"><td className="p-2">{r.level}</td><td className="p-2 text-xs text-muted-foreground">{auto[r.level]?.src}</td><td className="p-2 text-right">{b.toFixed(1)}</td>
                     {yrs.map((d, i) => <td key={d} className="p-2 text-right">{Math.max(b, b + ((r.target.total - b) * (i + 1)) / yrs.length).toFixed(1)}</td>)}</tr>); })}</tbody>
               </table>
               <div className="mt-4 flex flex-wrap gap-3">
