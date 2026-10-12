@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/barrier-analysis")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>): { mode?: "questionnaire" } => (s.mode === "questionnaire" ? { mode: "questionnaire" } : {}),
+  validateSearch: (s: Record<string, unknown>): { mode?: "questionnaire" } => (s["mode"] === "questionnaire" ? { mode: "questionnaire" } : {}),
   component: BarrierAnalysisPage,
 });
 
