@@ -130,30 +130,40 @@ function PricingPage() {
       <main className="mx-auto max-w-6xl px-6 py-10">
         <h1 className="page-title text-center text-primary">Subscription plans</h1>
         <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
-        <h2 className="section-title mt-8 text-primary">Managed compliance packages</h2>
-        <p className="mt-1 text-muted-foreground">We run your Employment Equity programme with you. Your first online payment covers the setup fee plus the first month.</p>
+        <h2 className="section-title mt-8 text-primary">Subscription packages</h2>
+        <p className="mt-1 text-muted-foreground">Every package includes the full implementation and onboarding service below, priced to your organisation. Speak to us for an exact quote within the range for your size.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {PACKAGES.map((p) => (
             <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-6 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
               {p.featured && <span className="mb-3 w-fit rounded-full bg-teal px-3 py-1 text-xs font-semibold text-primary-foreground">Most popular</span>}
               <h3 className="card-title text-primary">{p.name}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{p.market}</p>
-              <p className="mt-5 font-display text-2xl font-bold text-primary">{p.price}<span className="text-base font-medium text-muted-foreground">/month</span></p>
-              <p className="text-sm text-muted-foreground">{p.setup} · {p.annual}</p>
-              {p.intro && <p className="mt-5 text-sm font-semibold text-primary">{p.intro}</p>}
-              <ul className={`${p.intro ? "mt-2" : "mt-5"} flex-1 space-y-2 text-sm`}>
-                {p.features.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
-              </ul>
-              {p.payfast ? (
-                <button type="button" disabled={busy !== null} onClick={() => payWithPayfast(p.payfast!)} className={`mt-8 rounded-lg px-4 py-2 text-center text-sm font-semibold disabled:opacity-60 ${p.featured ? "bg-teal text-primary-foreground" : "bg-primary text-primary-foreground"}`}>
-                  {busy === p.payfast ? "Redirecting to PayFast…" : "Subscribe — pay online"}
-                </button>
-              ) : (
-                <a href="#quote" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</a>
-              )}
+              <dl className="mt-5 space-y-3 text-sm">
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Monthly price</dt>
+                  <dd className="font-display text-xl font-bold text-primary">{p.price}<span className="text-sm font-medium text-muted-foreground">/month</span></dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Annual option</dt>
+                  <dd className="font-semibold text-primary">{p.annual}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Implementation and data configuration</dt>
+                  <dd className="font-semibold text-primary">{p.setup}</dd>
+                </div>
+              </dl>
+              <a href="#quote" className="mt-auto pt-6"><span className="block rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</span></a>
             </div>
           ))}
         </div>
+
+        <section className="mt-12 rounded-xl border border-border bg-card p-8">
+          <h2 className="section-title text-primary">Implementation and onboarding service</h2>
+          <p className="mt-2 max-w-3xl text-muted-foreground">Our implementation and onboarding service ensures your Employment Equity programme is fully configured, compliant, and operational with minimal internal administration. The service includes:</p>
+          <ul className="mt-5 grid gap-x-8 gap-y-2 text-sm md:grid-cols-2">
+            {IMPLEMENTATION.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
+          </ul>
+        </section>
 
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
           <h2 className="section-title text-primary">Software-only subscription</h2>
