@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageExport } from "@/components/page-export";
 
-const STAFF_PATHS = ["/staff", "/clients"];
+const STAFF_PATHS = ["/staff", "/clients", "/review"];
 
 export function AppHeader() {
   const { data: isAdmin, isFetched } = useQuery({
@@ -51,6 +51,7 @@ export function AppHeader() {
               <Link to="/staff" className={link} activeProps={active}>Dashboard</Link>
               <Link to="/clients" className={link} activeProps={active}>Clients, invites &amp; deadlines</Link>
               <Link to="/invoices" className={link} activeProps={active}>Invoices</Link>
+              <Link to="/review" className={link} activeProps={active}>Review checklist</Link>
             </>
           ) : (
             <>
