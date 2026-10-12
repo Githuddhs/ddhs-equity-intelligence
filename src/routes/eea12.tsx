@@ -244,7 +244,7 @@ function Eea12Page() {
               {wf.units.length > 0 && (
                 <OrgUnitPicker units={wf.units} value={unitFilter}
                   onChange={(f) => { setPlanId(""); setUnitFilter(f); }}
-                  labels={["Faculty / Division", "Department", "Centre / Subsection"]} />
+                  labels={["Division", "Department", "Centre / Subsection"]} />
               )}
               <button type="button" onClick={() => loadFromWorkforce()}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
