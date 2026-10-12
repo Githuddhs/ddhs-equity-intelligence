@@ -129,7 +129,7 @@ function PricingPage() {
       </header>
       <main className="mx-auto max-w-6xl px-6 py-10">
         <h1 className="page-title text-center text-primary">Subscription plans</h1>
-        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
+        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a subscription package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
         <h2 className="section-title mt-8 text-primary">Subscription packages</h2>
         <p className="mt-1 text-muted-foreground">Every package includes the full implementation and onboarding service below, priced to your organisation. Speak to us for an exact quote within the range for your size.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
