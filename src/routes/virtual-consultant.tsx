@@ -88,7 +88,7 @@ function ConsultantPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
-      <Link to="/pricing" className="text-sm font-semibold text-teal">← Back to pricing</Link>
+      <Link to="/pricing" search={{ paid: false, cancelled: false }} className="text-sm font-semibold text-teal">← Back to pricing</Link>
       <h1 className="section-title mt-3 text-primary">Virtual EE Consultant</h1>
       <p className="mt-2 max-w-3xl text-muted-foreground">
         Remote, on-demand Employment Equity expertise by the hour — no monthly commitment. Every session works from your own platform data: workforce profile, EE plan, barrier analysis and compliance deadlines.
