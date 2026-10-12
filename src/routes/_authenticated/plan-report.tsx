@@ -34,7 +34,7 @@ type Row = {
 };
 
 function PlanReport() {
-  const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
+  const [filter, setFilter] = useOrgFilter();
   const [exporting, setExporting] = useState(false);
   const { data: wf } = useLatestOrgUnits();
   const { data: plans = [], isLoading } = useQuery({

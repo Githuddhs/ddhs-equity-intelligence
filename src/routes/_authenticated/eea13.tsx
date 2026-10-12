@@ -56,7 +56,7 @@ function Eea13Page() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [planId, setPlanId] = useState("");
   const [company, setCompany] = useState("");
-  const [filter, setFilter] = useState<UnitFilter>(ALL_UNITS);
+  const [filter, setFilter] = useOrgFilter();
   const [targets, setTargets] = useState<Record<string, Targets>>({});
   const [province, setProvince] = useState("National");
   useEffect(() => { void supabase.auth.getUser().then(({ data }) => { const p = data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }); }, []);

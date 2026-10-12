@@ -61,7 +61,7 @@ function Card({ title, to, cta, children }: { title: string; to: "/eea12" | "/ba
 
 function Dashboard() {
   const [exporting, setExporting] = useState(false);
-  const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
+  const [unitFilter, setUnitFilter] = useOrgFilter();
   const { data: wf } = useLatestOrgUnits();
   const { data, isLoading, error } = useQuery({
     queryKey: ["dashboard"],
