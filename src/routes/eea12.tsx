@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
 import { EeaCrosswalk } from "@/components/eea-crosswalk";
 import { latestDgFindings } from "@/lib/form-drafts";
+import { PageExport } from "@/components/page-export";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -183,6 +184,7 @@ function Eea12Page() {
         </div>
       </header>
 
+      <PageExport />
       <main className="mx-auto max-w-7xl space-y-10 px-6 py-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-teal">EEA12 Workforce Analysis</p>
