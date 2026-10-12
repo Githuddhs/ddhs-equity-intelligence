@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { PageExport } from "@/components/page-export";
 
 const STAFF_PATHS = ["/staff", "/clients"];
 
@@ -36,6 +37,8 @@ export function AppHeader() {
   const link = "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary";
   const active = { className: "rounded-md px-3 py-2 text-sm font-semibold text-primary bg-muted" };
   return (
+    <>
+    <PageExport />
     <header className={`border-b border-border print:hidden ${isAdmin ? "bg-secondary" : ""}`}>
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4">
         <Link to={isAdmin ? "/staff" : "/"} className="font-display text-lg font-bold text-primary">
@@ -66,5 +69,6 @@ export function AppHeader() {
         </nav>
       </div>
     </header>
+    </>
   );
 }
