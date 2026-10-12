@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-const shareOrigin = () => (/localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
+const shareOrigin = () => (typeof window === "undefined" || /localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
 
 type Props = {
   /** Company or person the invitation is for — prefilled when opened from a client record. */
