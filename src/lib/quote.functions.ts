@@ -17,7 +17,10 @@ export const quoteServices = [
   "EE Committee Training",
   "DG Review Preparation",
   "Full Compliance Audit",
-  "Enterprise Plus package",
+  "Essential 1 package",
+  "Essential 2 package",
+  "Professional package",
+  "Enterprise package",
   "Software-only subscription (5,000+ employees)",
   "Something else",
 ] as const;

@@ -25,17 +25,31 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-type Pkg = { name: string; market: string; price: string; setup: string; annual: string; intro?: string; features: string[]; featured?: boolean; payfast?: PayfastPlan };
+type Pkg = { name: string; market: string; price: string; annual: string; setup: string; featured?: boolean };
 
 const PACKAGES: Pkg[] = [
-  { name: "Essential Compliance", market: "Small employers (50–150 employees)", price: "R4,995", setup: "R9,500 once-off setup", annual: "R59,940 per year", payfast: "essential",
-    features: ["Workforce profile analysis", "EE compliance assessment", "Annual EEA2 and EEA4 submission support", "One EE Committee workshop annually", "EE compliance dashboard", "Quarterly compliance review", "Email support"] },
-  { name: "Professional EE Management", market: "Medium-sized employers (150–500 employees)", price: "R12,500", setup: "R18,500 once-off setup", annual: "R150,000 per year", intro: "Everything in Essential, plus:", featured: true, payfast: "professional",
-    features: ["EEA12 workforce analysis", "EEA13 EE Plan development", "Quarterly committee support", "Barrier analysis", "Recruitment monitoring", "Management reports", "Numerical target tracking", "Online document repository", "Quarterly executive dashboard"] },
-  { name: "Enterprise Transformation", market: "Large employers (500–5,000 employees)", price: "R29,500", setup: "R45,000 once-off setup", annual: "R354,000 per year", intro: "Everything in Professional, plus:", payfast: "enterprise",
-    features: ["Monthly EE Committee support", "DG Review preparation", "Sectoral target analysis", "Strategic transformation planning", "Executive presentations", "Audit readiness assessments", "Unlimited support requests", "Advanced analytics dashboard", "Board reporting"] },
-  { name: "Enterprise Plus", market: "Universities, municipalities, SOEs, listed companies", price: "R49,500–R85,000", setup: "R75,000–R150,000 setup", annual: "R594,000–R1,020,000 per year",
-    features: ["Dedicated EE Consultant", "Dedicated Data Analyst", "Transformation strategy support", "Multi-campus / site management", "Advanced predictive analytics", "Custom reporting", "DG Review support", "Executive workshops", "Unlimited users"] },
+  { name: "Essential 1", market: "Small employers (50–149 employees)", price: "R4,500–R12,500", annual: "R54,000–R150,000 per year", setup: "R12,500 once-off" },
+  { name: "Essential 2", market: "Employers (50–249 employees)", price: "R12,500–R25,500", annual: "R150,000–R300,000 per year", setup: "R20,000 once-off", featured: true },
+  { name: "Professional", market: "Medium-sized employers (150–999 employees)", price: "R12,500–R25,000", annual: "R150,000–R300,000 per year", setup: "R25,000 once-off" },
+  { name: "Enterprise", market: "Large employers and public entities (1,000+ employees)", price: "R25,000–R75,000", annual: "R270,000–R810,000 per year", setup: "R30,000 once-off" },
+];
+
+const IMPLEMENTATION = [
+  "Workforce data setup and platform configuration",
+  "Access to compliance dashboards, EE analytics, EE Plan, DG Review readiness reporting, and barrier analysis tools",
+  "End-to-end support in developing and configuring the EE Plan (EEA13)",
+  "Administration and analysis of barrier analysis questionnaires",
+  "Migration and uploading of EE and compliance documentation",
+  "Support with EEA2 and EEA4 reporting and submission processes",
+  "Multi-site, divisional, and group-wide reporting capability",
+  "Executive, EXCO, Board, and management dashboards",
+  "Workforce forecasting and scenario planning",
+  "Audit and DG Review readiness support",
+  "Employment Equity Committee portal and committee administration support",
+  "Centralised policy and procedure repository",
+  "HRIS and API integration options",
+  "Dedicated customer success and technical support",
+  "Quarterly strategic review and compliance advisory sessions",
 ];
 
 const SAAS: { size: string; price: string; payfast?: PayfastPlan }[] = [
@@ -115,31 +129,41 @@ function PricingPage() {
       </header>
       <main className="mx-auto max-w-6xl px-6 py-10">
         <h1 className="page-title text-center text-primary">Subscription plans</h1>
-        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a managed package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
-        <h2 className="section-title mt-8 text-primary">Managed compliance packages</h2>
-        <p className="mt-1 text-muted-foreground">We run your Employment Equity programme with you. Your first online payment covers the setup fee plus the first month.</p>
+        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a subscription package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
+        <h2 className="section-title mt-8 text-primary">Subscription packages</h2>
+        <p className="mt-1 text-muted-foreground">Every package includes the full implementation and onboarding service below, priced to your organisation. Speak to us for an exact quote within the range for your size.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {PACKAGES.map((p) => (
             <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-6 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
               {p.featured && <span className="mb-3 w-fit rounded-full bg-teal px-3 py-1 text-xs font-semibold text-primary-foreground">Most popular</span>}
               <h3 className="card-title text-primary">{p.name}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{p.market}</p>
-              <p className="mt-5 font-display text-2xl font-bold text-primary">{p.price}<span className="text-base font-medium text-muted-foreground">/month</span></p>
-              <p className="text-sm text-muted-foreground">{p.setup} · {p.annual}</p>
-              {p.intro && <p className="mt-5 text-sm font-semibold text-primary">{p.intro}</p>}
-              <ul className={`${p.intro ? "mt-2" : "mt-5"} flex-1 space-y-2 text-sm`}>
-                {p.features.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
-              </ul>
-              {p.payfast ? (
-                <button type="button" disabled={busy !== null} onClick={() => payWithPayfast(p.payfast!)} className={`mt-8 rounded-lg px-4 py-2 text-center text-sm font-semibold disabled:opacity-60 ${p.featured ? "bg-teal text-primary-foreground" : "bg-primary text-primary-foreground"}`}>
-                  {busy === p.payfast ? "Redirecting to PayFast…" : "Subscribe — pay online"}
-                </button>
-              ) : (
-                <a href="#quote" className="mt-8 rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</a>
-              )}
+              <dl className="mt-5 space-y-3 text-sm">
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Monthly price</dt>
+                  <dd className="font-display text-xl font-bold text-primary">{p.price}<span className="text-sm font-medium text-muted-foreground">/month</span></dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Annual option</dt>
+                  <dd className="font-semibold text-primary">{p.annual}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Implementation and data configuration</dt>
+                  <dd className="font-semibold text-primary">{p.setup}</dd>
+                </div>
+              </dl>
+              <a href="#quote" className="mt-auto pt-6"><span className="block rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</span></a>
             </div>
           ))}
         </div>
+
+        <section className="mt-12 rounded-xl border border-border bg-card p-8">
+          <h2 className="section-title text-primary">Implementation and onboarding service</h2>
+          <p className="mt-2 max-w-3xl text-muted-foreground">Our implementation and onboarding service ensures your Employment Equity programme is fully configured, compliant, and operational with minimal internal administration. The service includes:</p>
+          <ul className="mt-5 grid gap-x-8 gap-y-2 text-sm md:grid-cols-2">
+            {IMPLEMENTATION.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
+          </ul>
+        </section>
 
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
           <h2 className="section-title text-primary">Software-only subscription</h2>
