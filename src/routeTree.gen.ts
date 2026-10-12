@@ -26,6 +26,7 @@ import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
+import { Route as TourRouteImport } from './routes/tour'
 import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedBarrierAnalysisRouteImport } from './routes/_authenticated/barrier-analysis'
@@ -140,6 +141,11 @@ const SignupRoute = SignupRouteImport.update({
 const StaffLoginRoute = StaffLoginRouteImport.update({
   id: '/staff-login',
   path: '/staff-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourRoute = TourRouteImport.update({
+  id: '/tour',
+  path: '/tour',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkforceFoundationRoute = WorkforceFoundationRouteImport.update({
@@ -315,6 +321,7 @@ export interface FileRoutesByFullPath {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/tour': typeof TourRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
   '/account': typeof AuthenticatedAccountRoute
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
@@ -363,6 +370,7 @@ export interface FileRoutesByTo {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/tour': typeof TourRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
   '/account': typeof AuthenticatedAccountRoute
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
@@ -413,6 +421,7 @@ export interface FileRoutesById {
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
   '/staff-login': typeof StaffLoginRoute
+  '/tour': typeof TourRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
@@ -463,6 +472,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/tour'
     | '/workforce-foundation'
     | '/account'
     | '/barrier-analysis'
@@ -511,6 +521,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/tour'
     | '/workforce-foundation'
     | '/account'
     | '/barrier-analysis'
@@ -560,6 +571,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/signup'
     | '/staff-login'
+    | '/tour'
     | '/workforce-foundation'
     | '/_authenticated/account'
     | '/_authenticated/barrier-analysis'
@@ -610,6 +622,7 @@ export interface RootRouteChildren {
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
   StaffLoginRoute: typeof StaffLoginRoute
+  TourRoute: typeof TourRoute
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
@@ -739,6 +752,13 @@ declare module '@tanstack/react-router' {
       path: '/staff-login'
       fullPath: '/staff-login'
       preLoaderRoute: typeof StaffLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour': {
+      id: '/tour'
+      path: '/tour'
+      fullPath: '/tour'
+      preLoaderRoute: typeof TourRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/workforce-foundation': {
@@ -1025,6 +1045,7 @@ const rootRouteChildren: RootRouteChildren = {
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
   StaffLoginRoute: StaffLoginRoute,
+  TourRoute: TourRoute,
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
