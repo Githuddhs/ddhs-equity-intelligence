@@ -8,3 +8,11 @@ export function eapGap(actual: number | null | undefined, target: number | null 
     direction: rounded < 0 ? "under" as const : rounded > 0 ? "over" as const : "aligned" as const,
   };
 }
+
+export function eapExplanation(group: string, actual: number | null | undefined, target: number | null | undefined) {
+  const gap = eapGap(actual, target);
+  if (gap.direction === "unavailable") return `${group}: comparison unavailable because workforce headcount or provincial EAP is missing.`;
+  if (gap.direction === "aligned") return `${group}: aligned — workforce share matches provincial EAP to one decimal place (0.0 percentage points difference).`;
+  const amount = Math.abs(Math.round(((actual ?? 0) - (target ?? 0)) * 10) / 10).toFixed(1);
+  return `${group}: ${gap.label.toLowerCase()} — workforce share is ${amount} percentage points ${gap.direction === "under" ? "below" : "above"} provincial EAP (${actual?.toFixed(1)}% workforce versus ${target?.toFixed(1)}% EAP).`;
+}

@@ -111,6 +111,16 @@ meter.accent-teal::-webkit-meter-optimum-value { background: var(--teal); }
 meter.accent-primary::-moz-meter-bar { background: var(--primary); }
 meter.accent-teal::-moz-meter-bar { background: var(--teal); }
 
+.eap-bar-track { fill: none; stroke: var(--muted-foreground); stroke-opacity: 0.35; }
+.eap-bar-workforce { fill: currentColor; stroke: currentColor; }
+.eap-bar-benchmark { fill: none; stroke: currentColor; stroke-width: 2; stroke-dasharray: 5 3; }
+.eap-chart-row { break-inside: avoid; }
+@media print {
+  .eap-print-chart { color: var(--foreground); }
+  .eap-print-bar { color: var(--foreground); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .eap-print-chart p, .eap-print-chart span { color: var(--foreground); }
+}
+
 /* ---- Shared type scale: every page uses these, nothing else ---- */
 
 @utility hero-title {
