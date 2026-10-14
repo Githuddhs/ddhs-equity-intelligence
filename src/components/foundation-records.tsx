@@ -1,0 +1,101 @@
+import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Download, Upload, Plus, Trash2, LockKeyhole, Save } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { LEVELS } from "@/lib/workforce";
+import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
+import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, foundationWorkbook, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, type Foundation } from "@/lib/foundation";
+import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
+
+export const foundationQuery = () => ({ queryKey: ["foundation-periods"], queryFn: async () => {
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return [];
+  const { data, error } = await supabase.from("workforce_foundation_periods").select("*").eq("user_id", auth.user.id).order("period_end", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map((r) => foundationSchema.parse(r));
+} });
+
+const choices: Record<string, string[]> = {
+  populationGroup: ["African", "Coloured", "Indian", "White", "Foreign national"], gender: ["Male", "Female"],
+  disability: ["Yes", "No", "Not disclosed"], employmentType: ["Permanent", "Fixed-term", "Temporary", "Part-time"],
+  level: LEVELS, previousLevel: LEVELS, newLevel: LEVELS, gradingSystem: ["Paterson", "Peromnes", "Hay", "Equate", "Other"],
+  type: ["Recruitment", "Promotion", "Transfer", "Termination"], province: Object.keys(PROVINCE_EAP).filter((p) => p !== "National"), sector: SECTORS.map((s) => s.name),
+};
+const input = "h-9 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground";
+function Field({ name, value, onChange, label }: { name: string; value: string; onChange: (v: string) => void; label: string }) {
+  const options = choices[name];
+  if (options) return <select aria-label={label} className={input} value={value} onChange={(e) => onChange(e.target.value)}><option value="">Not supplied</option>{options.map((v) => <option key={v}>{v}</option>)}</select>;
+  const date = /date|periodstart|periodend/i.test(name);
+  const number = ["basicPay", "variablePay", "benefits", "hours", "fte"].includes(name);
+  return <input aria-label={label} className={input} value={value} type={date ? "date" : number ? "number" : "text"} min={number ? 0 : undefined} step={number ? "any" : undefined} max={name === "fte" ? 1 : undefined} onChange={(e) => onChange(e.target.value)} />;
+}
+
+export function FoundationRecords() {
+  const qc = useQueryClient();
+  const { data: records = [], isError } = useQuery(foundationQuery());
+  const [form, setForm] = useState<Foundation>(blankFoundation);
+  const [initialised, setInitialised] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const save = useServerFn(saveFoundation), remove = useServerFn(deleteFoundation);
+  useEffect(() => { if (!initialised && records[0]) { setForm(records[0]); setInitialised(true); } }, [records, initialised]);
+  const update = (next: Foundation) => { setForm(next); setDirty(true); setInitialised(true); };
+  const check = validateFoundation(form);
+  const snapshot = foundationSnapshot(form);
+  const persist = async () => {
+    setSaving(true);
+    try {
+      const result = await save({ data: form });
+      setForm({ ...form, id: result.id }); setDirty(false);
+      await qc.invalidateQueries();
+      toast.success("Reporting period saved; shared workforce figures updated.");
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save workforce records."); }
+    finally { setSaving(false); }
+  };
+  const table = (section: "employees" | "remuneration" | "movements", keys: readonly string[]) => {
+    const rows = form[section] as Record<string, string>[];
+    return <>
+      <div className="mb-3 flex items-center justify-between gap-3"><span className="text-sm text-muted-foreground">{rows.length} records</span><Button variant="outline" onClick={() => {
+        const row = section === "employees" ? employeeSchema.parse({ organisation: form.organisation.name }) : section === "remuneration" ? paySchema.parse({ periodStart: form.period_start, periodEnd: form.period_end }) : movementSchema.parse({});
+        update({ ...form, [section]: [...form[section], row] });
+      }}><Plus />Add {section === "employees" ? "employee" : section === "remuneration" ? "pay record" : "movement"}</Button></div>
+      <div className="overflow-x-auto border-y border-border"><table className="w-full text-sm"><thead><tr className="bg-muted">{keys.map((key) => <th key={key} className="min-w-44 px-3 py-3 text-left font-medium text-muted-foreground">{fieldLabel(key)}</th>)}<th className="px-2" /></tr></thead>
+        <tbody>{rows.slice(0, 200).map((row, i) => <tr key={i} className="border-t border-border">{keys.map((key) => <td key={key} className="px-3 py-2"><Field name={key} value={row[key] ?? ""} label={`${section} row ${i + 1} ${fieldLabel(key)}`} onChange={(v) => update({ ...form, [section]: rows.map((r, n) => n === i ? { ...r, [key]: v } : r) })} /></td>)}<td className="px-2"><Button variant="ghost" size="icon" title="Remove record" aria-label={`Remove ${section} row ${i + 1}`} onClick={() => update({ ...form, [section]: rows.filter((_, n) => n !== i) })}><Trash2 /></Button></td></tr>)}</tbody></table>
+        {!rows.length && <p className="py-8 text-center text-sm text-muted-foreground">No records captured.</p>}
+      </div>
+      {rows.length > 200 && <p className="mt-2 text-xs text-muted-foreground">First 200 records shown. All {rows.length} records are included when saved or downloaded.</p>}
+    </>;
+  };
+  return <section className="mt-8 border-y border-border py-6" aria-label="Reporting-period workforce records">
+    <div className="flex flex-wrap items-start justify-between gap-4">
+      <div><h2 className="section-title text-primary">Workforce reporting records</h2><p className="mt-2 flex max-w-2xl items-start gap-2 text-sm text-muted-foreground"><LockKeyhole className="mt-0.5 size-4 shrink-0" />Individual salary and disability records are account-owner only. Staff, managers and shared client links have no access to these records.</p></div>
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" onClick={() => void downloadFoundationWorkbook()}><Download />Template</Button>
+        <Button variant="outline" onClick={() => { if (dirty && !confirm("Discard unsaved changes?")) return; update(blankFoundation()); }}><Plus />New period</Button>
+      </div>
+    </div>
+    {isError && <p role="alert" className="mt-3 text-destructive">Saved workforce records could not be loaded. Refresh and try again.</p>}
+    <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <label className="text-sm font-medium">Saved reporting period<select className={`${input} mt-1`} value={form.id ?? ""} onChange={(e) => { if (dirty && !confirm("Discard unsaved changes?")) return; const r = records.find((v) => v.id === e.target.value); setForm(r ?? blankFoundation()); setInitialised(true); setDirty(false); }}><option value="">New reporting period</option>{records.map((r) => <option key={r.id} value={r.id}>{r.organisation.name || "Unnamed"} · {r.period_start} – {r.period_end}</option>)}</select></label>
+      {(["period_start", "period_end", "snapshot_date"] as const).map((key) => <label key={key} className="text-sm font-medium">{key === "period_start" ? "Reporting period start" : key === "period_end" ? "Reporting period end" : "Workforce snapshot date"}<input aria-label={key === "period_start" ? "Reporting period start" : key === "period_end" ? "Reporting period end" : "Workforce snapshot date"} type="date" className={`${input} mt-1`} value={form[key]} onChange={(e) => update({ ...form, [key]: e.target.value })} /></label>)}
+    </div>
+    <div className="mt-4 flex flex-wrap items-center gap-3 border-b border-border pb-4">
+      <Button variant="outline" asChild><label className="cursor-pointer"><Upload />Import workbook<input className="sr-only" type="file" accept=".xlsx,.xls" aria-label="Import foundation workbook" onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; try { update(await foundationWorkbook(f, form)); toast.success("Workbook loaded for review; not yet saved."); } catch (err) { toast.error(err instanceof Error ? err.message : "Cannot read workbook."); } e.target.value = ""; }} /></label></Button>
+      <Button variant="outline" disabled={!form.employees.length} onClick={() => void downloadFoundationWorkbook(form)}><Download />Download records</Button>
+      <span className="text-sm text-muted-foreground">{snapshot.total_headcount} employees at snapshot · {snapshot.units.length} units{dirty ? " · Unsaved changes" : ""}</span>
+    </div>
+    <Tabs defaultValue="organisation" className="mt-5">
+      <TabsList className="h-auto max-w-full flex-wrap justify-start"><TabsTrigger value="organisation">Organisation</TabsTrigger><TabsTrigger value="employees">Employees & job grades</TabsTrigger><TabsTrigger value="pay">Remuneration</TabsTrigger><TabsTrigger value="movements">Movements</TabsTrigger><TabsTrigger value="validation">Validation {check.errors.length || check.warnings.length ? `(${check.errors.length + check.warnings.length})` : ""}</TabsTrigger></TabsList>
+      <TabsContent value="organisation" className="py-4"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{Object.keys(form.organisation).map((key) => <label key={key} className="text-sm font-medium">{key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)}<div className="mt-1"><Field name={key} value={form.organisation[key as keyof typeof form.organisation]} label={key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)} onChange={(v) => update({ ...form, organisation: { ...form.organisation, [key]: v } })} /></div></label>)}</div></TabsContent>
+      <TabsContent value="employees" className="py-4">{table("employees", EMPLOYEE_FIELDS)}</TabsContent>
+      <TabsContent value="pay" className="py-4"><p className="mb-4 text-sm text-muted-foreground">Reporting-period totals in ZAR, not monthly rates. Blank amounts remain missing; enter 0 for confirmed zero.</p>{table("remuneration", PAY_FIELDS)}</TabsContent>
+      <TabsContent value="movements" className="py-4">{table("movements", MOVEMENT_FIELDS)}</TabsContent>
+      <TabsContent value="validation" className="py-4"><h3 className="font-semibold text-primary">{check.errors.length} errors · {check.warnings.length} missing-information warnings</h3><ul className="mt-3 list-disc space-y-1 pl-5 text-sm">{check.errors.slice(0, 100).map((v) => <li className="text-destructive" key={v}>{v}</li>)}{check.warnings.slice(0, 100).map((v) => <li className="text-muted-foreground" key={v}>{v}</li>)}</ul>{check.errors.length + check.warnings.length > 100 && <p className="mt-3 text-sm text-muted-foreground">Showing up to 100 errors and 100 warnings. Correct the records and check again.</p>}</TabsContent>
+    </Tabs>
+    <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4"><p className={`text-sm ${check.errors.length ? "text-destructive" : "text-muted-foreground"}`}>{check.errors.length ? `${check.errors.length} errors prevent saving — see Validation.` : `${check.warnings.length} missing-information warnings. Figures remain provisional until complete.`}</p><div className="flex gap-2">{form.id && <Button variant="outline" disabled={saving} onClick={async () => { if (!form.id || !confirm("Delete this reporting period and its linked workforce snapshot?")) return; try { await remove({ data: { id: form.id } }); setForm(blankFoundation()); setDirty(false); setInitialised(true); await qc.invalidateQueries(); toast.success("Reporting period deleted."); } catch { toast.error("Could not delete this period."); } }}><Trash2 />Delete period</Button>}<Button disabled={saving || !!check.errors.length} onClick={() => void persist()}><Save />{saving ? "Saving…" : "Save reporting period"}</Button></div></div>
+  </section>;
+}
