@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { LEVELS, GROUPS, normaliseWorkforce, levelTotal, grandTotal, normaliseDisability, disabilityTotal } from "@/lib/workforce";
 import { SECTORS, LEVEL_TO_TARGET_KEY, eapTargets } from "@/lib/sectors";
+import { latestFoundation } from "@/lib/foundation-source";
 
 export type LiveOverview = {
   snapshotDate: string;
@@ -32,7 +33,7 @@ export function useLiveOverview(): LiveOverview | null {
       const uid = auth.user?.id;
       if (!uid) return;
       const [snap, plan, barriers, dg, docs] = await Promise.all([
-        supabase.from("workforce_snapshots").select("snapshot_date,counts,disability").eq("user_id", uid).order("snapshot_date", { ascending: false }).limit(1),
+        supabase.from("workforce_snapshots").select("id,snapshot_date,counts,disability").eq("user_id", uid).order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1),
         supabase.from("ee_plans").select("sector,start_date,end_date,dg_review_due").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }).eq("user_id", uid),
         supabase.from("dg_reviews").select("score").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
@@ -40,6 +41,7 @@ export function useLiveOverview(): LiveOverview | null {
       ]);
       const s = snap.data?.[0];
       if (cancelled || !s) return;
+      const foundation = await latestFoundation(s.id);
 
       const w = normaliseWorkforce(s.counts);
       const total = grandTotal(w);
@@ -52,8 +54,8 @@ export function useLiveOverview(): LiveOverview | null {
       }
       const dis = disabilityTotal(normaliseDisability(s.disability));
       const p = plan.data?.[0];
-      const sector = SECTORS.find((x) => x.name === p?.sector);
-      const metaProvince = auth.user?.user_metadata?.["province"];
+      const sector = SECTORS.find((x) => x.name === (foundation?.organisation.sector || p?.sector));
+      const metaProvince = foundation?.organisation.province || auth.user?.user_metadata?.["province"];
       const province = typeof metaProvince === "string" && metaProvince.trim() ? metaProvince.trim() : null;
       const eap = province ? eapTargets(province).total : null;
 

@@ -6,12 +6,14 @@ import type { ExportableResponse } from "@/lib/barrier-export";
 import { GROUPS, LEVELS, levelTotal, normaliseDisability, normaliseWorkforce, type Workforce } from "@/lib/workforce";
 import { aggregate, normaliseUnits, type OrgUnit } from "@/lib/org-units";
 
-export type WorkforceSnap = { date: string; counts: Workforce; disability: Record<string, number>; units: OrgUnit[] };
+export type WorkforceSnap = { id?: string; date: string; counts: Workforce; disability: Record<string, number>; units: OrgUnit[] };
 
 export async function latestWorkforce(): Promise<WorkforceSnap | null> {
-  const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,disability,units").order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return null;
+  const { data } = await supabase.from("workforce_snapshots").select("id,snapshot_date,counts,disability,units").eq("user_id", auth.user.id).order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle();
   if (!data) return null;
-  return { date: data.snapshot_date, counts: normaliseWorkforce(data.counts), disability: normaliseDisability(data.disability), units: normaliseUnits(data.units) };
+  return { id: data.id, date: data.snapshot_date, counts: normaliseWorkforce(data.counts), disability: normaliseDisability(data.disability), units: normaliseUnits(data.units) };
 }
 
 const designated = (row: Record<string, number> | undefined) => GROUPS.filter((g) => g.designated).reduce((a, g) => a + (row?.[g.key] ?? 0), 0);
