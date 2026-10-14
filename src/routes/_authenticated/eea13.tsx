@@ -13,6 +13,7 @@ import { normaliseContent, type GoalRow, type Milestone, type PlanContent } from
 import { latestEvidence, type Evidence } from "@/lib/evidence";
 import { exportEea13Pdf } from "@/lib/eea13-report";
 import { latestDgFindings, type DgFindings } from "@/lib/form-drafts";
+import { latestFoundation } from "@/lib/foundation-source";
 
 export const Route = createFileRoute("/_authenticated/eea13")({
   head: () => ({
@@ -60,7 +61,7 @@ function Eea13Page() {
   const [filter, setFilter] = useOrgFilter();
   const [targets, setTargets] = useState<Record<string, Targets>>({});
   const [province, setProvince] = useState("National");
-  useEffect(() => { void supabase.auth.getUser().then(({ data }) => { const p = data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }); }, []);
+  useEffect(() => { void Promise.all([latestFoundation(), supabase.auth.getUser()]).then(([f, { data }]) => { const p = f?.organisation.province || data.user?.user_metadata?.["province"]; if (typeof p === "string" && PROVINCE_EAP[p]) setProvince(p); }).catch(() => {}); }, []);
   const [ev, setEv] = useState<Evidence | null>(null);
   const [dg, setDg] = useState<DgFindings>(null);
   const [saving, setSaving] = useState(false);

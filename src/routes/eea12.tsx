@@ -14,6 +14,7 @@ import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
 import { EeaCrosswalk, OccupationalGrades } from "@/components/eea-crosswalk";
 import { latestDgFindings } from "@/lib/form-drafts";
 import { PageExport } from "@/components/page-export";
+import { latestFoundation } from "@/lib/foundation-source";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -87,6 +88,13 @@ function Eea12Page() {
     const key = s ? LEVEL_TO_TARGET_KEY[lvl] : undefined;
     if (s && key) setTargetsByLevel((prev) => ({ ...prev, [lvl]: s.targets[key] }));
   };
+  useEffect(() => { void latestFoundation().then((f) => {
+    if (!f) return;
+    const p = f.organisation.province;
+    if (p && PROVINCE_EAP[p]) { setProvince(p); setEap(PROVINCE_EAP[p]); }
+    const s = f.organisation.sector;
+    if (s) { setSector(s); LEVELS.forEach((l) => applySectorTargets(s, l)); }
+  }).catch(() => {}); }, []);
 
   const [planId, setPlanId] = useState("");
   const { data: plans = [] } = useQuery({

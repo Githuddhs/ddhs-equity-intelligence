@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { LEVELS, GROUP_KEYS, emptyWorkforce, grandTotal, type Key } from "@/lib/workforce";
+import { LEVELS, emptyWorkforce, grandTotal, type Key } from "@/lib/workforce";
+import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import type { OrgUnit } from "@/lib/org-units";
 
 const text = z.string().trim().max(200).default("");
@@ -31,6 +32,8 @@ export function validateFoundation(f: Foundation) {
   if (![f.period_start, f.period_end, f.snapshot_date].every(validDate)) errors.push("Enter valid reporting-period and snapshot dates.");
   else if (f.period_start > f.period_end || f.snapshot_date < f.period_start || f.snapshot_date > f.period_end) errors.push("Snapshot date must fall within the reporting period; start must not follow end.");
   for (const k of ["name", "registration", "doelRef", "sector", "province"] as const) if (!f.organisation[k]) warnings.push(`Organisation: ${k === "doelRef" ? "DoEL reference" : k} is missing.`);
+  if (f.organisation.province && (!PROVINCE_EAP[f.organisation.province] || f.organisation.province === "National")) errors.push("Select a valid organisation province.");
+  if (f.organisation.sector && !SECTORS.some((s) => s.name === f.organisation.sector)) errors.push("Select a recognised economic sector.");
   if (!f.employees.length) errors.push("Add at least one employee record.");
   const ids = new Set<string>();
   f.employees.forEach((e, i) => {
@@ -43,6 +46,8 @@ export function validateFoundation(f: Foundation) {
     for (const k of ["jobTitle", "gradingSystem", "jobGrade", "employmentType", "startDate", "disability"] as const) if (!e[k]) warnings.push(`${label}: ${k} is missing.`);
     if (e.gradingSystem && !["Paterson", "Peromnes", "Hay", "Equate", "Other"].includes(e.gradingSystem)) errors.push(`${label}: grading system is not recognised.`);
     if (e.disability && !["Yes", "No", "Not disclosed"].includes(e.disability)) errors.push(`${label}: disability must be Yes, No or Not disclosed.`);
+    if (e.disability === "Not disclosed") warnings.push(`${label}: disability status not disclosed; disability totals are incomplete.`);
+    if (e.organisation && f.organisation.name && e.organisation !== f.organisation.name) errors.push(`${label}: organisation must match this reporting period.`);
     for (const k of ["startDate", "endDate"] as const) if (e[k] && !validDate(e[k])) errors.push(`${label}: invalid ${k}.`);
     if (e.startDate && e.endDate && e.endDate < e.startDate) errors.push(`${label}: end date precedes start date.`);
     if (![e.faculty, e.division, e.department, e.section].some(Boolean)) warnings.push(`${label}: no organisation-unit breakdown provided.`);
@@ -98,7 +103,8 @@ export function foundationReportGrids(f: Foundation) {
   for (const e of f.employees) {
     const k = employeeGroup(e);
     if (!k) continue;
-    if (activeAtSnapshot(e, f.snapshot_date) && e.disability === "Yes" && disabled[e.level]) disabled[e.level][k]++;
+    const disabledRow = disabled[e.level];
+    if (activeAtSnapshot(e, f.snapshot_date) && e.disability === "Yes" && disabledRow) disabledRow[k]++;
     const pay = f.remuneration.find((r) => r.employeeId === e.employeeId);
     if (pay && [pay.basicPay, pay.variablePay, pay.benefits].every((v) => v !== "")) {
       const r = remuneration[e.level], h = paidHeadcount[e.level];
@@ -126,19 +132,26 @@ export async function foundationWorkbook(file: File, current: Foundation): Promi
   const read = (name: string) => {
     const sheet = wb.Sheets[name];
     if (!sheet) return [];
-    return XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "", raw: false });
+    return XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "", raw: true });
   };
   const normalise = (r: Record<string, unknown>, keys: string[]) => Object.fromEntries(keys.map((key) => {
     const header = Object.keys(r).find((h) => h.toLowerCase().replace(/[^a-z]/g, "") === key.toLowerCase());
-    return [key, header ? String(r[header] ?? "").trim() : ""];
+    const value = header ? r[header] : "";
+    const dateKey = /date|periodstart|periodend/i.test(key);
+    if (dateKey && typeof value === "number") {
+      const d = XLSX.SSF.parse_date_code(value);
+      return [key, d ? `${d.y}-${String(d.m).padStart(2, "0")}-${String(d.d).padStart(2, "0")}` : ""];
+    }
+    return [key, String(value ?? "").trim()];
   }));
   const org = read("Organisation")[0];
   if (!wb.Sheets["Employees"]) throw new Error("Workbook needs an Employees sheet. Download the template for the required headings.");
+  const dates = org ? normalise(org, ["periodStart", "periodEnd", "snapshotDate"]) : {};
   return foundationSchema.parse({ ...current,
-    ...(org ? { ...normalise(org, ["period_start", "period_end", "snapshot_date"].map((s) => s.replace(/_/g, ""))) } : {}),
-    period_start: org ? String(org["periodStart"] ?? current.period_start) : current.period_start,
-    period_end: org ? String(org["periodEnd"] ?? current.period_end) : current.period_end,
-    snapshot_date: org ? String(org["snapshotDate"] ?? current.snapshot_date) : current.snapshot_date,
+    id: undefined,
+    period_start: dates["periodStart"] || current.period_start,
+    period_end: dates["periodEnd"] || current.period_end,
+    snapshot_date: dates["snapshotDate"] || current.snapshot_date,
     organisation: org ? normalise(org, Object.keys(organisationSchema.shape)) : current.organisation,
     employees: read("Employees").map((r) => normalise(r, EMPLOYEE_FIELDS)),
     remuneration: read("Pay").map((r) => normalise(r, PAY_FIELDS)),
