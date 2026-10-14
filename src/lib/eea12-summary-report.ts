@@ -87,6 +87,9 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     body: KEYS.map((k) => { const gap = eapGap(at.total ? at.sh(k) : null, i.eap[k]); return [NAMES[k] ?? k, all[k] ?? 0, at.total ? p(at.sh(k)) : "—", p(i.eap[k]), gap.gap, gap.label]; }),
   });
   explanations("Selected levels combined", at);
+  doc.setFontSize(8); doc.setTextColor(110);
+  for (const line of doc.splitTextToSize(EAP_GAP_LEGEND, 182) as string[]) { doc.text(line, 14, (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8); }
+  doc.setTextColor(0);
 
   for (const l of i.levels) {
     doc.addPage(); header(`EEA12 — ${l}`);
