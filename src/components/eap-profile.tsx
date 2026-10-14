@@ -23,7 +23,7 @@ export function EapProfile({ counts, eap, province }: { counts: Counts | undefin
     const target = eap?.[g.key];
     return { ...eapGap(actual, target), ...g, count: counts?.[g.key] ?? 0, actual, target };
   });
-  const percent = (n: number | null | undefined) => n == null ? "—" : `${n.toFixed(1)}%`;
+  const percent = (n: number | null | undefined) => n == null ? "Not available" : `${n.toFixed(1)}%`;
   return <div className="space-y-3" aria-label="EAP representation profile">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <h4 className="font-semibold text-primary">Population profile · {province || "Province not set"}</h4>

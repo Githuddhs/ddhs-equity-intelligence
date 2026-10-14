@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Show missing provincial EAP as “Not available” in charts and printed/downloaded tables; leave gaps uncalculated and preserve genuine zero benchmarks.
 - [ ] Include shared percentage-point EAP explanations in all four EEA12 download formats, retaining selected unit, occupational-level and job-grade filters; verify filtered files and missing-data states.
 - [x] Add percentage-point EAP gaps and plain-language explanations beside EEA12 occupational levels and in unit downloads; entered workforce comparisons and missing-data explanations verified.
 - [x] Make EAP charts print-readable with direct values, solid/dashed bars and explicit under/over labels; browser print with backgrounds off and screen views verified without runtime errors.
