@@ -38,6 +38,21 @@ async function pdfSource(blob: Blob) {
   pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
   return pdfjs.getDocument({ data: new Uint8Array(await blob.arrayBuffer()) }).promise;
 }
+async function finalizePresentation(blob: Blob): Promise<Blob> {
+  const { default: JSZip } = await import("jszip");
+  const zip = await JSZip.loadAsync(await blob.arrayBuffer());
+  const entry = zip.file("ppt/presentation.xml");
+  if (entry) {
+    const xml = new DOMParser().parseFromString(await entry.async("string"), "application/xml");
+    const root = xml.documentElement;
+    const order = ["sldMasterIdLst", "notesMasterIdLst", "handoutMasterIdLst", "sldIdLst", "sldSz", "notesSz", "smartTags", "embeddedFontLst", "custShowLst", "photoAlbum", "custDataLst", "kinsoku", "defaultTextStyle", "modifyVerifier", "extLst"];
+    const elements = Array.from(root.children);
+    elements.sort((a, b) => order.indexOf(a.localName) - order.indexOf(b.localName));
+    for (const element of elements) root.appendChild(element);
+    zip.file("ppt/presentation.xml", new XMLSerializer().serializeToString(xml));
+  }
+  return zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.presentationml.presentation", compression: "DEFLATE" });
+}
 async function requestData(request: ReportRequest): Promise<ReportData> {
   if (request.data) return request.data;
   if (request.workbook) {
@@ -86,7 +101,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
         await page.render({ canvasContext: ctx, canvas, viewport }).promise;
         const slide = pptx.addSlide(); slide.addImage({ data: canvas.toDataURL("image/png"), x: 0, y: 0, w: width, h: height });
       }
-      return await pptx.write({ outputType: "blob" }) as Blob;
+      return finalizePresentation(await pptx.write({ outputType: "blob" }) as Blob);
     } finally { await pdf.cleanup(); }
   }
   const d = await requestData(request);
@@ -117,6 +132,9 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
   if (format === "pdf") {
     const { jsPDF } = await import("jspdf"), autoTable = (await import("jspdf-autotable")).default;
     const doc = new jsPDF(); let y = 18;
+    doc.setFontSize(15);
+    const titleLines = doc.splitTextToSize(d.title, 180) as string[];
+    doc.text(titleLines, 14, y); y += titleLines.length * 6 + 6;
     for (const b of d.blocks) {
       if (b.kind === "table") {
         autoTable(doc, { startY: y, head: b.head.length ? [b.head] : [], body: b.body, styles: { fontSize: 8 }, margin: 14 });
@@ -168,5 +186,5 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
       }
     }
   }
-  return await pptx.write({ outputType: "blob" }) as Blob;
+  return finalizePresentation(await pptx.write({ outputType: "blob" }) as Blob);
 }
