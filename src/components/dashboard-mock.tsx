@@ -214,18 +214,20 @@ export function DashboardMock() {
                     />
                     <span
                       className="absolute inset-y-[-3px] w-0.5 rounded bg-muted-foreground/50"
-                      style={{ left: `${row.eap}%` }}
+                      style={{ left: `${row.eap ?? 0}%`, display: row.eap === null ? "none" : undefined }}
                     />
                   </div>
                   <span className="w-24 shrink-0 text-right text-[10px] text-muted-foreground">
-                    {row.share}% / {row.target === null ? "—" : `${row.target}%`} / {row.eap}%
+                    {row.share}% / {row.target === null ? "—" : `${row.target}%`} / {row.eap === null ? "—" : `${row.eap}%`}
                   </span>
                 </div>
               ))}
             </div>
             <p className="mt-2 text-[10px] text-muted-foreground">
               {live
-                ? "From your latest workforce snapshot · sector targets from your EE plan · national EAP. Full detail on the EEA12 page."
+                ? live.province
+                  ? `From your latest workforce snapshot · sector targets from your EE plan · ${live.province} EAP. Full detail on the EEA12 page.`
+                  : "Province not set — add your province on your profile to see the provincial EAP comparison. National figures are not substituted."
                 : "Example figures — your own comparison appears once you subscribe and load workforce data; full detail on the EEA12 page."}
             </p>
           </div>
