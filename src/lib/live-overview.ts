@@ -82,7 +82,7 @@ export function useLiveOverview(): LiveOverview | null {
         snapshotDate: s.snapshot_date,
         kpis: [
           { label: "Workforce Size", value: total.toLocaleString("en-ZA"), delta: `Snapshot ${s.snapshot_date}`, up: true },
-          { label: "Designated Groups", value: `${pct(designated, total)}%`, delta: `National EAP ${eap}%`, up: pct(designated, total) >= eap },
+          { label: "Designated Groups", value: `${pct(designated, total)}%`, delta: eap === null ? "Province not set" : `${province} EAP ${eap}%`, up: eap !== null && pct(designated, total) >= eap },
           { label: "Women", value: `${pct(women, total)}%`, delta: "Share of workforce", up: true },
           { label: "Disability", value: `${((dis / total) * 100).toFixed(1)}%`, delta: "3% guideline", up: dis / total >= 0.03 },
         ],
