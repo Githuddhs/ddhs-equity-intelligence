@@ -36,6 +36,15 @@ const scoreBands = [
   { label: "Evidence Coverage", value: 64 },
 ];
 
+const eea12Levels = [
+  { level: "Top management", share: 18, target: 40, eap: 76 },
+  { level: "Senior management", share: 29, target: 45, eap: 76 },
+  { level: "Professionally qualified", share: 48, target: 55, eap: 76 },
+  { level: "Skilled technical", share: 63, target: 60, eap: 76 },
+  { level: "Semi-skilled", share: 78, target: 65, eap: 76 },
+  { level: "Unskilled", share: 88, target: 70, eap: 76 },
+];
+
 
 const actions: { title: string; owner: string; status: string }[] = [
   { title: "Learnership intake · Skilled technical", owner: "HR Director", status: "In progress" },
