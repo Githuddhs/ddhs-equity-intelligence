@@ -45,4 +45,4 @@
 - [x] Home page overview illustration: also cleared sample wording — Accountability Queue and Evidence Repository now read "No actions recorded yet" / "No evidence uploaded yet"; verified on screen, no console errors
 - [x] Live overview: use client province for EAP, show missing-province state
 - [x] Live overview: show once workforce data is loaded, no subscription required
-- [ ] EEA12: display Paterson, Peromnes, Hay and Equate grades beneath each occupational category and verify category switching.
+- [x] EEA12: display Paterson, Peromnes, Hay and Equate grades beneath each occupational category; all six category switches verified with no page errors. Hay uses EEA9 points; Equate public-service levels are explicitly indicative.
