@@ -140,8 +140,13 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     doc.text(titleLines, 14, y); y += titleLines.length * 6 + 6;
     for (const b of d.blocks) {
       if (b.kind === "table") {
-        autoTable(doc, { startY: y, head: b.head.length ? [b.head] : [], body: b.body, styles: { fontSize: 8 }, margin: 14 });
-        y = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? y; y += 8;
+        const columns = Math.max(b.head.length, ...b.body.map((r) => r.length), 1);
+        for (let c = 1; c < Math.max(columns, 2); c += 5) {
+          const keys = columns === 1 ? [0] : [0, ...Array.from({ length: Math.min(5, columns - c) }, (_, i) => c + i)];
+          if (y > 250) { doc.addPage(); y = 18; }
+          autoTable(doc, { startY: y, head: b.head.length ? [keys.map((k) => b.head[k] ?? "")] : [], body: b.body.map((row) => keys.map((k) => row[k] ?? "")), styles: { fontSize: 8 }, margin: 14 });
+          y = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? y; y += 8;
+        }
       } else {
         doc.setFontSize(b.kind === "h" ? 13 : 10);
         const lines = doc.splitTextToSize(b.text, 180) as string[];
