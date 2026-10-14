@@ -38,6 +38,10 @@ export const Route = createFileRoute("/workforce-foundation")({
 });
 
 const collected = [
+  { title: "Organisation & reporting period", body: "Legal name, registration, DoEL reference, sector, province and matched reporting dates." },
+  { title: "Employee & job records", body: "Employee IDs, employment dates, job titles and Paterson, Peromnes, Hay or Equate grades." },
+  { title: "Remuneration", body: "Reporting-period basic pay, variable pay, benefits, hours and full-time equivalents, restricted to the account owner." },
+  { title: "Workforce movements", body: "Dated recruitment, promotion, transfer and termination records linked to employee IDs." },
   {
     title: "Occupational level",
     body: "The six levels used on EEA12, from Top Management through to Unskilled.",
@@ -57,6 +61,7 @@ const collected = [
 ];
 
 const protects = [
+  "Individual salary and disability records in Workforce Foundation reporting periods are account-owner only; staff, managers and shared links cannot read them.",
   "Each snapshot is private to your account. Nobody else sees it, and each client account is separate.",
   "DDHS staff can see it only for the clients we are actively working with — the same people who hold your file.",
   "Uploads are private files with a 20 MB limit, opened through a short-lived link rather than a public URL.",

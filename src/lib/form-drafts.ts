@@ -7,6 +7,8 @@ import { DOEL_LEVELS, type DoelForms, type Grid } from "@/lib/doel-forms";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS, eapTargets, type Targets } from "@/lib/sectors";
 import type { Eea12ReportInput } from "@/lib/eea12-summary-report";
 import type { Eea13PdfInput, Eea13Row } from "@/lib/eea13-report";
+import { latestFoundation } from "@/lib/foundation-source";
+import { foundationReportGrids, validateFoundation } from "@/lib/foundation";
 
 const KEY_TO_DOEL: Record<Key, string> = {
   MA: "AM", MC: "CM", MI: "IM", MW: "WM", FA: "AF", FC: "CF", FI: "IF", FW: "WF", FNM: "FNM", FNF: "FNF",
@@ -61,35 +63,39 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
     latestDgFindings(),
   ]);
   if (!w) return null;
+  const foundation = await latestFoundation(w.id);
+  const grids = foundation ? foundationReportGrids(foundation) : null;
+  const org = foundation?.organisation;
   const meta = (userRes.data.user?.user_metadata ?? {}) as Record<string, string>;
   const plan = planRes.data;
   const dgText = dg ? `DG review corrective actions (analysis ${dg.date}):\n${dg.actions.map((a) => `- ${a}`).join("\n")}` : "";
   const profile = toDoelGrid(w.counts as Record<string, Record<string, number>>);
-  const disabled: Grid = {};
-  for (const lvl of DOEL_LEVELS) disabled[lvl] = {};
-  for (const lvl of LEVELS) {
-    const n = w.disability[lvl] ?? 0;
-    if (n) disabled[LEVEL_TO_DOEL[lvl] ?? lvl]!["AM"] = n; // split unknown — recorded as a single figure to edit
-  }
   const eea2: DoelForms["eea2"] = {
     profile,
-    disabled,
+    ...(grids ? {
+      disabled: toDoelGrid(grids.disabled), recruitment: toDoelGrid(grids.recruitment),
+      promotion: toDoelGrid(grids.promotion), termination: toDoelGrid(grids.termination),
+    } : {}),
   };
-  eea2!.notes = `Draft from Workforce Data snapshot ${w.date}. Recruitment, promotion, termination and skills tables need the year's movement data — fill them on the DoEL submissions page or upload the reports there.${dgText ? `\n\n${dgText}` : ""}`;
+  if (!grids) eea2["disabled"] = {}; // Unknown demographic split must never be assigned to African males.
+  eea2.notes = `Draft from Workforce Data snapshot ${w.date}. ${foundation ? `Workforce movements from reporting period ${foundation.period_start} to ${foundation.period_end}. Skills development still needs a training register; blank or absent information is not confirmed as zero.` : "Recruitment, promotion, termination, disability demographic splits and skills tables require supporting records."}${dgText ? `\n\n${dgText}` : ""}`;
   return {
     employer: {
-      name: plan?.company || meta["company"] || "",
-      sector: plan?.sector || meta["sector"] || "",
-      contact: userRes.data.user?.email ?? "",
-      period: plan?.start_date && plan?.end_date ? `${plan.start_date} to ${plan.end_date}` : "",
+      name: org?.name || plan?.company || meta["company"] || "",
+      registration: org?.registration || "", doelRef: org?.doelRef || "", address: org?.address || "", sic: org?.sic || "",
+      sector: org?.sector || plan?.sector || meta["sector"] || "",
+      contact: org?.contact || userRes.data.user?.email || "",
+      period: foundation ? `${foundation.period_start} to ${foundation.period_end}` : "",
     },
     eea2,
     eea4: {
-      headcount: profile,
-      narrative: "Remuneration figures are not in Workforce Data — upload the payroll report on the DoEL submissions page to fill this table.",
+      headcount: grids ? toDoelGrid(grids.paidHeadcount) : {},
+      ...(grids ? { remuneration: toDoelGrid(grids.remuneration) } : {}),
+      narrative: foundation ? `Recorded remuneration totals in ZAR for ${foundation.period_start} to ${foundation.period_end}. Only complete basic pay, variable pay and benefits records are included. Missing pay remains missing, not zero. Review annualisation and statutory EEA4 requirements before submitting.` : "Remuneration records have not been supplied for this snapshot.",
       measures: dgText,
     },
-    sources: [`Workforce Data snapshot ${w.date}`, plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
+    missing: ["Skills development register not supplied.", ...(foundation ? validateFoundation(foundation).warnings : ["Workforce movements, remuneration and disability demographic splits not supplied."])],
+    sources: [`Workforce Data snapshot ${w.date}`, foundation ? `Workforce Foundation ${foundation.period_start} to ${foundation.period_end}` : "", plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
   };
 }
 
@@ -113,14 +119,15 @@ async function sharedSources(): Promise<SharedSources | null> {
     latestDgFindings(),
   ]);
   if (!w) return null;
+  const foundation = await latestFoundation(w.id);
   const meta = (userRes.data.user?.user_metadata ?? {}) as Record<string, string>;
   const plan = planRes.data;
   return {
     dg,
     counts: w.counts as Record<string, Record<string, number>>,
     snapshotDate: w.date,
-    sector: plan?.sector || meta["sector"] || "",
-    province: meta["province"] && PROVINCE_EAP[meta["province"]] ? meta["province"] : "National",
+    sector: foundation?.organisation.sector || plan?.sector || meta["sector"] || "",
+    province: foundation?.organisation.province || (meta["province"] && PROVINCE_EAP[meta["province"]] ? meta["province"] : "National"),
     planTitle: plan?.title || plan?.company || "EE plan",
     startDate: plan?.start_date ?? null,
     endDate: plan?.end_date ?? null,

@@ -8,6 +8,8 @@ import { AppHeader } from "@/components/app-header";
 import { extractPdfText } from "@/lib/workforce.functions";
 import { ExistingPlanGap } from "@/components/existing-plan-gap";
 import { OrgUnitPicker } from "@/components/org-unit-picker";
+import { FoundationRecords } from "@/components/foundation-records";
+import { OccupationalGrades } from "@/components/eea-crosswalk";
 import { ALL_UNITS, aggregate, breakdown, describeFilter, normaliseUnits, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 import {
   DISABILITY_COLUMN,
@@ -250,9 +252,10 @@ function WorkforcePage() {
         </div>
         <h1 className="page-title mt-2 text-primary">Workforce Data Foundation</h1>
         <p className="page-lead mt-1 text-muted-foreground">
-          Your headcount by occupational level, population group, gender and disability. Type it in or upload
-          an Excel, CSV or PDF export — nothing is saved until you have checked it.
+          Organisation details, employees, job grades, remuneration and workforce movements — with a shared, dated workforce profile.
         </p>
+
+        <FoundationRecords />
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           <Stat label="Total employees" value={total ? total.toLocaleString("en-ZA") : "–"} />
@@ -299,7 +302,7 @@ function WorkforcePage() {
               <tbody>
                 {LEVELS.map((l) => (
                   <tr key={l}>
-                    <td className={`${td} text-left font-medium text-primary`}>{l}</td>
+                    <td className={`${td} min-w-80 text-left font-medium text-primary`}><OccupationalGrades level={l} /></td>
                     {GROUPS.map((g) => (
                       <td key={g.key} className={td}>
                         <input
