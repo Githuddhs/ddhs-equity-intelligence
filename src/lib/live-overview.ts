@@ -80,6 +80,7 @@ export function useLiveOverview(): LiveOverview | null {
 
       setLive({
         snapshotDate: s.snapshot_date,
+        province,
         kpis: [
           { label: "Workforce Size", value: total.toLocaleString("en-ZA"), delta: `Snapshot ${s.snapshot_date}`, up: true },
           { label: "Designated Groups", value: `${pct(designated, total)}%`, delta: eap === null ? "Province not set" : `${province} EAP ${eap}%`, up: eap !== null && pct(designated, total) >= eap },
