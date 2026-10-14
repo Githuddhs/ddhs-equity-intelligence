@@ -30,10 +30,10 @@ const kpis = [
 
 
 const scoreBands = [
-  { label: "Representation", value: 0 },
-  { label: "Targets On Track", value: 0 },
-  { label: "Action Completion", value: 0 },
-  { label: "Evidence Coverage", value: 0 },
+  { label: "Representation", value: 72 },
+  { label: "Targets On Track", value: 61 },
+  { label: "Action Completion", value: 78 },
+  { label: "Evidence Coverage", value: 64 },
 ];
 
 
