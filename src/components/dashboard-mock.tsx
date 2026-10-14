@@ -324,6 +324,7 @@ export function DashboardMock() {
               {evidence.length === 0 && (
                 <p className="text-[11px] text-muted-foreground">No evidence uploaded yet</p>
               )}
+            </div>
           </div>
 
           <a
@@ -333,7 +334,6 @@ export function DashboardMock() {
             Take the 9-step site tour
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
-        </div>
         </div>
       </div>
     </div>
