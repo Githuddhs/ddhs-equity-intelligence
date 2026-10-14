@@ -43,5 +43,5 @@
 - [x] Home page overview illustration: cleared demo figures (KPIs 5,421 / 42.1% / 18 / 7, readiness score 78, band values 82/68/54/71, fake reporting period and cycle dates) — now blank placeholders; verified on screen, no console errors
 
 - [x] Home page overview illustration: also cleared sample wording — Accountability Queue and Evidence Repository now read "No actions recorded yet" / "No evidence uploaded yet"; verified on screen, no console errors
-- [ ] Live overview: use client province for EAP, show missing-province state (in progress)
-- [ ] Live overview: show once workforce data is loaded, no subscription required (in progress)
+- [x] Live overview: use client province for EAP, show missing-province state
+- [x] Live overview: show once workforce data is loaded, no subscription required
