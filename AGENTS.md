@@ -14,3 +14,4 @@
 - EEA12 and Workforce Foundation job-grade displays share OccupationalGrades and one crosswalk reference list, so occupational alignment remains consistent across entry and analysis.
 - Individual Workforce Foundation records live in owner-only reporting periods, never in shared snapshots; staff and managers have no blanket access to salary or disability records.
 - Workforce Foundation validation is shared by import/UI/server save; an invoker SQL transaction persists period records and non-identifying snapshot aggregates together so reports cannot diverge on partial saves.
+- Foundation document imports use deterministic named-column extraction, never AI, to avoid sending individual pay and disability records to an external model; imports remain unsaved until reviewed.
