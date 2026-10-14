@@ -1,5 +1,5 @@
 import { reportPdf } from "@/lib/report-download";
-import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
 const NAVY: [number, number, number] = [10, 37, 64];
