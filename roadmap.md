@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Improve EAP representation presentation with clear direction labels, readable tables and comparison charts, including matching downloads.
 - [x] EEA12 QA: 60 saved-fixture grouping/filter/job-level checks passed; sector and provincial gaps, missing-province/non-gazetted states, and all four downloads checked. Added missing grading references/warnings to unit downloads and removed unavailable target/province fallback from summary downloads. Temporary snapshot deleted; owner's account had no saved snapshot, so real-client data verification awaits an upload.
 - [x] Build EEA12 per-unit job-level comparisons against Sectoral Targets and provincial EAP; saved snapshot verified through organisation/faculty narrowing, demographic profiles, missing-province/non-gazetted/empty-level states and four-format downloads; temporary data removed.
 - [x] Add Word, Excel, PDF and PowerPoint options to report downloads; populated plan and imported Foundation files downloaded in all formats, Office packages checked, PDF and desktop/mobile chooser inspected.
