@@ -38,6 +38,7 @@ export function useLiveOverview(): LiveOverview | null {
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }).eq("user_id", uid),
         supabase.from("dg_reviews").select("score").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
         supabase.from("portal_documents").select("category,file_name").eq("user_id", uid).order("created_at", { ascending: false }).limit(3),
+        supabase.from("profiles").select("province").eq("id", uid).limit(1),
       ]);
       const s = snap.data?.[0];
       if (cancelled || !subs.data?.length || !s) return;
