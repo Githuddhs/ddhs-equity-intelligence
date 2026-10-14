@@ -4,6 +4,8 @@ import type { Json } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { useAiStream } from "@/components/use-ai-stream";
 import { extractPdfText } from "@/lib/workforce.functions";
+import { reportText } from "@/lib/report-download";
+import { Button } from "@/components/ui/button";
 
 /** Upload an existing EE plan (PDF/Word/text) and get an AI gap analysis against the Act and the current workforce. */
 export function ExistingPlanGap({ workforce }: { workforce: unknown }) {
@@ -54,7 +56,7 @@ export function ExistingPlanGap({ workforce }: { workforce: unknown }) {
     const { error } = await supabase.from("plan_gap_analyses").insert({ file_name: fileName.slice(0, 200), plan_text: text.slice(0, 200000), workforce: workforce as Json, result: full });
     if (error) toast.error("Analysis done, but it couldn't be saved."); else { toast.success("Gap analysis saved."); void load(); }
   };
-  const dl = (name: string, body: string) => { const b = new Blob([body], { type: "text/plain" }); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; a.click(); };
+  const dl = (name: string, body: string) => reportText(body, name, name.startsWith("plan-text") ? "Employment Equity plan text" : "EE plan gap analysis");
   const del = async (id: string) => { if (!confirm("Delete this saved analysis?")) return; await supabase.from("plan_gap_analyses").delete().eq("id", id); void load(); };
 
   return (
@@ -70,7 +72,7 @@ export function ExistingPlanGap({ workforce }: { workforce: unknown }) {
         <button disabled={!text || ai.loading} onClick={analyse} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
           {ai.loading ? "Analysing…" : "Run gap analysis"}
         </button>
-        {out && !ai.loading && <button onClick={() => { const b = new Blob([out], { type: "text/markdown" }); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "ee-plan-gap-analysis.md"; a.click(); }} className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">Download analysis</button>}
+        {out && !ai.loading && <Button variant="outline" onClick={() => dl("ee-plan-gap-analysis", out)}>Download analysis</Button>}
       </div>
       {ai.error && <p className="mt-3 text-sm text-destructive">{ai.error}</p>}
       {out && <div className="mt-4 max-h-[600px] overflow-auto whitespace-pre-wrap rounded-lg border border-border bg-muted/40 p-4 text-sm">{out}</div>}
@@ -83,8 +85,8 @@ export function ExistingPlanGap({ workforce }: { workforce: unknown }) {
                 <span><strong>{h.file_name}</strong> · {new Date(h.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })}</span>
                 <span className="flex gap-3">
                   <button onClick={() => setOpen(open === h.id ? null : h.id)} className="text-teal">{open === h.id ? "Hide" : "View"}</button>
-                  <button onClick={() => dl(`gap-analysis-${h.created_at.slice(0, 10)}.md`, h.result)} className="text-teal">Download analysis</button>
-                  <button onClick={() => dl(`plan-text-${h.file_name.replace(/\.[^.]+$/, "")}.txt`, h.plan_text)} className="text-teal">Download plan text</button>
+                  <Button variant="link" onClick={() => dl(`gap-analysis-${h.created_at.slice(0, 10)}.md`, h.result)}>Download analysis</Button>
+                  <Button variant="link" onClick={() => dl(`plan-text-${h.file_name.replace(/\.[^.]+$/, "")}.txt`, h.plan_text)}>Download plan text</Button>
                   <button onClick={() => del(h.id)} className="text-destructive">Delete</button>
                 </span>
               </div>

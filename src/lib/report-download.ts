@@ -8,6 +8,9 @@ export const extensions: Record<ReportFormat, string> = { word: "docx", excel: "
 export function offerReport(request: ReportRequest) { window.dispatchEvent(new CustomEvent(REPORT_EVENT, { detail: request })); }
 export function reportPdf(doc: InstanceType<typeof import("jspdf").jsPDF>, name: string) { offerReport({ name: name.replace(/\.pdf$/i, ""), pdf: doc.output("blob") }); }
 export function reportWorkbook(workbook: import("xlsx").WorkBook, name: string) { offerReport({ name: name.replace(/\.xlsx$/i, ""), workbook }); }
+export function reportText(text: string, name: string, title: string) {
+  offerReport({ name: name.replace(/\.(txt|md)$/i, ""), data: { title, blocks: text.split(/\r?\n/).filter((line) => line.trim()).map((line): ReportBlock => /^#{1,6}\s/.test(line) ? { kind: "h", text: line.replace(/^#{1,6}\s+/, "") } : { kind: "p", text: line }) } });
+}
 export function reportHtml(html: string, name: string) {
   const root = new DOMParser().parseFromString(html, "text/html");
   const blocks: ReportBlock[] = [];
@@ -98,7 +101,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
         const page = await pdf.getPage(n), viewport = page.getViewport({ scale: 1.8 });
         const canvas = document.createElement("canvas"); canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
         const ctx = canvas.getContext("2d"); if (!ctx) throw new Error("Cannot render report pages.");
-        await page.render({ canvasContext: ctx, canvas, viewport }).promise;
+        await page.render({ canvasContext: ctx, viewport }).promise;
         const slide = pptx.addSlide(); slide.addImage({ data: canvas.toDataURL("image/png"), x: 0, y: 0, w: width, h: height });
       }
       return finalizePresentation(await pptx.write({ outputType: "blob" }) as Blob);
