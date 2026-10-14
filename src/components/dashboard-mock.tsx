@@ -22,24 +22,41 @@ const nav = [
 ];
 
 const kpis = [
-  { label: "Workforce Size", value: "—", delta: "", up: true },
-  { label: "Designated Groups", value: "—", delta: "", up: true },
-  { label: "Actions Open", value: "—", delta: "", up: false },
-  { label: "Evidence Gaps", value: "—", delta: "", up: false },
+  { label: "Workforce Size", value: "842", delta: "+37 this year", up: true },
+  { label: "Designated Groups", value: "64%", delta: "+3.2 pts vs last cycle", up: true },
+  { label: "Actions Open", value: "14", delta: "3 overdue", up: false },
+  { label: "Evidence Gaps", value: "6", delta: "4 due this quarter", up: false },
 ];
 
 
 const scoreBands = [
-  { label: "Representation", value: 0 },
-  { label: "Targets On Track", value: 0 },
-  { label: "Action Completion", value: 0 },
-  { label: "Evidence Coverage", value: 0 },
+  { label: "Representation", value: 72 },
+  { label: "Targets On Track", value: 61 },
+  { label: "Action Completion", value: 78 },
+  { label: "Evidence Coverage", value: 64 },
+];
+
+const eea12Levels = [
+  { level: "Top management", share: 18, target: 40, eap: 76 },
+  { level: "Senior management", share: 29, target: 45, eap: 76 },
+  { level: "Professionally qualified", share: 48, target: 55, eap: 76 },
+  { level: "Skilled technical", share: 63, target: 60, eap: 76 },
+  { level: "Semi-skilled", share: 78, target: 65, eap: 76 },
+  { level: "Unskilled", share: 88, target: 70, eap: 76 },
 ];
 
 
-const actions: { title: string; owner: string; status: string }[] = [];
+const actions: { title: string; owner: string; status: string }[] = [
+  { title: "Learnership intake · Skilled technical", owner: "HR Director", status: "In progress" },
+  { title: "Affirmative procurement review", owner: "Transformation Committee", status: "Overdue" },
+  { title: "EE forum quarterly meeting", owner: "Senior Manager", status: "Scheduled" },
+];
 
-const evidence: { label: string; state: string }[] = [];
+const evidence: { label: string; state: string }[] = [
+  { label: "Workforce Data · Verified", state: "Verified" },
+  { label: "Training spend report · Pending", state: "Pending" },
+  { label: "EE committee minutes · Verified", state: "Verified" },
+];
 
 function statusTone(status: string) {
   if (status === "Overdue") return "border-destructive/30 bg-destructive/10 text-destructive";
@@ -48,7 +65,7 @@ function statusTone(status: string) {
 }
 
 export function DashboardMock() {
-  const score = 0;
+  const score = 68;
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
 
@@ -98,15 +115,18 @@ export function DashboardMock() {
         <div className="min-w-0 flex-1 p-4 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="font-display text-[15px] font-bold text-primary">
+              <p className="flex flex-wrap items-center gap-2 font-display text-[15px] font-bold text-primary">
                 Equity Intelligence Overview
+                <span className="rounded-full border border-teal/30 bg-teal-soft px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-teal">
+                  Example figures
+                </span>
               </p>
               <p className="text-[11px] text-muted-foreground">
-                Reporting period · not set
+                Reporting period · FY2025/26
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-              EEA13 Cycle · not set
+              EEA13 Cycle · 2025–2029
             </span>
           </div>
 
@@ -173,30 +193,41 @@ export function DashboardMock() {
               </span>
             </div>
             <div className="mt-2.5 space-y-2">
-              {["Top management", "Senior management", "Professionally qualified", "Skilled technical", "Semi-skilled", "Unskilled"].map((lvl) => (
-                <div key={lvl} className="flex items-center gap-2 text-[11px]">
-                  <span className="w-28 shrink-0 truncate text-muted-foreground">{lvl}</span>
+              {eea12Levels.map((row) => (
+                <div key={row.level} className="flex items-center gap-2 text-[11px]">
+                  <span className="w-28 shrink-0 truncate text-muted-foreground">{row.level}</span>
                   <div className="relative h-1.5 flex-1 rounded-full bg-secondary">
-                    <span className="absolute inset-y-[-3px] left-0 w-0.5 rounded bg-primary/70" />
-                    <span className="absolute inset-y-[-3px] left-[4px] w-0.5 rounded bg-muted-foreground/50" />
+                    <div
+                      className="absolute inset-y-0 left-0 rounded-full bg-teal"
+                      style={{ width: `${row.share}%` }}
+                    />
+                    <span
+                      className="absolute inset-y-[-3px] w-0.5 rounded bg-primary/70"
+                      style={{ left: `${row.target}%` }}
+                    />
+                    <span
+                      className="absolute inset-y-[-3px] w-0.5 rounded bg-muted-foreground/50"
+                      style={{ left: `${row.eap}%` }}
+                    />
                   </div>
-                  <span className="w-20 shrink-0 text-right text-[10px] text-muted-foreground">
-                    — / — / —
+                  <span className="w-24 shrink-0 text-right text-[10px] text-muted-foreground">
+                    {row.share}% / {row.target}% / {row.eap}%
                   </span>
                 </div>
               ))}
             </div>
             <p className="mt-2 text-[10px] text-muted-foreground">
-              Share, sectoral target and provincial EAP per level appear once workforce data is loaded — full comparison on the EEA12 page.
+              Example figures — your own comparison appears once workforce data is loaded; full
+              detail on the EEA12 page.
             </p>
           </div>
 
           {/* DG readiness, barriers, calendar */}
           <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
             {[
-              { icon: ClipboardCheck, title: "DG review readiness", note: "Process & reporting checklist · not started" },
-              { icon: TriangleAlert, title: "Barrier analysis", note: "Survey responses · none yet" },
-              { icon: Target, title: "Next statutory deadline", note: "EEA2 / EEA4 · not set" },
+              { icon: ClipboardCheck, title: "DG review readiness", note: "Process & reporting checklist · 7 of 12 complete" },
+              { icon: TriangleAlert, title: "Barrier analysis", note: "Survey responses · 26 received" },
+              { icon: Target, title: "Next statutory deadline", note: "EEA2 / EEA4 · due 15 Jan 2027" },
             ].map((c) => (
               <div key={c.title} className="rounded-xl border bg-background p-3">
                 <c.icon className="h-3.5 w-3.5 text-teal" />
