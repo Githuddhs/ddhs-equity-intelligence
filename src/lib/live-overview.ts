@@ -31,8 +31,9 @@ export function useLiveOverview(): LiveOverview | null {
       const { data: auth } = await supabase.auth.getUser();
       const uid = auth.user?.id;
       if (!uid) return;
-      const [subs, snap, plan, barriers, dg, docs] = await Promise.all([
+      const [subs, snap, plan, barriers, dg, docs, profile] = await Promise.all([
         supabase.from("subscriptions").select("status,plan").eq("user_id", uid).in("status", ["active", "complete", "paid"]).neq("plan", "dg_review").limit(1),
+        supabase.from("profiles").select("province").eq("id", uid).limit(1),
         supabase.from("workforce_snapshots").select("snapshot_date,counts,disability").eq("user_id", uid).order("snapshot_date", { ascending: false }).limit(1),
         supabase.from("ee_plans").select("sector,start_date,end_date,dg_review_due").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }).eq("user_id", uid),
