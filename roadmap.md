@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Add aligned grading references beneath Workforce Foundation categories; verify foundation workbook download and shared data in all four form drafts.
 - [ ] Workforce Foundation: organisation, employee/job-grade, remuneration and movement records; workbook import, period checks and missing-field warnings.
 - [ ] Protect individual salary/disability records; feed aggregate snapshots and EEA2/EEA4 drafts; verify saving, report readback and access restrictions.
 - Org personalisation: swap generic "the organisation" wording for real name, divisions, role titles — BLOCKED: waiting on Sello to supply details.
