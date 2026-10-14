@@ -37,17 +37,9 @@ const scoreBands = [
 ];
 
 
-const actions = [
-  { title: "Confirm EEA12 numerical targets", owner: "HR Business Partner", status: "Overdue" },
-  { title: "Publish EEA13 plan to committee", owner: "EE Manager", status: "In progress" },
-  { title: "Upload succession evidence pack", owner: "Talent Lead", status: "Not started" },
-];
+const actions: { title: string; owner: string; status: string }[] = [];
 
-const evidence = [
-  { label: "Consultation records", state: "Verified" },
-  { label: "Workforce analysis (EEA12)", state: "Verified" },
-  { label: "Target rationale", state: "Missing" },
-];
+const evidence: { label: string; state: string }[] = [];
 
 function statusTone(status: string) {
   if (status === "Overdue") return "border-destructive/30 bg-destructive/10 text-destructive";
@@ -235,6 +227,11 @@ export function DashboardMock() {
                   </p>
                 </div>
               ))}
+              {actions.length === 0 && (
+                <p className="rounded-lg border border-dashed border-border bg-secondary/40 p-3 text-[11px] text-muted-foreground">
+                  No actions recorded yet
+                </p>
+              )}
             </div>
           </div>
 
@@ -262,6 +259,9 @@ export function DashboardMock() {
                   {item.label}
                 </span>
               ))}
+              {evidence.length === 0 && (
+                <p className="text-[11px] text-muted-foreground">No evidence uploaded yet</p>
+              )}
             </div>
           </div>
         </div>
