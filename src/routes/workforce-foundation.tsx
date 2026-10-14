@@ -178,14 +178,10 @@ function WorkforceFoundationPage() {
                     <tr key={l}>
                       <td className="border border-border px-2 py-1.5 text-left font-medium text-primary">{l}</td>
                       {[0, 1, 2, 3].map((c) => (
-                        <td key={c} className="border border-border px-2 py-1.5 text-center tabular-nums text-muted-foreground">
-                          {i === 1 && c === 0 ? "12" : i === 3 && c === 2 ? "148" : "—"}
-                        </td>
+                        <td key={c} className="border border-border px-2 py-1.5 text-center tabular-nums text-muted-foreground">—</td>
                       ))}
                       <td className="border border-border px-2 py-1.5 text-center text-muted-foreground">…</td>
-                      <td className="border border-border px-2 py-1.5 text-center tabular-nums text-muted-foreground">
-                        {i === 3 ? "6" : "—"}
-                      </td>
+                      <td className="border border-border px-2 py-1.5 text-center tabular-nums text-muted-foreground">—</td>
                     </tr>
                   ))}
                 </tbody>
