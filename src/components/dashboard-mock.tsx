@@ -37,9 +37,17 @@ const scoreBands = [
 ];
 
 
-const actions: { title: string; owner: string; status: string }[] = [];
+const actions: { title: string; owner: string; status: string }[] = [
+  { title: "Learnership intake · Skilled technical", owner: "HR Director", status: "In progress" },
+  { title: "Affirmative procurement review", owner: "Transformation Committee", status: "Overdue" },
+  { title: "EE forum quarterly meeting", owner: "Senior Manager", status: "Scheduled" },
+];
 
-const evidence: { label: string; state: string }[] = [];
+const evidence: { label: string; state: string }[] = [
+  { label: "Workforce Data · Verified", state: "Verified" },
+  { label: "Training spend report · Pending", state: "Pending" },
+  { label: "EE committee minutes · Verified", state: "Verified" },
+];
 
 function statusTone(status: string) {
   if (status === "Overdue") return "border-destructive/30 bg-destructive/10 text-destructive";
