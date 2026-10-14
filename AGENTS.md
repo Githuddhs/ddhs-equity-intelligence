@@ -18,3 +18,4 @@
 - Generated reports use the root-mounted four-format download chooser; existing PDFs remain the canonical layout, native workbooks retain all rows, and conversion runs only in the browser to preserve data access and privacy.
 - Plan report filters merge workforce units with plan-only units; organisation/faculty scope is resolved through matching workforce paths, with unassigned plans explicitly excluded when those levels are selected.
 - EEA12 unit comparisons and summary downloads use saved snapshot aggregates and gazetted targets; missing provincial EAP and non-gazetted targets stay unavailable, while unit exports include the shared occupational-grade references so downloaded comparisons match the view.
+- EAP representation labels use the shared presentation formatter in views and reports, with percentage-point differences and explicit unavailable states to avoid ambiguous signed percentages.

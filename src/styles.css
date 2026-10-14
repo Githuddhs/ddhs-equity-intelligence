@@ -104,6 +104,13 @@
   text-wrap: balance;
 }
 
+meter.accent-primary, meter.accent-teal { appearance: none; background: var(--muted); border-radius: 3px; overflow: hidden; }
+meter.accent-primary::-webkit-meter-bar, meter.accent-teal::-webkit-meter-bar { background: var(--muted); border: none; border-radius: 3px; }
+meter.accent-primary::-webkit-meter-optimum-value { background: var(--primary); }
+meter.accent-teal::-webkit-meter-optimum-value { background: var(--teal); }
+meter.accent-primary::-moz-meter-bar { background: var(--primary); }
+meter.accent-teal::-moz-meter-bar { background: var(--teal); }
+
 /* ---- Shared type scale: every page uses these, nothing else ---- */
 
 @utility hero-title {

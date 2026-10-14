@@ -1,4 +1,5 @@
 import { reportPdf } from "@/lib/report-download";
+import { eapGap } from "@/lib/eap-presentation";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -66,8 +67,8 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
   autoTable(doc, {
     startY: (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8,
     headStyles: head, styles: { fontSize: 8 },
-    head: [["Population group (all levels)", "Headcount", "Share", "EAP", "Gap"]],
-    body: KEYS.map((k) => [NAMES[k] ?? k, all[k] ?? 0, p(at.sh(k)), p(i.eap[k]), i.eap[k] === undefined || !at.total ? "—" : `${(at.sh(k) - i.eap[k]).toFixed(1)} pp`]),
+    head: [["Population group (all levels)", "Headcount", "Share", "EAP", "Difference (pp)", "Representation"]],
+    body: KEYS.map((k) => { const gap = eapGap(at.total ? at.sh(k) : null, i.eap[k]); return [NAMES[k] ?? k, all[k] ?? 0, at.total ? p(at.sh(k)) : "—", p(i.eap[k]), gap.gap, gap.label]; }),
   });
 
   for (const l of i.levels) {
@@ -75,9 +76,9 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     const c = i.counts[l] ?? {}; const t = i.targetsFor(l); const a = analyse(c, i.eap, t);
     autoTable(doc, {
       startY: 40, headStyles: head, styles: { fontSize: 8 },
-      head: [["Population group", "Headcount", "Share", "EAP", "Gap"]],
-      body: KEYS.map((k) => [NAMES[k] ?? k, c[k] ?? 0, p(a.sh(k)), p(i.eap[k]), i.eap[k] === undefined || !a.total ? "—" : `${(a.sh(k) - i.eap[k]).toFixed(1)} pp`]),
-      foot: [["Total", a.total, "", "", ""]], footStyles: { fillColor: TEAL },
+      head: [["Population group", "Headcount", "Share", "EAP", "Difference (pp)", "Representation"]],
+      body: KEYS.map((k) => { const gap = eapGap(a.total ? a.sh(k) : null, i.eap[k]); return [NAMES[k] ?? k, c[k] ?? 0, a.total ? p(a.sh(k)) : "—", p(i.eap[k]), gap.gap, gap.label]; }),
+      foot: [["Total", a.total, "", "", "", ""]], footStyles: { fillColor: TEAL },
     });
     autoTable(doc, {
       startY: (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6,

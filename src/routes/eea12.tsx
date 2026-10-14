@@ -17,6 +17,8 @@ import { PageExport } from "@/components/page-export";
 import { latestFoundation } from "@/lib/foundation-source";
 import { Eea12UnitView } from "@/components/eea12-unit-view";
 import { Button } from "@/components/ui/button";
+import { EapProfile } from "@/components/eap-profile";
+import { eapGap } from "@/lib/eap-presentation";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -316,7 +318,7 @@ function Eea12Page() {
                 <tr>
                   <td className={`${td} text-left font-medium`}>Over / under vs EAP</td>
                   {GROUPS.map((g) => (
-                    <td key={g.key} className={`${td} font-semibold ${r.gap[g.key] < 0 ? "text-destructive" : "text-foreground"}`}>{sgn(r.gap[g.key])}</td>
+                    <td key={g.key} className={`${td} font-semibold ${r.gap[g.key] < 0 ? "text-destructive" : "text-foreground"}`}>{eapGap(r.total ? r.share[g.key] : null, eap[g.key]).gap}</td>
                   ))}
                   <td className={td}></td>
                 </tr>
@@ -341,6 +343,7 @@ function Eea12Page() {
             </select>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">EAP figures are the official Statistics South Africa QLFS Q3 2024 values per province — pick your province above, or edit any cell for your sector.</p>
+          <div className="mt-6 border-t border-border pt-5"><EapProfile counts={counts} eap={eap} province={province === "National" ? "National EAP" : province} /></div>
         </section>
 
         {wf && <Eea12UnitView units={wf.units} counts={wf.counts} filter={unitFilter} sector={sector} province={comparisonProvince} date={wf.date} />}
