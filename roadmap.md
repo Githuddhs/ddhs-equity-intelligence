@@ -41,3 +41,5 @@
 - [x] Pre-publish review checklist (src/routes/_authenticated/review.tsx, staff menu "Review checklist"): 41 tickable items across public site, client portal, staff tools and "Needs your input before publishing"; ticks persist in localStorage "ddhs-review-v1", progress bar, clear-all. Verified: tick → 1 of 41, survives reload, clear works, menu link opens /review. Full sweep signed in as staff: 39 pages, 0 page errors.
 
 - [x] Home page overview illustration: cleared demo figures (KPIs 5,421 / 42.1% / 18 / 7, readiness score 78, band values 82/68/54/71, fake reporting period and cycle dates) — now blank placeholders; verified on screen, no console errors
+
+- [x] Home page overview illustration: also cleared sample wording — Accountability Queue and Evidence Repository now read "No actions recorded yet" / "No evidence uploaded yet"; verified on screen, no console errors
