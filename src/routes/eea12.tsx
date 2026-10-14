@@ -114,11 +114,11 @@ function Eea12Page() {
     const filtered = !!(unitFilter.organisation || unitFilter.faculty || unitFilter.division || unitFilter.department || unitFilter.section);
     const w = wf.units.length && filtered ? aggregate(wf.units, unitFilter).counts : normaliseWorkforce(wf.counts);
     await exportEea12SummaryPdf({
-      scope: describeFilter(unitFilter), sector, province, snapshotDate: wf.date,
-      levels: LEVELS, counts: w as Record<string, Record<string, number>>, eap,
+      scope: describeFilter(unitFilter), sector, province: comparisonProvince, snapshotDate: wf.date,
+      levels: LEVELS, counts: w as Record<string, Record<string, number>>, eap: comparisonProvince ? PROVINCE_EAP[comparisonProvince] ?? {} : {},
       targetsFor: (l) => {
         const s = SECTORS.find((x) => x.name === sector); const k = LEVEL_TO_TARGET_KEY[l];
-        return (s && k ? s.targets[k] : undefined) ?? targetsByLevel[l] ?? { males: 0, females: 0, total: 0 };
+        return s && k ? s.targets[k] : undefined;
       },
       dgFindings: dg?.actions.map((a) => `${a} (DG review analysis ${dg.date})`) ?? [],
     });
@@ -126,8 +126,8 @@ function Eea12Page() {
   };
 
   const r = useMemo(() => {
-    const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
-    const share = Object.fromEntries(GROUPS.map((g) => [g.key, (counts[g.key] / total) * 100])) as Record<Key, number>;
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    const share = Object.fromEntries(GROUPS.map((g) => [g.key, total ? (counts[g.key] / total) * 100 : 0])) as Record<Key, number>;
     const desMales = share.MA + share.MC + share.MI;
     const females = share.FA + share.FC + share.FI + share.FW;
     const desTotal = desMales + females;

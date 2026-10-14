@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { OccupationalGrades } from "@/components/eea-crosswalk";
+import { OCCUPATIONAL_GRADES, OccupationalGrades } from "@/components/eea-crosswalk";
 import { Button } from "@/components/ui/button";
 import { ALL_UNITS, aggregate, describeFilter, matches, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 import { GROUPS, LEVELS, normaliseWorkforce } from "@/lib/workforce";
@@ -41,7 +41,15 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date }:
   const profileHead = ["Population group", "Headcount", "Workforce", "Provincial EAP", "EAP gap"];
   const download = () => {
     const blocks: ReportBlock[] = [{ kind: "p", text: `${describeFilter(filter)} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"} · Snapshot: ${date}` }];
-    for (const t of tables) blocks.push({ kind: "h", text: `${t.scope} — ${t.occupational} (${t.total} employees)` }, { kind: "table", title: `${t.scope} ${t.occupational}`, head, body: t.metrics }, { kind: "table", title: `${t.scope} profile`, head: profileHead, body: t.profile });
+    for (const t of tables) {
+      const grades = OCCUPATIONAL_GRADES.find((g) => g.level === t.occupational);
+      blocks.push({ kind: "h", text: `${t.scope} — ${t.occupational} (${t.total} employees)` });
+      if (grades) blocks.push({ kind: "p", text: `Paterson: ${grades.paterson} · Peromnes: ${grades.peromnes} · Hay: ${grades.hay} · Equate: ${grades.equate}. Indicative alignment; confirm your approved grading structure.` });
+      if (!eap) blocks.push({ kind: "p", text: "Province not set — provincial EAP comparisons are unavailable." });
+      if (!t.hasTarget) blocks.push({ kind: "p", text: "No gazetted sectoral numerical target for this occupational level." });
+      if (!t.total) blocks.push({ kind: "p", text: "No employees recorded at this level; workforce shares and gaps are unavailable." });
+      blocks.push({ kind: "table", title: `${t.scope} ${t.occupational}`, head, body: t.metrics }, { kind: "table", title: `${t.scope} ${t.occupational} profile`, head: profileHead, body: t.profile });
+    }
     offerReport({ name: "DDHS-EEA12-unit-comparison", data: { title: "EEA12 workforce comparison per unit", blocks } });
   };
   const table = (headers: string[], rows: string[][]) => <div className="overflow-x-auto"><table className="w-full min-w-[650px] text-sm"><thead className="bg-muted"><tr>{headers.map((h) => <th key={h} className="border-b border-border px-3 py-2 text-left">{h}</th>)}</tr></thead><tbody>{rows.map((r, i) => <tr key={i}>{r.map((cell, j) => <td key={j} className="border-b border-border px-3 py-2">{cell}</td>)}</tr>)}</tbody></table></div>;

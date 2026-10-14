@@ -1,4 +1,4 @@
-const ROWS: { level: string; desc: string; paterson: string; peromnes: string; hay: string; equate: string }[] = [
+export const OCCUPATIONAL_GRADES: { level: string; desc: string; paterson: string; peromnes: string; hay: string; equate: string }[] = [
   { level: "Top Management", desc: "CEO, MD, executive directors — control the organisation", paterson: "F1–F5 / G band", peromnes: "1, 1+, 1++", hay: "1,801–7,160 points", equate: "Levels 15–16*" },
   { level: "Senior Management", desc: "Directors, general managers — execute strategy", paterson: "E1–E5", peromnes: "2–4", hay: "735–1,800 points", equate: "Levels 13–14*" },
   { level: "Professionally Qualified", desc: "Middle management, specialists — professional knowledge and departmental planning", paterson: "D1–D5", peromnes: "4–7", hay: "371–734 points", equate: "Levels 9–12*" },
@@ -8,7 +8,7 @@ const ROWS: { level: string; desc: string; paterson: string; peromnes: string; h
 ];
 
 export function OccupationalGrades({ level }: { level: string }) {
-  const row = ROWS.find((r) => r.level === level);
+  const row = OCCUPATIONAL_GRADES.find((r) => r.level === level);
   if (!row) return null;
   return (
     <div>
@@ -35,7 +35,7 @@ export function EeaCrosswalk() {
         Occupational Levels guidance.
       </p>
       <div className="mt-3 divide-y divide-border">
-        {ROWS.map((r) => (
+        {OCCUPATIONAL_GRADES.map((r) => (
           <div key={r.level} className="py-4">
             <OccupationalGrades level={r.level} />
             <p className="mt-2 text-xs text-muted-foreground">{r.desc}</p>
