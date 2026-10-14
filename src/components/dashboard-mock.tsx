@@ -324,8 +324,16 @@ export function DashboardMock() {
               {evidence.length === 0 && (
                 <p className="text-[11px] text-muted-foreground">No evidence uploaded yet</p>
               )}
-            </div>
           </div>
+
+          <a
+            href="/tour"
+            className="mt-3 flex items-center justify-between rounded-xl border border-teal/30 bg-teal-soft px-4 py-2.5 text-[12px] font-semibold text-teal hover:bg-teal-soft/70"
+          >
+            Take the 9-step site tour
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
         </div>
       </div>
     </div>
