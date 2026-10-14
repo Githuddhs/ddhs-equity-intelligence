@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Build EEA12 per-unit job-level workforce comparisons against Sectoral Targets and configured provincial EAP.
 - [ ] Add Word, Excel, PDF and PowerPoint options to report downloads; verify generated files.
 - [ ] Fix Project monitoring: plan-only units missing from report filters and organisation/faculty labels disagreeing with rows.
 - [x] Foundation uploads: Excel/ODS, Word tables, text PDF and structured CSV/TSV/TXT/Markdown/JSON/HTML. CSV and Word UI import, PDF extraction and missing-field warnings verified; no test records saved.
