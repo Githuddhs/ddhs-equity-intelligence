@@ -104,6 +104,7 @@ function Eea12Page() {
   }).catch(() => {}); }, []);
 
   const [planId, setPlanId] = useState("");
+  const [reportLevel, setReportLevel] = useState("");
   const { data: plans = [] } = useQuery({
     queryKey: ["eea12-plan-units"],
     enabled: !!wf,
@@ -119,7 +120,7 @@ function Eea12Page() {
     const w = wf.units.length && filtered ? aggregate(wf.units, unitFilter).counts : normaliseWorkforce(wf.counts);
     await exportEea12SummaryPdf({
       scope: describeFilter(unitFilter), sector, province: comparisonProvince, snapshotDate: wf.date,
-      levels: LEVELS, counts: w as Record<string, Record<string, number>>, eap: comparisonProvince ? PROVINCE_EAP[comparisonProvince] ?? {} : {},
+      levels: reportLevel ? [reportLevel] : LEVELS, counts: w as Record<string, Record<string, number>>, eap: comparisonProvince ? PROVINCE_EAP[comparisonProvince] ?? {} : {},
       targetsFor: (l) => {
         const s = SECTORS.find((x) => x.name === sector); const k = LEVEL_TO_TARGET_KEY[l];
         return s && k ? s.targets[k] : undefined;
@@ -272,6 +273,7 @@ function Eea12Page() {
                 Reset to workforce data
               </button>
               <Button variant="outline" onClick={downloadSummary}>Download EEA12 summary report</Button>
+              <label className="text-sm font-medium">Report occupational level<select aria-label="Report occupational level" className="mt-1 block rounded-md border border-border bg-background px-3 py-2" value={reportLevel} onChange={(e) => setReportLevel(e.target.value)}><option value="">All occupational levels</option>{LEVELS.map((l) => <option key={l}>{l}</option>)}</select></label>
               <p className="w-full text-xs text-muted-foreground">Headcount for each level is filled automatically from your latest workforce snapshot ({describeFilter(unitFilter)}). The summary report covers all occupational levels together, then one page per level, for the selected unit.</p>
             </div>
           )}
@@ -348,7 +350,7 @@ function Eea12Page() {
           <div className="mt-6 border-t border-border pt-5"><EapProfile counts={counts} eap={eap} province={province === "National" ? "National EAP" : province} /></div>
         </section>
 
-        {wf && <Eea12UnitView units={wf.units} counts={wf.counts} filter={unitFilter} sector={sector} province={comparisonProvince} date={wf.date} />}
+        {wf && <Eea12UnitView units={wf.units} counts={wf.counts} filter={unitFilter} sector={sector} province={comparisonProvince} date={wf.date} foundation={foundationQuery.data} />}
         <JobGradeProgress foundation={foundationQuery.data} level={level} filter={unitFilter} sector={sector} province={comparisonProvince} loading={!!wf && foundationQuery.isPending} error={foundationQuery.isError} />
 
         <div className="grid gap-6 lg:grid-cols-2">

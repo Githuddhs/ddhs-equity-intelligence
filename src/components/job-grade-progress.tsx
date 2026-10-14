@@ -20,10 +20,14 @@ const pct = (n: number | undefined) => n === undefined ? "Unavailable" : `${n.to
 
 export function JobGradeProgress({ foundation, level, filter, sector, province, loading, error }: Props) {
   const [system, setSystem] = useState("");
+  const [grade, setGrade] = useState("");
   const groups = useMemo(() => foundation ? jobGradeGroups(foundation, level, filter) : [], [foundation, level, filter]);
   const systems = [...new Set(groups.map((g) => g.system))];
   const selectedSystem = systems.includes(system) ? system : "";
-  const visible = groups.filter((g) => !selectedSystem || g.system === selectedSystem);
+  const systemGroups = groups.filter((g) => !selectedSystem || g.system === selectedSystem);
+  const grades = [...new Set(systemGroups.map((g) => g.grade))];
+  const selectedGrade = grades.includes(grade) ? grade : "";
+  const visible = systemGroups.filter((g) => !selectedGrade || g.grade === selectedGrade);
   const eap = province && province !== "National" ? PROVINCE_EAP[province] : undefined;
   const targetKey = LEVEL_TO_TARGET_KEY[level];
   const target = targetKey ? SECTORS.find((s) => s.name === sector)?.targets[targetKey] : undefined;
@@ -55,7 +59,7 @@ export function JobGradeProgress({ foundation, level, filter, sector, province, 
       {!eap && <p role="status" className="text-sm text-destructive">Province not set — provincial EAP comparisons are unavailable.</p>}
       {!target && <p className="text-xs text-muted-foreground">{targetKey ? "Select a sector for the occupational benchmark." : "No gazetted sectoral numerical target for this occupational category."}</p>}
       {groups.some((g) => g.grade === "Grade not recorded" || g.system === "System not recorded") && <p role="status" className="text-sm text-destructive">Some job grades or grading systems are not recorded; these employees remain included in the totals.</p>}
-      <div className="flex flex-wrap items-center gap-4"><label className="text-sm font-medium">Grading system<select aria-label={`${level} grading system`} className="ml-2 rounded-md border border-border bg-background px-3 py-2" value={selectedSystem} onChange={(e) => setSystem(e.target.value)}><option value="">All recorded systems</option>{systems.map((s) => <option key={s}>{s}</option>)}</select></label><span className="text-sm text-muted-foreground">{visible.reduce((n, g) => n + g.total, 0)} employees · {visible.length} grades</span></div>
+      <div className="flex flex-wrap items-center gap-4"><label className="text-sm font-medium">Grading system<select aria-label={`${level} grading system`} className="ml-2 rounded-md border border-border bg-background px-3 py-2" value={selectedSystem} onChange={(e) => { setSystem(e.target.value); setGrade(""); }}><option value="">All recorded systems</option>{systems.map((s) => <option key={s}>{s}</option>)}</select></label><label className="text-sm font-medium">Job grade<select aria-label={`${level} job grade`} className="ml-2 rounded-md border border-border bg-background px-3 py-2" value={selectedGrade} onChange={(e) => setGrade(e.target.value)}><option value="">All recorded grades</option>{grades.map((g) => <option key={g}>{g}</option>)}</select></label><span className="text-sm text-muted-foreground">{visible.reduce((n, g) => n + g.total, 0)} employees · {visible.length} grades</span></div>
       <div className="overflow-x-auto"><table className="w-full min-w-[960px] text-sm"><thead className="bg-muted"><tr>{head.map((h) => <th key={h} className="border-b border-border px-3 py-2 text-left">{h}</th>)}</tr></thead><tbody>{rows.map((row, i) => <tr key={i}>{row.map((cell, j) => <td key={j} className="border-b border-border px-3 py-2">{cell}</td>)}</tr>)}</tbody></table></div>
       {visible.map((g) => <details key={`${g.system}-${g.grade}`} className="border-b border-border pb-3"><summary className="cursor-pointer text-sm font-semibold text-primary">{g.system} · {g.grade} — population profile ({g.total} employees)</summary><div className="pt-3"><EapProfile counts={g.counts} eap={eap} province={eap ? province : ""} /></div></details>)}
     </>}
