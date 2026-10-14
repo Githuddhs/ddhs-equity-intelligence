@@ -138,6 +138,68 @@ export function DashboardMock() {
             ))}
           </div>
 
+          {/* Organisation drill-down */}
+          <div className="mt-3 rounded-xl border bg-background p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              View by unit
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {["Organisation", "Faculty", "Division", "Department", "Section"].map((u, i) => (
+                <span key={u} className="inline-flex items-center gap-1 rounded-md border bg-secondary/40 px-2 py-1 text-[10px] font-medium text-muted-foreground">
+                  {i > 0 && <span className="text-teal">›</span>}
+                  {u} ▾
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* EEA12 vs EAP */}
+          <div className="mt-3 rounded-xl border bg-background p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[13px] font-semibold text-primary">EEA12 · Designated share vs EAP</p>
+              <Users className="h-3.5 w-3.5 text-teal" />
+            </div>
+            <div className="mt-3 space-y-2">
+              {["Top management", "Senior management", "Professionally qualified", "Skilled technical", "Semi-skilled", "Unskilled"].map((lvl) => (
+                <div key={lvl} className="flex items-center gap-2 text-[11px]">
+                  <span className="w-32 shrink-0 truncate text-muted-foreground">{lvl}</span>
+                  <div className="h-1.5 flex-1 rounded-full bg-secondary" />
+                  <span className="w-6 text-right font-semibold text-primary">—</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-2 text-[10px] text-muted-foreground">Compared with sector targets and provincial EAP once workforce data is loaded.</p>
+          </div>
+
+          {/* DG readiness, barriers, calendar */}
+          <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+            {[
+              { icon: ClipboardCheck, title: "DG review readiness", note: "Process & reporting checklist · not started" },
+              { icon: TriangleAlert, title: "Barrier analysis", note: "Survey responses · none yet" },
+              { icon: Target, title: "Next statutory deadline", note: "EEA2 / EEA4 · not set" },
+            ].map((c) => (
+              <div key={c.title} className="rounded-xl border bg-background p-3">
+                <c.icon className="h-3.5 w-3.5 text-teal" />
+                <p className="mt-1.5 text-[12px] font-semibold text-primary">{c.title}</p>
+                <p className="mt-0.5 text-[10px] text-muted-foreground">{c.note}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Forms library */}
+          <div className="mt-3 rounded-xl border bg-background p-3">
+            <p className="text-[12px] font-semibold text-primary">EEA forms · one data source</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {["EEA12", "EEA13", "EEA2", "EEA4"].map((f) => (
+                <span key={f} className="inline-flex items-center gap-1 rounded-md border border-teal/30 bg-teal-soft px-2 py-1 text-[10px] font-semibold text-teal">
+                  <FileCheck2 className="h-3 w-3" />
+                  {f} · draft not generated
+                </span>
+              ))}
+            </div>
+          </div>
+
+
           {/* Score */}
           <div className="mt-3 rounded-xl border bg-background p-4">
             <div className="flex items-center justify-between">
