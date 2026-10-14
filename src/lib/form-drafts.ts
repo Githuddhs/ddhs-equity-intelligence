@@ -70,12 +70,6 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
   const plan = planRes.data;
   const dgText = dg ? `DG review corrective actions (analysis ${dg.date}):\n${dg.actions.map((a) => `- ${a}`).join("\n")}` : "";
   const profile = toDoelGrid(w.counts as Record<string, Record<string, number>>);
-  const disabled: Grid = {};
-  for (const lvl of DOEL_LEVELS) disabled[lvl] = {};
-  for (const lvl of LEVELS) {
-    const n = w.disability[lvl] ?? 0;
-    if (n) disabled[LEVEL_TO_DOEL[lvl] ?? lvl]!["AM"] = n; // split unknown — recorded as a single figure to edit
-  }
   const eea2: DoelForms["eea2"] = {
     profile,
     ...(grids ? {
@@ -83,7 +77,7 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
       promotion: toDoelGrid(grids.promotion), termination: toDoelGrid(grids.termination),
     } : {}),
   };
-  if (!grids) eea2.disabled = {}; // Unknown demographic split must never be assigned to African males.
+  if (!grids) eea2["disabled"] = {}; // Unknown demographic split must never be assigned to African males.
   eea2.notes = `Draft from Workforce Data snapshot ${w.date}. ${foundation ? `Workforce movements from reporting period ${foundation.period_start} to ${foundation.period_end}. Skills development still needs a training register; blank or absent information is not confirmed as zero.` : "Recruitment, promotion, termination, disability demographic splits and skills tables require supporting records."}${dgText ? `\n\n${dgText}` : ""}`;
   return {
     employer: {
