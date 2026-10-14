@@ -22,18 +22,20 @@ const nav = [
 ];
 
 const kpis = [
-  { label: "Workforce Size", value: "5,421", delta: "+6% YoY", up: true },
-  { label: "Designated Groups", value: "42.1%", delta: "+4 pp", up: true },
-  { label: "Actions Open", value: "18", delta: "6 overdue", up: false },
-  { label: "Evidence Gaps", value: "7", delta: "3 critical", up: false },
+  { label: "Workforce Size", value: "—", delta: "", up: true },
+  { label: "Designated Groups", value: "—", delta: "", up: true },
+  { label: "Actions Open", value: "—", delta: "", up: false },
+  { label: "Evidence Gaps", value: "—", delta: "", up: false },
 ];
 
+
 const scoreBands = [
-  { label: "Representation", value: 82 },
-  { label: "Targets On Track", value: 68 },
-  { label: "Action Completion", value: 54 },
-  { label: "Evidence Coverage", value: 71 },
+  { label: "Representation", value: 0 },
+  { label: "Targets On Track", value: 0 },
+  { label: "Action Completion", value: 0 },
+  { label: "Evidence Coverage", value: 0 },
 ];
+
 
 const actions = [
   { title: "Confirm EEA12 numerical targets", owner: "HR Business Partner", status: "Overdue" },
@@ -54,7 +56,7 @@ function statusTone(status: string) {
 }
 
 export function DashboardMock() {
-  const score = 78;
+  const score = 0;
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
 
@@ -108,11 +110,11 @@ export function DashboardMock() {
                 Equity Intelligence Overview
               </p>
               <p className="text-[11px] text-muted-foreground">
-                Reporting period · October 2025 – September 2026
+                Reporting period · not set
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-              EEA13 Cycle · Q1 2026
+              EEA13 Cycle · not set
             </span>
           </div>
 
@@ -124,18 +126,22 @@ export function DashboardMock() {
                   {kpi.label}
                 </p>
                 <p className="mt-1 font-display text-xl font-bold text-primary">{kpi.value}</p>
-                <p
-                  className={`mt-0.5 flex items-center gap-1 text-[11px] font-semibold ${
-                    kpi.up ? "text-teal" : "text-destructive"
-                  }`}
-                >
-                  {kpi.up ? (
-                    <ArrowUpRight className="h-3 w-3 shrink-0" />
-                  ) : (
-                    <TriangleAlert className="h-3 w-3 shrink-0" />
-                  )}
-                  {kpi.delta}
-                </p>
+                {kpi.delta ? (
+                  <p
+                    className={`mt-0.5 flex items-center gap-1 text-[11px] font-semibold ${
+                      kpi.up ? "text-teal" : "text-destructive"
+                    }`}
+                  >
+                    {kpi.up ? (
+                      <ArrowUpRight className="h-3 w-3 shrink-0" />
+                    ) : (
+                      <TriangleAlert className="h-3 w-3 shrink-0" />
+                    )}
+                    {kpi.delta}
+                  </p>
+                ) : (
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">Not yet measured</p>
+                )}
               </div>
             ))}
           </div>
@@ -172,7 +178,9 @@ export function DashboardMock() {
                   />
                 </svg>
                 <span className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-display text-xl font-bold text-primary">{score}</span>
+                  <span className="font-display text-xl font-bold text-primary">
+                    {score > 0 ? score : "—"}
+                  </span>
                   <span className="text-[9px] text-muted-foreground">out of 100</span>
                 </span>
               </div>
@@ -186,7 +194,9 @@ export function DashboardMock() {
                 <div key={band.label}>
                   <div className="flex items-center justify-between text-[11px] font-medium">
                     <span className="text-muted-foreground">{band.label}</span>
-                    <span className="font-semibold text-primary">{band.value}</span>
+                    <span className="font-semibold text-primary">
+                      {band.value > 0 ? band.value : "—"}
+                    </span>
                   </div>
                   <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
                     <div
