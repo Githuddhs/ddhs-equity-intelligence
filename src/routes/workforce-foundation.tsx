@@ -174,7 +174,7 @@ function WorkforceFoundationPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {LEVELS.map((l, i) => (
+                  {LEVELS.map((l) => (
                     <tr key={l}>
                       <td className="border border-border px-2 py-1.5 text-left font-medium text-primary">{l}</td>
                       {[0, 1, 2, 3].map((c) => (
