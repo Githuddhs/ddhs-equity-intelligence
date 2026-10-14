@@ -2,6 +2,7 @@ import { z } from "zod";
 import { LEVELS, emptyWorkforce, grandTotal, type Key } from "@/lib/workforce";
 import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import type { OrgUnit } from "@/lib/org-units";
+import { reportWorkbook } from "@/lib/report-download";
 
 const text = z.string().trim().max(200).default("");
 export const organisationSchema = z.object({ name: text, registration: text, doelRef: text, sector: text, province: text, address: text, sic: text, contact: text });
@@ -167,5 +168,5 @@ export async function downloadFoundationWorkbook(f?: Foundation) {
   append("Employees", EMPLOYEE_FIELDS, f?.employees ?? []);
   append("Pay", PAY_FIELDS, f?.remuneration ?? []);
   append("Movements", MOVEMENT_FIELDS, f?.movements ?? []);
-  XLSX.writeFile(wb, f ? `DDHS-workforce-${f.period_start}-${f.period_end}.xlsx` : "DDHS-workforce-foundation-template.xlsx");
+  reportWorkbook(wb, f ? `DDHS-workforce-${f.period_start}-${f.period_end}.xlsx` : "DDHS-workforce-foundation-template.xlsx");
 }

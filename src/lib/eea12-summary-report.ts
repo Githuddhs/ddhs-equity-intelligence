@@ -1,3 +1,4 @@
+import { reportPdf } from "@/lib/report-download";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -107,5 +108,5 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
       doc.text(lines, 14, y); y += lines.length * 5 + 1;
     }
   }
-  doc.save(`EEA12-summary-${i.scope.replace(/[^a-z0-9]+/gi, "-")}-${new Date().toISOString().slice(0, 10)}.pdf`);
+  reportPdf(doc, `EEA12-summary-${i.scope.replace(/[^a-z0-9]+/gi, "-")}-${new Date().toISOString().slice(0, 10)}.pdf`);
 }

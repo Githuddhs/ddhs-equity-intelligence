@@ -1,3 +1,4 @@
+import { reportPdf } from "@/lib/report-download";
 // EEA2 / EEA4 form structures, AI result parsing and PDF output.
 // Official Department of Employment and Labour online reporting portal.
 export const DOEL_PORTAL_URL = "https://ees.labour.gov.za";
@@ -96,5 +97,5 @@ export async function exportDoelPdf(form: "EEA2" | "EEA4", f: DoelForms) {
     doc.addPage(); doc.setFontSize(11); doc.text("Information still missing", 14, 16);
     doc.setFontSize(9); doc.text(doc.splitTextToSize(f.missing.map((m) => `• ${m}`).join("\n"), 265), 14, 24);
   }
-  doc.save(`${form}-draft.pdf`);
+  reportPdf(doc, `${form}-draft.pdf`);
 }

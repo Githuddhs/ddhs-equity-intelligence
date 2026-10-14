@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
 import { fileText, gatherAppData } from "@/lib/evidence";
+import { reportText } from "@/lib/report-download";
+import { Button } from "@/components/ui/button";
 
 const SLOTS = [
   { key: "assessment", label: "Latest DG review assessment", hint: "The Director-General's review report / findings (s43–44)" },
@@ -83,8 +85,7 @@ export function DgOutcome() {
   };
 
   const download = () => {
-    const url = URL.createObjectURL(new Blob([current], { type: "text/plain;charset=utf-8" }));
-    const a = document.createElement("a"); a.href = url; a.download = "DG-review-corrective-action-plan.txt"; a.click(); URL.revokeObjectURL(url);
+    reportText(current, "DG-review-corrective-action-plan", "DG review corrective action plan");
   };
 
   return (
@@ -107,7 +108,7 @@ export function DgOutcome() {
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <button type="button" disabled={!!busy} onClick={() => void analyse()} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50">{busy ? "Working…" : "Analyse & recommend corrective action"}</button>
-        {current && !busy && <button type="button" onClick={download} className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">Download</button>}
+        {current && !busy && <Button variant="outline" onClick={download}>Download</Button>}
         {busy && <span className="text-sm text-muted-foreground">{busy}</span>}
       </div>
       {current && <div className="prose mt-5 max-w-none text-sm">{renderMd(current)}</div>}

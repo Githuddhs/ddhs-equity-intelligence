@@ -1,3 +1,4 @@
+import { reportHtml } from "@/lib/report-download";
 // Barrier Analysis response document (Word): questionnaire results combined with the
 // latest Workforce Foundation snapshot (headcount by level, disability, division/department).
 import { supabase } from "@/integrations/supabase/client";
@@ -85,6 +86,5 @@ export async function downloadBarrierResponseDoc(responses: ExportableResponse[]
 <p class="muted">Individual responses are reported in aggregate only. Use this document as the s19 analysis evidence for the EE plan.</p>`;
 
   const html = `<html><head><meta charset="utf-8"><style>body{font-family:Calibri,Arial,sans-serif;font-size:10.5pt;color:#0a2540}h1{font-size:17pt}h2{font-size:13pt;color:#00a3a3;margin-top:14pt}h3{font-size:11pt}table{border-collapse:collapse;margin:6pt 0}th{background:#0a2540;color:#fff;font-size:9pt;padding:3pt 5pt}td{border:1px solid #cbd5e1;font-size:9pt;padding:3pt 5pt}.muted{color:#64748b;font-size:9pt}</style></head><body>${body}</body></html>`;
-  const blob = new Blob(["\ufeff", html], { type: "application/msword" });
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "barrier-analysis-response-document.doc"; a.click();
+  reportHtml(html, "barrier-analysis-response-document");
 }

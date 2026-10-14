@@ -1,3 +1,4 @@
+import { reportPdf, reportWorkbook } from "@/lib/report-download";
 import { DG_ITEMS, TEXT_SECTIONS, type Deadline, type DgAnswer, type PlanContent } from "@/lib/ee-plan";
 
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -151,7 +152,7 @@ export async function exportEea12Pdf(a: Eea12Export) {
 
   await appendWorkforce(doc, autoTable, await loadWorkforceSnapshot());
   footers(doc, `EEA12 Analysis — ${a.level}`);
-  doc.save(`ddhs-eea12-${a.level.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${stamp()}.pdf`);
+  reportPdf(doc, `ddhs-eea12-${a.level.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${stamp()}.pdf`);
 }
 
 // ---------- DG review ----------
@@ -204,7 +205,7 @@ export async function exportDgReviewPdf(r: DgExport) {
 
   await appendWorkforce(doc, autoTable, await loadWorkforceSnapshot());
   footers(doc, "DG Review Readiness");
-  doc.save(`ddhs-dg-review-${stamp()}.pdf`);
+  reportPdf(doc, `ddhs-dg-review-${stamp()}.pdf`);
 }
 
 // ---------- EE plan ----------
@@ -286,7 +287,7 @@ export async function exportPlanPdf(meta: PlanExportMeta, content: PlanContent) 
 
   await appendWorkforce(doc, autoTable, await loadWorkforceSnapshot());
   footers(doc, `EE Plan — ${meta.title}`);
-  doc.save(`ddhs-ee-plan-${stamp()}.pdf`);
+  reportPdf(doc, `ddhs-ee-plan-${stamp()}.pdf`);
 }
 
 // ---------- Compliance calendar ----------
@@ -314,6 +315,6 @@ export function exportComplianceExcel(deadlines: Deadline[], answers: Record<str
         ...LEVELS.map((l) => [l, ...GROUPS.map((g) => wf.counts[l]?.[g.key] ?? 0), levelTotal(wf.counts[l]), wf.disability[l] ?? 0])];
       XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows2), "Workforce profile");
     }
-    XLSX.writeFile(wb, `ddhs-compliance-calendar-${stamp()}.xlsx`);
+    reportWorkbook(wb, `ddhs-compliance-calendar-${stamp()}.xlsx`);
   });
 }

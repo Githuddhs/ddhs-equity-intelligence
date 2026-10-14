@@ -13,6 +13,7 @@ import {
   type DoelSubmission,
 } from "@/lib/doel.functions";
 import { DOEL_PORTAL_URL } from "@/lib/doel-forms";
+import { reportText } from "@/lib/report-download";
 
 export const Route = createFileRoute("/_authenticated/doel-submissions")({
   head: () => ({
@@ -143,13 +144,7 @@ function DoelSubmissionsPage() {
       "—",
       "This summary is drawn from your EE plan on DDHS Equity Intelligence. Complete the official EEA4 form on the DoEL online system and attach this analysis where required.",
     ];
-    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "EEA4-income-differentials-summary.txt";
-    a.click();
-    URL.revokeObjectURL(url);
+    reportText(lines.join("\n"), "EEA4-income-differentials-summary", "EEA4 income differentials summary");
   };
 
   const inputCls = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";

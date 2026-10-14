@@ -1,3 +1,4 @@
+import { reportHtml } from "@/lib/report-download";
 // Editable Word (.doc) templates for EE policies and the senior manager appointment letter.
 // Generated as Word-compatible HTML so clients can open, edit and sign them in Microsoft Word.
 
@@ -58,13 +59,7 @@ function wrap(title: string, body: string) {
 <style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.45;color:#0a2540}h1{font-size:18pt;color:#0a2540}h2{font-size:13pt;color:#00a3a3;margin-top:16pt}.muted{color:#64748b;font-size:9pt}td{padding:4pt 8pt;border:1px solid #cbd5e1}</style></head><body>${body}</body></html>`;
 }
 
-function download(name: string, html: string) {
-  const blob = new Blob(["\ufeff", html], { type: "application/msword" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = name; a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+function download(name: string, html: string) { reportHtml(html, name); }
 
 const slug = (s: string) => s.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").slice(0, 60) || "organisation";
 

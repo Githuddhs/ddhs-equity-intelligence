@@ -10,6 +10,7 @@ import { ExistingPlanGap } from "@/components/existing-plan-gap";
 import { OrgUnitPicker } from "@/components/org-unit-picker";
 import { FoundationRecords } from "@/components/foundation-records";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
+import { offerReport } from "@/lib/report-download";
 import { ALL_UNITS, aggregate, breakdown, describeFilter, normaliseUnits, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 import {
   DISABILITY_COLUMN,
@@ -207,12 +208,8 @@ function WorkforcePage() {
   };
 
   const downloadTemplate = () => {
-    const url = URL.createObjectURL(new Blob([templateCsv()], { type: "text/csv;charset=utf-8" }));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "DDHS-workforce-template.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    const rows = templateCsv().trim().split(/\r?\n/).map((line) => line.split(","));
+    offerReport({ name: "DDHS-workforce-template", data: { title: "DDHS workforce template", blocks: [{ kind: "table", title: "Workforce", head: rows[0] ?? [], body: rows.slice(1) }] } });
   };
 
   const removeSnapshot = async (s: Snapshot) => {

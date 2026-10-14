@@ -1,3 +1,4 @@
+import { reportPdf } from "@/lib/report-download";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -8,7 +9,7 @@ import { useLatestOrgUnits } from "@/components/org-unit-picker";
 import { useOrgFilter } from "@/components/org-filter";
 import { describeFilter, type OrgUnit } from "@/lib/org-units";
 import { daysUntil, normaliseContent, type Milestone } from "@/lib/ee-plan";
-import { emptyWorkforce } from "@/lib/workforce";
+import { unitsForPlan, planMatchesFilter } from "@/lib/plan-units";
 
 export const Route = createFileRoute("/_authenticated/plan-report")({
   head: () => ({
@@ -35,7 +36,7 @@ type Row = {
 };
 
 function PlanReport() {
-  const [filter, setFilter] = useOrgFilter();
+  const [filter] = useOrgFilter();
   const [exporting, setExporting] = useState(false);
   const { data: wf } = useLatestOrgUnits();
   const { data: plans = [], isLoading } = useQuery({
@@ -68,17 +69,10 @@ function PlanReport() {
   // Menu options: units from the workforce upload plus any unit named on a plan.
   const units: OrgUnit[] = useMemo(() => [
     ...(wf?.units ?? []),
-    ...rows.filter((r) => r.division || r.department || r.section).map((r) => ({
-      organisation: "Not specified", faculty: "Not specified",
-      division: r.division || "Not specified", department: r.department || "Not specified", section: r.section || "Not specified",
-      counts: emptyWorkforce(), disability: {},
-    })),
+    ...rows.filter((r) => r.division || r.department || r.section).flatMap((r) => unitsForPlan(r, wf?.units ?? [])),
   ], [wf, rows]);
 
-  const shown = rows.filter((r) =>
-    (!filter.division || r.division === filter.division) &&
-    (!filter.department || r.department === filter.department) &&
-    (!filter.section || r.section === filter.section));
+  const shown = rows.filter((r) => planMatchesFilter(r, wf?.units ?? [], filter));
 
   const tot = shown.reduce((a, r) => ({ budget: a.budget + r.budget, spent: a.spent + r.spent, ms: a.ms + r.milestones.length, done: a.done + r.done, overdue: a.overdue + r.overdue.length }), { budget: 0, spent: 0, ms: 0, done: 0, overdue: 0 });
   const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
@@ -113,8 +107,8 @@ function PlanReport() {
           theme: "grid", headStyles: { fillColor: [10, 37, 64] }, styles: { fontSize: 8 },
         });
       }
-      doc.save(`ddhs-ee-plan-report-${new Date().toISOString().slice(0, 10)}.pdf`);
-      toast.success("EE plan report downloaded.");
+      reportPdf(doc, `ddhs-ee-plan-report-${new Date().toISOString().slice(0, 10)}.pdf`);
+      toast.success("EE plan report ready — select a download format.");
     } catch {
       toast.error("Could not build the report. Please try again.");
     } finally {
@@ -137,7 +131,7 @@ function PlanReport() {
           </div>
           <button onClick={() => void exportPdf()} disabled={exporting || !shown.length}
             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-            {exporting ? "Building report…" : "Download report (PDF)"}
+            {exporting ? "Building report…" : "Download report"}
           </button>
         </div>
 
@@ -145,6 +139,9 @@ function PlanReport() {
           <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-sm">
             <p className="text-sm text-muted-foreground">Upload a workforce file with Division, Department and Section columns, or set the unit on each plan, to filter this report.</p>
           </div>
+        )}
+        {(filter.organisation || filter.faculty) && rows.some((r) => unitsForPlan(r, wf?.units ?? []).every((u) => u.organisation === "Not specified")) && (
+          <p role="status" className="mt-4 text-sm text-muted-foreground">Plans without a matching workforce unit have no organisation or faculty assignment and are excluded from this selection. Select all organisations and faculties to see them.</p>
         )}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
