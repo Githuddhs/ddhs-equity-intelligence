@@ -1,9 +1,9 @@
 # DDHS roadmap
 
 ## Open
-- [ ] Add aligned grading references beneath Workforce Foundation categories; verify foundation workbook download and shared data in all four form drafts.
-- [ ] Workforce Foundation: organisation, employee/job-grade, remuneration and movement records; workbook import, period checks and missing-field warnings.
-- [ ] Protect individual salary/disability records; feed aggregate snapshots and EEA2/EEA4 drafts; verify saving, report readback and access restrictions.
+- [x] Aligned grading references beneath Workforce Foundation categories; workbook download verified with all four sheets; matching source headcounts verified in all four EEA drafts.
+- [x] Workforce Foundation: organisation, employee/job-grade, remuneration and movement records; workbook import, period checks and missing-field warnings. Save/reload verified using temporary records, then removed.
+- [x] Owner-only individual salary/disability policy confirmed; aggregate snapshot, EEA2 movements/disability, EEA4 pay and provincial live overview readback verified. Cross-account authenticated privacy test not performed.
 - Org personalisation: swap generic "the organisation" wording for real name, divisions, role titles — BLOCKED: waiting on Sello to supply details.
 - DG review price: confirm real price (placeholder R4,025 incl. VAT).
 - sdm@ddhs.co.za activation: password-reset link sent to a reachable address; Sello must open it and set a password before staff sign-in works.
