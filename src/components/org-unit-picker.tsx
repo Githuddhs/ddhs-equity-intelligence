@@ -12,13 +12,13 @@ export function useLatestOrgUnits(enabled = true) {
       if (!u.user) return null;
       const { data, error } = await supabase
         .from("workforce_snapshots")
-        .select("snapshot_date,counts,disability,units")
+        .select("id,snapshot_date,counts,disability,units")
         .eq("user_id", u.user.id)
         .order("created_at", { ascending: false })
         .limit(1);
       if (error) throw error;
       const s = data?.[0];
-      return s ? { date: s.snapshot_date, counts: s.counts, disability: s.disability, units: normaliseUnits(s.units) } : null;
+      return s ? { id: s.id, date: s.snapshot_date, counts: s.counts, disability: s.disability, units: normaliseUnits(s.units) } : null;
     },
   });
 }

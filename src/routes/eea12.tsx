@@ -19,6 +19,7 @@ import { Eea12UnitView } from "@/components/eea12-unit-view";
 import { Button } from "@/components/ui/button";
 import { EapProfile } from "@/components/eap-profile";
 import { eapGap } from "@/lib/eap-presentation";
+import { JobGradeProgress } from "@/components/job-grade-progress";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -75,6 +76,7 @@ function Eea12Page() {
   const [comparisonProvince, setComparisonProvince] = useState("");
   const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
   const { data: wf } = useLatestOrgUnits();
+  const foundationQuery = useQuery({ queryKey: ["eea12-job-grade-foundation", wf?.id], enabled: !!wf?.id, queryFn: () => latestFoundation(wf?.id) });
   const loadFromWorkforce = (lvl = level, f = unitFilter) => {
     if (!wf) return;
     const filtered = !!(f.organisation || f.faculty || f.division || f.department || f.section);
@@ -347,6 +349,7 @@ function Eea12Page() {
         </section>
 
         {wf && <Eea12UnitView units={wf.units} counts={wf.counts} filter={unitFilter} sector={sector} province={comparisonProvince} date={wf.date} />}
+        <JobGradeProgress foundation={foundationQuery.data} level={level} filter={unitFilter} sector={sector} province={comparisonProvince} loading={!!wf && foundationQuery.isPending} error={foundationQuery.isError} />
 
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">

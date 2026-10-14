@@ -19,3 +19,4 @@
 - Plan report filters merge workforce units with plan-only units; organisation/faculty scope is resolved through matching workforce paths, with unassigned plans explicitly excluded when those levels are selected.
 - EEA12 unit comparisons and summary downloads use saved snapshot aggregates and gazetted targets; missing provincial EAP and non-gazetted targets stay unavailable, while unit exports include the shared occupational-grade references so downloaded comparisons match the view.
 - EAP representation labels use the shared presentation formatter in views and reports, with percentage-point differences and explicit unavailable states to avoid ambiguous signed percentages.
+- EEA12 job-grade progress derives aggregate headcounts from owner-readable Foundation records linked to the selected snapshot; occupational targets remain diagnostic grade benchmarks, preventing unrelated periods or invented grade-specific compliance targets.
