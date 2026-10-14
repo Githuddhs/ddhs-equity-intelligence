@@ -22,18 +22,20 @@ const nav = [
 ];
 
 const kpis = [
-  { label: "Workforce Size", value: "5,421", delta: "+6% YoY", up: true },
-  { label: "Designated Groups", value: "42.1%", delta: "+4 pp", up: true },
-  { label: "Actions Open", value: "18", delta: "6 overdue", up: false },
-  { label: "Evidence Gaps", value: "7", delta: "3 critical", up: false },
+  { label: "Workforce Size", value: "—", delta: "", up: true },
+  { label: "Designated Groups", value: "—", delta: "", up: true },
+  { label: "Actions Open", value: "—", delta: "", up: false },
+  { label: "Evidence Gaps", value: "—", delta: "", up: false },
 ];
 
+
 const scoreBands = [
-  { label: "Representation", value: 82 },
-  { label: "Targets On Track", value: 68 },
-  { label: "Action Completion", value: 54 },
-  { label: "Evidence Coverage", value: 71 },
+  { label: "Representation", value: 0 },
+  { label: "Targets On Track", value: 0 },
+  { label: "Action Completion", value: 0 },
+  { label: "Evidence Coverage", value: 0 },
 ];
+
 
 const actions = [
   { title: "Confirm EEA12 numerical targets", owner: "HR Business Partner", status: "Overdue" },
@@ -54,7 +56,7 @@ function statusTone(status: string) {
 }
 
 export function DashboardMock() {
-  const score = 78;
+  const score = 0;
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
 
@@ -108,11 +110,11 @@ export function DashboardMock() {
                 Equity Intelligence Overview
               </p>
               <p className="text-[11px] text-muted-foreground">
-                Reporting period · October 2025 – September 2026
+                Reporting period · not set
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-              EEA13 Cycle · Q1 2026
+              EEA13 Cycle · not set
             </span>
           </div>
 
