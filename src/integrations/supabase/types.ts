@@ -646,6 +646,62 @@ export type Database = {
         }
         Relationships: []
       }
+      workforce_foundation_periods: {
+        Row: {
+          created_at: string
+          employees: Json
+          id: string
+          movements: Json
+          organisation: Json
+          period_end: string
+          period_start: string
+          remuneration: Json
+          snapshot_date: string
+          snapshot_id: string | null
+          updated_at: string
+          user_id: string
+          warnings: Json
+        }
+        Insert: {
+          created_at?: string
+          employees?: Json
+          id?: string
+          movements?: Json
+          organisation?: Json
+          period_end: string
+          period_start: string
+          remuneration?: Json
+          snapshot_date: string
+          snapshot_id?: string | null
+          updated_at?: string
+          user_id?: string
+          warnings?: Json
+        }
+        Update: {
+          created_at?: string
+          employees?: Json
+          id?: string
+          movements?: Json
+          organisation?: Json
+          period_end?: string
+          period_start?: string
+          remuneration?: Json
+          snapshot_date?: string
+          snapshot_id?: string | null
+          updated_at?: string
+          user_id?: string
+          warnings?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workforce_foundation_periods_snapshot_id_fkey"
+            columns: ["snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "workforce_snapshots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workforce_snapshots: {
         Row: {
           counts: Json
@@ -717,6 +773,10 @@ export type Database = {
           id: string
         }[]
       }
+      delete_workforce_foundation: {
+        Args: { p_id: string }
+        Returns: undefined
+      }
       enquiry_throttled: { Args: { p_email: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -733,6 +793,10 @@ export type Database = {
           full_name: string
           id: string
         }[]
+      }
+      save_workforce_foundation: {
+        Args: { p_record: Json; p_snapshot: Json }
+        Returns: string
       }
       set_manager_role: {
         Args: { _make: boolean; _user_id: string }
