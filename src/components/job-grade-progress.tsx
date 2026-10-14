@@ -6,7 +6,7 @@ import type { Foundation } from "@/lib/foundation";
 import { describeFilter, type UnitFilter } from "@/lib/org-units";
 import { GROUPS, type Key } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { eapGap, eapExplanation } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
 
 type Props = { foundation?: Foundation | null | undefined; level: string; filter: UnitFilter; sector: string; province: string; loading?: boolean; error?: boolean };
@@ -16,7 +16,7 @@ const metrics: { label: string; key: "total" | "males" | "females"; keys: Key[] 
   { label: "Designated males", key: "males", keys: ["MA", "MC", "MI"] },
   { label: "Women", key: "females", keys: ["FA", "FC", "FI", "FW"] },
 ];
-const pct = (n: number | undefined) => n === undefined ? "Unavailable" : `${n.toFixed(1)}%`;
+const pct = (n: number | undefined) => n === undefined ? "Not available" : `${n.toFixed(1)}%`;
 
 export function JobGradeProgress({ foundation, level, filter, sector, province, loading, error }: Props) {
   const [system, setSystem] = useState("");
@@ -34,10 +34,10 @@ export function JobGradeProgress({ foundation, level, filter, sector, province, 
   const rows = visible.flatMap((g) => metrics.map((m) => {
     const actual = m.keys.reduce((n, k) => n + g.counts[k], 0) / g.total * 100;
     const benchmark = target?.[m.key];
-    const provincial = eap ? m.keys.reduce((n, k) => n + (eap[k] ?? 0), 0) : undefined;
+    const provincial = eapShare(eap, m.keys);
     const gap = eapGap(actual, provincial);
     const sectorProgress = benchmark === undefined ? "Unavailable" : `${actual >= benchmark ? "Benchmark met" : "Below benchmark"} · ${Math.abs(actual - benchmark).toFixed(1)} pp ${actual >= benchmark ? "above" : "below"}`;
-    return [`${g.system} · ${g.grade}`, String(g.total), m.label, pct(actual), pct(benchmark), sectorProgress, pct(provincial), `${gap.label} · ${gap.gap}`, eapExplanation(m.label, actual, provincial)];
+    return [`${g.system} · ${g.grade}`, String(g.total), m.label, pct(actual), pct(benchmark), sectorProgress, pct(provincial), gap.gap ? `${gap.label} · ${gap.gap}` : gap.label, eapExplanation(m.label, actual, provincial)];
   }));
   const download = () => {
     const blocks: ReportBlock[] = [

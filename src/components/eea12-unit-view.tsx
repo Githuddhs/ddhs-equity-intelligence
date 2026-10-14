@@ -6,14 +6,14 @@ import { GROUPS, LEVELS, normaliseWorkforce } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
 import { EapProfile } from "@/components/eap-profile";
-import { eapGap, eapExplanation } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
 import { EapLevelExplanation } from "@/components/eap-level-explanation";
 import { JobGradeProgress } from "@/components/job-grade-progress";
 import type { Foundation } from "@/lib/foundation";
 
 type Props = { units: OrgUnit[]; counts: unknown; filter: UnitFilter; sector: string; province: string; date: string; foundation?: Foundation | null | undefined };
 const fields = ["organisation", "faculty", "division", "department", "section"] as const;
-const percentage = (n: number | null) => n === null ? "—" : `${n.toFixed(1)}%`;
+const percentage = (n: number | null) => n === null ? "Not available" : `${n.toFixed(1)}%`;
 const variance = (actual: number | null, target: number | null) => actual === null || target === null ? "—" : `${actual - target > 0 ? "+" : ""}${(actual - target).toFixed(1)} pp`;
 
 export function Eea12UnitView({ units, counts, filter, sector, province, date, foundation }: Props) {
@@ -36,9 +36,9 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date, f
     const metricKeys = [["MA", "MC", "MI", "FA", "FC", "FI", "FW"], ["MA", "MC", "MI"], ["FA", "FC", "FI", "FW"]];
     const metrics = (["total", "males", "females"] as const).map((key, i) => {
       const actual = share(metricKeys[i] ?? []);
-      const provincial = eap ? (metricKeys[i] ?? []).reduce((n, k) => n + (eap[k as keyof typeof eap] ?? 0), 0) : null;
+      const provincial = eapShare(eap, metricKeys[i] ?? []) ?? null;
       const gap = eapGap(actual, provincial);
-      return [["Designated groups", "Designated males", "Women"][i] ?? key, percentage(actual), percentage(target?.[key] ?? null), variance(actual, target?.[key] ?? null), percentage(provincial), `${gap.label} · ${gap.gap}`, eapExplanation(["Designated groups", "Designated males", "Women"][i] ?? key, actual, provincial)];
+      return [["Designated groups", "Designated males", "Women"][i] ?? key, percentage(actual), percentage(target?.[key] ?? null), variance(actual, target?.[key] ?? null), percentage(provincial), gap.gap ? `${gap.label} · ${gap.gap}` : gap.label, eapExplanation(["Designated groups", "Designated males", "Women"][i] ?? key, actual, provincial)];
     });
     const profile = GROUPS.map((g) => { const gap = eapGap(share([g.key]), eap?.[g.key]); return [g.label, String(row?.[g.key] ?? 0), percentage(share([g.key])), percentage(eap?.[g.key] ?? null), gap.gap, gap.label, eapExplanation(g.label, share([g.key]), eap?.[g.key])]; });
     return { scope: scope.name, occupational, total, metrics, profile, row, hasTarget: !!targetKey };

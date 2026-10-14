@@ -1,5 +1,5 @@
 import { reportPdf } from "@/lib/report-download";
-import { eapGap, eapExplanation } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -11,7 +11,7 @@ const NAMES: Record<string, string> = {
   FNM: "Foreign national males", FNF: "Foreign national females",
 };
 const DESIGNATED = ["MA", "MC", "MI", "FA", "FC", "FI", "FW"];
-const p = (n: number | undefined) => n === undefined ? "—" : `${n.toFixed(1)}%`;
+const p = (n: number | undefined) => n === undefined ? "Not available" : `${n.toFixed(1)}%`;
 
 export type Eea12ReportInput = {
   scope: string; sector: string; province: string; snapshotDate?: string;
@@ -48,7 +48,6 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
   };
   const head = { fillColor: NAVY };
   const explanations = (label: string, a: ReturnType<typeof analyse>) => {
-    const eapShare = (keys: string[]) => keys.every((k) => i.eap[k] !== undefined) ? keys.reduce((n, k) => n + (i.eap[k] ?? 0), 0) : undefined;
     const metrics = [
       ["Designated groups", a.des, DESIGNATED],
       ["Designated males", a.desM, ["MA", "MC", "MI"]],
@@ -59,7 +58,7 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
       headStyles: head, styles: { fontSize: 9 }, columnStyles: { 0: { cellWidth: 42 } },
       head: [[label, "What this means — provincial EAP (percentage points)"]],
       body: [
-        ...metrics.map(([group, actual, keys]) => [group, eapExplanation(group, a.total ? actual : null, eapShare([...keys]))]),
+        ...metrics.map(([group, actual, keys]) => [group, eapExplanation(group, a.total ? actual : null, eapShare(i.eap, keys))]),
         ...KEYS.map((k) => [NAMES[k] ?? k, eapExplanation(NAMES[k] ?? k, a.total ? a.sh(k) : null, i.eap[k])]),
       ],
     });
