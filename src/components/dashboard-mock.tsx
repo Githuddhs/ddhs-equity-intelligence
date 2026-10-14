@@ -126,18 +126,22 @@ export function DashboardMock() {
                   {kpi.label}
                 </p>
                 <p className="mt-1 font-display text-xl font-bold text-primary">{kpi.value}</p>
-                <p
-                  className={`mt-0.5 flex items-center gap-1 text-[11px] font-semibold ${
-                    kpi.up ? "text-teal" : "text-destructive"
-                  }`}
-                >
-                  {kpi.up ? (
-                    <ArrowUpRight className="h-3 w-3 shrink-0" />
-                  ) : (
-                    <TriangleAlert className="h-3 w-3 shrink-0" />
-                  )}
-                  {kpi.delta}
-                </p>
+                {kpi.delta ? (
+                  <p
+                    className={`mt-0.5 flex items-center gap-1 text-[11px] font-semibold ${
+                      kpi.up ? "text-teal" : "text-destructive"
+                    }`}
+                  >
+                    {kpi.up ? (
+                      <ArrowUpRight className="h-3 w-3 shrink-0" />
+                    ) : (
+                      <TriangleAlert className="h-3 w-3 shrink-0" />
+                    )}
+                    {kpi.delta}
+                  </p>
+                ) : (
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">Not yet measured</p>
+                )}
               </div>
             ))}
           </div>
@@ -174,7 +178,9 @@ export function DashboardMock() {
                   />
                 </svg>
                 <span className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-display text-xl font-bold text-primary">{score}</span>
+                  <span className="font-display text-xl font-bold text-primary">
+                    {score > 0 ? score : "—"}
+                  </span>
                   <span className="text-[9px] text-muted-foreground">out of 100</span>
                 </span>
               </div>
@@ -188,7 +194,9 @@ export function DashboardMock() {
                 <div key={band.label}>
                   <div className="flex items-center justify-between text-[11px] font-medium">
                     <span className="text-muted-foreground">{band.label}</span>
-                    <span className="font-semibold text-primary">{band.value}</span>
+                    <span className="font-semibold text-primary">
+                      {band.value > 0 ? band.value : "—"}
+                    </span>
                   </div>
                   <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
                     <div
