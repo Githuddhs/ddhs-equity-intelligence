@@ -5,6 +5,8 @@ import { ALL_UNITS, aggregate, describeFilter, matches, type OrgUnit, type UnitF
 import { GROUPS, LEVELS, normaliseWorkforce } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
+import { EapProfile } from "@/components/eap-profile";
+import { eapGap } from "@/lib/eap-presentation";
 
 type Props = { units: OrgUnit[]; counts: unknown; filter: UnitFilter; sector: string; province: string; date: string };
 const fields = ["organisation", "faculty", "division", "department", "section"] as const;
@@ -32,15 +34,16 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date }:
     const metrics = (["total", "males", "females"] as const).map((key, i) => {
       const actual = share(metricKeys[i] ?? []);
       const provincial = eap ? (metricKeys[i] ?? []).reduce((n, k) => n + (eap[k as keyof typeof eap] ?? 0), 0) : null;
-      return [["Designated groups", "Designated males", "Women"][i] ?? key, percentage(actual), percentage(target?.[key] ?? null), variance(actual, target?.[key] ?? null), percentage(provincial), variance(actual, provincial)];
+      const gap = eapGap(actual, provincial);
+      return [["Designated groups", "Designated males", "Women"][i] ?? key, percentage(actual), percentage(target?.[key] ?? null), variance(actual, target?.[key] ?? null), percentage(provincial), `${gap.label} · ${gap.gap}`];
     });
-    const profile = GROUPS.map((g) => [g.label, String(row?.[g.key] ?? 0), percentage(share([g.key])), percentage(eap?.[g.key] ?? null), variance(share([g.key]), eap?.[g.key] ?? null)]);
-    return { scope: scope.name, occupational, total, metrics, profile, hasTarget: !!targetKey };
+    const profile = GROUPS.map((g) => { const gap = eapGap(share([g.key]), eap?.[g.key]); return [g.label, String(row?.[g.key] ?? 0), percentage(share([g.key])), percentage(eap?.[g.key] ?? null), gap.gap, gap.label]; });
+    return { scope: scope.name, occupational, total, metrics, profile, row, hasTarget: !!targetKey };
   }));
   const head = ["Group", "Workforce", "Sector target", "Sector gap", "Provincial EAP", "EAP gap"];
-  const profileHead = ["Population group", "Headcount", "Workforce", "Provincial EAP", "EAP gap"];
+  const profileHead = ["Population group", "Headcount", "Workforce share", "Provincial EAP", "EAP difference (pp)", "Representation"];
   const download = () => {
-    const blocks: ReportBlock[] = [{ kind: "p", text: `${describeFilter(filter)} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"} · Snapshot: ${date}` }];
+    const blocks: ReportBlock[] = [{ kind: "p", text: `${describeFilter(filter)} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"} · Snapshot: ${date}` }, { kind: "p", text: "EAP difference is workforce share minus the EAP benchmark, in percentage points (pp). Below means under-represented; above means over-represented. Foreign nationals are not designated groups." }];
     for (const t of tables) {
       const grades = OCCUPATIONAL_GRADES.find((g) => g.level === t.occupational);
       blocks.push({ kind: "h", text: `${t.scope} — ${t.occupational} (${t.total} employees)` });
@@ -59,6 +62,6 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date }:
     {!eap && <p role="status" className="text-sm text-destructive">Province not set — select a province or complete the organisation details in Workforce Foundation. Provincial EAP comparisons are unavailable.</p>}
     {!selectedSector && <p className="text-sm text-muted-foreground">Sector not set — select your economic sector for gazetted targets.</p>}
     {!tables.length && <p className="text-sm text-muted-foreground">No workforce records match this unit.</p>}
-    {tables.map((t) => <div key={`${t.scope}-${t.occupational}`} className="space-y-3 border-t border-border pt-5"><h3 className="font-semibold text-primary">{t.scope} · {t.occupational} <span className="font-normal text-muted-foreground">· {t.total} employees</span></h3><OccupationalGrades level={t.occupational} />{!t.hasTarget && <p className="text-xs text-muted-foreground">No gazetted sectoral numerical target for this occupational level.</p>}{t.total === 0 && <p className="text-xs text-muted-foreground">No employees recorded at this level; workforce shares and gaps are unavailable.</p>}{table(head, t.metrics)}<details><summary className="cursor-pointer text-sm font-semibold text-teal">Workforce population profile · {eap ? province : "Province not set"}</summary><div className="mt-3">{table(profileHead, t.profile)}</div></details></div>)}
+    {tables.map((t) => <div key={`${t.scope}-${t.occupational}`} className="space-y-3 border-t border-border pt-5"><h3 className="font-semibold text-primary">{t.scope} · {t.occupational} <span className="font-normal text-muted-foreground">· {t.total} employees</span></h3><OccupationalGrades level={t.occupational} />{!t.hasTarget && <p className="text-xs text-muted-foreground">No gazetted sectoral numerical target for this occupational level.</p>}{t.total === 0 && <p className="text-xs text-muted-foreground">No employees recorded at this level; workforce shares and gaps are unavailable.</p>}{table(head, t.metrics)}<EapProfile counts={t.row} eap={eap} province={eap ? province : ""} /></div>)}
   </section>;
 }

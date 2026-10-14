@@ -12,7 +12,7 @@ const view = (province = "Gauteng", filter = ALL_UNITS) => renderToStaticMarkup(
 describe("EEA12 unit comparison", () => {
   it("retains headcounts including foreign nationals and correct provincial/sector gaps", () => {
     const html = view();
-    for (const value of ["12", "66.7%", "76.6%", "-9.9 pp", "94.2%", "-27.5 pp", "Paterson", "Peromnes", "Hay", "Equate"]) expect(html).toContain(value);
+    for (const value of ["12", "66.7%", "76.6%", "-9.9 pp", "94.2%", "27.5 pp below", "Under-represented", "Over-represented", "Paterson", "Peromnes", "Hay", "Equate"]) expect(html).toContain(value);
   });
   it("does not substitute national EAP for a missing province", () => {
     for (const province of ["", "National", "Unknown"]) {
