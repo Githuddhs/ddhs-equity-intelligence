@@ -9,7 +9,7 @@ import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { eapGap } from "@/lib/eap-presentation";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
 
-type Props = { foundation?: Foundation | null; level: string; filter: UnitFilter; sector: string; province: string; loading?: boolean; error?: boolean };
+type Props = { foundation?: Foundation | null | undefined; level: string; filter: UnitFilter; sector: string; province: string; loading?: boolean; error?: boolean };
 const head = ["Grading system / grade", "Headcount", "Group", "Workforce share", "Occupational sector benchmark", "Sector progress", "Provincial EAP", "EAP representation"];
 const metrics: { label: string; key: "total" | "males" | "females"; keys: Key[] }[] = [
   { label: "Designated groups", key: "total", keys: ["MA", "MC", "MI", "FA", "FC", "FI", "FW"] },
