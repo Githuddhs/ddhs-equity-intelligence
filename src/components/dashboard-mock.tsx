@@ -228,7 +228,7 @@ export function DashboardMock() {
                 ? live.province
                   ? `From your latest workforce snapshot · sector targets from your EE plan · ${live.province} EAP. Full detail on the EEA12 page.`
                   : "Province not set — add your province on your profile to see the provincial EAP comparison. National figures are not substituted."
-                : "Example figures — your own comparison appears once you subscribe and load workforce data; full detail on the EEA12 page."}
+                : "Example figures — your own comparison appears once you load workforce data; full detail on the EEA12 page."}
             </p>
           </div>
 

@@ -21,7 +21,7 @@ export type LiveOverview = {
 const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0);
 const designatedKeys = GROUPS.filter((g) => g.designated).map((g) => g.key);
 
-/** Real overview figures for a signed-in client with an active subscription and saved workforce data; null otherwise. */
+/** Real overview figures for a signed-in client with saved workforce data; null otherwise. */
 export function useLiveOverview(): LiveOverview | null {
   const [live, setLive] = useState<LiveOverview | null>(null);
 
