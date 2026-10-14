@@ -38,8 +38,18 @@ describe("Job-grade progress", () => {
   it("does not substitute national EAP or invent grade records", () => {
     const html = renderToStaticMarkup(<JobGradeProgress foundation={foundation} level="Senior Management" filter={ALL_UNITS} sector="Education" province="" />);
     expect(html).toContain("Province not set");
-    expect(html).toContain("Unavailable");
+    expect(html).toContain("Not available");
     expect(html).not.toContain("94.2%");
     expect(renderToStaticMarkup(<JobGradeProgress level="Senior Management" filter={ALL_UNITS} sector="" province="" />)).toContain("Job-grade data unavailable for this snapshot");
+  });
+  it("uses the same percentage-point explanations for unit-filtered grade rows", () => {
+    const html = renderToStaticMarkup(<JobGradeProgress foundation={foundation} level="Senior Management" filter={{ ...ALL_UNITS, division: "North" }} sector="Education" province="Gauteng" />);
+    expect(html).toContain("4 employees");
+    expect(html).toContain("What this means");
+    expect(html).toContain("percentage points below provincial EAP");
+    expect(html).toContain("percentage points above provincial EAP");
+    expect(html).not.toContain("employeeId");
+    const missing = renderToStaticMarkup(<JobGradeProgress foundation={foundation} level="Senior Management" filter={ALL_UNITS} sector="Education" province="" />);
+    expect(missing).toContain("comparison unavailable because workforce headcount or provincial EAP is missing");
   });
 });

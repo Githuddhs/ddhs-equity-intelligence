@@ -348,7 +348,7 @@ function Eea12Page() {
             </select>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">EAP figures are the official Statistics South Africa QLFS Q3 2024 values per province — pick your province above, or edit any cell for your sector.</p>
-          <div className="mt-6 space-y-4 border-t border-border pt-5"><EapLevelExplanation level={level} counts={counts} eap={comparisonProvince ? eap : undefined} /><EapProfile counts={counts} eap={eap} province={province === "National" ? "National EAP" : province} /></div>
+          <div className="mt-6 space-y-4 border-t border-border pt-5"><EapLevelExplanation level={level} counts={counts} eap={comparisonProvince ? eap : undefined} /><EapProfile counts={counts} eap={comparisonProvince ? eap : undefined} province={comparisonProvince} /></div>
         </section>
 
         {wf && <Eea12UnitView units={wf.units} counts={wf.counts} filter={unitFilter} sector={sector} province={comparisonProvince} date={wf.date} foundation={foundationQuery.data} />}
