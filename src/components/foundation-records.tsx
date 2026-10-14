@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LEVELS } from "@/lib/workforce";
 import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, foundationWorkbook, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, type Foundation } from "@/lib/foundation";
+import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, type Foundation } from "@/lib/foundation";
+import { FOUNDATION_ACCEPT, importFoundationFile } from "@/lib/foundation-import";
 import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
 
@@ -42,6 +43,8 @@ export function FoundationRecords() {
   const [initialised, setInitialised] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [importSection, setImportSection] = useState<"employees" | "remuneration" | "movements">("employees");
   const save = useServerFn(saveFoundation), remove = useServerFn(deleteFoundation);
   useEffect(() => { if (!initialised && records[0]) { setForm(records[0]); setInitialised(true); } }, [records, initialised]);
   const update = (next: Foundation) => { setForm(next); setDirty(true); setInitialised(true); };
@@ -85,10 +88,12 @@ export function FoundationRecords() {
       {(["period_start", "period_end", "snapshot_date"] as const).map((key) => <label key={key} className="text-sm font-medium">{key === "period_start" ? "Reporting period start" : key === "period_end" ? "Reporting period end" : "Workforce snapshot date"}<input aria-label={key === "period_start" ? "Reporting period start" : key === "period_end" ? "Reporting period end" : "Workforce snapshot date"} type="date" className={`${input} mt-1`} value={form[key]} onChange={(e) => update({ ...form, [key]: e.target.value })} /></label>)}
     </div>
     <div className="mt-4 flex flex-wrap items-center gap-3 border-b border-border pb-4">
-      <Button variant="outline" asChild><label className="cursor-pointer"><Upload />Import workbook<input className="sr-only" type="file" accept=".xlsx,.xls" aria-label="Import foundation workbook" onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; try { update(await foundationWorkbook(f, form)); toast.success("Workbook loaded for review; not yet saved."); } catch (err) { toast.error(err instanceof Error ? err.message : "Cannot read workbook."); } e.target.value = ""; }} /></label></Button>
+      <select className={`${input} max-w-52`} aria-label="Upload record type" value={importSection} disabled={importing} onChange={(e) => { const value = e.target.value; if (value === "employees" || value === "remuneration" || value === "movements") setImportSection(value); }}><option value="employees">Employee records</option><option value="remuneration">Remuneration records</option><option value="movements">Movement records</option></select>
+      <Button variant="outline" disabled={importing} asChild><label className="cursor-pointer"><Upload />{importing ? "Reading file…" : "Upload foundation data"}<input className="sr-only" type="file" disabled={importing} accept={FOUNDATION_ACCEPT} aria-label="Import foundation data" onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; const el = e.target; if (dirty && !confirm("Replace matching records with this file? Other record types remain unchanged.")) { el.value = ""; return; } setImporting(true); try { update(await importFoundationFile(f, form, importSection)); toast.success("File loaded for review; check Validation before saving."); } catch (err) { toast.error(err instanceof Error ? err.message : "Cannot read file."); } finally { setImporting(false); el.value = ""; } }} /></label></Button>
       <Button variant="outline" disabled={!form.employees.length} onClick={() => void downloadFoundationWorkbook(form)}><Download />Download records</Button>
       <span className="text-sm text-muted-foreground">{snapshot.total_headcount} employees at snapshot · {snapshot.units.length} units{dirty ? " · Unsaved changes" : ""}</span>
     </div>
+    <p className="mt-3 text-xs text-muted-foreground">Excel / ODS, Word (.docx), text-based PDF, CSV, TSV, TXT, Markdown, JSON and HTML tables. Up to 20 MB; PDF up to 10 MB. Record tables need named columns and employee IDs. Scans cannot be read; convert older .doc files to .docx.</p>
     <Tabs defaultValue="organisation" className="mt-5">
       <TabsList className="h-auto max-w-full flex-wrap justify-start"><TabsTrigger value="organisation">Organisation</TabsTrigger><TabsTrigger value="employees">Employees & job grades</TabsTrigger><TabsTrigger value="pay">Remuneration</TabsTrigger><TabsTrigger value="movements">Movements</TabsTrigger><TabsTrigger value="validation">Validation {check.errors.length || check.warnings.length ? `(${check.errors.length + check.warnings.length})` : ""}</TabsTrigger></TabsList>
       <TabsContent value="organisation" className="py-4"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{Object.keys(form.organisation).map((key) => <label key={key} className="text-sm font-medium">{key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)}<div className="mt-1"><Field name={key} value={form.organisation[key as keyof typeof form.organisation]} label={key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)} onChange={(v) => update({ ...form, organisation: { ...form.organisation, [key]: v } })} /></div></label>)}</div></TabsContent>

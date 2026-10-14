@@ -1,0 +1,98 @@
+import { foundationSchema, foundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, organisationSchema, type Foundation } from "@/lib/foundation";
+import { extractPdfText } from "@/lib/workforce.functions";
+
+export const FOUNDATION_ACCEPT = ".xlsx,.xls,.xlsm,.xlsb,.ods,.docx,.pdf,.csv,.tsv,.txt,.md,.json,.html,.htm";
+const keyOf = (s: string) => s.toLowerCase().replace(/[^a-z]/g, "");
+const aliases: Record<string, string[]> = {
+  employeeId: ["employee number", "employee code", "staff number", "personnel number"],
+  level: ["occupational level", "occupational category"], populationGroup: ["race", "population group"],
+  jobGrade: ["grade"], gradingSystem: ["job grading system"], basicPay: ["basic salary"],
+  name: ["legal organisation name", "company name"], doelRef: ["DoEL reference"],
+};
+const normalise = (row: Record<string, unknown>, keys: readonly string[]) => Object.fromEntries(keys.map((key) => {
+  const header = Object.keys(row).find((h) => [key, ...(aliases[key] ?? [])].some((v) => keyOf(v) === keyOf(h)));
+  return [key, String(header ? row[header] ?? "" : "").trim()];
+}));
+type Rows = Record<string, unknown>[];
+
+/** Deterministic extraction only: no salary/disability data is sent to an AI service. */
+export async function importFoundationFile(file: File, current: Foundation, section: "employees" | "remuneration" | "movements"): Promise<Foundation> {
+  if (file.size > 20 * 1024 * 1024) throw new Error("File exceeds the 20 MB limit.");
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  if (["xlsx", "xls", "xlsm", "xlsb", "ods"].includes(ext)) return foundationWorkbook(file, current);
+  if (ext === "json") {
+    const data: unknown = JSON.parse(await file.text());
+    if (Array.isArray(data)) return applyTables([data], current, section);
+    if (!data || typeof data !== "object") throw new Error("JSON must contain a Foundation record or an array of records.");
+    return foundationSchema.parse({ ...current, ...data, id: undefined });
+  }
+  const tables: Rows[] = [];
+  if (["docx", "html", "htm"].includes(ext)) {
+    let html: string;
+    if (ext === "docx") {
+      const mammoth = await import("mammoth");
+      html = (await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() })).value;
+    } else html = await file.text();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    for (const table of doc.querySelectorAll("table")) {
+      const lines = [...table.querySelectorAll("tr")].map((tr) => [...tr.querySelectorAll("th,td")].map((td) => td.textContent?.trim() ?? ""));
+      tables.push(rowsFromCells(lines));
+    }
+    if (!tables.length) throw new Error("No record tables found. Use Word tables with column headings, or upload the Excel template.");
+  } else if (["pdf", "csv", "tsv", "txt", "md"].includes(ext)) {
+    let text: string;
+    if (ext === "pdf") {
+      if (file.size > 10 * 1024 * 1024) throw new Error("PDF reading is limited to 10 MB; other formats accept 20 MB.");
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+      text = (await extractPdfText({ data: { fileName: file.name, base64: btoa(binary) } })).text;
+    } else text = await file.text();
+    const XLSX = await import("xlsx");
+    for (const block of text.split(/\n\s*\n/)) {
+      const lines = block.trim().split(/\r?\n/).filter((line) => !/^\s*\|?\s*:?-{3}/.test(line));
+      if (lines.length < 2) continue;
+      if (lines[0]?.includes("|") || (ext === "pdf" && !lines[0]?.includes(",") && !lines[0]?.includes("\t"))) {
+        const cells = lines.map((line) => line.replace(/^\s*\||\|\s*$/g, "").split(line.includes("|") ? /\s*\|\s*/ : /\t| {2,}/));
+        tables.push(rowsFromCells(cells));
+      } else {
+        const wb = XLSX.read(lines.join("\n"), { type: "string", raw: true, ...(ext === "tsv" ? { FS: "\t" } : {}) });
+        const first = wb.SheetNames[0];
+        const sheet = first ? wb.Sheets[first] : undefined;
+        if (sheet) tables.push(XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false }));
+      }
+    }
+  } else throw new Error("Unsupported format. Use Excel, ODS, Word (.docx), a text-based PDF, CSV, TSV, TXT, Markdown, JSON or HTML tables. Convert older .doc files to .docx first.");
+  return applyTables(tables, current, section);
+}
+
+function rowsFromCells(lines: string[][]): Rows {
+  const headers = lines[0];
+  if (!headers) return [];
+  return lines.slice(1).map((cells) => Object.fromEntries(headers.map((h, i) => [h.trim(), cells[i]?.trim() ?? ""])));
+}
+function applyTables(tables: Rows[], current: Foundation, section: "employees" | "remuneration" | "movements"): Foundation {
+  const next = { ...current, id: undefined };
+  let matched = false;
+  for (const rows of tables) {
+    const first = rows[0];
+    if (!first) continue;
+    const has = (key: string) => Object.keys(first).some((h) => [key, ...(aliases[key] ?? [])].some((v) => keyOf(v) === keyOf(h)));
+    const target = has("basicPay") || has("variablePay") ? "remuneration" : has("type") && has("date") ? "movements" : has("level") || has("gender") ? "employees" : section;
+    if (has("employeeId")) {
+      const keys = target === "employees" ? EMPLOYEE_FIELDS : target === "remuneration" ? PAY_FIELDS : MOVEMENT_FIELDS;
+      const parsed = rows.map((row) => normalise(row, keys));
+      Object.assign(next, { [target]: parsed });
+      matched = true;
+    } else if (has("name") && (has("province") || has("registration"))) {
+      next.organisation = organisationSchema.parse(normalise(first, Object.keys(organisationSchema.shape)));
+      const dates = normalise(first, ["periodStart", "periodEnd", "snapshotDate"]);
+      next.period_start = dates["periodStart"] || next.period_start;
+      next.period_end = dates["periodEnd"] || next.period_end;
+      next.snapshot_date = dates["snapshotDate"] || next.snapshot_date;
+      matched = true;
+    }
+  }
+  if (!matched) throw new Error("No recognised workforce records found. Tables need an Employee ID column and named fields. Scanned PDFs and narrative-only documents cannot populate employee records.");
+  return foundationSchema.parse(next);
+}
