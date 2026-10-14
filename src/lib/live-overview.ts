@@ -53,7 +53,8 @@ export function useLiveOverview(): LiveOverview | null {
       const dis = disabilityTotal(normaliseDisability(s.disability));
       const p = plan.data?.[0];
       const sector = SECTORS.find((x) => x.name === p?.sector);
-      const province = profile.data?.[0]?.province?.trim() || null;
+      const metaProvince = auth.user?.user_metadata?.province;
+      const province = typeof metaProvince === "string" && metaProvince.trim() ? metaProvince.trim() : null;
       const eap = province ? eapTargets(province).total : null;
 
       const levels = LEVELS.map((l) => {
