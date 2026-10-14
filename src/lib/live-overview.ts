@@ -63,11 +63,11 @@ export function useLiveOverview(): LiveOverview | null {
         const t = levelTotal(r);
         const d = designatedKeys.reduce((a, k) => a + (r[k] ?? 0), 0);
         const key = LEVEL_TO_TARGET_KEY[l];
-        return { level: l, share: pct(d, t), target: sector && key ? Math.round(sector.targets[key].total) : null, eap: Math.round(eap) };
+        return { level: l, share: pct(d, t), target: sector && key ? Math.round(sector.targets[key].total) : null, eap: eap === null ? null : Math.round(eap) };
       });
       const withTarget = levels.filter((l) => l.target !== null);
       const onTrack = withTarget.length ? pct(withTarget.filter((l) => l.share >= (l.target ?? 0)).length, withTarget.length) : 0;
-      const representation = Math.min(100, pct(designated, total * (eap / 100)));
+      const representation = eap === null ? 0 : Math.min(100, pct(designated, total * (eap / 100)));
       const dgScore = dg.data?.[0]?.score ?? 0;
       const evidenceCoverage = Math.min(100, (docs.data?.length ?? 0) * 33);
       const bands = [
