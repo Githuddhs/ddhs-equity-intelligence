@@ -48,7 +48,7 @@ function statusTone(status: string) {
 }
 
 export function DashboardMock() {
-  const score = 0;
+  const score = 68;
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
 
@@ -98,15 +98,18 @@ export function DashboardMock() {
         <div className="min-w-0 flex-1 p-4 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="font-display text-[15px] font-bold text-primary">
+              <p className="flex flex-wrap items-center gap-2 font-display text-[15px] font-bold text-primary">
                 Equity Intelligence Overview
+                <span className="rounded-full border border-teal/30 bg-teal-soft px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-teal">
+                  Example figures
+                </span>
               </p>
               <p className="text-[11px] text-muted-foreground">
-                Reporting period · not set
+                Reporting period · FY2025/26
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-              EEA13 Cycle · not set
+              EEA13 Cycle · 2025–2029
             </span>
           </div>
 
@@ -173,30 +176,41 @@ export function DashboardMock() {
               </span>
             </div>
             <div className="mt-2.5 space-y-2">
-              {["Top management", "Senior management", "Professionally qualified", "Skilled technical", "Semi-skilled", "Unskilled"].map((lvl) => (
-                <div key={lvl} className="flex items-center gap-2 text-[11px]">
-                  <span className="w-28 shrink-0 truncate text-muted-foreground">{lvl}</span>
+              {eea12Levels.map((row) => (
+                <div key={row.level} className="flex items-center gap-2 text-[11px]">
+                  <span className="w-28 shrink-0 truncate text-muted-foreground">{row.level}</span>
                   <div className="relative h-1.5 flex-1 rounded-full bg-secondary">
-                    <span className="absolute inset-y-[-3px] left-0 w-0.5 rounded bg-primary/70" />
-                    <span className="absolute inset-y-[-3px] left-[4px] w-0.5 rounded bg-muted-foreground/50" />
+                    <div
+                      className="absolute inset-y-0 left-0 rounded-full bg-teal"
+                      style={{ width: `${row.share}%` }}
+                    />
+                    <span
+                      className="absolute inset-y-[-3px] w-0.5 rounded bg-primary/70"
+                      style={{ left: `${row.target}%` }}
+                    />
+                    <span
+                      className="absolute inset-y-[-3px] w-0.5 rounded bg-muted-foreground/50"
+                      style={{ left: `${row.eap}%` }}
+                    />
                   </div>
-                  <span className="w-20 shrink-0 text-right text-[10px] text-muted-foreground">
-                    — / — / —
+                  <span className="w-24 shrink-0 text-right text-[10px] text-muted-foreground">
+                    {row.share}% / {row.target}% / {row.eap}%
                   </span>
                 </div>
               ))}
             </div>
             <p className="mt-2 text-[10px] text-muted-foreground">
-              Share, sectoral target and provincial EAP per level appear once workforce data is loaded — full comparison on the EEA12 page.
+              Example figures — your own comparison appears once workforce data is loaded; full
+              detail on the EEA12 page.
             </p>
           </div>
 
           {/* DG readiness, barriers, calendar */}
           <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
             {[
-              { icon: ClipboardCheck, title: "DG review readiness", note: "Process & reporting checklist · not started" },
-              { icon: TriangleAlert, title: "Barrier analysis", note: "Survey responses · none yet" },
-              { icon: Target, title: "Next statutory deadline", note: "EEA2 / EEA4 · not set" },
+              { icon: ClipboardCheck, title: "DG review readiness", note: "Process & reporting checklist · 7 of 12 complete" },
+              { icon: TriangleAlert, title: "Barrier analysis", note: "Survey responses · 26 received" },
+              { icon: Target, title: "Next statutory deadline", note: "EEA2 / EEA4 · due 15 Jan 2027" },
             ].map((c) => (
               <div key={c.title} className="rounded-xl border bg-background p-3">
                 <c.icon className="h-3.5 w-3.5 text-teal" />
