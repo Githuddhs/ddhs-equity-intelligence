@@ -7,6 +7,24 @@ const ROWS: { level: string; desc: string; paterson: string; peromnes: string; h
   { level: "Unskilled", desc: "Cleaners, labourers, messengers — defined decision making", paterson: "A", peromnes: "15–17", hay: "8–10", equate: "1–2" },
 ];
 
+export function OccupationalGrades({ level }: { level: string }) {
+  const row = ROWS.find((r) => r.level === level);
+  if (!row) return null;
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-primary">{row.level}</h3>
+      <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
+        {(["paterson", "peromnes", "hay", "equate"] as const).map((system) => (
+          <div key={system}>
+            <dt className="text-xs font-medium capitalize text-muted-foreground">{system}</dt>
+            <dd className="mt-1 text-sm font-semibold text-foreground">{row[system]}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
 export function EeaCrosswalk() {
   return (
     <div className="card">
@@ -16,31 +34,13 @@ export function EeaCrosswalk() {
         occupational levels used for EEA2, EEA4 and workforce profile reporting, based on the EEA9
         Occupational Levels guidance.
       </p>
-      <div className="mt-3 overflow-x-auto">
-        <table className="w-full min-w-[720px] text-sm">
-          <thead>
-            <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-              <th className="py-2 pr-3">EEA occupational level</th>
-              <th className="py-2 pr-3">Typical roles</th>
-              <th className="py-2 pr-3">Paterson</th>
-              <th className="py-2 pr-3">Peromnes</th>
-              <th className="py-2 pr-3">Hay</th>
-              <th className="py-2">Equate</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ROWS.map((r) => (
-              <tr key={r.level} className="border-b last:border-0">
-                <td className="py-2 pr-3 font-medium text-primary">{r.level}</td>
-                <td className="py-2 pr-3 text-muted-foreground">{r.desc}</td>
-                <td className="py-2 pr-3">{r.paterson}</td>
-                <td className="py-2 pr-3">{r.peromnes}</td>
-                <td className="py-2 pr-3">{r.hay}</td>
-                <td className="py-2">{r.equate}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="mt-3 divide-y divide-border">
+        {ROWS.map((r) => (
+          <div key={r.level} className="py-4">
+            <OccupationalGrades level={r.level} />
+            <p className="mt-2 text-xs text-muted-foreground">{r.desc}</p>
+          </div>
+        ))}
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
         Indicative alignment only — grade boundaries vary by organisation and grading implementation.

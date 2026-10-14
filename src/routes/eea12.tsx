@@ -11,7 +11,7 @@ import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org
 import { normaliseWorkforce } from "@/lib/workforce";
 import { useQuery } from "@tanstack/react-query";
 import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
-import { EeaCrosswalk } from "@/components/eea-crosswalk";
+import { EeaCrosswalk, OccupationalGrades } from "@/components/eea-crosswalk";
 import { latestDgFindings } from "@/lib/form-drafts";
 import { PageExport } from "@/components/page-export";
 
@@ -220,6 +220,10 @@ function Eea12Page() {
                 {LEVELS.map((l) => <option key={l}>{l}</option>)}
               </select>
             </label>
+          </div>
+          <div className="mb-5 border-y border-border py-4" aria-label="Selected occupational category job grades">
+            <OccupationalGrades level={level} />
+            <p className="mt-3 text-xs text-muted-foreground">Indicative job-grade alignment — confirm against your organisation’s job evaluation and role responsibilities.</p>
           </div>
           {wf && (
             <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-teal/40 bg-muted/40 p-3">
