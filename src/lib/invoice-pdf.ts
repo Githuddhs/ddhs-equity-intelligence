@@ -1,3 +1,4 @@
+import { reportPdf } from "@/lib/report-download";
 import type { InvoiceItem } from "@/lib/invoice.functions";
 
 export type InvoiceForPdf = {
@@ -136,5 +137,5 @@ export async function exportInvoicePdf(inv: InvoiceForPdf) {
   doc.setFontSize(8);
   doc.text("DDHS Equity Intelligence (Pty) Ltd — Employment Equity compliance, workforce transformation and governance.", 14, 285);
 
-  doc.save(`${inv.invoice_number}.pdf`);
+  reportPdf(doc, `${inv.invoice_number}.pdf`);
 }

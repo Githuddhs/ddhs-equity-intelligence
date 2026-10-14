@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
-
-type Block = { kind: "h" | "p"; text: string } | { kind: "table"; title: string; head: string[]; body: string[][] };
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { offerReport, type ReportBlock as Block } from "@/lib/report-download";
 
 const clean = (s: string) => s.replace(/\s+/g, " ").trim();
 const fieldValue = (el: Element): string => {
@@ -40,7 +41,7 @@ function extract(root: HTMLElement): { title: string; blocks: Block[]; fields: [
     if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") { const v = fieldValue(node); if (v) { const l = fieldLabel(node); fields.push([l, v]); blocks.push({ kind: "p", text: `${l}: ${v}` }); } return; }
     if (tag === "BUTTON" || tag === "SCRIPT" || tag === "STYLE" || tag === "SVG" || tag === "NAV") return;
     const hasBlockChild = Array.from(node.children).some((c) => /^(DIV|P|SECTION|ARTICLE|UL|OL|LI|TABLE|H1|H2|H3|H4|LABEL|INPUT|SELECT|TEXTAREA|FORM)$/.test(c.tagName));
-    if (!hasBlockChild && /^(P|LI|SPAN|DIV|LABEL|DT|DD|A|STRONG)$/.test(tag)) { const t = clean(node.textContent ?? ""); if (t) blocks.push({ kind: "p", text: tag === "LI" ? `• ${t}` : t }); return; }
+    if (!hasBlockChild && !node.querySelector("input,select,textarea") && /^(P|LI|SPAN|DIV|LABEL|DT|DD|A|STRONG)$/.test(tag)) { const t = clean(node.textContent ?? ""); if (t) blocks.push({ kind: "p", text: tag === "LI" ? `• ${t}` : t }); return; }
     Array.from(node.children).forEach(walk);
   };
   walk(root);
@@ -48,59 +49,20 @@ function extract(root: HTMLElement): { title: string; blocks: Block[]; fields: [
   return { title, blocks, fields };
 }
 
-const fileBase = (t: string) => `${t.replace(/[^\w]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "export"}-${new Date().toISOString().slice(0, 10)}`;
-const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const save = (blob: Blob, name: string) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
-
-async function toPdf(d: ReturnType<typeof extract>) {
-  const { jsPDF } = await import("jspdf"); const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF(); const W = doc.internal.pageSize.getWidth(); const H = doc.internal.pageSize.getHeight();
-  let y = 18;
-  doc.setFontSize(9); doc.setTextColor(13, 148, 136); doc.text("DDHS Equity Intelligence", 14, 10); doc.setTextColor(0);
-  const need = (h: number) => { if (y + h > H - 14) { doc.addPage(); y = 16; } };
-  for (const b of d.blocks) {
-    if (b.kind === "h") { need(10); doc.setFontSize(13); doc.setFont("helvetica", "bold"); doc.setTextColor(15, 39, 71); doc.text(doc.splitTextToSize(b.text, W - 28), 14, y); doc.setTextColor(0); doc.setFont("helvetica", "normal"); y += 8; }
-    else if (b.kind !== "table") { doc.setFontSize(9.5); const lines = doc.splitTextToSize(b.text, W - 28) as string[]; for (const l of lines) { need(5); doc.text(l, 14, y); y += 4.6; } y += 1.5; }
-    else { autoTable(doc, { startY: y, head: b.head.length ? [b.head] : [], body: b.body, styles: { fontSize: 8 }, headStyles: { fillColor: [15, 39, 71] }, margin: { left: 14, right: 14 } }); y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6; }
-  }
-  doc.save(fileBase(d.title) + ".pdf");
-}
-
-function toWord(d: ReturnType<typeof extract>) {
-  const body = d.blocks.map((b) => b.kind !== "table" ? (b.kind === "h" ? `<h2>${esc(b.text)}</h2>` : `<p>${esc(b.text)}</p>`)
-    : `<table>${b.head.length ? `<tr>${b.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr>` : ""}${b.body.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table>`).join("\n");
-  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${esc(d.title)}</title><style>body{font-family:Arial;font-size:10.5pt}h2{color:#0f2747;font-size:14pt}table{border-collapse:collapse;width:100%;margin:6pt 0}th{background:#0f2747;color:#fff}th,td{border:1px solid #bbb;padding:3pt;font-size:9pt}</style></head><body><p style="color:#0d9488">DDHS Equity Intelligence · ${new Date().toLocaleDateString("en-ZA")}</p>${body}</body></html>`;
-  save(new Blob(["\ufeff", html], { type: "application/msword" }), fileBase(d.title) + ".doc");
-}
-
-async function toExcel(d: ReturnType<typeof extract>) {
-  const XLSX = await import("xlsx"); const wb = XLSX.utils.book_new(); const used = new Set<string>();
-  const name = (s: string) => { let n = s.replace(/[\\/?*[\]:]/g, "").slice(0, 28) || "Sheet"; let k = n, i = 2; while (used.has(k)) k = `${n.slice(0, 25)} ${i++}`; used.add(k); return k; };
-  const summary: string[][] = [[d.title], [`Exported ${new Date().toLocaleString("en-ZA")}`], []];
-  d.blocks.forEach((b) => { if (b.kind !== "table") summary.push([b.kind === "h" ? b.text.toUpperCase() : b.text]); });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summary), name("Summary"));
-  if (d.fields.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([["Field", "Value"], ...d.fields]), name("Fields"));
-  d.blocks.forEach((b) => { if (b.kind === "table") XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(b.head.length ? [b.head, ...b.body] : b.body), name(b.title)); });
-  XLSX.writeFile(wb, fileBase(d.title) + ".xlsx");
-}
-
 export function PageExport() {
   const [busy, setBusy] = useState(false);
-  const run = async (fmt: "pdf" | "word" | "excel") => {
+  const run = () => {
     const root = document.querySelector("main") as HTMLElement | null;
     if (!root) { toast.error("Nothing on this page to download."); return; }
     setBusy(true);
-    try { const d = extract(root); if (!d.blocks.length) { toast.error("Nothing on this page to download yet."); return; } if (fmt === "pdf") await toPdf(d); else if (fmt === "word") toWord(d); else await toExcel(d); }
-    catch (e) { toast.error(e instanceof Error ? e.message : "Download failed"); }
+    try {
+      const data = extract(root);
+      if (!data.blocks.length) { toast.error("Nothing on this page to download yet."); return; }
+      offerReport({ name: data.title.replace(/[^a-z0-9]+/gi, "-").slice(0, 60), data });
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Download failed"); }
     finally { setBusy(false); }
   };
-  const btn = "rounded-md px-2.5 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50";
-  return (
-    <div data-no-export className="fixed bottom-4 right-4 z-40 flex items-center gap-1 rounded-lg border border-border bg-primary p-1 shadow-lg print:hidden">
-      <span className="px-2 text-xs font-semibold text-primary-foreground">Download page:</span>
-      <button disabled={busy} onClick={() => run("word")} className={btn}>Word</button>
-      <button disabled={busy} onClick={() => run("pdf")} className={btn}>PDF</button>
-      <button disabled={busy} onClick={() => run("excel")} className={`${btn} bg-teal`}>Excel</button>
-    </div>
-  );
+  return <div data-no-export className="fixed bottom-4 right-4 z-40 print:hidden">
+    <Button disabled={busy} onClick={run}><Download />Download · Word / Excel / PDF / PPT</Button>
+  </div>;
 }

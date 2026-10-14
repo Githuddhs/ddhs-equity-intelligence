@@ -15,3 +15,5 @@
 - Individual Workforce Foundation records live in owner-only reporting periods, never in shared snapshots; staff and managers have no blanket access to salary or disability records.
 - Workforce Foundation validation is shared by import/UI/server save; an invoker SQL transaction persists period records and non-identifying snapshot aggregates together so reports cannot diverge on partial saves.
 - Foundation document imports use deterministic named-column extraction, never AI, to avoid sending individual pay and disability records to an external model; imports remain unsaved until reviewed.
+- Generated reports use the root-mounted four-format download chooser; existing PDFs remain the canonical layout, native workbooks retain all rows, and conversion runs only in the browser to preserve data access and privacy.
+- Plan report filters merge workforce units with plan-only units; organisation/faculty scope is resolved through matching workforce paths, with unassigned plans explicitly excluded when those levels are selected.

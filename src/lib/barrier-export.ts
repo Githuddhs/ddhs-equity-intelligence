@@ -1,3 +1,4 @@
+import { reportPdf, reportWorkbook } from "@/lib/report-download";
 import {
   LIKERT_SECTIONS, OPEN_QUESTIONS, BARRIER_TEXT, FINAL_TEXT, QUESTIONNAIRE_VERSION,
   sectionScores, completionPct, rolesFor, barrierFrequency,
@@ -116,7 +117,7 @@ export async function exportBarrierExcel(responses: ExportableResponse[]) {
   ws4["!cols"] = [{ wch: 12 }, { wch: 24 }, { wch: 60 }, { wch: 70 }];
   XLSX.utils.book_append_sheet(wb, ws4, "Open feedback");
 
-  XLSX.writeFile(wb, `ddhs-barrier-analysis-${stamp}.xlsx`);
+  reportWorkbook(wb, `ddhs-barrier-analysis-${stamp}.xlsx`);
 }
 
 export async function exportBarrierPdf(responses: ExportableResponse[]) {
@@ -215,5 +216,5 @@ export async function exportBarrierPdf(responses: ExportableResponse[]) {
     }
   }
 
-  doc.save(`ddhs-barrier-analysis-${new Date().toISOString().slice(0, 10)}.pdf`);
+  reportPdf(doc, `ddhs-barrier-analysis-${new Date().toISOString().slice(0, 10)}.pdf`);
 }

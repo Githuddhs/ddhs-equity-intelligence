@@ -1,6 +1,8 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Add Word, Excel, PDF and PowerPoint options to report downloads; verify generated files.
+- [ ] Fix Project monitoring: plan-only units missing from report filters and organisation/faculty labels disagreeing with rows.
 - [x] Foundation uploads: Excel/ODS, Word tables, text PDF and structured CSV/TSV/TXT/Markdown/JSON/HTML. CSV and Word UI import, PDF extraction and missing-field warnings verified; no test records saved.
 - [x] Aligned grading references beneath Workforce Foundation categories; workbook download verified with all four sheets; matching source headcounts verified in all four EEA drafts.
 - [x] Workforce Foundation: organisation, employee/job-grade, remuneration and movement records; workbook import, period checks and missing-field warnings. Save/reload verified using temporary records, then removed.

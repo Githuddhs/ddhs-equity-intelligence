@@ -1,3 +1,4 @@
+import { reportPdf } from "@/lib/report-download";
 import type { PlanContent, SavedAnalysis } from "@/lib/ee-plan";
 import { goalsFromAnalyses, emptyContent, buildDeadlines, daysUntil } from "@/lib/ee-plan";
 import { averageBarrierScores } from "@/lib/plan-autofill";
@@ -259,5 +260,5 @@ export async function exportLeadershipPdf(input: LeadershipReportInput) {
     doc.text(`DDHS Equity Intelligence — Leadership Report · ${input.company} · ${today} · Page ${i} of ${pages}`, 14, 292);
   }
 
-  doc.save(`ddhs-leadership-report-${new Date().toISOString().slice(0, 10)}.pdf`);
+  reportPdf(doc, `ddhs-leadership-report-${new Date().toISOString().slice(0, 10)}.pdf`);
 }
