@@ -9,6 +9,7 @@ import { extractPdfText } from "@/lib/workforce.functions";
 import { ExistingPlanGap } from "@/components/existing-plan-gap";
 import { OrgUnitPicker } from "@/components/org-unit-picker";
 import { FoundationRecords } from "@/components/foundation-records";
+import { OccupationalGrades } from "@/components/eea-crosswalk";
 import { ALL_UNITS, aggregate, breakdown, describeFilter, normaliseUnits, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 import {
   DISABILITY_COLUMN,
@@ -301,7 +302,7 @@ function WorkforcePage() {
               <tbody>
                 {LEVELS.map((l) => (
                   <tr key={l}>
-                    <td className={`${td} text-left font-medium text-primary`}>{l}</td>
+                    <td className={`${td} min-w-80 text-left font-medium text-primary`}><OccupationalGrades level={l} /></td>
                     {GROUPS.map((g) => (
                       <td key={g.key} className={td}>
                         <input

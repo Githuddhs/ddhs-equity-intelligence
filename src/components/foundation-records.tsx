@@ -10,6 +10,7 @@ import { LEVELS } from "@/lib/workforce";
 import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, foundationWorkbook, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, type Foundation } from "@/lib/foundation";
 import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
+import { OccupationalGrades } from "@/components/eea-crosswalk";
 
 export const foundationQuery = () => ({ queryKey: ["foundation-periods"], queryFn: async () => {
   const { data: auth } = await supabase.auth.getUser();
@@ -28,7 +29,7 @@ const choices: Record<string, string[]> = {
 const input = "h-9 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground";
 function Field({ name, value, onChange, label }: { name: string; value: string; onChange: (v: string) => void; label: string }) {
   const options = choices[name];
-  if (options) return <select aria-label={label} className={input} value={value} onChange={(e) => onChange(e.target.value)}><option value="">Not supplied</option>{options.map((v) => <option key={v}>{v}</option>)}</select>;
+  if (options) return <select aria-label={label} className={input} value={value} onChange={(e) => onChange(e.target.value)}><option value="">Not supplied</option>{options.map((v) => <option key={v} value={v}>{v}</option>)}</select>;
   const date = /date|periodstart|periodend/i.test(name);
   const number = ["basicPay", "variablePay", "benefits", "hours", "fte"].includes(name);
   return <input aria-label={label} className={input} value={value} type={date ? "date" : number ? "number" : "text"} min={number ? 0 : undefined} step={number ? "any" : undefined} max={name === "fte" ? 1 : undefined} onChange={(e) => onChange(e.target.value)} />;
@@ -91,7 +92,7 @@ export function FoundationRecords() {
     <Tabs defaultValue="organisation" className="mt-5">
       <TabsList className="h-auto max-w-full flex-wrap justify-start"><TabsTrigger value="organisation">Organisation</TabsTrigger><TabsTrigger value="employees">Employees & job grades</TabsTrigger><TabsTrigger value="pay">Remuneration</TabsTrigger><TabsTrigger value="movements">Movements</TabsTrigger><TabsTrigger value="validation">Validation {check.errors.length || check.warnings.length ? `(${check.errors.length + check.warnings.length})` : ""}</TabsTrigger></TabsList>
       <TabsContent value="organisation" className="py-4"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{Object.keys(form.organisation).map((key) => <label key={key} className="text-sm font-medium">{key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)}<div className="mt-1"><Field name={key} value={form.organisation[key as keyof typeof form.organisation]} label={key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)} onChange={(v) => update({ ...form, organisation: { ...form.organisation, [key]: v } })} /></div></label>)}</div></TabsContent>
-      <TabsContent value="employees" className="py-4">{table("employees", EMPLOYEE_FIELDS)}</TabsContent>
+      <TabsContent value="employees" className="py-4">{table("employees", EMPLOYEE_FIELDS)}<div className="mt-6 divide-y divide-border">{LEVELS.map((level) => <div key={level} className="py-4"><OccupationalGrades level={level} /></div>)}</div><p className="mt-3 text-xs text-muted-foreground">Indicative EEA9 alignment: confirm against actual job responsibilities and your approved grading structure. Hay values are points; Equate public-service levels are indicative.</p></TabsContent>
       <TabsContent value="pay" className="py-4"><p className="mb-4 text-sm text-muted-foreground">Reporting-period totals in ZAR, not monthly rates. Blank amounts remain missing; enter 0 for confirmed zero.</p>{table("remuneration", PAY_FIELDS)}</TabsContent>
       <TabsContent value="movements" className="py-4">{table("movements", MOVEMENT_FIELDS)}</TabsContent>
       <TabsContent value="validation" className="py-4"><h3 className="font-semibold text-primary">{check.errors.length} errors · {check.warnings.length} missing-information warnings</h3><ul className="mt-3 list-disc space-y-1 pl-5 text-sm">{check.errors.slice(0, 100).map((v) => <li className="text-destructive" key={v}>{v}</li>)}{check.warnings.slice(0, 100).map((v) => <li className="text-muted-foreground" key={v}>{v}</li>)}</ul>{check.errors.length + check.warnings.length > 100 && <p className="mt-3 text-sm text-muted-foreground">Showing up to 100 errors and 100 warnings. Correct the records and check again.</p>}</TabsContent>
