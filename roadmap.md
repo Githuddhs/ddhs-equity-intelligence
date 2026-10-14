@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Add job-grade progress within each EEA12 occupational category using snapshot-linked Foundation records, unit filters and provincial EAP/occupational benchmarks; verify calculations and display.
 - [x] Improve EAP representation presentation: explicit below/above percentage-point differences and under/over labels, Table/Chart population views and matching unit/summary report tables; entered-data browser flow and regression tests verified.
 - [x] EEA12 QA: 60 saved-fixture grouping/filter/job-level checks passed; sector and provincial gaps, missing-province/non-gazetted states, and all four downloads checked. Added missing grading references/warnings to unit downloads and removed unavailable target/province fallback from summary downloads. Temporary snapshot deleted; owner's account had no saved snapshot, so real-client data verification awaits an upload.
 - [x] Build EEA12 per-unit job-level comparisons against Sectoral Targets and provincial EAP; saved snapshot verified through organisation/faculty narrowing, demographic profiles, missing-province/non-gazetted/empty-level states and four-format downloads; temporary data removed.
