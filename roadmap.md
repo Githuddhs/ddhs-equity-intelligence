@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Verify EEA12 unit view against saved workforce totals, all unit filters, sector/provincial comparisons and missing-province states; inspect all four downloaded formats and fix mismatches.
 - [x] Build EEA12 per-unit job-level comparisons against Sectoral Targets and provincial EAP; saved snapshot verified through organisation/faculty narrowing, demographic profiles, missing-province/non-gazetted/empty-level states and four-format downloads; temporary data removed.
 - [x] Add Word, Excel, PDF and PowerPoint options to report downloads; populated plan and imported Foundation files downloaded in all formats, Office packages checked, PDF and desktop/mobile chooser inspected.
 - [x] Fix Project monitoring: plan-only units missing from report filters and organisation/faculty labels disagreeing with rows; saved-plan filter verified, three tests pass, finding resolved.
