@@ -22,10 +22,10 @@ const nav = [
 ];
 
 const kpis = [
-  { label: "Workforce Size", value: "—", delta: "", up: true },
-  { label: "Designated Groups", value: "—", delta: "", up: true },
-  { label: "Actions Open", value: "—", delta: "", up: false },
-  { label: "Evidence Gaps", value: "—", delta: "", up: false },
+  { label: "Workforce Size", value: "842", delta: "+37 this year", up: true },
+  { label: "Designated Groups", value: "64%", delta: "+3.2 pts vs last cycle", up: true },
+  { label: "Actions Open", value: "14", delta: "3 overdue", up: false },
+  { label: "Evidence Gaps", value: "6", delta: "4 due this quarter", up: false },
 ];
 
 
