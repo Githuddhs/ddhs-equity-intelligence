@@ -6,7 +6,9 @@ import { SECTORS, LEVEL_TO_TARGET_KEY, eapTargets } from "@/lib/sectors";
 export type LiveOverview = {
   snapshotDate: string;
   kpis: { label: string; value: string; delta: string; up: boolean }[];
-  levels: { level: string; share: number; target: number | null; eap: number }[];
+  levels: { level: string; share: number; target: number | null; eap: number | null }[];
+  /** Configured province used for EAP comparisons; null when the client has not set one. */
+  province: string | null;
   score: number;
   bands: { label: string; value: number }[];
   dgNote: string;
