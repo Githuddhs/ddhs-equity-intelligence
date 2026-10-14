@@ -1,7 +1,7 @@
 # DDHS roadmap
 
 ## Open
-- [ ] Expand Foundation uploads to Excel, Word, PDF and structured text formats; verify import and validation without saving invented data.
+- [x] Foundation uploads: Excel/ODS, Word tables, text PDF and structured CSV/TSV/TXT/Markdown/JSON/HTML. CSV and Word UI import, PDF extraction and missing-field warnings verified; no test records saved.
 - [x] Aligned grading references beneath Workforce Foundation categories; workbook download verified with all four sheets; matching source headcounts verified in all four EEA drafts.
 - [x] Workforce Foundation: organisation, employee/job-grade, remuneration and movement records; workbook import, period checks and missing-field warnings. Save/reload verified using temporary records, then removed.
 - [x] Owner-only individual salary/disability policy confirmed; aggregate snapshot, EEA2 movements/disability, EEA4 pay and provincial live overview readback verified. Cross-account authenticated privacy test not performed.
