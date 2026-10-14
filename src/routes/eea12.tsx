@@ -18,7 +18,7 @@ import { latestFoundation } from "@/lib/foundation-source";
 import { Eea12UnitView } from "@/components/eea12-unit-view";
 import { Button } from "@/components/ui/button";
 import { EapProfile } from "@/components/eap-profile";
-import { eapGap } from "@/lib/eap-presentation";
+import { eapGap, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 import { JobGradeProgress } from "@/components/job-grade-progress";
 import { EapLevelExplanation } from "@/components/eap-level-explanation";
 
@@ -337,9 +337,10 @@ function Eea12Page() {
                   {GROUPS.map((g) => <td key={g.key} className={`${td} font-bold`}>{r.secondary[g.key] ?? ""}</td>)}
                   <td className={td}></td>
                 </tr>
-              </tbody>
+          </tbody>
             </table>
           </div>
+          <p className="mt-2 text-xs text-muted-foreground">{EAP_GAP_LEGEND}</p>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <label className="text-sm font-medium" htmlFor="eap-province">EAP province</label>
             <select id="eap-province" value={province} onChange={(e) => { setProvince(e.target.value); setComparisonProvince(e.target.value === "National" ? "" : e.target.value); setEap(PROVINCE_EAP[e.target.value] ?? DEFAULT_EAP); }}
