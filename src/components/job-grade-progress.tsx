@@ -6,7 +6,7 @@ import type { Foundation } from "@/lib/foundation";
 import { describeFilter, type UnitFilter } from "@/lib/org-units";
 import { GROUPS, type Key } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
 
 type Props = { foundation?: Foundation | null | undefined; level: string; filter: UnitFilter; sector: string; province: string; loading?: boolean; error?: boolean };
@@ -43,7 +43,7 @@ export function JobGradeProgress({ foundation, level, filter, sector, province, 
     const blocks: ReportBlock[] = [
       { kind: "p", text: `${level} · ${describeFilter(filter)} · Snapshot: ${foundation?.snapshot_date} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"}` },
       { kind: "p", text: `Grading system: ${selectedSystem || "All recorded systems"} · Job grade: ${selectedGrade || "All recorded grades"} · ${visible.reduce((n, g) => n + g.total, 0)} employees · ${visible.length} grades` },
-      { kind: "p", text: "Sector targets are gazetted at occupational level, not separately per job grade. Grade comparisons are diagnostic benchmarks, not a grade-specific compliance determination. EAP differences are percentage points (pp)." },
+      { kind: "p", text: `Sector targets are gazetted at occupational level, not separately per job grade. Grade comparisons are diagnostic benchmarks, not a grade-specific compliance determination. ${EAP_GAP_LEGEND}` },
       { kind: "table", title: "Progress by recorded job grade", head, body: rows },
     ];
     for (const g of visible) blocks.push({ kind: "table", title: `${g.system} · ${g.grade} population profile`, head: ["Population group", "Headcount", "Workforce share", "Provincial EAP", "Difference (pp)", "Representation", "What this means"], body: GROUPS.map((m) => {
@@ -61,6 +61,7 @@ export function JobGradeProgress({ foundation, level, filter, sector, province, 
       {!target && <p className="text-xs text-muted-foreground">{targetKey ? "Select a sector for the occupational benchmark." : "No gazetted sectoral numerical target for this occupational category."}</p>}
       {groups.some((g) => g.grade === "Grade not recorded" || g.system === "System not recorded") && <p role="status" className="text-sm text-destructive">Some job grades or grading systems are not recorded; these employees remain included in the totals.</p>}
       <div className="flex flex-wrap items-center gap-4"><label className="text-sm font-medium">Grading system<select aria-label={`${level} grading system`} className="ml-2 rounded-md border border-border bg-background px-3 py-2" value={selectedSystem} onChange={(e) => { setSystem(e.target.value); setGrade(""); }}><option value="">All recorded systems</option>{systems.map((s) => <option key={s}>{s}</option>)}</select></label><label className="text-sm font-medium">Job grade<select aria-label={`${level} job grade`} className="ml-2 rounded-md border border-border bg-background px-3 py-2" value={selectedGrade} onChange={(e) => setGrade(e.target.value)}><option value="">All recorded grades</option>{grades.map((g) => <option key={g}>{g}</option>)}</select></label><span className="text-sm text-muted-foreground">{visible.reduce((n, g) => n + g.total, 0)} employees · {visible.length} grades</span></div>
+      <p className="text-xs text-muted-foreground">{EAP_GAP_LEGEND}</p>
       <div className="overflow-x-auto"><table className="w-full min-w-[960px] text-sm"><thead className="bg-muted"><tr>{head.map((h) => <th key={h} className="border-b border-border px-3 py-2 text-left">{h}</th>)}</tr></thead><tbody>{rows.map((row, i) => <tr key={i}>{row.map((cell, j) => <td key={j} className="border-b border-border px-3 py-2">{cell}</td>)}</tr>)}</tbody></table></div>
       {visible.map((g) => <details key={`${g.system}-${g.grade}`} className="border-b border-border pb-3"><summary className="cursor-pointer text-sm font-semibold text-primary">{g.system} · {g.grade} — population profile ({g.total} employees)</summary><div className="pt-3"><EapProfile counts={g.counts} eap={eap} province={eap ? province : ""} /></div></details>)}
     </>}

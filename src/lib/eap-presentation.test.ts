@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { eapGap, eapExplanation, eapShare } from "./eap-presentation";
+import { eapGap, eapExplanation, eapShare, EAP_GAP_LEGEND } from "./eap-presentation";
 describe("EAP presentation", () => {
+  it("provides a shared gap legend for charts and printed tables", () => {
+    expect(EAP_GAP_LEGEND).toContain("workforce share minus provincial EAP");
+    expect(EAP_GAP_LEGEND).toContain("negative");
+    expect(EAP_GAP_LEGEND).toContain("under-representation");
+  });
   it("states direction in percentage points", () => {
     expect(eapGap(33.3333, 46.6)).toMatchObject({ gap: "13.3 pp below", label: "Under-represented" });
     expect(eapGap(16.6667, 5.8)).toMatchObject({ gap: "10.9 pp above", label: "Over-represented" });

@@ -1,4 +1,5 @@
 /** Presentation only: compare unrounded shares, display gaps in percentage points. */
+export const EAP_GAP_LEGEND = "Percentage-point (pp) gaps are workforce share minus provincial EAP; a negative value (shown as \"below\") means under-representation, a positive value (\"above\") over-representation.";
 export function eapShare(eap: Record<string, number> | undefined, keys: readonly string[]) {
   if (!eap || keys.some((key) => eap[key] == null || !Number.isFinite(eap[key]))) return undefined;
   return keys.reduce((sum, key) => sum + (eap[key] ?? 0), 0);

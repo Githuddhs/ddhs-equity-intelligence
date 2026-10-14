@@ -6,7 +6,7 @@ import { GROUPS, LEVELS, normaliseWorkforce } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
 import { EapProfile } from "@/components/eap-profile";
-import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 import { EapLevelExplanation } from "@/components/eap-level-explanation";
 import { JobGradeProgress } from "@/components/job-grade-progress";
 import type { Foundation } from "@/lib/foundation";
@@ -48,6 +48,7 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date, f
   const download = () => {
     const blocks: ReportBlock[] = [{ kind: "p", text: `${describeFilter(filter)} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"} · Snapshot: ${date}` }, { kind: "p", text: "EAP difference is workforce share minus the EAP benchmark, in percentage points (pp). Below means under-represented; above means over-represented. Foreign nationals are not designated groups." }];
     blocks.push({ kind: "p", text: `Compare units by: ${groupBy} · Occupational level: ${level || "All occupational levels"}` });
+    blocks.push({ kind: "p", text: `${EAP_GAP_LEGEND} Foreign nationals are not designated groups.` });
     for (const t of tables) {
       const grades = OCCUPATIONAL_GRADES.find((g) => g.level === t.occupational);
       blocks.push({ kind: "h", text: `${t.scope} — ${t.occupational} (${t.total} employees)` });
@@ -66,6 +67,7 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date, f
     {!eap && <p role="status" className="text-sm text-destructive">Province not set — select a province or complete the organisation details in Workforce Foundation. Provincial EAP comparisons are unavailable.</p>}
     {!selectedSector && <p className="text-sm text-muted-foreground">Sector not set — select your economic sector for gazetted targets.</p>}
     {!tables.length && <p className="text-sm text-muted-foreground">No workforce records match this unit.</p>}
+    <p className="text-xs text-muted-foreground">{EAP_GAP_LEGEND}</p>
     {tables.map((t) => <div key={`${t.scope}-${t.occupational}`} className="space-y-3 border-t border-border pt-5"><h3 className="font-semibold text-primary">{t.scope} · {t.occupational} <span className="font-normal text-muted-foreground">· {t.total} employees</span></h3><OccupationalGrades level={t.occupational} />{!t.hasTarget && <p className="text-xs text-muted-foreground">No gazetted sectoral numerical target for this occupational level.</p>}{t.total === 0 && <p className="text-xs text-muted-foreground">No employees recorded at this level; workforce shares and gaps are unavailable.</p>}<EapLevelExplanation level={t.occupational} counts={t.row} eap={eap} />{table(head, t.metrics)}<EapProfile counts={t.row} eap={eap} province={eap ? province : ""} /><JobGradeProgress foundation={foundation} level={t.occupational} filter={units.length ? { ...filter, [groupBy]: t.scope } : filter} sector={sector} province={province} /></div>)}
   </section>;
 }

@@ -1,5 +1,5 @@
 import { reportPdf } from "@/lib/report-download";
-import { eapGap, eapExplanation, eapShare } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation, eapShare, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -87,6 +87,9 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     body: KEYS.map((k) => { const gap = eapGap(at.total ? at.sh(k) : null, i.eap[k]); return [NAMES[k] ?? k, all[k] ?? 0, at.total ? p(at.sh(k)) : "—", p(i.eap[k]), gap.gap, gap.label]; }),
   });
   explanations("Selected levels combined", at);
+  doc.setFontSize(8); doc.setTextColor(110);
+  for (const line of doc.splitTextToSize(EAP_GAP_LEGEND, 182) as string[]) { doc.text(line, 14, (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8); }
+  doc.setTextColor(0);
 
   for (const l of i.levels) {
     doc.addPage(); header(`EEA12 — ${l}`);
@@ -109,6 +112,12 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     });
     explanations(l, a);
     let y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8;
+    doc.setFontSize(8); doc.setTextColor(110);
+    for (const line of doc.splitTextToSize(EAP_GAP_LEGEND, 182) as string[]) {
+      if (y > 280) { doc.addPage(); y = 20; }
+      doc.text(line, 14, y); y += 4;
+    }
+    doc.setTextColor(0); y += 2;
     doc.setFontSize(10);
     const lines = doc.splitTextToSize(
       !a.total ? "No headcount recorded for this level."
