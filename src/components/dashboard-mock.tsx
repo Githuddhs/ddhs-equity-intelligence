@@ -178,7 +178,7 @@ export function DashboardMock() {
                   <span className="w-28 shrink-0 truncate text-muted-foreground">{lvl}</span>
                   <div className="relative h-1.5 flex-1 rounded-full bg-secondary">
                     <span className="absolute inset-y-[-3px] left-0 w-0.5 rounded bg-primary/70" />
-                    <span className="absolute inset-y-[-3px] left-0 w-0.5 rounded bg-muted-foreground/50" />
+                    <span className="absolute inset-y-[-3px] left-[4px] w-0.5 rounded bg-muted-foreground/50" />
                   </div>
                   <span className="w-20 shrink-0 text-right text-[10px] text-muted-foreground">
                     — / — / —
