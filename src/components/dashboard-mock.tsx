@@ -11,6 +11,7 @@ import {
   TriangleAlert,
   Users,
 } from "lucide-react";
+import { useLiveOverview } from "@/lib/live-overview";
 
 const nav = [
   { icon: BarChart3, label: "Overview", active: true },
@@ -21,7 +22,7 @@ const nav = [
   { icon: Layers, label: "Reports" },
 ];
 
-const kpis = [
+const example_kpis = [
   { label: "Workforce Size", value: "842", delta: "+37 this year", up: true },
   { label: "Designated Groups", value: "64%", delta: "+3.2 pts vs last cycle", up: true },
   { label: "Actions Open", value: "14", delta: "3 overdue", up: false },
@@ -29,14 +30,14 @@ const kpis = [
 ];
 
 
-const scoreBands = [
+const example_scoreBands = [
   { label: "Representation", value: 72 },
   { label: "Targets On Track", value: 61 },
   { label: "Action Completion", value: 78 },
   { label: "Evidence Coverage", value: 64 },
 ];
 
-const eea12Levels = [
+const example_eea12Levels = [
   { level: "Top management", share: 18, target: 40, eap: 76 },
   { level: "Senior management", share: 29, target: 45, eap: 76 },
   { level: "Professionally qualified", share: 48, target: 55, eap: 76 },
@@ -46,13 +47,13 @@ const eea12Levels = [
 ];
 
 
-const actions: { title: string; owner: string; status: string }[] = [
+const example_actions: { title: string; owner: string; status: string }[] = [
   { title: "Learnership intake · Skilled technical", owner: "HR Director", status: "In progress" },
   { title: "Affirmative procurement review", owner: "Transformation Committee", status: "Overdue" },
   { title: "EE forum quarterly meeting", owner: "Senior Manager", status: "Scheduled" },
 ];
 
-const evidence: { label: string; state: string }[] = [
+const example_evidence: { label: string; state: string }[] = [
   { label: "Workforce Data · Verified", state: "Verified" },
   { label: "Training spend report · Pending", state: "Pending" },
   { label: "EE committee minutes · Verified", state: "Verified" },
@@ -65,7 +66,13 @@ function statusTone(status: string) {
 }
 
 export function DashboardMock() {
-  const score = 68;
+  const live = useLiveOverview();
+  const kpis = live?.kpis ?? example_kpis;
+  const scoreBands = live?.bands ?? example_scoreBands;
+  const eea12Levels = live?.levels ?? example_eea12Levels;
+  const actions = live ? [] : example_actions;
+  const evidence = live ? live.evidence : example_evidence;
+  const score = live ? live.score : 68;
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
 
@@ -118,15 +125,15 @@ export function DashboardMock() {
               <p className="flex flex-wrap items-center gap-2 font-display text-[15px] font-bold text-primary">
                 Equity Intelligence Overview
                 <span className="rounded-full border border-teal/30 bg-teal-soft px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-teal">
-                  Example figures
+                  {live ? "Your live data" : "Example figures"}
                 </span>
               </p>
               <p className="text-[11px] text-muted-foreground">
-                Reporting period · FY2025/26
+                {live ? `Workforce snapshot · ${live.snapshotDate}` : "Reporting period · FY2025/26"}
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-              EEA13 Cycle · 2025–2029
+              EEA13 Cycle · {live?.planCycle ?? (live ? "not set" : "2025–2029")}
             </span>
           </div>
 
@@ -203,7 +210,7 @@ export function DashboardMock() {
                     />
                     <span
                       className="absolute inset-y-[-3px] w-0.5 rounded bg-primary/70"
-                      style={{ left: `${row.target}%` }}
+                      style={{ left: `${row.target ?? 0}%`, display: row.target === null ? "none" : undefined }}
                     />
                     <span
                       className="absolute inset-y-[-3px] w-0.5 rounded bg-muted-foreground/50"
@@ -211,23 +218,24 @@ export function DashboardMock() {
                     />
                   </div>
                   <span className="w-24 shrink-0 text-right text-[10px] text-muted-foreground">
-                    {row.share}% / {row.target}% / {row.eap}%
+                    {row.share}% / {row.target === null ? "—" : `${row.target}%`} / {row.eap}%
                   </span>
                 </div>
               ))}
             </div>
             <p className="mt-2 text-[10px] text-muted-foreground">
-              Example figures — your own comparison appears once workforce data is loaded; full
-              detail on the EEA12 page.
+              {live
+                ? "From your latest workforce snapshot · sector targets from your EE plan · national EAP. Full detail on the EEA12 page."
+                : "Example figures — your own comparison appears once you subscribe and load workforce data; full detail on the EEA12 page."}
             </p>
           </div>
 
           {/* DG readiness, barriers, calendar */}
           <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
             {[
-              { icon: ClipboardCheck, title: "DG review readiness", note: "Process & reporting checklist · 7 of 12 complete" },
-              { icon: TriangleAlert, title: "Barrier analysis", note: "Survey responses · 26 received" },
-              { icon: Target, title: "Next statutory deadline", note: "EEA2 / EEA4 · due 15 Jan 2027" },
+              { icon: ClipboardCheck, title: "DG review readiness", note: live?.dgNote ?? "Process & reporting checklist · 7 of 12 complete" },
+              { icon: TriangleAlert, title: "Barrier analysis", note: live?.barrierNote ?? "Survey responses · 26 received" },
+              { icon: Target, title: "Next statutory deadline", note: live?.deadlineNote ?? "EEA2 / EEA4 · due 15 Jan 2027" },
             ].map((c) => (
               <div key={c.title} className="rounded-xl border bg-background p-3">
                 <c.icon className="h-3.5 w-3.5 text-teal" />
