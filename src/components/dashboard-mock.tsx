@@ -153,22 +153,42 @@ export function DashboardMock() {
             </div>
           </div>
 
-          {/* EEA12 vs EAP */}
+          {/* EEA12 vs sectoral targets & provincial EAP */}
           <div className="mt-3 rounded-xl border bg-background p-4">
             <div className="flex items-center justify-between">
-              <p className="text-[13px] font-semibold text-primary">EEA12 · Designated share vs EAP</p>
+              <p className="text-[13px] font-semibold text-primary">
+                EEA12 · Designated share vs Sectoral Targets &amp; provincial EAP
+              </p>
               <Users className="h-3.5 w-3.5 text-teal" />
             </div>
-            <div className="mt-3 space-y-2">
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <span className="h-1.5 w-3 rounded-full bg-teal" /> Designated share
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <span className="h-2.5 w-0.5 rounded bg-primary" /> Sectoral target
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <span className="h-2.5 w-0.5 rounded bg-muted-foreground/60" /> Provincial EAP
+              </span>
+            </div>
+            <div className="mt-2.5 space-y-2">
               {["Top management", "Senior management", "Professionally qualified", "Skilled technical", "Semi-skilled", "Unskilled"].map((lvl) => (
                 <div key={lvl} className="flex items-center gap-2 text-[11px]">
-                  <span className="w-32 shrink-0 truncate text-muted-foreground">{lvl}</span>
-                  <div className="h-1.5 flex-1 rounded-full bg-secondary" />
-                  <span className="w-6 text-right font-semibold text-primary">—</span>
+                  <span className="w-28 shrink-0 truncate text-muted-foreground">{lvl}</span>
+                  <div className="relative h-1.5 flex-1 rounded-full bg-secondary">
+                    <span className="absolute inset-y-[-3px] left-0 w-0.5 rounded bg-primary/70" />
+                    <span className="absolute inset-y-[-3px] left-[4px] w-0.5 rounded bg-muted-foreground/50" />
+                  </div>
+                  <span className="w-20 shrink-0 text-right text-[10px] text-muted-foreground">
+                    — / — / —
+                  </span>
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-[10px] text-muted-foreground">Compared with sector targets and provincial EAP once workforce data is loaded.</p>
+            <p className="mt-2 text-[10px] text-muted-foreground">
+              Share, sectoral target and provincial EAP per level appear once workforce data is loaded — full comparison on the EEA12 page.
+            </p>
           </div>
 
           {/* DG readiness, barriers, calendar */}
