@@ -6,7 +6,9 @@ import { SECTORS, LEVEL_TO_TARGET_KEY, eapTargets } from "@/lib/sectors";
 export type LiveOverview = {
   snapshotDate: string;
   kpis: { label: string; value: string; delta: string; up: boolean }[];
-  levels: { level: string; share: number; target: number | null; eap: number }[];
+  levels: { level: string; share: number; target: number | null; eap: number | null }[];
+  /** Configured province used for EAP comparisons; null when the client has not set one. */
+  province: string | null;
   score: number;
   bands: { label: string; value: number }[];
   dgNote: string;
@@ -19,7 +21,7 @@ export type LiveOverview = {
 const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0);
 const designatedKeys = GROUPS.filter((g) => g.designated).map((g) => g.key);
 
-/** Real overview figures for a signed-in client with an active subscription and saved workforce data; null otherwise. */
+/** Real overview figures for a signed-in client with saved workforce data; null otherwise. */
 export function useLiveOverview(): LiveOverview | null {
   const [live, setLive] = useState<LiveOverview | null>(null);
 
@@ -29,8 +31,7 @@ export function useLiveOverview(): LiveOverview | null {
       const { data: auth } = await supabase.auth.getUser();
       const uid = auth.user?.id;
       if (!uid) return;
-      const [subs, snap, plan, barriers, dg, docs] = await Promise.all([
-        supabase.from("subscriptions").select("status,plan").eq("user_id", uid).in("status", ["active", "complete", "paid"]).neq("plan", "dg_review").limit(1),
+      const [snap, plan, barriers, dg, docs] = await Promise.all([
         supabase.from("workforce_snapshots").select("snapshot_date,counts,disability").eq("user_id", uid).order("snapshot_date", { ascending: false }).limit(1),
         supabase.from("ee_plans").select("sector,start_date,end_date,dg_review_due").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }).eq("user_id", uid),
@@ -38,7 +39,7 @@ export function useLiveOverview(): LiveOverview | null {
         supabase.from("portal_documents").select("category,file_name").eq("user_id", uid).order("created_at", { ascending: false }).limit(3),
       ]);
       const s = snap.data?.[0];
-      if (cancelled || !subs.data?.length || !s) return;
+      if (cancelled || !s) return;
 
       const w = normaliseWorkforce(s.counts);
       const total = grandTotal(w);
@@ -52,18 +53,20 @@ export function useLiveOverview(): LiveOverview | null {
       const dis = disabilityTotal(normaliseDisability(s.disability));
       const p = plan.data?.[0];
       const sector = SECTORS.find((x) => x.name === p?.sector);
-      const eap = eapTargets("National").total;
+      const metaProvince = auth.user?.user_metadata?.["province"];
+      const province = typeof metaProvince === "string" && metaProvince.trim() ? metaProvince.trim() : null;
+      const eap = province ? eapTargets(province).total : null;
 
       const levels = LEVELS.map((l) => {
         const r = w[l]!;
         const t = levelTotal(r);
         const d = designatedKeys.reduce((a, k) => a + (r[k] ?? 0), 0);
         const key = LEVEL_TO_TARGET_KEY[l];
-        return { level: l, share: pct(d, t), target: sector && key ? Math.round(sector.targets[key].total) : null, eap: Math.round(eap) };
+        return { level: l, share: pct(d, t), target: sector && key ? Math.round(sector.targets[key].total) : null, eap: eap === null ? null : Math.round(eap) };
       });
       const withTarget = levels.filter((l) => l.target !== null);
       const onTrack = withTarget.length ? pct(withTarget.filter((l) => l.share >= (l.target ?? 0)).length, withTarget.length) : 0;
-      const representation = Math.min(100, pct(designated, total * (eap / 100)));
+      const representation = eap === null ? 0 : Math.min(100, pct(designated, total * (eap / 100)));
       const dgScore = dg.data?.[0]?.score ?? 0;
       const evidenceCoverage = Math.min(100, (docs.data?.length ?? 0) * 33);
       const bands = [
@@ -76,9 +79,10 @@ export function useLiveOverview(): LiveOverview | null {
 
       setLive({
         snapshotDate: s.snapshot_date,
+        province,
         kpis: [
           { label: "Workforce Size", value: total.toLocaleString("en-ZA"), delta: `Snapshot ${s.snapshot_date}`, up: true },
-          { label: "Designated Groups", value: `${pct(designated, total)}%`, delta: `National EAP ${eap}%`, up: pct(designated, total) >= eap },
+          { label: "Designated Groups", value: `${pct(designated, total)}%`, delta: eap === null ? "Province not set" : `${province} EAP ${eap}%`, up: eap !== null && pct(designated, total) >= eap },
           { label: "Women", value: `${pct(women, total)}%`, delta: "Share of workforce", up: true },
           { label: "Disability", value: `${((dis / total) * 100).toFixed(1)}%`, delta: "3% guideline", up: dis / total >= 0.03 },
         ],
