@@ -112,6 +112,12 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     });
     explanations(l, a);
     let y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8;
+    doc.setFontSize(8); doc.setTextColor(110);
+    for (const line of doc.splitTextToSize(EAP_GAP_LEGEND, 182) as string[]) {
+      if (y > 280) { doc.addPage(); y = 20; }
+      doc.text(line, 14, y); y += 4;
+    }
+    doc.setTextColor(0); y += 2;
     doc.setFontSize(10);
     const lines = doc.splitTextToSize(
       !a.total ? "No headcount recorded for this level."
