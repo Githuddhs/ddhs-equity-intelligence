@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Include shared percentage-point EAP explanations in all four EEA12 download formats, retaining selected unit, occupational-level and job-grade filters; verify filtered files and missing-data states.
 - [x] Add percentage-point EAP gaps and plain-language explanations beside EEA12 occupational levels and in unit downloads; entered workforce comparisons and missing-data explanations verified.
 - [x] Make EAP charts print-readable with direct values, solid/dashed bars and explicit under/over labels; browser print with backgrounds off and screen views verified without runtime errors.
 - [x] Add EEA12 report/download drill-down by occupational level, recorded job grade and linked organisation/faculty/division/department/section filters; signed-in temporary saved records verified grade and division narrowing, level changes and four-format chooser; test records removed.
