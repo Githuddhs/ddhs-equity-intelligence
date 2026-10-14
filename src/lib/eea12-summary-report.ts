@@ -1,5 +1,5 @@
 import { reportPdf } from "@/lib/report-download";
-import { eapGap } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation } from "@/lib/eap-presentation";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -47,6 +47,23 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     doc.setTextColor(0, 0, 0);
   };
   const head = { fillColor: NAVY };
+  const explanations = (label: string, a: ReturnType<typeof analyse>) => {
+    const eapShare = (keys: string[]) => keys.every((k) => i.eap[k] !== undefined) ? keys.reduce((n, k) => n + (i.eap[k] ?? 0), 0) : undefined;
+    const metrics = [
+      ["Designated groups", a.des, DESIGNATED],
+      ["Designated males", a.desM, ["MA", "MC", "MI"]],
+      ["Women", a.fem, ["FA", "FC", "FI", "FW"]],
+    ] as const;
+    autoTable(doc, {
+      startY: (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8,
+      headStyles: head, styles: { fontSize: 9 }, columnStyles: { 0: { cellWidth: 42 } },
+      head: [[label, "What this means — provincial EAP (percentage points)"]],
+      body: [
+        ...metrics.map(([group, actual, keys]) => [group, eapExplanation(group, a.total ? actual : null, eapShare([...keys]))]),
+        ...KEYS.map((k) => [NAMES[k] ?? k, eapExplanation(NAMES[k] ?? k, a.total ? a.sh(k) : null, i.eap[k])]),
+      ],
+    });
+  };
 
   header("EEA12 Workforce Analysis — summary across all occupational levels");
   const all: Row = {};
@@ -70,6 +87,7 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
     head: [["Population group (all levels)", "Headcount", "Share", "EAP", "Difference (pp)", "Representation"]],
     body: KEYS.map((k) => { const gap = eapGap(at.total ? at.sh(k) : null, i.eap[k]); return [NAMES[k] ?? k, all[k] ?? 0, at.total ? p(at.sh(k)) : "—", p(i.eap[k]), gap.gap, gap.label]; }),
   });
+  explanations("Selected levels combined", at);
 
   for (const l of i.levels) {
     doc.addPage(); header(`EEA12 — ${l}`);
@@ -90,13 +108,17 @@ export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
         ["Designated females", p(t?.females), p(a.fem), !a.total ? "No data" : !t ? "No gazetted target" : a.fShort ? "Shortfall" : "Achieved"],
       ],
     });
+    explanations(l, a);
     let y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8;
     doc.setFontSize(10);
     const lines = doc.splitTextToSize(
       !a.total ? "No headcount recorded for this level."
         : !i.province ? "Province not set — provincial EAP comparisons and appointment rankings are unavailable." : `Next appointment (primary): ${a.optimal.map((k, n) => `${n + 1}. ${NAMES[k]}`).join(", ") || "none — all designated groups at or above EAP"}.\n` +
           `Next appointment (secondary): ${a.under.map((k, n) => `${n + 1}. ${NAMES[k]}`).join(", ") || "none"}.`, 182);
-    doc.text(lines, 14, y); y += lines.length * 5;
+    for (const line of lines as string[]) {
+      if (y > 280) { doc.addPage(); y = 20; }
+      doc.text(line, 14, y); y += 5;
+    }
   }
   if (i.dgFindings?.length) {
     doc.addPage();

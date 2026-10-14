@@ -6,11 +6,11 @@ import type { Foundation } from "@/lib/foundation";
 import { describeFilter, type UnitFilter } from "@/lib/org-units";
 import { GROUPS, type Key } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { eapGap } from "@/lib/eap-presentation";
+import { eapGap, eapExplanation } from "@/lib/eap-presentation";
 import { offerReport, type ReportBlock } from "@/lib/report-download";
 
 type Props = { foundation?: Foundation | null | undefined; level: string; filter: UnitFilter; sector: string; province: string; loading?: boolean; error?: boolean };
-const head = ["Grading system / grade", "Headcount", "Group", "Workforce share", "Occupational sector benchmark", "Sector progress", "Provincial EAP", "EAP representation"];
+const head = ["Grading system / grade", "Headcount", "Group", "Workforce share", "Occupational sector benchmark", "Sector progress", "Provincial EAP", "EAP representation", "What this means"];
 const metrics: { label: string; key: "total" | "males" | "females"; keys: Key[] }[] = [
   { label: "Designated groups", key: "total", keys: ["MA", "MC", "MI", "FA", "FC", "FI", "FW"] },
   { label: "Designated males", key: "males", keys: ["MA", "MC", "MI"] },
@@ -37,18 +37,19 @@ export function JobGradeProgress({ foundation, level, filter, sector, province, 
     const provincial = eap ? m.keys.reduce((n, k) => n + (eap[k] ?? 0), 0) : undefined;
     const gap = eapGap(actual, provincial);
     const sectorProgress = benchmark === undefined ? "Unavailable" : `${actual >= benchmark ? "Benchmark met" : "Below benchmark"} · ${Math.abs(actual - benchmark).toFixed(1)} pp ${actual >= benchmark ? "above" : "below"}`;
-    return [`${g.system} · ${g.grade}`, String(g.total), m.label, pct(actual), pct(benchmark), sectorProgress, pct(provincial), `${gap.label} · ${gap.gap}`];
+    return [`${g.system} · ${g.grade}`, String(g.total), m.label, pct(actual), pct(benchmark), sectorProgress, pct(provincial), `${gap.label} · ${gap.gap}`, eapExplanation(m.label, actual, provincial)];
   }));
   const download = () => {
     const blocks: ReportBlock[] = [
       { kind: "p", text: `${level} · ${describeFilter(filter)} · Snapshot: ${foundation?.snapshot_date} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"}` },
+      { kind: "p", text: `Grading system: ${selectedSystem || "All recorded systems"} · Job grade: ${selectedGrade || "All recorded grades"} · ${visible.reduce((n, g) => n + g.total, 0)} employees · ${visible.length} grades` },
       { kind: "p", text: "Sector targets are gazetted at occupational level, not separately per job grade. Grade comparisons are diagnostic benchmarks, not a grade-specific compliance determination. EAP differences are percentage points (pp)." },
       { kind: "table", title: "Progress by recorded job grade", head, body: rows },
     ];
-    for (const g of visible) blocks.push({ kind: "table", title: `${g.system} · ${g.grade} population profile`, head: ["Population group", "Headcount", "Workforce share", "Provincial EAP", "Difference (pp)", "Representation"], body: GROUPS.map((m) => {
+    for (const g of visible) blocks.push({ kind: "table", title: `${g.system} · ${g.grade} population profile`, head: ["Population group", "Headcount", "Workforce share", "Provincial EAP", "Difference (pp)", "Representation", "What this means"], body: GROUPS.map((m) => {
       const actual = g.counts[m.key] / g.total * 100;
       const gap = eapGap(actual, eap?.[m.key]);
-      return [m.label, String(g.counts[m.key]), pct(actual), pct(eap?.[m.key]), gap.gap, gap.label];
+      return [m.label, String(g.counts[m.key]), pct(actual), pct(eap?.[m.key]), gap.gap, gap.label, eapExplanation(m.label, actual, eap?.[m.key])];
     }) });
     offerReport({ name: "DDHS-EEA12-job-grade-progress", data: { title: `${level} — job-grade progress`, blocks } });
   };

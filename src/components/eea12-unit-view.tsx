@@ -40,13 +40,14 @@ export function Eea12UnitView({ units, counts, filter, sector, province, date, f
       const gap = eapGap(actual, provincial);
       return [["Designated groups", "Designated males", "Women"][i] ?? key, percentage(actual), percentage(target?.[key] ?? null), variance(actual, target?.[key] ?? null), percentage(provincial), `${gap.label} · ${gap.gap}`, eapExplanation(["Designated groups", "Designated males", "Women"][i] ?? key, actual, provincial)];
     });
-    const profile = GROUPS.map((g) => { const gap = eapGap(share([g.key]), eap?.[g.key]); return [g.label, String(row?.[g.key] ?? 0), percentage(share([g.key])), percentage(eap?.[g.key] ?? null), gap.gap, gap.label]; });
+    const profile = GROUPS.map((g) => { const gap = eapGap(share([g.key]), eap?.[g.key]); return [g.label, String(row?.[g.key] ?? 0), percentage(share([g.key])), percentage(eap?.[g.key] ?? null), gap.gap, gap.label, eapExplanation(g.label, share([g.key]), eap?.[g.key])]; });
     return { scope: scope.name, occupational, total, metrics, profile, row, hasTarget: !!targetKey };
   }));
   const head = ["Group", "Workforce", "Sector target", "Sector gap", "Provincial EAP", "EAP gap (pp)", "What this means"];
-  const profileHead = ["Population group", "Headcount", "Workforce share", "Provincial EAP", "EAP difference (pp)", "Representation"];
+  const profileHead = ["Population group", "Headcount", "Workforce share", "Provincial EAP", "EAP difference (pp)", "Representation", "What this means"];
   const download = () => {
     const blocks: ReportBlock[] = [{ kind: "p", text: `${describeFilter(filter)} · Sector: ${sector || "Not set"} · Province: ${eap ? province : "Not set"} · Snapshot: ${date}` }, { kind: "p", text: "EAP difference is workforce share minus the EAP benchmark, in percentage points (pp). Below means under-represented; above means over-represented. Foreign nationals are not designated groups." }];
+    blocks.push({ kind: "p", text: `Compare units by: ${groupBy} · Occupational level: ${level || "All occupational levels"}` });
     for (const t of tables) {
       const grades = OCCUPATIONAL_GRADES.find((g) => g.level === t.occupational);
       blocks.push({ kind: "h", text: `${t.scope} — ${t.occupational} (${t.total} employees)` });
