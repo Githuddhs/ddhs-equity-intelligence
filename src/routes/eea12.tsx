@@ -15,6 +15,8 @@ import { EeaCrosswalk, OccupationalGrades } from "@/components/eea-crosswalk";
 import { latestDgFindings } from "@/lib/form-drafts";
 import { PageExport } from "@/components/page-export";
 import { latestFoundation } from "@/lib/foundation-source";
+import { Eea12UnitView } from "@/components/eea12-unit-view";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -54,7 +56,7 @@ const LEVELS = ["Top Management", "Senior Management", "Professionally Qualified
 
 
 const DEFAULT_COUNTS: Record<Key, number> = { MA: 0, MC: 0, MI: 0, MW: 0, FA: 0, FC: 0, FI: 0, FW: 0, FNM: 0, FNF: 0 };
-const DEFAULT_EAP: Record<Key, number> = PROVINCE_EAP["National"]!;
+const DEFAULT_EAP: Record<Key, number> = PROVINCE_EAP["National"] ?? DEFAULT_COUNTS;
 
 const pct = (n: number) => `${n.toFixed(1)}%`;
 const sgn = (n: number) => `${n > 0 ? "+" : ""}${n.toFixed(2)}%`;
@@ -68,11 +70,12 @@ function Eea12Page() {
   const [savedId, setSavedId] = useState<string | null>(null);
   const [eap, setEap] = useState(DEFAULT_EAP);
   const [province, setProvince] = useState("National");
+  const [comparisonProvince, setComparisonProvince] = useState("");
   const [unitFilter, setUnitFilter] = useState<UnitFilter>(ALL_UNITS);
   const { data: wf } = useLatestOrgUnits();
   const loadFromWorkforce = (lvl = level, f = unitFilter) => {
     if (!wf) return;
-    const filtered = !!(f.division || f.department || f.section);
+    const filtered = !!(f.organisation || f.faculty || f.division || f.department || f.section);
     const w = wf.units.length && filtered ? aggregate(wf.units, f).counts : normaliseWorkforce(wf.counts);
     const row = w[lvl];
     if (row) setCounts({ ...DEFAULT_COUNTS, ...row });
@@ -91,7 +94,7 @@ function Eea12Page() {
   useEffect(() => { void latestFoundation().then((f) => {
     if (!f) return;
     const p = f.organisation.province;
-    if (p && PROVINCE_EAP[p]) { setProvince(p); setEap(PROVINCE_EAP[p]); }
+    if (p && p !== "National" && PROVINCE_EAP[p]) { setProvince(p); setComparisonProvince(p); setEap(PROVINCE_EAP[p]); }
     const s = f.organisation.sector;
     if (s) { setSector(s); LEVELS.forEach((l) => applySectorTargets(s, l)); }
   }).catch(() => {}); }, []);
@@ -108,7 +111,7 @@ function Eea12Page() {
   const { data: dg } = useQuery({ queryKey: ["eea12-dg-findings"], queryFn: latestDgFindings });
   const downloadSummary = async () => {
     if (!wf) return;
-    const filtered = !!(unitFilter.division || unitFilter.department || unitFilter.section);
+    const filtered = !!(unitFilter.organisation || unitFilter.faculty || unitFilter.division || unitFilter.department || unitFilter.section);
     const w = wf.units.length && filtered ? aggregate(wf.units, unitFilter).counts : normaliseWorkforce(wf.counts);
     await exportEea12SummaryPdf({
       scope: describeFilter(unitFilter), sector, province, snapshotDate: wf.date,
@@ -119,7 +122,7 @@ function Eea12Page() {
       },
       dgFindings: dg?.actions.map((a) => `${a} (DG review analysis ${dg.date})`) ?? [],
     });
-    toast.success("EEA12 summary report downloaded");
+    toast.success("EEA12 summary ready — select a download format.");
   };
 
   const r = useMemo(() => {
@@ -264,10 +267,7 @@ function Eea12Page() {
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
                 Reset to workforce data
               </button>
-              <button type="button" onClick={downloadSummary}
-                className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground">
-                Download EEA12 summary report (PDF)
-              </button>
+              <Button variant="outline" onClick={downloadSummary}>Download EEA12 summary report</Button>
               <p className="w-full text-xs text-muted-foreground">Headcount for each level is filled automatically from your latest workforce snapshot ({describeFilter(unitFilter)}). The summary report covers all occupational levels together, then one page per level, for the selected unit.</p>
             </div>
           )}
@@ -335,13 +335,15 @@ function Eea12Page() {
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <label className="text-sm font-medium" htmlFor="eap-province">EAP province</label>
-            <select id="eap-province" value={province} onChange={(e) => { setProvince(e.target.value); setEap(PROVINCE_EAP[e.target.value] ?? DEFAULT_EAP); }}
+            <select id="eap-province" value={province} onChange={(e) => { setProvince(e.target.value); setComparisonProvince(e.target.value === "National" ? "" : e.target.value); setEap(PROVINCE_EAP[e.target.value] ?? DEFAULT_EAP); }}
               className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm">
               {Object.keys(PROVINCE_EAP).map((p) => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">EAP figures are the official Statistics South Africa QLFS Q3 2024 values per province — pick your province above, or edit any cell for your sector.</p>
         </section>
+
+        {wf && <Eea12UnitView units={wf.units} counts={wf.counts} filter={unitFilter} sector={sector} province={comparisonProvince} date={wf.date} />}
 
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -354,7 +356,8 @@ function Eea12Page() {
               </thead>
               <tbody>
                 {r.sectoral.map((s, i) => {
-                  const key = (["total", "males", "females"] as const)[i]!;
+                  const key = (["total", "males", "females"] as const)[i];
+                  if (!key) return null;
                   const ok = s.actual >= s.target;
                   return (
                     <tr key={s.name}>
