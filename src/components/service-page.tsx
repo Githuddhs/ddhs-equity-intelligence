@@ -46,9 +46,9 @@ export function serviceHead(path: string, title: string, description: string) {
 
 export function SourceBadge({ kind }: { kind: "doc" | "draft" }) {
   return kind === "doc" ? (
-    <span className="inline-block rounded-full normal-case tracking-normal sm:ml-2 border border-teal/40 bg-teal/10 px-2 py-0.5 align-middle text-xs font-semibold text-teal">From your document</span>
+    <span className="inline-block rounded-full normal-case tracking-normal ml-2 border border-teal/40 bg-teal/10 px-2 py-0.5 align-middle text-xs font-semibold text-teal">From your document</span>
   ) : (
-    <span className="inline-block rounded-full normal-case tracking-normal sm:ml-2 border border-dashed border-destructive/60 bg-destructive/10 px-2 py-0.5 align-middle text-xs font-semibold text-destructive">Draft · needs your approval</span>
+    <span className="inline-block rounded-full normal-case tracking-normal ml-2 border border-dashed border-destructive/60 bg-destructive/10 px-2 py-0.5 align-middle text-xs font-semibold text-destructive">Draft · needs your approval</span>
   );
 }
 
