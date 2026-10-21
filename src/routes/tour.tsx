@@ -96,7 +96,7 @@ function TourPage() {
             <ArrowLeft className="h-4 w-4" /> Back
           </button>
           {last ? (
-            <a href="/#contact" onClick={() => track("tour_complete", "booked")} className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Book a DDHS demonstration</a>
+            <a href="/#contact" className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Book a DDHS demonstration</a>
           ) : (
             <button onClick={() => setI(i + 1)} className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">
               Next <ArrowRight className="h-4 w-4" />
