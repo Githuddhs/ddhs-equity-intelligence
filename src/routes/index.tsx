@@ -617,7 +617,13 @@ function Index() {
               </ul>
             </div>
             <div>
-              <h4 className="label-title text-primary">Company</h4>
+              <h4 className="label-title text-primary">Services</h4>
+              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                {SERVICES.map((s) => (
+                  <li key={s.to}><Link to={s.to} className="transition-colors hover:text-primary">{s.label}</Link></li>
+                ))}
+              </ul>
+              <h4 className="label-title mt-8 text-primary">Company</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["About DDHS Equity Intelligence", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
                   <li key={l}><a href="#contact" className="transition-colors hover:text-primary">{l}</a></li>
