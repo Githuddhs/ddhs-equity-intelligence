@@ -1,3 +1,4 @@
+import { track } from "@/lib/track";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,

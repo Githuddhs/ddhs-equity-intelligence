@@ -1,3 +1,4 @@
+import { track } from "@/lib/track";
 export type ReportBlock = { kind: "h"; text: string } | { kind: "p"; text: string } | { kind: "table"; title: string; head: string[]; body: string[][] };
 export type ReportData = { title: string; blocks: ReportBlock[]; fields?: [string, string][] };
 export type ReportFormat = "word" | "excel" | "pdf" | "powerpoint";
