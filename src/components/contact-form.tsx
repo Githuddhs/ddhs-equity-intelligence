@@ -254,7 +254,7 @@ export function ContactForm() {
           </>
         ) : (
           <>
-            Request demonstration <Send className="h-4 w-4" />
+            Book a DDHS demonstration <Send className="h-4 w-4" />
           </>
         )}
       </button>
