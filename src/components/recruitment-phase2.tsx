@@ -106,7 +106,7 @@ export function GovernanceStep({ v, save, busy }: { v: Vacancy; save: Save; busy
   );
 }
 
-export function ImpactStep({ v, cands, save, busy, reload }: { v: Vacancy; cands: Candidate[]; save: Save; busy: boolean; reload: () => Promise<void> }) {
+export function ImpactStep({ v, cands, save, busy, reload, highRisks = 0 }: { v: Vacancy; cands: Candidate[]; save: Save; busy: boolean; reload: () => Promise<void>; highRisks?: number }) {
   const saved = (v.appointment_review ?? {}) as AppointmentReview;
   const [base, setBase] = useState<Baseline | null>(null);
   const [r, setR] = useState<AppointmentReview>(saved);
@@ -119,7 +119,7 @@ export function ImpactStep({ v, cands, save, busy, reload }: { v: Vacancy; cands
     const s = SECTORS.find((x) => x.name === v.sector); const k = LEVEL_TO_TARGET_KEY[v.occupational_level];
     return appointmentImpact({ counts, candidate: c, targets: s && k ? s.targets[k] : undefined, eap: v.province ? PROVINCE_EAP[v.province] ?? null : null });
   };
-  const blockers = reviewBlockers(r, card.criticalOpen);
+  const blockers = reviewBlockers(r, card.criticalOpen, highRisks);
   const decided = saved.decision;
   const appointee = cands.find((c) => c.id === saved.candidate_id);
 
@@ -174,6 +174,7 @@ export function ImpactStep({ v, cands, save, busy, reload }: { v: Vacancy; cands
             <label className="block font-medium">Reviewer (name and title)<input className={input} maxLength={150} value={r.reviewer ?? ""} onChange={(e) => setR({ ...r, reviewer: e.target.value })} /></label>
             <label className="block font-medium">Reasons for the decision<textarea className={input} rows={3} maxLength={3000} value={r.reasons ?? ""} onChange={(e) => setR({ ...r, reasons: e.target.value })} /></label>
             <label className="flex items-start gap-2"><input type="checkbox" className="mt-1" checked={!!r.reviewedImpact} onChange={(e) => setR({ ...r, reviewedImpact: e.target.checked })} />I have reviewed the impact assessment{cand ? ` for ${cand.full_name}` : ""}.</label>
+            {highRisks > 0 && <label className="flex items-start gap-2"><input type="checkbox" className="mt-1" checked={!!r.acknowledgedRisks} onChange={(e) => setR({ ...r, acknowledgedRisks: e.target.checked })} />I have considered the {highRisks} high-severity risk flag(s) in step 7.</label>}
             <label className="flex items-start gap-2"><input type="checkbox" className="mt-1" checked={!!r.confirmedMerit} onChange={(e) => setR({ ...r, confirmedMerit: e.target.checked })} />The decision rests on job-related criteria, the committee's assessment and our approved EE policy.</label>
           </div>
           <div className="text-sm">
