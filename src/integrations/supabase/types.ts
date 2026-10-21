@@ -568,6 +568,173 @@ export type Database = {
         }
         Relationships: []
       }
+      recruitment_candidates: {
+        Row: {
+          assessment_score: number | null
+          consent: boolean
+          created_at: string
+          cv_path: string | null
+          disability: boolean
+          email: string
+          foreign_national: boolean
+          full_name: string
+          gender: string
+          history: Json
+          id: string
+          interview_at: string | null
+          meets_minimum: boolean | null
+          notes: string
+          phone: string
+          race: string
+          source: string
+          stage: string
+          updated_at: string
+          user_id: string
+          vacancy_id: string
+        }
+        Insert: {
+          assessment_score?: number | null
+          consent?: boolean
+          created_at?: string
+          cv_path?: string | null
+          disability?: boolean
+          email?: string
+          foreign_national?: boolean
+          full_name: string
+          gender?: string
+          history?: Json
+          id?: string
+          interview_at?: string | null
+          meets_minimum?: boolean | null
+          notes?: string
+          phone?: string
+          race?: string
+          source?: string
+          stage?: string
+          updated_at?: string
+          user_id: string
+          vacancy_id: string
+        }
+        Update: {
+          assessment_score?: number | null
+          consent?: boolean
+          created_at?: string
+          cv_path?: string | null
+          disability?: boolean
+          email?: string
+          foreign_national?: boolean
+          full_name?: string
+          gender?: string
+          history?: Json
+          id?: string
+          interview_at?: string | null
+          meets_minimum?: boolean | null
+          notes?: string
+          phone?: string
+          race?: string
+          source?: string
+          stage?: string
+          updated_at?: string
+          user_id?: string
+          vacancy_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recruitment_candidates_vacancy_id_fkey"
+            columns: ["vacancy_id"]
+            isOneToOne: false
+            referencedRelation: "recruitment_vacancies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recruitment_vacancies: {
+        Row: {
+          approval_note: string
+          approved_at: string | null
+          approver_name: string
+          checks: Json
+          closing_date: string | null
+          created_at: string
+          criteria: Json
+          department: string
+          division: string
+          id: string
+          in_workforce_plan: boolean
+          job_profile: string
+          occupational_level: string
+          organisation: string
+          priority: Json
+          province: string
+          public_token: string
+          reason: string
+          scarce_skill: boolean
+          section: string
+          sector: string
+          sourcing: Json
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approval_note?: string
+          approved_at?: string | null
+          approver_name?: string
+          checks?: Json
+          closing_date?: string | null
+          created_at?: string
+          criteria?: Json
+          department?: string
+          division?: string
+          id?: string
+          in_workforce_plan?: boolean
+          job_profile?: string
+          occupational_level: string
+          organisation?: string
+          priority?: Json
+          province?: string
+          public_token?: string
+          reason?: string
+          scarce_skill?: boolean
+          section?: string
+          sector?: string
+          sourcing?: Json
+          status?: string
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          approval_note?: string
+          approved_at?: string | null
+          approver_name?: string
+          checks?: Json
+          closing_date?: string | null
+          created_at?: string
+          criteria?: Json
+          department?: string
+          division?: string
+          id?: string
+          in_workforce_plan?: boolean
+          job_profile?: string
+          occupational_level?: string
+          organisation?: string
+          priority?: Json
+          province?: string
+          public_token?: string
+          reason?: string
+          scarce_skill?: boolean
+          section?: string
+          sector?: string
+          sourcing?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       reminder_settings: {
         Row: {
           enabled: boolean
@@ -797,6 +964,10 @@ export type Database = {
           id: string
         }[]
       }
+      apply_to_vacancy: {
+        Args: { _application: Json; _token: string }
+        Returns: boolean
+      }
       delete_workforce_foundation: {
         Args: { p_id: string }
         Returns: undefined
@@ -839,6 +1010,8 @@ export type Database = {
         Returns: boolean
       }
       survey_link_info: { Args: { _token: string }; Returns: Json }
+      vacancy_open: { Args: { _id: string }; Returns: boolean }
+      vacancy_public: { Args: { _token: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user" | "manager"
