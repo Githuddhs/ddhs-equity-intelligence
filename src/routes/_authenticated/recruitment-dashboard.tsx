@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/recruitment-dashboard")({
   component: DashboardPage,
 });
 
-function Stat({ label, value, note }: { label: string; value: string | number; note?: string }) {
+function Stat({ label, value, note }: { label: string; value: string | number; note?: string | undefined }) {
   return <div className="rounded-xl border border-border bg-card p-4"><p className="text-xs text-muted-foreground">{label}</p><p className="font-display text-2xl font-bold text-primary">{value}</p>{note && <p className="text-xs text-teal">{note}</p>}</div>;
 }
 
