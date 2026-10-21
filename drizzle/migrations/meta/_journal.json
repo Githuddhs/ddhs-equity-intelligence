@@ -183,6 +183,13 @@
       "when": 1791943672222,
       "tag": "0025_workforce_foundation_periods",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1792567438774,
+      "tag": "0026_site_events",
+      "breakpoints": true
     }
   ]
 }
