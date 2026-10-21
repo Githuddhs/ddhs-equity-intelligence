@@ -1,3 +1,4 @@
+import { track } from "@/lib/track";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -44,6 +45,7 @@ function TourPage() {
   const { for: invitedFor, from: invitedFrom } = Route.useSearch();
   const s = STEPS[i]!;
   const last = i === STEPS.length - 1;
+  useEffect(() => { if (last) track("tour_complete"); }, [last]);
   const inviteUrl = `${shareOrigin()}/tour?for=${encodeURIComponent(invitedFor ?? "your team")}${invitedFrom ? `&from=${encodeURIComponent(invitedFrom)}` : ""}`;
   const copyInvite = async () => {
     try { await navigator.clipboard.writeText(inviteUrl); toast.success("Tour link copied — send it to whoever you'd like to invite."); }

@@ -589,6 +589,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_events: {
+        Row: {
+          created_at: string
+          detail: string
+          event: string
+          id: string
+          path: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: string
+          event: string
+          id?: string
+          path?: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string
+          event?: string
+          id?: string
+          path?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           amount: number

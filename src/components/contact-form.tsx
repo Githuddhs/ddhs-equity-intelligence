@@ -1,3 +1,4 @@
+import { track } from "@/lib/track";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
@@ -63,6 +64,7 @@ export function ContactForm() {
     let result: Awaited<ReturnType<typeof sendEnquiry>>;
     try {
       result = await sendEnquiry({ data: parsed.data });
+      track("demo_request");
     } catch {
       setSubmitting(false);
       toast.error("We couldn't send your enquiry just now. Please try again, or email sdm@ddhs.co.za.");

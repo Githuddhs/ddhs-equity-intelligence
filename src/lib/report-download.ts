@@ -1,3 +1,4 @@
+import { track } from "@/lib/track";
 export type ReportBlock = { kind: "h"; text: string } | { kind: "p"; text: string } | { kind: "table"; title: string; head: string[]; body: string[][] };
 export type ReportData = { title: string; blocks: ReportBlock[]; fields?: [string, string][] };
 export type ReportFormat = "word" | "excel" | "pdf" | "powerpoint";
@@ -25,6 +26,7 @@ export function reportHtml(html: string, name: string) {
 }
 
 export async function deliverReportFile(blob: Blob, filename: string) {
+  track("assessment_download", filename);
   const file = new File([blob], filename, { type: blob.type });
   if (matchMedia("(pointer: coarse)").matches && navigator.canShare?.({ files: [file] })) {
     try { await navigator.share({ files: [file], title: filename }); return; }

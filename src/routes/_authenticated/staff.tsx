@@ -37,7 +37,7 @@ function StaffDashboard() {
       const { data: u } = await supabase.auth.getUser();
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
       if (!isAdmin) return null;
-      const [c, p, r, d, s, e, q, ai] = await Promise.all([
+      const [c, p, r, d, s, e, q, ai, ev] = await Promise.all([
         supabase.rpc("admin_clients_all"),
         supabase.from("ee_plans").select("user_id,title,dg_review_due,updated_at").order("updated_at", { ascending: false }),
         supabase.from("dg_reviews").select("user_id,score,created_at,updated_at").order("updated_at", { ascending: false }),
@@ -46,6 +46,7 @@ function StaffDashboard() {
         supabase.from("contact_enquiries").select("id,full_name,email,message,created_at").order("created_at", { ascending: false }).limit(10),
         supabase.from("quote_requests").select("id,created_at").order("created_at", { ascending: false }),
         supabase.from("ai_usage").select("id,feature,model,created_at").order("created_at", { ascending: false }).limit(500),
+        supabase.from("site_events").select("event,created_at").gte("created_at", new Date(Date.now() - 30 * 864e5).toISOString()).limit(10000),
       ]);
       for (const x of [c, p, r, d]) if (x.error) throw x.error;
       const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
@@ -58,6 +59,7 @@ function StaffDashboard() {
         aiMonth: aiRows.filter((x) => +new Date(x.created_at) >= +monthStart).length,
         aiByFeature: aiRows.reduce<Record<string, number>>((m, x) => { m[x.feature] = (m[x.feature] ?? 0) + 1; return m; }, {}),
         aiRecent: aiRows.slice(0, 10),
+        events: (ev.data ?? []).reduce<Record<string, { month: number; week: number }>>((m, x) => { const t = m[x.event] ??= { month: 0, week: 0 }; t.month++; if (+new Date(x.created_at) > Date.now() - 7 * 864e5) t.week++; return m; }, {}),
       };
       return { overview, clients: (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
@@ -113,6 +115,16 @@ function StaffDashboard() {
                 </div>
               ))}
             </div>
+
+            <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+              <h2 className="section-title text-primary">Website activity</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Last 30 days (last 7 days in brackets). Anonymous counts only.</p>
+              <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {([["visit", "Page visits"], ["tour_complete", "Guided tour completions"], ["assessment_download", "Assessment downloads"], ["demo_request", "Demo requests"]] as const).map(([k, label]) => (
+                  <div key={k}><p className="text-sm text-muted-foreground">{label}</p><p className="font-display text-2xl font-bold">{ov.events[k]?.month ?? 0} <span className="text-base font-semibold text-muted-foreground">({ov.events[k]?.week ?? 0})</span></p></div>
+                ))}
+              </div>
+            </section>
 
             <div className="mt-6"><TourInvite /></div>
 
