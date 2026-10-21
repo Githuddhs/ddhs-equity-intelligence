@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ServicePage, serviceHead } from "@/components/service-page";
+import { ServicePage, SourceBadge, serviceHead } from "@/components/service-page";
 
 const JOURNEY: { title: string; intro: string; items: string[]; output: string; note?: string }[] = [
   { title: "Plan the Vacancy", intro: "Before recruitment begins, DDHS assesses:", items: ["Current workforce representation", "Under-representation at the relevant occupational level", "Organisational and business-unit EE targets", "Approved workforce and succession plans", "Scarce and critical skills requirements", "The potential transformation contribution of the vacancy"], output: "Recruitment Transformation Priority" },
@@ -16,7 +16,7 @@ const JOURNEY: { title: string; intro: string; items: string[]; output: string; 
 function Journey() {
   return (
     <section className="mt-16">
-      <h2 className="section-title text-primary">One integrated recruitment journey</h2>
+      <h2 className="section-title text-primary">One integrated recruitment journey<SourceBadge kind="doc" /></h2>
       <ol className="mt-6 grid gap-6 lg:grid-cols-3">
         {JOURNEY.map((s, i) => (
           <li key={s.title} className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -42,6 +42,7 @@ export const Route = createFileRoute("/services/recruitment-suite")({
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-suite",
+      reviewMarks: true,
       eyebrow: "An Integrated Transformation Applicant Tracking System",
       title: "DDHS Recruitment Intelligence & Governance Suite™",
       tagline: "Recruit it. Govern it. Transform it.",
