@@ -46,6 +46,7 @@ import { Route as AuthenticatedPlanReportRouteImport } from './routes/_authentic
 import { Route as AuthenticatedPoliciesRouteImport } from './routes/_authenticated/policies'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedRecruitmentRouteImport } from './routes/_authenticated/recruitment'
+import { Route as AuthenticatedRecruitmentDashboardRouteImport } from './routes/_authenticated/recruitment-dashboard'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
@@ -256,6 +257,12 @@ const AuthenticatedRecruitmentRoute =
     path: '/recruitment',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRecruitmentDashboardRoute =
+  AuthenticatedRecruitmentDashboardRouteImport.update({
+    id: '/recruitment-dashboard',
+    path: '/recruitment-dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -406,6 +413,7 @@ export interface FileRoutesByFullPath {
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/recruitment': typeof AuthenticatedRecruitmentRoute
+  '/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/review': typeof AuthenticatedReviewRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
@@ -465,6 +473,7 @@ export interface FileRoutesByTo {
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
   '/recruitment': typeof AuthenticatedRecruitmentRoute
+  '/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/review': typeof AuthenticatedReviewRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
@@ -526,6 +535,7 @@ export interface FileRoutesById {
   '/_authenticated/policies': typeof AuthenticatedPoliciesRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/recruitment': typeof AuthenticatedRecruitmentRoute
+  '/_authenticated/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
@@ -587,6 +597,7 @@ export interface FileRouteTypes {
     | '/policies'
     | '/portal'
     | '/recruitment'
+    | '/recruitment-dashboard'
     | '/review'
     | '/staff'
     | '/workforce'
@@ -646,6 +657,7 @@ export interface FileRouteTypes {
     | '/policies'
     | '/portal'
     | '/recruitment'
+    | '/recruitment-dashboard'
     | '/review'
     | '/staff'
     | '/workforce'
@@ -706,6 +718,7 @@ export interface FileRouteTypes {
     | '/_authenticated/policies'
     | '/_authenticated/portal'
     | '/_authenticated/recruitment'
+    | '/_authenticated/recruitment-dashboard'
     | '/_authenticated/review'
     | '/_authenticated/staff'
     | '/_authenticated/workforce'
@@ -1026,6 +1039,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecruitmentRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recruitment-dashboard': {
+      id: '/_authenticated/recruitment-dashboard'
+      path: '/recruitment-dashboard'
+      fullPath: '/recruitment-dashboard'
+      preLoaderRoute: typeof AuthenticatedRecruitmentDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/review': {
       id: '/_authenticated/review'
       path: '/review'
@@ -1194,6 +1214,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPoliciesRoute: typeof AuthenticatedPoliciesRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedRecruitmentRoute: typeof AuthenticatedRecruitmentRoute
+  AuthenticatedRecruitmentDashboardRoute: typeof AuthenticatedRecruitmentDashboardRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
@@ -1222,6 +1243,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPoliciesRoute: AuthenticatedPoliciesRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedRecruitmentRoute: AuthenticatedRecruitmentRoute,
+  AuthenticatedRecruitmentDashboardRoute:
+    AuthenticatedRecruitmentDashboardRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
