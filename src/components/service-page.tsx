@@ -46,9 +46,9 @@ export function serviceHead(path: string, title: string, description: string) {
 
 export function SourceBadge({ kind }: { kind: "doc" | "draft" }) {
   return kind === "doc" ? (
-    <span className="ml-2 inline-block rounded-full border border-teal/40 bg-teal/10 px-2 py-0.5 align-middle text-xs font-semibold text-teal">From your document</span>
+    <span className="inline-block rounded-full normal-case tracking-normal sm:ml-2 border border-teal/40 bg-teal/10 px-2 py-0.5 align-middle text-xs font-semibold text-teal">From your document</span>
   ) : (
-    <span className="ml-2 inline-block rounded-full border border-dashed border-destructive/60 bg-destructive/10 px-2 py-0.5 align-middle text-xs font-semibold text-destructive">Draft · needs your approval</span>
+    <span className="inline-block rounded-full normal-case tracking-normal sm:ml-2 border border-dashed border-destructive/60 bg-destructive/10 px-2 py-0.5 align-middle text-xs font-semibold text-destructive">Draft · needs your approval</span>
   );
 }
 
@@ -58,10 +58,10 @@ export function ServicePage({ c }: { c: ServiceContent }) {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <Link to="/" className="shrink-0 whitespace-nowrap font-display text-base font-bold text-primary sm:text-lg">
+          <Link to="/" className="min-w-0 font-display text-base leading-tight font-bold text-primary sm:text-lg">
             DDHS <span className="text-teal">Equity Intelligence</span>
           </Link>
-          <div className="flex items-center gap-4 text-sm font-semibold">
+          <div className="flex shrink-0 items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
             <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-xs text-primary-foreground sm:px-4 sm:text-sm">
