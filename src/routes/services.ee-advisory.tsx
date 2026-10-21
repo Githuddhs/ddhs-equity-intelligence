@@ -6,6 +6,8 @@ export const Route = createFileRoute("/services/ee-advisory")({
   component: () => (
     <ServicePage c={{
       current: "/services/ee-advisory",
+      reviewMarks: true,
+      heroSource: "draft",
       eyebrow: "Service · Advisory",
       title: "Specialist Employment Equity advisory",
       lead: "Experienced EE specialists who work alongside your team — interpreting your data, strengthening your plans and preparing you for DG reviews and DoEL submissions.",

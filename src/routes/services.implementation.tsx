@@ -6,6 +6,8 @@ export const Route = createFileRoute("/services/implementation")({
   component: () => (
     <ServicePage c={{
       current: "/services/implementation",
+      reviewMarks: true,
+      heroSource: "draft",
       eyebrow: "Service · Onboarding",
       title: "Implementation services",
       lead: "A guided, once-off onboarding that gets your workforce data, organisation structure and EE records into the platform correctly — so your first reporting cycle is accurate from day one.",
