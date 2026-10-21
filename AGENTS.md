@@ -24,3 +24,4 @@
 - EEA12 summary, unit and job-grade downloads reuse eapExplanation and capture the active scope before opening the format chooser, so all four formats retain identical percentage-point explanations and filtered rows.
 - Provincial EAP aggregates use eapShare to reject incomplete benchmarks; missing comparisons display Not available with no calculated gap, while genuine zero values remain comparable.
 - Recruitment Suite vacancies and candidates are owner-only; public applicants reach a vacancy only through security-definer token functions and upload CVs into a private bucket folder named by vacancy id, so applicant data never needs a public read policy.
+- Recruitment appointments are gated by a database trigger requiring an approved, named human review for that candidate on the vacancy, so the UI cannot be bypassed to appoint without review.
