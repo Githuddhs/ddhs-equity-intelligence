@@ -7,10 +7,13 @@ export const SERVICES = [
   { to: "/services/implementation", label: "Implementation services" },
   { to: "/services/ee-advisory", label: "Specialist EE advisory" },
   { to: "/services/recruitment-governance", label: "Recruitment governance intelligence" },
+  { to: "/services/recruitment-suite", label: "Recruitment Intelligence & Governance Suite" },
 ] as const;
 
 export type ServiceContent = {
   current: (typeof SERVICES)[number]["to"];
+  tagline?: string;
+  extra?: import("react").ReactNode;
   eyebrow: string;
   title: string;
   lead: string;
@@ -72,6 +75,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">{c.eyebrow}</p>
             <h1 className="display-title mt-2 text-balance text-primary">{c.title}</h1>
+            {c.tagline && <p className="mt-3 font-display text-lg font-semibold text-teal">{c.tagline}</p>}
             <p className="page-lead mt-4 text-muted-foreground">{c.lead}</p>
             <Link to="/" hash="contact" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
               Book a DDHS demonstration <ArrowRight className="h-4 w-4" />
@@ -100,6 +104,8 @@ export function ServicePage({ c }: { c: ServiceContent }) {
             ))}
           </div>
         </section>
+
+        {c.extra}
 
         <section className="mt-16 rounded-xl border border-border bg-secondary/50 p-8">
           <h2 className="section-title text-primary">How it works</h2>

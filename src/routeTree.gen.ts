@@ -53,6 +53,7 @@ import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as ServicesEeAdvisoryRouteImport } from './routes/services.ee-advisory'
 import { Route as ServicesImplementationRouteImport } from './routes/services.implementation'
 import { Route as ServicesRecruitmentGovernanceRouteImport } from './routes/services.recruitment-governance'
+import { Route as ServicesRecruitmentSuiteRouteImport } from './routes/services.recruitment-suite'
 import { Route as ServicesSaasSubscriptionsRouteImport } from './routes/services.saas-subscriptions'
 import { Route as SurveyTokenRouteImport } from './routes/survey.$token'
 import { Route as ViewTokenRouteImport } from './routes/view.$token'
@@ -287,6 +288,12 @@ const ServicesRecruitmentGovernanceRoute =
     path: '/services/recruitment-governance',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ServicesRecruitmentSuiteRoute =
+  ServicesRecruitmentSuiteRouteImport.update({
+    id: '/services/recruitment-suite',
+    path: '/services/recruitment-suite',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ServicesSaasSubscriptionsRoute =
   ServicesSaasSubscriptionsRouteImport.update({
     id: '/services/saas-subscriptions',
@@ -386,6 +393,7 @@ export interface FileRoutesByFullPath {
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
+  '/services/recruitment-suite': typeof ServicesRecruitmentSuiteRoute
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
@@ -441,6 +449,7 @@ export interface FileRoutesByTo {
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
+  '/services/recruitment-suite': typeof ServicesRecruitmentSuiteRoute
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
@@ -498,6 +507,7 @@ export interface FileRoutesById {
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
+  '/services/recruitment-suite': typeof ServicesRecruitmentSuiteRoute
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
@@ -555,6 +565,7 @@ export interface FileRouteTypes {
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
+    | '/services/recruitment-suite'
     | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
@@ -610,6 +621,7 @@ export interface FileRouteTypes {
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
+    | '/services/recruitment-suite'
     | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
@@ -666,6 +678,7 @@ export interface FileRouteTypes {
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
+    | '/services/recruitment-suite'
     | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
@@ -704,6 +717,7 @@ export interface RootRouteChildren {
   ServicesEeAdvisoryRoute: typeof ServicesEeAdvisoryRoute
   ServicesImplementationRoute: typeof ServicesImplementationRoute
   ServicesRecruitmentGovernanceRoute: typeof ServicesRecruitmentGovernanceRoute
+  ServicesRecruitmentSuiteRoute: typeof ServicesRecruitmentSuiteRoute
   ServicesSaasSubscriptionsRoute: typeof ServicesSaasSubscriptionsRoute
   SurveyTokenRoute: typeof SurveyTokenRoute
   ViewTokenRoute: typeof ViewTokenRoute
@@ -1022,6 +1036,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRecruitmentGovernanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/recruitment-suite': {
+      id: '/services/recruitment-suite'
+      path: '/services/recruitment-suite'
+      fullPath: '/services/recruitment-suite'
+      preLoaderRoute: typeof ServicesRecruitmentSuiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/saas-subscriptions': {
       id: '/services/saas-subscriptions'
       path: '/services/saas-subscriptions'
@@ -1176,6 +1197,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesEeAdvisoryRoute: ServicesEeAdvisoryRoute,
   ServicesImplementationRoute: ServicesImplementationRoute,
   ServicesRecruitmentGovernanceRoute: ServicesRecruitmentGovernanceRoute,
+  ServicesRecruitmentSuiteRoute: ServicesRecruitmentSuiteRoute,
   ServicesSaasSubscriptionsRoute: ServicesSaasSubscriptionsRoute,
   SurveyTokenRoute: SurveyTokenRoute,
   ViewTokenRoute: ViewTokenRoute,
