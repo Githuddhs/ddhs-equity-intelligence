@@ -17,6 +17,8 @@ export type ServiceContent = {
   reviewMarks?: boolean;
   /** Source of the opening/hero section when reviewMarks is on ("doc" default). */
   heroSource?: "doc" | "draft";
+  /** Render a "Platform › …" breadcrumb so the page reads as part of the platform. */
+  platformModule?: boolean;
   extra?: import("react").ReactNode;
   eyebrow: string;
   title: string;
@@ -72,6 +74,16 @@ export function ServicePage({ c }: { c: ServiceContent }) {
           </div>
         </div>
       </header>
+
+      {c.platformModule && (
+        <div className="border-b border-border bg-background">
+          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 text-xs font-semibold sm:px-6">
+            <Link to="/" hash="platform" className="text-teal hover:text-primary">Platform</Link>
+            <span aria-hidden className="text-muted-foreground">›</span>
+            <span className="text-primary">{c.title}</span>
+          </div>
+        </div>
+      )}
 
       <nav className="border-b border-border bg-secondary/40">
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm sm:flex-wrap sm:px-6">

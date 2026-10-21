@@ -43,6 +43,7 @@ export const Route = createFileRoute("/services/recruitment-suite")({
     <ServicePage c={{
       current: "/services/recruitment-suite",
       reviewMarks: true,
+      platformModule: true,
       eyebrow: "An Integrated Transformation Applicant Tracking System",
       title: "DDHS Recruitment Intelligence & Governance Suite™",
       tagline: "Recruit it. Govern it. Transform it.",
