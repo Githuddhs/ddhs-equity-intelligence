@@ -184,7 +184,7 @@ function Index() {
               href="#contact"
               className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Request demonstration
+              Book a DDHS demonstration
             </a>
           </div>
         </div>
@@ -195,7 +195,7 @@ function Index() {
             <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
             <a href="#outcomes" className="whitespace-nowrap transition-colors hover:text-primary">Client Outcomes</a>
             <a href="#bbbee" className="whitespace-nowrap transition-colors hover:text-primary">B-BBEE</a>
-            <a href="#contact" className="whitespace-nowrap transition-colors hover:text-primary">Book a Demo</a>
+            <a href="#contact" className="whitespace-nowrap transition-colors hover:text-primary">Book a DDHS demonstration</a>
             <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site Tour</a>
             <a href="/virtual-consultant" className="whitespace-nowrap transition-colors hover:text-primary">Virtual Consultant</a>
           </nav>
@@ -222,7 +222,7 @@ function Index() {
               href="#contact"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Request demonstration <ArrowRight className="h-4 w-4" />
+              Book a DDHS demonstration <ArrowRight className="h-4 w-4" />
             </a>
             <a
               href="#pilots"
@@ -552,10 +552,10 @@ function Index() {
         </div>
       </section>
 
-      {/* Book a Demo */}
+      {/* Book a DDHS demonstration */}
       <section id="contact" className="bg-primary py-10">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-teal">Book a Demo</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-teal">Book a DDHS demonstration</p>
           <h2 className="display-title mt-2 text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence
           </h2>
@@ -641,7 +641,7 @@ function Index() {
               href="#contact"
               className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Request demonstration
+              Book a DDHS demonstration
             </a>
           </div>
         </div>
