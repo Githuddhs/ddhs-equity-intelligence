@@ -12,6 +12,8 @@ import {
 } from "@/lib/recruitment";
 import { loadBaseline, priorityFor } from "@/lib/recruitment-data";
 import { FlowStep, GovernanceStep, ImpactStep } from "@/components/recruitment-phase2";
+import { EvidenceStep, RiskStep } from "@/components/recruitment-phase3";
+import { riskFlags, type C as RC, type V as RV } from "@/lib/recruitment-phase3";
 
 export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
   head: () => ({
@@ -50,6 +52,8 @@ function VacancyPage() {
   if (v === undefined) return <div className="min-h-screen bg-background"><AppHeader /><p className="p-8 text-sm text-muted-foreground">Loading…</p></div>;
   if (!v) return <div className="min-h-screen bg-background"><AppHeader /><p className="p-8 text-sm">Vacancy not found. <Link to="/recruitment" className="text-teal underline">Back to vacancies</Link></p></div>;
 
+  const risks = riskFlags(v as unknown as RV, cands as unknown as RC[]);
+
   const save = async (patch: Partial<Vacancy>, msg?: string) => {
     setBusy(true);
     const { data, error } = await supabase.from("recruitment_vacancies").update(patch).eq("id", v.id).select("*").single();
@@ -74,7 +78,9 @@ function VacancyPage() {
         <CandidateStep v={v} cands={cands} reload={load} />
         <FlowStep cands={cands} />
         <GovernanceStep key={`g-${v.id}`} v={v} save={save} busy={busy} />
-        <ImpactStep key={`i-${v.id}`} v={v} cands={cands} save={save} busy={busy} reload={load} />
+        <RiskStep risks={risks} />
+        <ImpactStep key={`i-${v.id}`} v={v} cands={cands} save={save} busy={busy} reload={load} highRisks={risks.filter((r) => r.severity === "High").length} />
+        <EvidenceStep v={v} cands={cands} risks={risks} />
       </main>
     </div>
   );
