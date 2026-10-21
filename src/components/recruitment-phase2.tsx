@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json, Tables } from "@/integrations/supabase/types";
-import { GROUPS } from "@/lib/workforce";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { candidateGroup, STAGE_LABEL, type Stage } from "@/lib/recruitment";
+import { STAGE_LABEL, type Stage } from "@/lib/recruitment";
 import { baselineCounts, loadBaseline, type Baseline } from "@/lib/recruitment-data";
 import {
   appointmentImpact, candidateFlow, governanceScorecard, reviewBlockers,
@@ -187,7 +186,6 @@ export function ImpactStep({ v, cands, save, busy, reload }: { v: Vacancy; cands
           </div>
         </div>
       )}
-      {GROUPS.length === 0 && candidateGroup({ race: "", gender: "", foreign_national: false })}
     </section>
   );
 }
