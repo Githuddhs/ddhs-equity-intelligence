@@ -107,11 +107,12 @@ export function appointmentImpact(input: { counts: Counts | undefined; candidate
   return { group: g, groupLabel: label, before: share(input.counts, [g]), after: share(after, [g]), sectoral, eap, verdict, notes };
 }
 
-export type AppointmentReview = { candidate_id?: string | undefined; reviewer?: string; decision?: "approved" | "declined"; reasons?: string; confirmedMerit?: boolean; reviewedImpact?: boolean; at?: string; scorecard?: number };
+export type AppointmentReview = { candidate_id?: string | undefined; reviewer?: string; decision?: "approved" | "declined"; reasons?: string; confirmedMerit?: boolean; reviewedImpact?: boolean; acknowledgedRisks?: boolean; at?: string; scorecard?: number };
 
 /** What still blocks a human reviewer from approving an appointment. */
-export function reviewBlockers(r: AppointmentReview, scorecardCriticalOpen: string[]): string[] {
+export function reviewBlockers(r: AppointmentReview, scorecardCriticalOpen: string[], highRisks = 0): string[] {
   const b: string[] = [];
+  if (highRisks > 0 && !r.acknowledgedRisks) b.push(`Acknowledge the ${highRisks} high-severity risk flag(s)`);
   if (!r.candidate_id) b.push("Choose the recommended candidate");
   if (!r.reviewer?.trim()) b.push("Reviewer name and title");
   if (!r.reviewedImpact) b.push("Confirm you reviewed the impact assessment");
