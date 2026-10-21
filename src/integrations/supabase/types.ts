@@ -650,6 +650,7 @@ export type Database = {
       }
       recruitment_vacancies: {
         Row: {
+          appointment_review: Json
           approval_note: string
           approved_at: string | null
           approver_name: string
@@ -659,6 +660,7 @@ export type Database = {
           criteria: Json
           department: string
           division: string
+          governance: Json
           id: string
           in_workforce_plan: boolean
           job_profile: string
@@ -678,6 +680,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          appointment_review?: Json
           approval_note?: string
           approved_at?: string | null
           approver_name?: string
@@ -687,6 +690,7 @@ export type Database = {
           criteria?: Json
           department?: string
           division?: string
+          governance?: Json
           id?: string
           in_workforce_plan?: boolean
           job_profile?: string
@@ -706,6 +710,7 @@ export type Database = {
           user_id?: string
         }
         Update: {
+          appointment_review?: Json
           approval_note?: string
           approved_at?: string | null
           approver_name?: string
@@ -715,6 +720,7 @@ export type Database = {
           criteria?: Json
           department?: string
           division?: string
+          governance?: Json
           id?: string
           in_workforce_plan?: boolean
           job_profile?: string
