@@ -59,7 +59,7 @@ const r1 = (n: number) => Math.round(n * 10) / 10;
  */
 export function transformationPriority(input: {
   counts: Counts | undefined; targets: Targets | undefined; eap: Record<string, number> | null;
-  scarce?: boolean; inPlan?: boolean;
+  scarce?: boolean | undefined; inPlan?: boolean | undefined;
 }): Priority {
   const { counts, targets, eap } = input;
   const total = counts ? Object.values(counts).reduce((a, b) => a + b, 0) : 0;
