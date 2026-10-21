@@ -125,6 +125,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    const key = `ddhs-visit:${pathname}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    track("visit");
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>

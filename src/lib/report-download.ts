@@ -25,6 +25,7 @@ export function reportHtml(html: string, name: string) {
 }
 
 export async function deliverReportFile(blob: Blob, filename: string) {
+  track("assessment_download", filename);
   const file = new File([blob], filename, { type: blob.type });
   if (matchMedia("(pointer: coarse)").matches && navigator.canShare?.({ files: [file] })) {
     try { await navigator.share({ files: [file], title: filename }); return; }

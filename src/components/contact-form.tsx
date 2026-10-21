@@ -63,6 +63,7 @@ export function ContactForm() {
     let result: Awaited<ReturnType<typeof sendEnquiry>>;
     try {
       result = await sendEnquiry({ data: parsed.data });
+      track("demo_request");
     } catch {
       setSubmitting(false);
       toast.error("We couldn't send your enquiry just now. Please try again, or email sdm@ddhs.co.za.");
