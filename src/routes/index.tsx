@@ -190,10 +190,12 @@ function Index() {
         </div>
         <div className="mx-auto hidden max-w-7xl px-6 pb-2 md:block">
           <nav className="flex items-center gap-6 text-sm font-semibold text-teal">
+            <a href="#why-ddhs" className="whitespace-nowrap transition-colors hover:text-primary">Why DDHS</a>
+            <a href="#problems" className="whitespace-nowrap transition-colors hover:text-primary">Problems We Solve</a>
             <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
-            <a href="#capabilities" className="whitespace-nowrap transition-colors hover:text-primary">Capabilities</a>
-            <a href="#governance" className="whitespace-nowrap transition-colors hover:text-primary">Governance</a>
-            <a href="#pilots" className="whitespace-nowrap transition-colors hover:text-primary">Pilot Programme</a>
+            <a href="#outcomes" className="whitespace-nowrap transition-colors hover:text-primary">Client Outcomes</a>
+            <a href="#bbbee" className="whitespace-nowrap transition-colors hover:text-primary">B-BBEE</a>
+            <a href="#contact" className="whitespace-nowrap transition-colors hover:text-primary">Book a Demo</a>
             <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site Tour</a>
             <a href="/virtual-consultant" className="whitespace-nowrap transition-colors hover:text-primary">Virtual Consultant</a>
           </nav>
@@ -247,9 +249,35 @@ function Index() {
       </section>
 
 
-      {/* Section 2: The Problem */}
-      <section className="bg-secondary/40 py-8">
+      {/* Why DDHS */}
+      <section id="why-ddhs" className="py-8">
         <div className="mx-auto max-w-7xl px-6">
+          <SectionHeading
+            eyebrow="Why DDHS"
+            title="Built in South Africa, for South African Employment Equity"
+            body="We combine Employment Equity expertise with a platform designed around the Employment Equity Act, DoEL forms and Director-General review requirements."
+          />
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: ShieldCheck, title: "Compliance-first", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
+              { icon: Layers, title: "One source of truth", body: "Upload once; analysis, plans, monitoring and reports all read the same figures." },
+              { icon: FolderLock, title: "Privacy by design", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
+              { icon: Users, title: "Expert support", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
+            ].map((c) => (
+              <div key={c.title} className="rounded-2xl border bg-card p-6 shadow-sm">
+                <c.icon className="h-6 w-6 text-teal" />
+                <h3 className="card-title mt-4 text-primary">{c.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Problems We Solve */}
+      <section id="problems" className="bg-secondary/40 py-8">
+        <div className="mx-auto max-w-7xl px-6">
+          <p className="text-center text-sm font-semibold uppercase tracking-widest text-teal">Problems We Solve</p>
           <SectionHeading
             title="Employment Equity Shouldn't Be Managed Across Spreadsheets, Emails and Shared Drives"
             body="Disconnected processes make it difficult to manage targets, assign accountability, maintain evidence and demonstrate progress."
@@ -373,8 +401,76 @@ function Index() {
         </div>
       </section>
 
+      {/* Client Outcomes */}
+      <section id="outcomes" className="py-8">
+        <div className="mx-auto max-w-7xl px-6">
+          <SectionHeading
+            eyebrow="Client Outcomes"
+            title="What Clients Gain"
+            body="The results our platform is designed to deliver for employers."
+          />
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { icon: Target, title: "Clear, defensible targets", body: "Numerical goals set against sector targets and provincial EAP, level by level." },
+              { icon: ClipboardCheck, title: "On-time DoEL submissions", body: "Drafted EEA2 and EEA4 forms and a submission log with references." },
+              { icon: FileCheck2, title: "Audit-ready evidence", body: "Every action linked to owners, deadlines and supporting documents." },
+              { icon: LineChart, title: "Visible progress", body: "Leadership dashboards showing under-representation closing over time." },
+              { icon: CheckCircle2, title: "DG review readiness", body: "Checklists and corrective actions before an inspection arrives." },
+              { icon: Sparkles, title: "Less admin time", body: "Spend effort on transformation, not on reconciling spreadsheets." },
+            ].map((c) => (
+              <div key={c.title} className="flex gap-4 rounded-2xl border bg-card p-6 shadow-sm">
+                <c.icon className="h-6 w-6 shrink-0 text-teal" />
+                <div>
+                  <h3 className="card-title text-primary">{c.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* B-BBEE Verified Supplier */}
+      <section id="bbbee" className="bg-secondary/40 py-8">
+        <div className="mx-auto grid max-w-5xl items-center gap-8 px-6 md:grid-cols-[auto_1fr]">
+          <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border-4 border-teal bg-card">
+            <ShieldCheck className="h-12 w-12 text-teal" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-teal">B-BBEE Verified Supplier</p>
+            <h2 className="display-title mt-2 text-balance text-primary">A Transformation Partner That Counts Towards Your Scorecard</h2>
+            <p className="mt-3 text-muted-foreground">
+              DDHS Equity Intelligence (Pty) Ltd is a B-BBEE verified supplier. Procuring from us can support the
+              preferential procurement element of your B-BBEE scorecard. Our B-BBEE certificate is available on request.
+            </p>
+            <a href="#contact" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal hover:text-primary">
+              Request our B-BBEE certificate <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Guided Tour */}
+      <section id="guided-tour" className="py-8">
+        <div className="mx-auto max-w-5xl px-6 text-center">
+          <SectionHeading
+            eyebrow="Guided Tour"
+            title="See Every Capability in Five Minutes"
+            body="An eight-step guided tour from workforce data to EEA12 analysis, EE plans, monitoring, DG review readiness and DoEL reporting — no sign-in needed."
+          />
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <a href="/tour" className="inline-flex items-center gap-2 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-teal-foreground hover:bg-teal/90">
+              Start the guided tour <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="/virtual-consultant" className="inline-flex items-center rounded-lg border border-input px-6 py-3 text-sm font-semibold text-primary hover:bg-accent">
+              Talk to a Virtual Consultant
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Section 6: Who It Is For */}
-      <section className="py-8">
+      <section className="bg-secondary/40 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             title="Designed for Complex Employment Environments"
@@ -456,10 +552,11 @@ function Index() {
         </div>
       </section>
 
-      {/* Section 9: Final Conversion */}
+      {/* Book a Demo */}
       <section id="contact" className="bg-primary py-10">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <h2 className="display-title text-balance text-navy-foreground">
+          <p className="text-sm font-semibold uppercase tracking-widest text-teal">Book a Demo</p>
+          <h2 className="display-title mt-2 text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-navy-foreground/70">
