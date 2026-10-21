@@ -107,7 +107,7 @@ export function appointmentImpact(input: { counts: Counts | undefined; candidate
   return { group: g, groupLabel: label, before: share(input.counts, [g]), after: share(after, [g]), sectoral, eap, verdict, notes };
 }
 
-export type AppointmentReview = { candidate_id?: string; reviewer?: string; decision?: "approved" | "declined"; reasons?: string; confirmedMerit?: boolean; reviewedImpact?: boolean; at?: string; scorecard?: number };
+export type AppointmentReview = { candidate_id?: string | undefined; reviewer?: string; decision?: "approved" | "declined"; reasons?: string; confirmedMerit?: boolean; reviewedImpact?: boolean; at?: string; scorecard?: number };
 
 /** What still blocks a human reviewer from approving an appointment. */
 export function reviewBlockers(r: AppointmentReview, scorecardCriticalOpen: string[]): string[] {
