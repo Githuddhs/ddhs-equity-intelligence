@@ -80,6 +80,18 @@ const lifecycle = [
   { icon: Layers, title: "Report", body: "Generate leadership-ready reporting and dashboards." },
 ];
 
+const suiteSteps = [
+  "Plan the Vacancy",
+  "Approve and Advertise",
+  "Track and Manage Candidates",
+  "Monitor Candidate Flow",
+  "Govern the Selection Process",
+  "Assess Appointment Impact",
+  "Flag Governance and Transformation Risks",
+  "Maintain an Audit-Ready Evidence Trail",
+  "Report to Leadership and Governance Structures",
+];
+
 const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Workforce Data Foundation", href: "/workforce-foundation" },
   { name: "EEA12 Workforce Analysis", href: "/eea12" },
@@ -91,6 +103,7 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Executive Intelligence", href: "/executive-intelligence" },
   { name: "Leadership Dashboard", href: "/leadership-dashboard" },
   { name: "Leadership Report", href: "/leadership-report" },
+  { name: "Recruitment Intelligence & Governance Suite", href: "/services/recruitment-suite" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
@@ -325,6 +338,51 @@ function Index() {
                 <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-12 overflow-hidden rounded-2xl border border-teal/30 bg-primary p-7 shadow-sm sm:p-9">
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_1fr] lg:items-center">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-teal">Platform Module</p>
+                <h3 className="mt-3 font-display text-xl font-extrabold leading-tight text-balance text-navy-foreground sm:text-2xl">
+                  DDHS Recruitment Intelligence &amp; Governance Suite™
+                </h3>
+                <p className="mt-2 font-display text-base font-semibold text-teal">
+                  Recruit it. Govern it. Transform it.
+                </p>
+                <p className="mt-4 text-sm leading-relaxed text-navy-foreground/80">
+                  An integrated transformation applicant tracking system that runs inside the platform:
+                  every vacancy, candidate stage and appointment is connected to your workforce analysis,
+                  EE targets, governance evidence and leadership reporting.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link
+                    to="/services/recruitment-suite"
+                    className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
+                  >
+                    Explore the Suite <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center rounded-lg border border-navy-foreground/30 px-5 py-2.5 text-sm font-semibold text-navy-foreground transition-colors hover:bg-navy-foreground/10"
+                  >
+                    Book a DDHS demonstration
+                  </a>
+                </div>
+              </div>
+              <ol className="grid gap-2">
+                {suiteSteps.map((s, i) => (
+                  <li
+                    key={s}
+                    className="flex items-center gap-3 rounded-lg bg-navy-foreground/5 px-3 py-2 text-sm font-medium text-navy-foreground/90"
+                  >
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal text-xs font-bold text-teal-foreground">
+                      {i + 1}
+                    </span>
+                    {s}
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
           <div className="mt-10 text-center">
             <a
@@ -611,6 +669,7 @@ function Index() {
                   { l: "Executive Reporting", h: "/executive-intelligence" },
                   { l: "Leadership Dashboard", h: "/leadership-dashboard" },
                   { l: "Leadership Report", h: "/leadership-report" },
+                  { l: "Recruitment Intelligence & Governance Suite", h: "/services/recruitment-suite" },
                   { l: "Client view", h: "/client-view" },
                 ].map((l) => (
                   <li key={l.l}><a href={l.h} className="transition-colors hover:text-primary">{l.l}</a></li>
@@ -620,7 +679,7 @@ function Index() {
             <div>
               <h4 className="label-title text-primary">Services</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {SERVICES.map((s) => (
+                {SERVICES.filter((s) => s.to !== "/services/recruitment-suite").map((s) => (
                   <li key={s.to}><Link to={s.to} className="transition-colors hover:text-primary">{s.label}</Link></li>
                 ))}
               </ul>
