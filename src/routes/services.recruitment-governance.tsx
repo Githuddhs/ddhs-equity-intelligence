@@ -6,6 +6,8 @@ export const Route = createFileRoute("/services/recruitment-governance")({
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-governance",
+      reviewMarks: true,
+      heroSource: "draft",
       eyebrow: "Service · Intelligence",
       title: "Recruitment governance intelligence",
       lead: "Make every appointment count towards your EE targets. We connect recruitment, promotions and terminations to your workforce profile, so hiring decisions are visible, justified and accountable.",

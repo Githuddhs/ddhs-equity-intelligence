@@ -15,6 +15,8 @@ export type ServiceContent = {
   tagline?: string;
   /** Show "From your document" / "Needs approval" badges so the owner can review copy. */
   reviewMarks?: boolean;
+  /** Source of the opening/hero section when reviewMarks is on ("doc" default). */
+  heroSource?: "doc" | "draft";
   extra?: import("react").ReactNode;
   eyebrow: string;
   title: string;
@@ -84,7 +86,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
       <main className="mx-auto max-w-7xl px-6 py-10">
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div>
-            {c.reviewMarks && <div className="mb-3"><SourceBadge kind="doc" /></div>}
+            {c.reviewMarks && <div className="mb-3"><SourceBadge kind={c.heroSource ?? "doc"} /></div>}
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">{c.eyebrow}</p>
             <h1 className="display-title mt-2 text-balance text-primary">{c.title}</h1>
             {c.tagline && <p className="mt-3 font-display text-lg font-semibold text-teal">{c.tagline}</p>}
