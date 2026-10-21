@@ -50,6 +50,10 @@ import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
+import { Route as ServicesEeAdvisoryRouteImport } from './routes/services.ee-advisory'
+import { Route as ServicesImplementationRouteImport } from './routes/services.implementation'
+import { Route as ServicesRecruitmentGovernanceRouteImport } from './routes/services.recruitment-governance'
+import { Route as ServicesSaasSubscriptionsRouteImport } from './routes/services.saas-subscriptions'
 import { Route as SurveyTokenRouteImport } from './routes/survey.$token'
 import { Route as ViewTokenRouteImport } from './routes/view.$token'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
@@ -267,6 +271,28 @@ const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   path: '/api/eea-insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesEeAdvisoryRoute = ServicesEeAdvisoryRouteImport.update({
+  id: '/services/ee-advisory',
+  path: '/services/ee-advisory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesImplementationRoute = ServicesImplementationRouteImport.update({
+  id: '/services/implementation',
+  path: '/services/implementation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRecruitmentGovernanceRoute =
+  ServicesRecruitmentGovernanceRouteImport.update({
+    id: '/services/recruitment-governance',
+    path: '/services/recruitment-governance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ServicesSaasSubscriptionsRoute =
+  ServicesSaasSubscriptionsRouteImport.update({
+    id: '/services/saas-subscriptions',
+    path: '/services/saas-subscriptions',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SurveyTokenRoute = SurveyTokenRouteImport.update({
   id: '/survey/$token',
   path: '/survey/$token',
@@ -357,6 +383,10 @@ export interface FileRoutesByFullPath {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
+  '/services/implementation': typeof ServicesImplementationRoute
+  '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
+  '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
@@ -408,6 +438,10 @@ export interface FileRoutesByTo {
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
+  '/services/implementation': typeof ServicesImplementationRoute
+  '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
+  '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
@@ -461,6 +495,10 @@ export interface FileRoutesById {
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
+  '/services/implementation': typeof ServicesImplementationRoute
+  '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
+  '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
@@ -514,6 +552,10 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/services/ee-advisory'
+    | '/services/implementation'
+    | '/services/recruitment-governance'
+    | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
     | '/clients/$id'
@@ -565,6 +607,10 @@ export interface FileRouteTypes {
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/services/ee-advisory'
+    | '/services/implementation'
+    | '/services/recruitment-governance'
+    | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
     | '/clients/$id'
@@ -617,6 +663,10 @@ export interface FileRouteTypes {
     | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/services/ee-advisory'
+    | '/services/implementation'
+    | '/services/recruitment-governance'
+    | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
     | '/_authenticated/clients_/$id'
@@ -651,6 +701,10 @@ export interface RootRouteChildren {
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
+  ServicesEeAdvisoryRoute: typeof ServicesEeAdvisoryRoute
+  ServicesImplementationRoute: typeof ServicesImplementationRoute
+  ServicesRecruitmentGovernanceRoute: typeof ServicesRecruitmentGovernanceRoute
+  ServicesSaasSubscriptionsRoute: typeof ServicesSaasSubscriptionsRoute
   SurveyTokenRoute: typeof SurveyTokenRoute
   ViewTokenRoute: typeof ViewTokenRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
@@ -947,6 +1001,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEeaInsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/ee-advisory': {
+      id: '/services/ee-advisory'
+      path: '/services/ee-advisory'
+      fullPath: '/services/ee-advisory'
+      preLoaderRoute: typeof ServicesEeAdvisoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/implementation': {
+      id: '/services/implementation'
+      path: '/services/implementation'
+      fullPath: '/services/implementation'
+      preLoaderRoute: typeof ServicesImplementationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/recruitment-governance': {
+      id: '/services/recruitment-governance'
+      path: '/services/recruitment-governance'
+      fullPath: '/services/recruitment-governance'
+      preLoaderRoute: typeof ServicesRecruitmentGovernanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/saas-subscriptions': {
+      id: '/services/saas-subscriptions'
+      path: '/services/saas-subscriptions'
+      fullPath: '/services/saas-subscriptions'
+      preLoaderRoute: typeof ServicesSaasSubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/survey/$token': {
       id: '/survey/$token'
       path: '/survey/$token'
@@ -1091,6 +1173,10 @@ const rootRouteChildren: RootRouteChildren = {
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
+  ServicesEeAdvisoryRoute: ServicesEeAdvisoryRoute,
+  ServicesImplementationRoute: ServicesImplementationRoute,
+  ServicesRecruitmentGovernanceRoute: ServicesRecruitmentGovernanceRoute,
+  ServicesSaasSubscriptionsRoute: ServicesSaasSubscriptionsRoute,
   SurveyTokenRoute: SurveyTokenRoute,
   ViewTokenRoute: ViewTokenRoute,
   ApiPublicHooksComplianceRemindersRoute:
