@@ -164,12 +164,27 @@ function WorkforcePage() {
       if (ext === "xlsx" || ext === "xls") {
         const XLSX = await import("xlsx");
         const wb = XLSX.read(await f.arrayBuffer(), { type: "array" });
-        const sheet = wb.Sheets[wb.SheetNames[0] ?? ""];
-        if (!sheet) throw new Error(`${f.name} has no sheets in it.`);
-        const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "" })
-          .map((r) => r.map((c) => String(c ?? "").trim()))
-          .filter((r) => r.some((c) => c.length > 0));
-        parsed = parseWorkforceRows(rows, f.name);
+        if (!wb.SheetNames.length) throw new Error(`${f.name} has no sheets in it.`);
+        // Downloaded templates put a title-only "Summary" sheet first, so try
+        // each sheet and use the first one that contains a readable headcount table.
+        let found: ParsedFile | undefined;
+        let firstError: unknown;
+        for (const name of wb.SheetNames) {
+          const sheet = wb.Sheets[name];
+          if (!sheet) continue;
+          const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "" })
+            .map((r) => r.map((c) => String(c ?? "").trim()))
+            .filter((r) => r.some((c) => c.length > 0));
+          if (!rows.length) continue;
+          try {
+            found = parseWorkforceRows(rows, f.name);
+            break;
+          } catch (err) {
+            firstError ??= err;
+          }
+        }
+        if (!found) throw firstError instanceof Error ? firstError : new Error(`No headcount table could be read from ${f.name}.`);
+        parsed = found;
       } else if (ext === "pdf" || ext === "docx") {
         // Extracted text loses its columns, so glue the known multi-word
         // headings and level names together before splitting on whitespace.
