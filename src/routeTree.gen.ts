@@ -45,11 +45,13 @@ import { Route as AuthenticatedManagerRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPlanReportRouteImport } from './routes/_authenticated/plan-report'
 import { Route as AuthenticatedPoliciesRouteImport } from './routes/_authenticated/policies'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedRecruitmentRouteImport } from './routes/_authenticated/recruitment'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
+import { Route as ApplyTokenRouteImport } from './routes/apply.$token'
 import { Route as ServicesEeAdvisoryRouteImport } from './routes/services.ee-advisory'
 import { Route as ServicesImplementationRouteImport } from './routes/services.implementation'
 import { Route as ServicesRecruitmentGovernanceRouteImport } from './routes/services.recruitment-governance'
@@ -61,6 +63,7 @@ import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
 import { Route as AuthenticatedPortalAreaRouteImport } from './routes/_authenticated/portal_.$area'
+import { Route as AuthenticatedRecruitmentIdRouteImport } from './routes/_authenticated/recruitment_.$id'
 import { Route as ApiPublicHooksComplianceRemindersRouteImport } from './routes/api/public/hooks/compliance-reminders'
 import { Route as ApiPublicHooksPayfastItnRouteImport } from './routes/api/public/hooks/payfast-itn'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -247,6 +250,12 @@ const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   path: '/portal',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRecruitmentRoute =
+  AuthenticatedRecruitmentRouteImport.update({
+    id: '/recruitment',
+    path: '/recruitment',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -270,6 +279,11 @@ const ApiEeAssistRoute = ApiEeAssistRouteImport.update({
 const ApiEeaInsightsRoute = ApiEeaInsightsRouteImport.update({
   id: '/api/eea-insights',
   path: '/api/eea-insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyTokenRoute = ApplyTokenRouteImport.update({
+  id: '/apply/$token',
+  path: '/apply/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesEeAdvisoryRoute = ServicesEeAdvisoryRouteImport.update({
@@ -330,6 +344,12 @@ const AuthenticatedPortalAreaRoute = AuthenticatedPortalAreaRouteImport.update({
   path: '/portal/$area',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRecruitmentIdRoute =
+  AuthenticatedRecruitmentIdRouteImport.update({
+    id: '/recruitment_/$id',
+    path: '/recruitment/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicHooksComplianceRemindersRoute =
   ApiPublicHooksComplianceRemindersRouteImport.update({
     id: '/api/public/hooks/compliance-reminders',
@@ -385,11 +405,13 @@ export interface FileRoutesByFullPath {
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/recruitment': typeof AuthenticatedRecruitmentRoute
   '/review': typeof AuthenticatedReviewRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/apply/$token': typeof ApplyTokenRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -400,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
+  '/recruitment/$id': typeof AuthenticatedRecruitmentIdRoute
   '/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
@@ -441,11 +464,13 @@ export interface FileRoutesByTo {
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/recruitment': typeof AuthenticatedRecruitmentRoute
   '/review': typeof AuthenticatedReviewRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/apply/$token': typeof ApplyTokenRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -456,6 +481,7 @@ export interface FileRoutesByTo {
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
+  '/recruitment/$id': typeof AuthenticatedRecruitmentIdRoute
   '/plans': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
@@ -499,11 +525,13 @@ export interface FileRoutesById {
   '/_authenticated/plan-report': typeof AuthenticatedPlanReportRoute
   '/_authenticated/policies': typeof AuthenticatedPoliciesRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/_authenticated/recruitment': typeof AuthenticatedRecruitmentRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
+  '/apply/$token': typeof ApplyTokenRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -514,6 +542,7 @@ export interface FileRoutesById {
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
+  '/_authenticated/recruitment_/$id': typeof AuthenticatedRecruitmentIdRoute
   '/_authenticated/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
@@ -557,11 +586,13 @@ export interface FileRouteTypes {
     | '/plan-report'
     | '/policies'
     | '/portal'
+    | '/recruitment'
     | '/review'
     | '/staff'
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/apply/$token'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -572,6 +603,7 @@ export interface FileRouteTypes {
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
+    | '/recruitment/$id'
     | '/plans/'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
@@ -613,11 +645,13 @@ export interface FileRouteTypes {
     | '/plan-report'
     | '/policies'
     | '/portal'
+    | '/recruitment'
     | '/review'
     | '/staff'
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/apply/$token'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -628,6 +662,7 @@ export interface FileRouteTypes {
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
+    | '/recruitment/$id'
     | '/plans'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
@@ -670,11 +705,13 @@ export interface FileRouteTypes {
     | '/_authenticated/plan-report'
     | '/_authenticated/policies'
     | '/_authenticated/portal'
+    | '/_authenticated/recruitment'
     | '/_authenticated/review'
     | '/_authenticated/staff'
     | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
+    | '/apply/$token'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -685,6 +722,7 @@ export interface FileRouteTypes {
     | '/_authenticated/clients_/$id'
     | '/_authenticated/plans/$id'
     | '/_authenticated/portal_/$area'
+    | '/_authenticated/recruitment_/$id'
     | '/_authenticated/plans/'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
@@ -714,6 +752,7 @@ export interface RootRouteChildren {
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
+  ApplyTokenRoute: typeof ApplyTokenRoute
   ServicesEeAdvisoryRoute: typeof ServicesEeAdvisoryRoute
   ServicesImplementationRoute: typeof ServicesImplementationRoute
   ServicesRecruitmentGovernanceRoute: typeof ServicesRecruitmentGovernanceRoute
@@ -980,6 +1019,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPortalRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recruitment': {
+      id: '/_authenticated/recruitment'
+      path: '/recruitment'
+      fullPath: '/recruitment'
+      preLoaderRoute: typeof AuthenticatedRecruitmentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/review': {
       id: '/_authenticated/review'
       path: '/review'
@@ -1013,6 +1059,13 @@ declare module '@tanstack/react-router' {
       path: '/api/eea-insights'
       fullPath: '/api/eea-insights'
       preLoaderRoute: typeof ApiEeaInsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply/$token': {
+      id: '/apply/$token'
+      path: '/apply/$token'
+      fullPath: '/apply/$token'
+      preLoaderRoute: typeof ApplyTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/ee-advisory': {
@@ -1092,6 +1145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPortalAreaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recruitment_/$id': {
+      id: '/_authenticated/recruitment_/$id'
+      path: '/recruitment/$id'
+      fullPath: '/recruitment/$id'
+      preLoaderRoute: typeof AuthenticatedRecruitmentIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/hooks/compliance-reminders': {
       id: '/api/public/hooks/compliance-reminders'
       path: '/api/public/hooks/compliance-reminders'
@@ -1133,12 +1193,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPlanReportRoute: typeof AuthenticatedPlanReportRoute
   AuthenticatedPoliciesRoute: typeof AuthenticatedPoliciesRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedRecruitmentRoute: typeof AuthenticatedRecruitmentRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
   AuthenticatedClientsIdRoute: typeof AuthenticatedClientsIdRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
   AuthenticatedPortalAreaRoute: typeof AuthenticatedPortalAreaRoute
+  AuthenticatedRecruitmentIdRoute: typeof AuthenticatedRecruitmentIdRoute
   AuthenticatedPlansIndexRoute: typeof AuthenticatedPlansIndexRoute
 }
 
@@ -1159,12 +1221,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPlanReportRoute: AuthenticatedPlanReportRoute,
   AuthenticatedPoliciesRoute: AuthenticatedPoliciesRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedRecruitmentRoute: AuthenticatedRecruitmentRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
   AuthenticatedClientsIdRoute: AuthenticatedClientsIdRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
   AuthenticatedPortalAreaRoute: AuthenticatedPortalAreaRoute,
+  AuthenticatedRecruitmentIdRoute: AuthenticatedRecruitmentIdRoute,
   AuthenticatedPlansIndexRoute: AuthenticatedPlansIndexRoute,
 }
 
@@ -1194,6 +1258,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkforceFoundationRoute: WorkforceFoundationRoute,
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
+  ApplyTokenRoute: ApplyTokenRoute,
   ServicesEeAdvisoryRoute: ServicesEeAdvisoryRoute,
   ServicesImplementationRoute: ServicesImplementationRoute,
   ServicesRecruitmentGovernanceRoute: ServicesRecruitmentGovernanceRoute,

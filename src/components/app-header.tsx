@@ -60,6 +60,7 @@ export function AppHeader() {
               <Link to="/workforce" className={link} activeProps={active}>Workforce Data</Link>
               <Link to="/barrier-analysis" search={{}} className={link} activeProps={active} activeOptions={{ includeSearch: true }}>Barriers</Link>
               <Link to="/barrier-analysis" search={{ mode: "questionnaire" }} className={link} activeProps={active} activeOptions={{ includeSearch: true }}>Questionnaire</Link>
+              <Link to="/recruitment" className={link} activeProps={active}>Recruitment</Link>
               <Link to="/compliance" className={link} activeProps={active}>Compliance</Link>
               <Link to="/history" className={link} activeProps={active}>History</Link>
               <Link to="/dg-history" className={link} activeProps={active}>DG History</Link>

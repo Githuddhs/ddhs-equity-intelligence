@@ -23,3 +23,4 @@
 - EEA12 job-grade progress derives aggregate headcounts from owner-readable Foundation records linked to the selected snapshot; occupational targets remain diagnostic grade benchmarks, preventing unrelated periods or invented grade-specific compliance targets.
 - EEA12 summary, unit and job-grade downloads reuse eapExplanation and capture the active scope before opening the format chooser, so all four formats retain identical percentage-point explanations and filtered rows.
 - Provincial EAP aggregates use eapShare to reject incomplete benchmarks; missing comparisons display Not available with no calculated gap, while genuine zero values remain comparable.
+- Recruitment Suite vacancies and candidates are owner-only; public applicants reach a vacancy only through security-definer token functions and upload CVs into a private bucket folder named by vacancy id, so applicant data never needs a public read policy.

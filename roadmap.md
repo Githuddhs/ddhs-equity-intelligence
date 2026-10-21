@@ -61,3 +61,8 @@
 - [x] Live overview: use client province for EAP, show missing-province state
 - [x] Live overview: show once workforce data is loaded, no subscription required
 - [x] EEA12: display Paterson, Peromnes, Hay and Equate grades beneath each occupational category; all six category switches verified with no page errors. Hay uses EEA9 points; Equate public-service levels are explicitly indicative.
+
+## Recruitment Suite (nine steps, phased)
+- [x] Phase 1: Plan vacancy (priority), Approve & advertise (checks, approval, public apply link), Track candidates (pipeline, CVs, stages)
+- [ ] Phase 2: Candidate-flow analysis by designated group (step 4), selection governance scorecard (step 5), appointment impact assessment (step 6)
+- [ ] Phase 3: Risk flags (step 7), evidence pack (step 8), executive recruitment dashboard (step 9)
