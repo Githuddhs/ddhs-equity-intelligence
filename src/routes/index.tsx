@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SERVICES } from "@/components/service-page";
 import { AuthCta } from "@/components/auth-cta";
 import {
   ArrowRight,
