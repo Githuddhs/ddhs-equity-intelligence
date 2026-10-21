@@ -1,54 +1,70 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage, SourceBadge, serviceHead } from "@/components/service-page";
 
-const PRACTICE: { title: string; body: string; shows: string }[] = [
+const PRACTICE: { title: string; status: "live" | "partial" | "proposed"; body: string; shows: string }[] = [
   {
     title: "A vacancy opens in a division",
+    status: "live",
     body: "Workforce Data holds the unit's profile by occupational level and job grade, so the first question is not \"who do we interview\" but \"which group is most under-represented at this level in this unit\".",
     shows: "Next-appointment priorities — designated groups ranked by shortfall against sector targets and provincial EAP",
   },
   {
     title: "The vacancy is approved before advertising",
-    body: "The job profile, selection criteria and sourcing plan are checked and approved before the advert goes out, so the posting is deliberate rather than incidental.",
-    shows: "An approved, EE-aligned sourcing plan on record",
+    status: "proposed",
+    body: "The platform does not yet manage vacancy approvals. Today this step stays in your own approval process, informed by the priorities above; a built-in EE-aligned vacancy approval and sourcing workflow is planned.",
+    shows: "an EE-aligned vacancy approval and sourcing-plan workflow in the platform",
   },
   {
     title: "Candidates move through a tracked pipeline",
-    body: "Applications, shortlisting, interviews and offers are counted by designated group at each stage, so drop-out points are visible while the vacancy is still open — not only in next year's report.",
-    shows: "Candidate-flow analysis by recruitment stage",
+    status: "proposed",
+    body: "The platform does not yet include applicant tracking, so applications and shortlisting are not counted stage by stage today. Candidate-flow analysis by designated group is planned as part of the Recruitment Intelligence & Governance Suite.",
+    shows: "candidate-flow analysis by recruitment stage",
   },
   {
     title: "The selection committee is governed",
-    body: "Committee composition, conflict-of-interest declarations, consistent criteria and recorded decisions are verified as the process runs, then stored — not assembled after the fact.",
-    shows: "A governance scorecard for the selection process",
+    status: "proposed",
+    body: "Committee composition, conflict-of-interest declarations and recorded decisions are not yet captured in the platform; the evidence trail for them is planned in the Suite.",
+    shows: "a governance scorecard for the selection process",
   },
   {
-    title: "The appointment's impact is assessed before sign-off",
-    body: "Before final approval, the manager sees what the appointment would do to the unit's representation at that level — and either aligns with the priorities or records a justified deviation.",
-    shows: "An appointment impact assessment plus a manager sign-off with reasons",
+    title: "The appointment is approved and justified",
+    status: "partial",
+    body: "Today, managers can record approvals and justifications for appointments that move away from targets, and that sign-off trail is stored. An automatic assessment of an appointment's impact before final approval is proposed.",
+    shows: "a manager sign-off trail with recorded reasons · pre-approval impact assessment (planned)",
   },
   {
-    title: "Leadership and evidence are updated automatically",
-    body: "The appointment flows into movement tracking, job-grade progress and DG-review evidence, so the trail is already in place when a review or audit asks for it.",
-    shows: "Leadership dashboards and a defensible appointment record",
+    title: "Leadership and evidence are updated",
+    status: "live",
+    body: "The appointment's movement record sits in Workforce Data, feeding job-grade progress and DG-review evidence, and leadership reports draw from the same saved data.",
+    shows: "Leadership dashboards and reports in Word, Excel, PDF and PowerPoint, from one data source",
   },
 ];
 
 function Practice() {
+  const pill = (status: "live" | "partial" | "proposed") =>
+    status === "live" ? (
+      <span className="ml-2 inline-block rounded-full border border-teal/40 bg-teal/10 px-2 py-0.5 align-middle text-xs font-semibold text-teal">Works today</span>
+    ) : status === "partial" ? (
+      <span className="ml-2 inline-block rounded-full border border-dashed border-primary/50 px-2 py-0.5 align-middle text-xs font-semibold text-primary">Partly built</span>
+    ) : (
+      <span className="ml-2 inline-block rounded-full border border-dashed border-destructive/60 bg-destructive/10 px-2 py-0.5 align-middle text-xs font-semibold text-destructive">Proposed</span>
+    );
+  const label = (status: "live" | "partial" | "proposed") =>
+    status === "proposed" ? "Planned:" : status === "partial" ? "Today and planned:" : "Platform shows:";
   return (
     <section className="mt-16">
       <h2 className="section-title text-primary">Recruitment governance in practice<SourceBadge kind="draft" /></h2>
       <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
-        A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review.
+        A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Steps marked "Works today" run in the platform now; "Proposed" steps are planned and not yet built; "Partly built" is a mix of both.
       </p>
       <ol className="mt-6 space-y-4">
         {PRACTICE.map((s, i) => (
           <li key={s.title} className="flex gap-4 rounded-xl border border-border bg-card p-5 shadow-sm">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-display font-bold text-primary-foreground">{i + 1}</span>
             <div className="min-w-0">
-              <p className="card-title text-primary">{s.title}</p>
+              <p className="card-title text-primary">{s.title}{pill(s.status)}</p>
               <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
-              <p className="mt-2 text-sm"><span className="font-semibold text-teal">Platform shows:</span> <span className="font-semibold text-primary">{s.shows}</span></p>
+              <p className="mt-2 text-sm"><span className="font-semibold text-teal">{label(s.status)}</span> <span className="font-semibold text-primary">{s.shows}</span></p>
             </div>
           </li>
         ))}
