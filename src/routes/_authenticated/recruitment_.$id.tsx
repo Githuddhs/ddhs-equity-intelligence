@@ -11,6 +11,7 @@ import {
   type Checks, type Priority, type Sourcing, type Stage, type VacancyStatus,
 } from "@/lib/recruitment";
 import { loadBaseline, priorityFor } from "@/lib/recruitment-data";
+import { FlowStep, GovernanceStep, ImpactStep } from "@/components/recruitment-phase2";
 
 export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
   head: () => ({
@@ -71,6 +72,9 @@ function VacancyPage() {
         <PlanStep v={v} save={save} busy={busy} />
         <ApproveStep v={v} save={save} busy={busy} />
         <CandidateStep v={v} cands={cands} reload={load} />
+        <FlowStep cands={cands} />
+        <GovernanceStep key={`g-${v.id}`} v={v} save={save} busy={busy} />
+        <ImpactStep key={`i-${v.id}`} v={v} cands={cands} save={save} busy={busy} reload={load} />
       </main>
     </div>
   );
@@ -191,7 +195,7 @@ function CandidateStep({ v, cands, reload }: { v: Vacancy; cands: Candidate[]; r
     const history = patch.stage && patch.stage !== c.stage
       ? [...(Array.isArray(c.history) ? (c.history as Json[]) : []), { stage: patch.stage, at: new Date().toISOString() }] : c.history;
     const { error } = await supabase.from("recruitment_candidates").update({ ...patch, history }).eq("id", c.id);
-    if (error) toast.error("Couldn't update the candidate."); else await reload();
+    if (error) toast.error(error.message.includes("human review") ? "Appointments need an approved human review in step 6 first." : "Couldn't update the candidate."); else await reload();
   };
 
   const add = async (e: React.FormEvent) => {

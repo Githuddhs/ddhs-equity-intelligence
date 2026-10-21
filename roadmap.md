@@ -64,5 +64,5 @@
 
 ## Recruitment Suite (nine steps, phased)
 - [x] Phase 1: Plan vacancy (priority), Approve & advertise (checks, approval, public apply link), Track candidates (pipeline, CVs, stages)
-- [ ] Phase 2: Candidate-flow analysis by designated group (step 4), selection governance scorecard (step 5), appointment impact assessment (step 6)
+- [x] Phase 2: Candidate-flow analysis by designated group (step 4), selection governance scorecard (step 5), appointment impact assessment (step 6)
 - [ ] Phase 3: Risk flags (step 7), evidence pack (step 8), executive recruitment dashboard (step 9)
