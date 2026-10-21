@@ -1,6 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { normaliseWorkforce, type Workforce } from "@/lib/workforce";
 import { aggregate, normaliseUnits, type UnitFilter } from "@/lib/org-units";
+import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
+import { transformationPriority, type Priority } from "@/lib/recruitment";
 
 export type Baseline = { workforce: Workforce | null; units: ReturnType<typeof normaliseUnits>; date: string | null; province: string; sector: string };
 
@@ -30,3 +32,13 @@ export function baselineCounts(b: Baseline, f: Partial<UnitFilter>) {
   }
   return { workforce: b.workforce, scope: "organisation" as const };
 }
+
+export function priorityFor(b: Baseline | null, v: { occupational_level: string; sector: string; province: string; organisation?: string; division?: string; department?: string; section?: string; scarce_skill?: boolean; in_workforce_plan?: boolean }): Priority {
+  const scoped = b ? baselineCounts(b, v) : { workforce: null };
+  const sector = SECTORS.find((s) => s.name === v.sector); const tk = LEVEL_TO_TARGET_KEY[v.occupational_level];
+  return transformationPriority({
+    counts: scoped.workforce?.[v.occupational_level], targets: sector && tk ? sector.targets[tk] : undefined,
+    eap: v.province ? PROVINCE_EAP[v.province] ?? null : null, scarce: v.scarce_skill, inPlan: v.in_workforce_plan,
+  });
+}
+

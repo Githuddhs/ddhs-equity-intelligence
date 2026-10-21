@@ -6,9 +6,9 @@ import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { PriorityBadge, PriorityCard } from "@/components/priority-card";
 import { LEVELS } from "@/lib/workforce";
-import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { STATUS_LABEL, transformationPriority, type Priority, type VacancyStatus } from "@/lib/recruitment";
-import { baselineCounts, loadBaseline, type Baseline } from "@/lib/recruitment-data";
+import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
+import { STATUS_LABEL, type Priority, type VacancyStatus } from "@/lib/recruitment";
+import { loadBaseline, priorityFor, type Baseline } from "@/lib/recruitment-data";
 
 export const Route = createFileRoute("/_authenticated/recruitment")({
   head: () => ({
@@ -27,15 +27,6 @@ export const Route = createFileRoute("/_authenticated/recruitment")({
 type Row = { id: string; title: string; occupational_level: string; department: string; status: string; priority: Json; created_at: string; recruitment_candidates: { count: number }[] };
 
 const input = "mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm";
-
-export function priorityFor(b: Baseline | null, v: { occupational_level: string; sector: string; province: string; organisation?: string; division?: string; department?: string; section?: string; scarce_skill?: boolean; in_workforce_plan?: boolean }): Priority {
-  const scoped = b ? baselineCounts(b, v) : { workforce: null };
-  const sector = SECTORS.find((s) => s.name === v.sector); const tk = LEVEL_TO_TARGET_KEY[v.occupational_level];
-  return transformationPriority({
-    counts: scoped.workforce?.[v.occupational_level], targets: sector && tk ? sector.targets[tk] : undefined,
-    eap: v.province ? PROVINCE_EAP[v.province] ?? null : null, scarce: v.scarce_skill, inPlan: v.in_workforce_plan,
-  });
-}
 
 function RecruitmentPage() {
   const navigate = useNavigate();
