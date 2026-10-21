@@ -81,6 +81,7 @@ export const Route = createFileRoute("/services/recruitment-governance")({
         { title: "Unit drill-down", body: "View recruitment impact by organisation, division, department and section." },
         { title: "Leadership reporting", body: "Clear progress reports for executives and EE committees." },
       ],
+      extra: <Practice />,
       steps: [
         { title: "Connect data", body: "Use your Workforce Foundation movements." },
         { title: "Set priorities", body: "See which groups to prioritise per level." },
