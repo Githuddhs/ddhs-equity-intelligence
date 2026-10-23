@@ -24,6 +24,8 @@ import {
 
 import { ContactForm } from "@/components/contact-form";
 import { DashboardMock } from "@/components/dashboard-mock";
+import { BrandMark } from "@/components/brand-mark";
+import { SiteNav } from "@/components/site-nav";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -104,7 +106,7 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Executive Intelligence", href: "/executive-intelligence" },
   { name: "Leadership Dashboard", href: "/leadership-dashboard" },
   { name: "Leadership Report", href: "/leadership-report" },
-  { name: "Recruitment Intelligence & Governance Suite", href: "/services/recruitment-suite" },
+  { name: "Recruitment Suite", href: "/services/recruitment-suite" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
@@ -184,18 +186,7 @@ function Index() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 pt-3">
-          <div className="flex items-center gap-2">
-            <img
-              src="/icons/icon-192.png"
-              alt="DDHS Equity Intelligence app icon"
-              width={192}
-              height={192}
-              className="h-8 w-8 rounded-lg"
-            />
-            <span className="font-display text-lg font-bold text-primary">
-              DDHS <span className="text-teal">Equity Intelligence</span>
-            </span>
-          </div>
+          <BrandMark />
           <div className="flex items-center gap-5">
             <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
             <InstallApp variant="compact" />
@@ -208,19 +199,7 @@ function Index() {
             </a>
           </div>
         </div>
-        <div className="mx-auto hidden max-w-7xl px-6 pb-2 md:block">
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold text-teal">
-            <a href="#why-ddhs" className="whitespace-nowrap transition-colors hover:text-primary">Why DDHS</a>
-            <a href="#problems" className="whitespace-nowrap transition-colors hover:text-primary">Problems We Solve</a>
-            <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
-            <a href="#outcomes" className="whitespace-nowrap transition-colors hover:text-primary">Client Outcomes</a>
-            <a href="#bbbee" className="whitespace-nowrap transition-colors hover:text-primary">B-BBEE</a>
-            <a href="#contact" className="whitespace-nowrap transition-colors hover:text-primary">Book a Demonstration</a>
-            <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site Tour</a>
-            <a href="/virtual-consultant" className="whitespace-nowrap transition-colors hover:text-primary">Virtual Consultant</a>
-            <a href="/services/recruitment-suite" className="whitespace-nowrap transition-colors hover:text-primary">Recruitment Suite</a>
-          </nav>
-        </div>
+        <SiteNav />
       </header>
 
 
@@ -351,7 +330,7 @@ function Index() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-teal">Platform Module</p>
                 <h3 className="mt-3 font-display text-xl font-extrabold leading-tight text-balance text-navy-foreground sm:text-2xl">
-                  DDHS Recruitment Intelligence &amp; Governance Suite™
+                  Recruitment Suite
                 </h3>
                 <p className="mt-2 font-display text-base font-semibold text-teal">
                   Recruit it. Govern it. Transform it.
@@ -652,14 +631,7 @@ function Index() {
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-10 md:grid-cols-4">
             <div>
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <BarChart3 className="h-4 w-4 text-primary-foreground" />
-                </div>
-                <span className="font-display font-bold text-primary">
-                  DDHS <span className="text-teal">Equity Intelligence</span>
-                </span>
-              </div>
+              <BrandMark to={null} />
               <p className="mt-4 text-sm font-medium text-teal">Data. Accountability. Transformation.</p>
               <p className="mt-2 text-sm text-muted-foreground">
                 <span className="font-semibold text-primary">DDHS</span>{" "}
@@ -679,7 +651,7 @@ function Index() {
                   { l: "Executive Reporting", h: "/executive-intelligence" },
                   { l: "Leadership Dashboard", h: "/leadership-dashboard" },
                   { l: "Leadership Report", h: "/leadership-report" },
-                  { l: "Recruitment Intelligence & Governance Suite", h: "/services/recruitment-suite" },
+                  { l: "Recruitment Suite", h: "/services/recruitment-suite" },
                   { l: "Client view", h: "/client-view" },
                   { l: "Download the app", h: "#platform" },
                 ].map((l) => (

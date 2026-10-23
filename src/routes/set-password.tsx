@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/set-password")({
   head: () => ({
@@ -52,6 +53,7 @@ function SetPasswordPage() {
 
   return (
     <main className="mx-auto max-w-md px-6 py-10">
+      <BrandMark className="mb-6" />
       <h1 className="page-title">Set your password</h1>
       <p className="page-lead mt-2 text-muted-foreground">Choose a password to finish accepting your DDHS Equity Intelligence invite.</p>
       {ready === false ? (

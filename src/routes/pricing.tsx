@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { startPayfastCheckout, type PayfastPlan } from "@/lib/payfast.functions";
 import { QuoteForm } from "@/components/quote-form";
 import { AuthCta } from "@/components/auth-cta";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -120,7 +121,7 @@ function PricingPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
+          <BrandMark />
           <div className="flex items-center gap-4">
             <AuthCta />
             <Link to="/auth" search={{ next: "/portal" }} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Sign in</Link>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { emptyContent, type PlanContent } from "@/lib/ee-plan";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/view/$token")({
   head: () => ({
@@ -56,7 +57,7 @@ function SharedView() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold"><span className="text-primary">DDHS</span> <span className="text-teal">Equity Intelligence</span></Link>
+          <BrandMark />
           <span className="text-sm text-muted-foreground">Read-only shared view</span>
         </div>
       </header>

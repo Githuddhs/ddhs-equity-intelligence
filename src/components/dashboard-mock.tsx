@@ -12,6 +12,7 @@ import {
   Users,
 } from "lucide-react";
 import { useLiveOverview } from "@/lib/live-overview";
+import { BrandMark } from "@/components/brand-mark";
 
 const nav = [
   { icon: BarChart3, label: "Overview", active: true },
@@ -92,13 +93,8 @@ export function DashboardMock() {
       <div className="flex">
         {/* Sidebar */}
         <aside className="hidden w-44 shrink-0 flex-col border-r bg-secondary/30 p-3 sm:flex">
-          <div className="flex items-center gap-2 px-1 pb-4">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-              <BarChart3 className="h-3.5 w-3.5 text-primary-foreground" />
-            </div>
-            <span className="font-display text-[13px] font-bold leading-tight text-primary">
-              DDHS <span className="text-teal">Equity Intelligence</span>
-            </span>
+          <div className="px-1 pb-4">
+            <BrandMark to={null} size="sm" />
           </div>
           <nav className="space-y-1">
             {nav.map((item) => (
