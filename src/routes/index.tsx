@@ -384,6 +384,9 @@ function Index() {
               </ol>
             </div>
           </div>
+          <div className="mt-10">
+            <InstallApp />
+          </div>
           <div className="mt-10 text-center">
             <a
               href="#capabilities"
