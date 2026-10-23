@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ServicePage, SourceBadge, serviceHead } from "@/components/service-page";
+import { ServicePage, serviceHead } from "@/components/service-page";
 
 const PRACTICE: { title: string; status: "live" | "partial" | "proposed"; body: string; shows: string }[] = [
   {
@@ -53,7 +53,7 @@ function Practice() {
     status === "proposed" ? "Planned:" : status === "partial" ? "Today and planned:" : "Platform shows:";
   return (
     <section className="mt-16">
-      <h2 className="section-title text-primary">Recruitment governance in practice<SourceBadge kind="draft" /></h2>
+      <h2 className="section-title text-primary">Recruitment governance in practice</h2>
       <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
         A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Steps marked "Works today" run in the platform now; "Proposed" steps are planned and not yet built; "Partly built" is a mix of both.
       </p>
@@ -78,8 +78,6 @@ export const Route = createFileRoute("/services/recruitment-governance")({
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-governance",
-      reviewMarks: true,
-      heroSource: "draft",
       eyebrow: "Service · Intelligence",
       title: "Recruitment governance intelligence",
       lead: "Make every appointment count towards your EE targets. We connect recruitment, promotions and terminations to your workforce profile, so hiring decisions are visible, justified and accountable.",

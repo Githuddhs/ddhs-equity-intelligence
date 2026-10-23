@@ -6,8 +6,6 @@ export const Route = createFileRoute("/services/saas-subscriptions")({
   component: () => (
     <ServicePage c={{
       current: "/services/saas-subscriptions",
-      reviewMarks: true,
-      heroSource: "draft",
       eyebrow: "Service · Platform",
       title: "SaaS subscriptions",
       lead: "One platform for your full Employment Equity cycle — from workforce data to EEA2/EEA4 drafts, DG review readiness and board reporting — on a monthly or annual subscription sized to your workforce.",
