@@ -283,3 +283,12 @@ function CandidateStep({ v, cands, reload }: { v: Vacancy; cands: Candidate[]; r
     </section>
   );
 }
+
+/** Stored UTC timestamp -> the browser's local wall-clock value for a datetime-local input. */
+function toLocalInput(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
