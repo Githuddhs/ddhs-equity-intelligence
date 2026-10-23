@@ -185,15 +185,20 @@ function Index() {
       <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 pt-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <BarChart3 className="h-4 w-4 text-primary-foreground" />
-            </div>
+            <img
+              src="/icons/icon-192.png"
+              alt="DDHS Equity Intelligence app icon"
+              width={192}
+              height={192}
+              className="h-8 w-8 rounded-lg"
+            />
             <span className="font-display text-lg font-bold text-primary">
               DDHS <span className="text-teal">Equity Intelligence</span>
             </span>
           </div>
           <div className="flex items-center gap-5">
             <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
+            <InstallApp variant="compact" />
             <AuthCta />
             <a
               href="#contact"
