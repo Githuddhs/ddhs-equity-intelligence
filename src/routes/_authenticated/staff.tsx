@@ -119,8 +119,8 @@ function StaffDashboard() {
             <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
               <h2 className="section-title text-primary">Website activity</h2>
               <p className="mt-1 text-sm text-muted-foreground">Last 30 days (last 7 days in brackets). Anonymous counts only.</p>
-              <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {([["visit", "Page visits"], ["tour_complete", "Guided tour completions"], ["assessment_download", "Assessment downloads"], ["demo_request", "Demo requests"]] as const).map(([k, label]) => (
+              <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                {([["visit", "Page visits"], ["tour_complete", "Guided tour completions"], ["assessment_download", "Assessment downloads"], ["demo_request", "Demo requests"], ["app_install", "App installs"]] as const).map(([k, label]) => (
                   <div key={k}><p className="text-sm text-muted-foreground">{label}</p><p className="font-display text-2xl font-bold">{ov.events[k]?.month ?? 0} <span className="text-base font-semibold text-muted-foreground">({ov.events[k]?.week ?? 0})</span></p></div>
                 ))}
               </div>

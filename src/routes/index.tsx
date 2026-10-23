@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SERVICES } from "@/components/service-page";
+import { InstallApp } from "@/components/install-app";
 import { AuthCta } from "@/components/auth-cta";
 import {
   ArrowRight,
@@ -384,6 +385,9 @@ function Index() {
               </ol>
             </div>
           </div>
+          <div className="mt-10">
+            <InstallApp />
+          </div>
           <div className="mt-10 text-center">
             <a
               href="#capabilities"
@@ -671,6 +675,7 @@ function Index() {
                   { l: "Leadership Report", h: "/leadership-report" },
                   { l: "Recruitment Intelligence & Governance Suite", h: "/services/recruitment-suite" },
                   { l: "Client view", h: "/client-view" },
+                  { l: "Download the app", h: "#platform" },
                 ].map((l) => (
                   <li key={l.l}><a href={l.h} className="transition-colors hover:text-primary">{l.l}</a></li>
                 ))}
