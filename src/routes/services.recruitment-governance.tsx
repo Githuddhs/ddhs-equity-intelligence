@@ -35,7 +35,7 @@ const PRACTICE: { title: string; status: "live" | "partial" | "proposed"; body: 
   {
     title: "Leadership and evidence are updated",
     status: "live",
-    body: "The appointment's movement record sits in Workforce Data, feeding job-grade progress and DG-review evidence, and leadership reports draw from the same saved data.",
+    body: "The onboarding handover checklist confirms the appointment is recorded in Workforce Data, where it feeds job-grade progress and DG-review evidence. The vacancy evidence pack and leadership dashboard draw from the same saved data.",
     shows: "Leadership dashboards and reports in Word, Excel, PDF and PowerPoint, from one data source",
   },
 ];
@@ -55,7 +55,7 @@ function Practice() {
     <section className="mt-16">
       <h2 className="section-title text-primary">Recruitment governance in practice</h2>
       <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
-        A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Steps marked "Works today" run in the platform now; "Proposed" steps are planned and not yet built; "Partly built" is a mix of both.
+        A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Every step below runs in the platform today.
       </p>
       <ol className="mt-6 space-y-4">
         {PRACTICE.map((s, i) => (
