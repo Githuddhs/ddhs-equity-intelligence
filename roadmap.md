@@ -67,3 +67,4 @@
 - [x] Phase 2: Candidate-flow analysis by designated group (step 4), selection governance scorecard (step 5), appointment impact assessment (step 6)
 - [x] Phase 3: Risk flags (step 7), evidence pack (step 8), executive recruitment dashboard (step 9)
 - [x] Test: create vacancy, add candidate, Email candidate + handover
+- [ ] Rename "DDHS Recruitment Intelligence & Governance Suite™" to "Recruitment Suite" across all pages
