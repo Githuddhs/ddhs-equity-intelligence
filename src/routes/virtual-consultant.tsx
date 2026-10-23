@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { submitQuoteRequest } from "@/lib/quote.functions";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/virtual-consultant")({
   head: () => ({
@@ -88,6 +89,7 @@ function ConsultantPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
+      <BrandMark className="mb-6" />
       <Link to="/pricing" search={{ paid: false, cancelled: false }} className="text-sm font-semibold text-teal">← Back to pricing</Link>
       <h1 className="section-title mt-3 text-primary">Virtual EE Consultant</h1>
       <p className="mt-2 max-w-3xl text-muted-foreground">

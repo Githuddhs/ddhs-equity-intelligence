@@ -21,6 +21,7 @@ import { EapProfile } from "@/components/eap-profile";
 import { eapGap, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 import { JobGradeProgress } from "@/components/job-grade-progress";
 import { EapLevelExplanation } from "@/components/eap-level-explanation";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/eea12")({
   head: () => ({
@@ -189,9 +190,7 @@ function Eea12Page() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold text-primary">
-            DDHS <span className="text-teal">Equity Intelligence</span>
-          </Link>
+          <BrandMark />
           <div className="flex items-center gap-4">
             <AuthCta />
             <Link to="/" hash="contact" className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">

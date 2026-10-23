@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { AuthCta } from "@/components/auth-cta";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/client-view")({
   head: () => ({
@@ -30,7 +31,7 @@ function ClientView() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold"><span className="text-primary">DDHS</span> <span className="text-teal">Equity Intelligence</span></Link>
+          <BrandMark />
           <AuthCta />
         </div>
       </header>

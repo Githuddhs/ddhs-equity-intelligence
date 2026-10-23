@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
+import { BrandMark } from "@/components/brand-mark";
 
 const safeNext = (n: unknown) => (typeof n === "string" && n.startsWith("/") && !n.startsWith("//") ? n : "/portal");
 
@@ -86,7 +87,7 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
-        <Link to="/" className="font-display text-lg font-bold text-primary">DDHS <span className="text-teal">Equity Intelligence</span></Link>
+        <BrandMark />
         <h1 className="page-title mt-4 text-primary">{mode === "in" ? "Sign in" : mode === "up" ? "Create your account" : "Reset password"}</h1>
         <p className="page-lead mt-1 text-muted-foreground">
           {mode === "reset"

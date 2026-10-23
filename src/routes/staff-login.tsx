@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/staff-login")({
   head: () => ({
@@ -43,7 +44,7 @@ function StaffLogin() {
     <main className="flex min-h-screen items-center justify-center bg-primary px-6">
       <form onSubmit={submit} className="w-full max-w-sm space-y-4 rounded-2xl bg-card p-8 shadow-xl">
         <p className="label-title text-teal">Staff portal</p>
-        <h1 className="page-title text-primary">DDHS <span className="text-teal">Equity Intelligence</span></h1>
+        <h1 className="page-title text-primary"><BrandMark to={null} /></h1>
         <p className="text-sm text-muted-foreground">Manage clients, invites and deadlines.</p>
         <input type="email" required placeholder="Staff email" value={email} onChange={(e) => setEmail(e.target.value)}
           className="w-full rounded-lg border border-border bg-background px-3 py-2" />

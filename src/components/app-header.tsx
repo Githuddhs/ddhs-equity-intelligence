@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageExport } from "@/components/page-export";
 import { InstallApp } from "@/components/install-app";
+import { BrandMark } from "@/components/brand-mark";
 
 const STAFF_PATHS = ["/staff", "/clients", "/review"];
 
@@ -42,10 +43,9 @@ export function AppHeader() {
     <PageExport />
     <header className={`border-b border-border print:hidden ${isAdmin ? "bg-secondary" : ""}`}>
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4">
-        <Link to={isAdmin ? "/staff" : "/"} className="font-display text-lg font-bold text-primary">
-          DDHS <span className="text-teal">Equity Intelligence</span>
+        <BrandMark to={isAdmin ? "/staff" : "/"}>
           {isAdmin && <span className="ml-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">Staff portal</span>}
-        </Link>
+        </BrandMark>
         <nav className="flex flex-wrap items-center gap-1">
           {isAdmin ? (
             <>

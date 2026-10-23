@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { AuthCta } from "@/components/auth-cta";
+import { BrandMark } from "@/components/brand-mark";
 
 export const SERVICES = [
   { to: "/services/saas-subscriptions", label: "SaaS subscriptions" },
@@ -49,9 +50,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <Link to="/" className="min-w-0 font-display text-base leading-tight font-bold text-primary sm:text-lg">
-            DDHS <span className="text-teal">Equity Intelligence</span>
-          </Link>
+          <BrandMark className="min-w-0" />
           <div className="flex shrink-0 items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
             <AuthCta />
@@ -157,9 +156,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
 
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
-          <Link to="/" className="font-display font-bold text-primary">
-            DDHS <span className="text-teal">Equity Intelligence</span>
-          </Link>
+          <BrandMark />
           <p className="text-sm text-muted-foreground">
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>

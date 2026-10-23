@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import {
+import { BrandMark } from "@/components/brand-mark";
   BARRIER_CHECKLIST, BARRIER_SOURCES, LIKERT, LIKERT_SECTIONS, OPEN_QUESTIONS, PARTICIPANT_FIELDS,
   PRIORITY_LIMIT, PRIORITY_OPTIONS, QUESTIONNAIRE_VERSION, rolesFor,
 } from "@/lib/barrier";
@@ -64,7 +65,7 @@ function SurveyPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border bg-card px-6 py-4">
-        <p className="font-display text-lg font-bold"><span className="text-navy">DDHS</span> <span className="text-teal">Equity Intelligence</span></p>
+        <BrandMark to={null} />
       </header>
       <main className="mx-auto max-w-4xl px-6 py-8">
         {info === undefined && <p className="text-muted-foreground">Loading…</p>}

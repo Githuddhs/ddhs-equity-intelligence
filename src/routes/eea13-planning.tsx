@@ -12,6 +12,7 @@ import {
 
 import { TEXT_SECTIONS, PLAN_LEVELS } from "@/lib/ee-plan";
 import { AuthCta } from "@/components/auth-cta";
+import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/eea13-planning")({
   head: () => ({
@@ -95,9 +96,7 @@ function Eea13PlanningPage() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="font-display text-lg font-bold text-primary">
-            DDHS <span className="text-teal">Equity Intelligence</span>
-          </Link>
+          <BrandMark />
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
                         <AuthCta />
@@ -260,9 +259,7 @@ function Eea13PlanningPage() {
 
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
-          <Link to="/" className="font-display font-bold text-primary">
-            DDHS <span className="text-teal">Equity Intelligence</span>
-          </Link>
+          <BrandMark />
           <p className="text-sm text-muted-foreground">
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>
