@@ -105,7 +105,7 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Executive Intelligence", href: "/executive-intelligence" },
   { name: "Leadership Dashboard", href: "/leadership-dashboard" },
   { name: "Leadership Report", href: "/leadership-report" },
-  { name: "Recruitment Intelligence & Governance Suite", href: "/services/recruitment-suite" },
+  { name: "Recruitment Suite", href: "/services/recruitment-suite" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
@@ -341,7 +341,7 @@ function Index() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-teal">Platform Module</p>
                 <h3 className="mt-3 font-display text-xl font-extrabold leading-tight text-balance text-navy-foreground sm:text-2xl">
-                  DDHS Recruitment Intelligence &amp; Governance Suite™
+                  Recruitment Suite
                 </h3>
                 <p className="mt-2 font-display text-base font-semibold text-teal">
                   Recruit it. Govern it. Transform it.
@@ -662,7 +662,7 @@ function Index() {
                   { l: "Executive Reporting", h: "/executive-intelligence" },
                   { l: "Leadership Dashboard", h: "/leadership-dashboard" },
                   { l: "Leadership Report", h: "/leadership-report" },
-                  { l: "Recruitment Intelligence & Governance Suite", h: "/services/recruitment-suite" },
+                  { l: "Recruitment Suite", h: "/services/recruitment-suite" },
                   { l: "Client view", h: "/client-view" },
                   { l: "Download the app", h: "#platform" },
                 ].map((l) => (

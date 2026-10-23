@@ -1,4 +1,4 @@
-// Recruitment Intelligence & Governance Suite — steps 1–3 (plan, approve/advertise, track candidates).
+// Recruitment Suite — steps 1–3 (plan, approve/advertise, track candidates).
 // Pure helpers so the vacancy page, public apply page and tests share one set of rules.
 import { GROUPS, type Counts, type Key } from "@/lib/workforce";
 import type { Targets } from "@/lib/sectors";

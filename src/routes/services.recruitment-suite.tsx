@@ -38,13 +38,13 @@ function Journey() {
 }
 
 export const Route = createFileRoute("/services/recruitment-suite")({
-  head: () => serviceHead("/services/recruitment-suite", "Recruitment Intelligence & Governance Suite™", "An integrated transformation applicant tracking system for South African employers, combining ATS, Employment Equity intelligence, selection governance, analytics and audit-ready evidence."),
+  head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "An integrated transformation applicant tracking system for South African employers, combining ATS, Employment Equity intelligence, selection governance, analytics and audit-ready evidence."),
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-suite",
       platformModule: true,
       eyebrow: "An Integrated Transformation Applicant Tracking System",
-      title: "DDHS Recruitment Intelligence & Governance Suite™",
+      title: "Recruitment Suite",
       tagline: "Recruit it. Govern it. Transform it.",
       lead: "An integrated Applicant Tracking System designed for South African employers. It manages the complete recruitment lifecycle while connecting every vacancy and appointment to Employment Equity priorities, governance requirements, workforce targets and measurable transformation outcomes.",
       forWho: [
