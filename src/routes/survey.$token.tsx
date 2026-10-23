@@ -4,8 +4,8 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
-import {
 import { BrandMark } from "@/components/brand-mark";
+import {
   BARRIER_CHECKLIST, BARRIER_SOURCES, LIKERT, LIKERT_SECTIONS, OPEN_QUESTIONS, PARTICIPANT_FIELDS,
   PRIORITY_LIMIT, PRIORITY_OPTIONS, QUESTIONNAIRE_VERSION, rolesFor,
 } from "@/lib/barrier";
