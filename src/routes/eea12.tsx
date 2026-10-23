@@ -195,7 +195,7 @@ function Eea12Page() {
           <div className="flex items-center gap-4">
             <AuthCta />
             <Link to="/" hash="contact" className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-              Book a DDHS demonstration
+              Book a Demonstration
             </Link>
           </div>
         </div>

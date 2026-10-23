@@ -27,7 +27,7 @@ const GROUPS: Group[] = [
     title: "Public site — what people see before signing in",
     blurb: "Open each page and read the wording. These are the pages a prospect or stakeholder reaches from the top menu or an invitation link.",
     items: [
-      { id: "home", to: "/", label: "Home", note: "Intro at the top, menu under the logo, 'Book a DDHS demonstration' buttons, Site Tour and Virtual Consultant in the menu." },
+      { id: "home", to: "/", label: "Home", note: "Intro at the top, menu under the logo, 'Book a Demonstration' buttons, Site Tour and Virtual Consultant in the menu." },
       { id: "wf", to: "/workforce-foundation", label: "Workforce Foundation", note: "Capability wording, upload types accepted, five-level org menus." },
       { id: "eea12", to: "/eea12", label: "EEA12 Workforce Analysis", note: "Menus, sector targets, crosswalk table, summary report download." },
       { id: "eea13", to: "/eea13-planning", label: "EEA13 Planning", note: "Auto-set targets, yearly timeline alignment, gap analysis, PDF report." },
@@ -36,7 +36,7 @@ const GROUPS: Group[] = [
       { id: "exec", to: "/executive-intelligence", label: "Executive intelligence", note: "Leadership dashboard and report wording." },
       { id: "pricing", to: "/pricing", label: "Pricing", note: "Four packages, price ranges, implementation list, virtual consultant section, quote form." },
       { id: "consultant", to: "/virtual-consultant", label: "Virtual EE Consultant", note: "Profile wording, service areas, rates, booking form." },
-      { id: "tour", to: "/tour", label: "Site Tour", note: "Nine steps, wording, 'Learn more' links, final 'Book a DDHS demonstration'." },
+      { id: "tour", to: "/tour", label: "Site Tour", note: "Nine steps, wording, 'Learn more' links, final 'Book a Demonstration'." },
       { id: "ai", to: "/responsible-ai", label: "Responsible AI", note: "How the platform uses AI — read for accuracy." },
     ],
   },

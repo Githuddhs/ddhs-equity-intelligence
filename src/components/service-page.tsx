@@ -69,7 +69,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
             <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-xs text-primary-foreground sm:px-4 sm:text-sm">
-              Book a DDHS demonstration
+              Book a Demonstration
             </Link>
           </div>
         </div>
@@ -104,7 +104,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
             {c.tagline && <p className="mt-3 font-display text-lg font-semibold text-teal">{c.tagline}</p>}
             <p className="page-lead mt-4 text-muted-foreground">{c.lead}</p>
             <Link to="/" hash="contact" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-              Book a DDHS demonstration <ArrowRight className="h-4 w-4" />
+              Book a Demonstration <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -161,7 +161,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
           <p className="mx-auto mt-4 max-w-2xl page-lead text-navy-foreground/80">{c.ctaBody}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link to="/" hash="contact" className="inline-flex items-center gap-2 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-teal-foreground hover:bg-teal/90">
-              Book a DDHS demonstration <ArrowRight className="h-4 w-4" />
+              Book a Demonstration <ArrowRight className="h-4 w-4" />
             </Link>
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="inline-flex items-center rounded-lg border border-navy-foreground/30 px-6 py-3 text-sm font-semibold text-navy-foreground hover:bg-navy-foreground/10">
               See pricing
