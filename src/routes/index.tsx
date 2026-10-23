@@ -199,19 +199,7 @@ function Index() {
             </a>
           </div>
         </div>
-        <div className="mx-auto hidden max-w-7xl px-6 pb-2 md:block">
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold text-teal">
-            <a href="#why-ddhs" className="whitespace-nowrap transition-colors hover:text-primary">Why DDHS</a>
-            <a href="#problems" className="whitespace-nowrap transition-colors hover:text-primary">Problems We Solve</a>
-            <a href="#platform" className="whitespace-nowrap transition-colors hover:text-primary">Platform</a>
-            <a href="#outcomes" className="whitespace-nowrap transition-colors hover:text-primary">Client Outcomes</a>
-            <a href="#bbbee" className="whitespace-nowrap transition-colors hover:text-primary">B-BBEE</a>
-            <a href="#contact" className="whitespace-nowrap transition-colors hover:text-primary">Book a Demonstration</a>
-            <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site Tour</a>
-            <a href="/virtual-consultant" className="whitespace-nowrap transition-colors hover:text-primary">Virtual Consultant</a>
-            <a href="/services/recruitment-suite" className="whitespace-nowrap transition-colors hover:text-primary">Recruitment Suite</a>
-          </nav>
-        </div>
+        <SiteNav />
       </header>
 
 
