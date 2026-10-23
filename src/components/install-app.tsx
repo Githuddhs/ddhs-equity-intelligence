@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Download, Smartphone } from "lucide-react";
 import { track } from "@/lib/track";
 
@@ -29,6 +29,24 @@ export function InstallApp({ variant = "panel" }: { variant?: "panel" | "compact
   const [prompt, setPrompt] = useState<PromptEvent | null>(null);
   const [state, setState] = useState<"checking" | "ready" | "manual" | "installed">("checking");
   const [open, setOpen] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+
+  // Close the instructions menu when the user clicks away or presses Escape.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (event: MouseEvent) => {
+      if (wrap.current && !wrap.current.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (isStandalone()) {
@@ -69,7 +87,7 @@ export function InstallApp({ variant = "panel" }: { variant?: "panel" | "compact
 
   if (variant === "compact") {
     return (
-      <div className="relative print:hidden">
+      <div ref={wrap} className="relative print:hidden">
         <button
           onClick={() => (prompt ? void install() : setOpen((v) => !v))}
           className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-accent"
