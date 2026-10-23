@@ -69,3 +69,4 @@
 - [x] Test: create vacancy, add candidate, Email candidate + handover
 - [x] Rename "DDHS Recruitment Intelligence & Governance Suite™" to "Recruitment Suite" across all pages
 - [x] Mobile menu: include "Recruitment Suite" after "Virtual Consultant", pointing to /services/recruitment-suite
+- [x] Rename "Executive Recruitment Intelligence Dashboard" to "Recruitment Suite Dashboard" (page, meta, Suite step 9, all four downloads)
