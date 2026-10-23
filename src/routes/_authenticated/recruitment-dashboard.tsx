@@ -9,9 +9,9 @@ import { dashboardReport, recruitmentDashboard, type C, type V } from "@/lib/rec
 export const Route = createFileRoute("/_authenticated/recruitment-dashboard")({
   head: () => ({
     meta: [
-      { title: "Recruitment intelligence dashboard — DDHS Equity Intelligence" },
+      { title: "Recruitment Suite Dashboard — DDHS Equity Intelligence" },
       { name: "description", content: "Vacancy activity, time to fill, pipeline representation, governance compliance and recruitment risks." },
-      { property: "og:title", content: "Recruitment intelligence dashboard — DDHS" },
+      { property: "og:title", content: "Recruitment Suite Dashboard — DDHS" },
       { property: "og:description", content: "Executive view of recruitment activity, EE contribution, governance and risks." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -39,7 +39,7 @@ function DashboardPage() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">Step 9 · Report to leadership</p>
-            <h1 className="section-title mt-1 text-primary">Recruitment intelligence dashboard</h1>
+            <h1 className="section-title mt-1 text-primary">Recruitment Suite Dashboard</h1>
           </div>
           <div className="flex gap-2">
             <Link to="/recruitment" className="rounded-lg border border-border px-4 py-2 text-sm font-semibold">Vacancies</Link>
