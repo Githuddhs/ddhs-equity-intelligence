@@ -25,6 +25,7 @@ import {
 import { ContactForm } from "@/components/contact-form";
 import { DashboardMock } from "@/components/dashboard-mock";
 import { BrandMark } from "@/components/brand-mark";
+import { SiteNav } from "@/components/site-nav";
 
 export const Route = createFileRoute("/")({
   head: () => ({
