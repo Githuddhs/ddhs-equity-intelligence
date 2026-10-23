@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageExport } from "@/components/page-export";
+import { InstallApp } from "@/components/install-app";
 
 const STAFF_PATHS = ["/staff", "/clients", "/review"];
 
@@ -68,6 +69,7 @@ export function AppHeader() {
               <Link to="/account" className={link} activeProps={active}>My account</Link>
             </>
           )}
+          <InstallApp variant="compact" />
           <button onClick={signOut} className="ml-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold">Sign out</button>
         </nav>
       </div>
