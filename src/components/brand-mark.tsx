@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 type Size = "sm" | "md" | "lg";
 
@@ -9,8 +10,8 @@ const SIZES: Record<Size, { icon: string; text: string }> = {
 };
 
 /**
- * The standard DDHS logo: app icon beside the navy "DDHS" + teal
- * "Equity Intelligence" wordmark. Used on every page header and footer.
+ * The standard DDHS logo: the app icon beside the navy "DDHS" + teal
+ * "Equity Intelligence" wordmark. Used in every page header and footer.
  * Pass `to={null}` where the mark must not be a link.
  */
 export function BrandMark({
@@ -20,9 +21,9 @@ export function BrandMark({
   children,
 }: {
   size?: Size;
-  to?: string | null;
+  to?: "/" | "/staff" | null;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) {
   const s = SIZES[size];
   const mark = (
