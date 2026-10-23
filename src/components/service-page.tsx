@@ -13,10 +13,6 @@ export const SERVICES = [
 export type ServiceContent = {
   current: (typeof SERVICES)[number]["to"];
   tagline?: string;
-  /** Show "From your document" / "Needs approval" badges so the owner can review copy. */
-  reviewMarks?: boolean;
-  /** Source of the opening/hero section when reviewMarks is on ("doc" default). */
-  heroSource?: "doc" | "draft";
   /** Render a "Platform › …" breadcrumb so the page reads as part of the platform. */
   platformModule?: boolean;
   extra?: import("react").ReactNode;
@@ -48,16 +44,7 @@ export function serviceHead(path: string, title: string, description: string) {
   };
 }
 
-export function SourceBadge({ kind }: { kind: "doc" | "draft" }) {
-  return kind === "doc" ? (
-    <span className="inline-block rounded-full normal-case tracking-normal ml-2 border border-teal/40 bg-teal/10 px-2 py-0.5 align-middle text-xs font-semibold text-teal">From your document</span>
-  ) : (
-    <span className="inline-block rounded-full normal-case tracking-normal ml-2 border border-dashed border-destructive/60 bg-destructive/10 px-2 py-0.5 align-middle text-xs font-semibold text-destructive">Draft · needs your approval</span>
-  );
-}
-
 export function ServicePage({ c }: { c: ServiceContent }) {
-  const mark = (k: "doc" | "draft") => (c.reviewMarks ? <SourceBadge kind={k} /> : null);
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
@@ -98,7 +85,6 @@ export function ServicePage({ c }: { c: ServiceContent }) {
       <main className="mx-auto max-w-7xl px-6 py-10">
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div>
-            {c.reviewMarks && <div className="mb-3"><SourceBadge kind={c.heroSource ?? "doc"} /></div>}
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">{c.eyebrow}</p>
             <h1 className="display-title mt-2 text-balance text-primary">{c.title}</h1>
             {c.tagline && <p className="mt-3 font-display text-lg font-semibold text-teal">{c.tagline}</p>}
@@ -108,7 +94,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
             </Link>
           </div>
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
-            <p className="label-title text-teal">Who it is for{mark("draft")}</p>
+            <p className="label-title text-teal">Who it is for</p>
             <ul className="mt-4 space-y-3 text-sm">
               {c.forWho.map((w) => (
                 <li key={w} className="flex items-start gap-3 text-muted-foreground">
@@ -120,7 +106,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </div>
 
         <section className="mt-16">
-          <h2 className="section-title text-primary">What is included{mark("draft")}</h2>
+          <h2 className="section-title text-primary">What is included</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {c.offerings.map((o) => (
               <div key={o.title} className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -134,7 +120,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         {c.extra}
 
         <section className="mt-16 rounded-xl border border-border bg-secondary/50 p-8">
-          <h2 className="section-title text-primary">How it works{mark("draft")}</h2>
+          <h2 className="section-title text-primary">How it works</h2>
           <ol className="mt-6 grid gap-6 lg:grid-cols-4">
             {c.steps.map((s, i) => (
               <li key={s.title}>
@@ -147,7 +133,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </section>
 
         <section className="mt-16">
-          <h2 className="section-title text-primary">What you can expect{mark("draft")}</h2>
+          <h2 className="section-title text-primary">What you can expect</h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {c.outcomes.map((o) => (
               <li key={o} className="rounded-md bg-secondary/60 px-4 py-3 text-sm font-medium text-primary">{o}</li>
@@ -156,7 +142,6 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </section>
 
         <section className="mt-16 rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-10 text-center">
-          {c.reviewMarks && <div className="mb-3"><span className="inline-block rounded-full border border-dashed border-navy-foreground/60 px-2 py-0.5 text-xs font-semibold text-navy-foreground">Draft · needs your approval</span></div>}
           <h2 className="display-title text-balance text-navy-foreground">{c.ctaTitle}</h2>
           <p className="mx-auto mt-4 max-w-2xl page-lead text-navy-foreground/80">{c.ctaBody}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
