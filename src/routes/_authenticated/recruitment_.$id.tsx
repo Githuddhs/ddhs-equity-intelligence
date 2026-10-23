@@ -264,6 +264,8 @@ function CandidateStep({ v, cands, reload }: { v: Vacancy; cands: Candidate[]; r
       </div>
       <p className="mt-2 text-xs text-muted-foreground">Current stage labels: {Object.values(STAGE_LABEL).join(", ")}. Every stage change is kept in the candidate's history.</p>
 
+      {cands.filter((c) => c.stage === "appointed").map((c) => <Handover key={c.id} c={c} save={(h: HandoverData) => update(c, { handover: h } as unknown as Partial<Candidate>)} />)}
+
       <form onSubmit={add} className="mt-6 rounded-xl border border-border bg-card p-5">
         <p className="font-semibold text-primary">Capture a candidate</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -291,4 +293,54 @@ function toLocalInput(iso: string | null | undefined): string {
   if (Number.isNaN(d.getTime())) return "";
   const p = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+const HANDOVER_ITEMS = [
+  "Signed offer and contract received",
+  "EE1 self-declaration completed",
+  "Start date confirmed with the line manager",
+  "Payroll and HR records set up",
+  "Equipment and system access arranged",
+  "Induction and orientation scheduled",
+  "Workforce Data movement recorded",
+] as const;
+type HandoverData = { start_date?: string; manager?: string; notes?: string; done?: string[]; completed_at?: string | null };
+
+function Handover({ c, save }: { c: Candidate; save: (h: HandoverData) => Promise<void> | void }) {
+  const initial = ((c as unknown as { handover?: HandoverData }).handover ?? {}) as HandoverData;
+  const [h, setH] = useState<HandoverData>({ done: [], ...initial });
+  const done = h.done ?? [];
+  const all = HANDOVER_ITEMS.every((i) => done.includes(i));
+  const box = "mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm";
+  const commit = (next: HandoverData) => { setH(next); void save(next); };
+  return (
+    <div className="mt-6 rounded-xl border border-teal/40 bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="font-semibold text-primary">Onboarding handover · {c.full_name}</p>
+        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${h.completed_at ? "bg-teal/15 text-teal" : "bg-secondary text-muted-foreground"}`}>
+          {h.completed_at ? `Handed over ${new Date(h.completed_at).toLocaleDateString("en-ZA")}` : `${done.length} of ${HANDOVER_ITEMS.length} done`}
+        </span>
+      </div>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        <label className="text-sm font-medium">Start date<input type="date" className={box} value={h.start_date ?? ""} onChange={(e) => commit({ ...h, start_date: e.target.value })} /></label>
+        <label className="text-sm font-medium">Line manager<input className={box} maxLength={150} value={h.manager ?? ""} onChange={(e) => setH({ ...h, manager: e.target.value })} onBlur={() => void save(h)} /></label>
+      </div>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        {HANDOVER_ITEMS.map((i) => (
+          <label key={i} className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={done.includes(i)} disabled={!!h.completed_at} onChange={(e) => commit({ ...h, done: e.target.checked ? [...done, i] : done.filter((x) => x !== i) })} />{i}
+          </label>
+        ))}
+      </div>
+      <label className="mt-3 block text-sm font-medium">Handover notes<textarea rows={2} maxLength={2000} className={box} value={h.notes ?? ""} onChange={(e) => setH({ ...h, notes: e.target.value })} onBlur={() => void save(h)} /></label>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {!h.completed_at ? (
+          <button type="button" disabled={!all || !h.start_date} onClick={() => commit({ ...h, completed_at: new Date().toISOString() })} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Complete handover</button>
+        ) : (
+          <button type="button" onClick={() => commit({ ...h, completed_at: null })} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary">Reopen handover</button>
+        )}
+        {!h.completed_at && (!all || !h.start_date) && <p className="self-center text-xs text-muted-foreground">Tick every item and set a start date to complete the handover.</p>}
+      </div>
+    </div>
+  );
 }

@@ -1,0 +1,2 @@
+ALTER TABLE public.recruitment_candidates ADD COLUMN IF NOT EXISTS handover jsonb NOT NULL DEFAULT '{}'::jsonb;
+COMMENT ON COLUMN public.recruitment_candidates.handover IS 'Onboarding handover for appointed candidates: start date, line manager, checklist, completion.';
