@@ -264,6 +264,8 @@ function CandidateStep({ v, cands, reload }: { v: Vacancy; cands: Candidate[]; r
       </div>
       <p className="mt-2 text-xs text-muted-foreground">Current stage labels: {Object.values(STAGE_LABEL).join(", ")}. Every stage change is kept in the candidate's history.</p>
 
+      {cands.filter((c) => c.stage === "appointed").map((c) => <Handover key={c.id} c={c} save={(h) => update(c, { handover: h } as Partial<Candidate>)} />)}
+
       <form onSubmit={add} className="mt-6 rounded-xl border border-border bg-card p-5">
         <p className="font-semibold text-primary">Capture a candidate</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
