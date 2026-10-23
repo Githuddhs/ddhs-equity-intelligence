@@ -579,6 +579,7 @@ export type Database = {
           foreign_national: boolean
           full_name: string
           gender: string
+          handover: Json
           history: Json
           id: string
           interview_at: string | null
@@ -602,6 +603,7 @@ export type Database = {
           foreign_national?: boolean
           full_name: string
           gender?: string
+          handover?: Json
           history?: Json
           id?: string
           interview_at?: string | null
@@ -625,6 +627,7 @@ export type Database = {
           foreign_national?: boolean
           full_name?: string
           gender?: string
+          handover?: Json
           history?: Json
           id?: string
           interview_at?: string | null
