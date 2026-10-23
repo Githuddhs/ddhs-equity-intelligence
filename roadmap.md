@@ -68,4 +68,4 @@
 - [x] Phase 3: Risk flags (step 7), evidence pack (step 8), executive recruitment dashboard (step 9)
 - [x] Test: create vacancy, add candidate, Email candidate + handover
 - [x] Rename "DDHS Recruitment Intelligence & Governance Suite™" to "Recruitment Suite" across all pages
-- [ ] Mobile menu: include "Recruitment Suite" after "Virtual Consultant", pointing to /services/recruitment-suite
+- [x] Mobile menu: include "Recruitment Suite" after "Virtual Consultant", pointing to /services/recruitment-suite
