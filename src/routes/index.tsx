@@ -218,7 +218,7 @@ function Index() {
             <a href="#contact" className="whitespace-nowrap transition-colors hover:text-primary">Book a Demonstration</a>
             <a href="/tour" className="whitespace-nowrap transition-colors hover:text-primary">Site Tour</a>
             <a href="/virtual-consultant" className="whitespace-nowrap transition-colors hover:text-primary">Virtual Consultant</a>
-            <a href="/services/recruitment-suite" className="whitespace-nowrap transition-colors hover:text-primary">Recruitment Intelligence Suite</a>
+            <a href="/services/recruitment-suite" className="whitespace-nowrap transition-colors hover:text-primary">Recruitment Suite</a>
           </nav>
         </div>
       </header>
