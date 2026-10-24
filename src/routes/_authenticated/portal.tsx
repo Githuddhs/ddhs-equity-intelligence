@@ -74,6 +74,12 @@ function Portal() {
           <span className="font-semibold text-teal">Open →</span>
         </Link>
 
+        <Link to="/plan-lifecycle" className="mt-4 flex items-center justify-between rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
+          <span><span className="card-title block text-primary">EE plan lifecycle</span><span className="text-sm text-muted-foreground">13 steps from employer profile to signed EEA13 plan — see what is done and what is next.</span></span>
+          <span className="font-semibold text-teal">Open →</span>
+        </Link>
+
+
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           <Stat label="EEA12 analyses" value={data?.analyses.length} />
           <Stat label="EE plans" value={data?.plans.length} />
