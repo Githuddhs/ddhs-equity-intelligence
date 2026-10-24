@@ -127,3 +127,20 @@ export function recruitmentFunnel(cands: { stage: string; history: unknown; race
     }),
   }));
 }
+
+export type AppointmentPlan = { gapPts: number | null; required: number | null; perYear: number[]; shares: number[] };
+/**
+ * Designated appointments needed to move the current profile to the fixed five-year target (sector target or provincial EAP),
+ * assuming headcount stays constant and each designated appointment replaces a non-designated incumbent. Spread evenly, front-loaded,
+ * with yearly shares that never exceed the target and reach it by the last year.
+ */
+export function appointmentPlan(base: Baseline | null | undefined, target: number | null, years: number): AppointmentPlan {
+  const n = Math.max(1, Math.min(5, years));
+  if (!base || !base.headcount || base.share === null || target === null) return { gapPts: null, required: null, perYear: [], shares: [] };
+  const gapPts = r1(Math.max(0, target - base.share));
+  const required = Math.max(0, Math.ceil((target / 100) * base.headcount - base.designated - 1e-9));
+  const perYear = Array.from({ length: n }, (_, i) => Math.floor(required / n) + (i < required % n ? 1 : 0));
+  let cum = 0;
+  const shares = perYear.map((a, i) => { cum += a; return i === n - 1 ? Math.max(base.share!, target) === base.share! ? base.share! : target : Math.min(target, r1(((base.designated + cum) / base.headcount) * 100)); });
+  return { gapPts, required, perYear, shares };
+}

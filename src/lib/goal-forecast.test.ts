@@ -32,3 +32,22 @@ describe("goal forecast", () => {
     expect(r.missing.join()).toMatch(/above the provincial EAP maximum/);
   });
 });
+
+import { appointmentPlan } from "./goal-forecast";
+describe("appointmentPlan", () => {
+  it("needs designated appointments equal to the gap between five-year target and current profile", () => {
+    const p = appointmentPlan({ headcount: 20, designated: 10, share: 50 }, 85.8, 5);
+    expect(p.gapPts).toBe(35.8);
+    expect(p.required).toBe(8); // ceil(17.16) - 10
+    expect(p.perYear).toEqual([2, 2, 2, 1, 1]);
+    expect(p.shares[4]).toBe(85.8);
+    expect(p.shares.every((s) => s <= 85.8)).toBe(true);
+  });
+  it("needs none when the profile already meets the target", () => {
+    expect(appointmentPlan({ headcount: 10, designated: 10, share: 100 }, 92.8, 5).required).toBe(0);
+  });
+  it("is unavailable without a baseline or target", () => {
+    expect(appointmentPlan(null, 69.9, 5).required).toBeNull();
+    expect(appointmentPlan({ headcount: 4, designated: 2, share: 50 }, null, 5).required).toBeNull();
+  });
+});
