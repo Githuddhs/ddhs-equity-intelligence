@@ -6,8 +6,10 @@ import {
   ClipboardCheck,
   Database,
   FileCheck2,
+  Globe,
   Layers,
   LineChart,
+  Lock,
   type LucideIcon,
   Target,
 } from "lucide-react";
@@ -24,6 +26,10 @@ export type Capability = {
   /** Short explanation shown when a lifecycle icon is clicked. */
   summary: string;
   points: string[];
+  /** Access note based on how the linked page actually works. */
+  access: string;
+  /** "open" when the tool itself runs publicly, "portal" when the working tool needs a client login. */
+  accessMode: "open" | "portal";
 };
 
 export const CAPABILITIES: Record<string, Capability> = {
