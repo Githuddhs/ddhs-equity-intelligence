@@ -199,18 +199,20 @@ function Index() {
 
 
       {/* Section 1: Hero */}
-      <section className="mx-auto max-w-7xl px-6 pt-8 pb-10">
+      <section className="mx-auto max-w-7xl px-6 pt-5 pb-10 sm:pt-8">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
             Take Control of Employment Equity Implementation
           </h1>
           <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
             Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
-            and executive insight.{" "}
-            <span className="font-semibold text-primary">DDHS</span>{" "}
-            <span className="font-semibold text-teal">Equity Intelligence</span> helps South
-            African employers manage Employment Equity analysis, planning, monitoring, governance
-            and reporting from a single platform.
+            and executive insight.
+            <span className="hidden sm:inline">{" "}
+              <span className="font-semibold text-primary">DDHS</span>{" "}
+              <span className="font-semibold text-teal">Equity Intelligence</span> helps South
+              African employers manage Employment Equity analysis, planning, monitoring, governance
+              and reporting from a single platform.
+            </span>
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a
