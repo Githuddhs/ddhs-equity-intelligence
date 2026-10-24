@@ -16,6 +16,7 @@ import { autofillPlan, questionnaireSections } from "@/lib/plan-autofill";
 import { assemblePlan, EDITED, missingInputs, planDateProblem, sectionSource } from "@/lib/plan-assembly";
 import { ORG_LABELS } from "@/lib/foundation";
 import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
+import { BarrierRegister } from "@/components/barrier-register";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
 
@@ -258,6 +259,8 @@ function PlanBuilder() {
           </div>
           <Src k="goals" />
         </section>
+
+        <BarrierRegister list={content.register ?? []} onChange={(register) => upContent({ register })} onCopy={(t) => { if ((content.barriers || content.measures) && !confirm("Replace the current barriers and measures text with the register?")) return; upContent({ ...t, sources: { ...(content.sources ?? {}), barriers: "Barrier register", measures: "Barrier register" } }); toast.success("Barriers and measures sections updated. Save the plan to keep them."); }} />
 
         {TEXT_SECTIONS.map((s) => (
           <section key={s.key} className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
