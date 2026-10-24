@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { sendTestReminder } from "@/lib/reminders.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
+import { GoalVariancePanel } from "@/components/goal-variance-panel";
 import { buildDeadlines, daysUntil, DG_ITEMS, type Deadline, type DgAnswer } from "@/lib/ee-plan";
 import { exportComplianceExcel } from "@/lib/capability-reports";
 
@@ -111,6 +112,7 @@ function Compliance() {
             );
           })}
         </div>
+        <GoalVariancePanel />
         <p className="mt-6 text-xs text-muted-foreground">Dates follow the standard EE reporting cycle (31 August reporting date, 15 January online submission). Confirm against current Department of Employment and Labour notices. "Add reminder" saves a calendar entry with alerts 14 and 3 days before.</p>
       </main>
     </div>
