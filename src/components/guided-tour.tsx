@@ -7,7 +7,7 @@ import { track } from "@/lib/track";
 
 const shareOrigin = () => (typeof window === "undefined" || /localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
 
-export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string };
+export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string; hash?: string };
 
 /** Shared step-by-step tour layout used by the platform tour and the Recruitment Suite tour. */
 export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label = "site tour", exitTo = "/" }: { steps: TourStep[]; path: string; invitedFor?: string | undefined; invitedFrom?: string | undefined; label?: string; exitTo?: string }) {
@@ -59,7 +59,7 @@ export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label 
           <ul className="mt-5 space-y-2">
             {s.points.map((p) => <li key={p} className="flex gap-2 text-sm"><span className="text-teal">✓</span>{p}</li>)}
           </ul>
-          <Link to={s.to} className="mt-6 inline-block text-sm font-semibold text-teal underline">{s.cta}</Link>
+          <Link to={s.to} hash={s.hash} className="mt-6 inline-block text-sm font-semibold text-teal underline">{s.cta}</Link>
         </section>
         <div className="mt-6 flex items-center justify-between">
           <button onClick={() => setI(i - 1)} disabled={i === 0} className="inline-flex items-center gap-2 rounded-lg border border-input px-4 py-2 text-sm font-semibold text-primary disabled:opacity-40">
