@@ -27,3 +27,4 @@
 - Recruitment appointments are gated by a database trigger requiring an approved, named human review for that candidate on the vacancy, so the UI cannot be bypassed to appoint without review.
 - Recruitment risk flags, evidence packs and the leadership dashboard are derived on read from vacancy and candidate rows (no stored copies), and high-severity flags only add an acknowledgement to the human review, never an automatic decision.
 - Public page metadata uses `pageHead` in src/lib/seo.ts (canonical, share card, breadcrumbs) and every route declares `staticData.sitemap`; the router-derived /sitemap.xml follows these, so private sections stay excluded via "exclude-subtree" plus noindex.
+- The EE plan lifecycle chain (src/lib/plan-chain.ts) derives each step's status on read from existing owner data, with no stored copy, so the tracker always matches the source records.
