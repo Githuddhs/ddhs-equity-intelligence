@@ -1,3 +1,5 @@
+ALTER TABLE public.workforce_snapshots DROP CONSTRAINT IF EXISTS workforce_snapshots_source_check;
+ALTER TABLE public.workforce_snapshots ADD CONSTRAINT workforce_snapshots_source_check CHECK (source = ANY (ARRAY['manual'::text, 'upload'::text, 'employee_profile'::text]));
 CREATE OR REPLACE FUNCTION public.save_workforce_foundation(p_record jsonb, p_snapshot jsonb) RETURNS uuid LANGUAGE plpgsql SECURITY INVOKER SET search_path = public AS $$
 DECLARE v_id uuid; v_snapshot uuid; v_old_snapshot uuid;
 BEGIN

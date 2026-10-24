@@ -1,2 +1,2 @@
-ALTER TABLE public.workforce_snapshots DROP CONSTRAINT workforce_snapshots_source_check;
+ALTER TABLE public.workforce_snapshots DROP CONSTRAINT IF EXISTS workforce_snapshots_source_check;
 ALTER TABLE public.workforce_snapshots ADD CONSTRAINT workforce_snapshots_source_check CHECK (source = ANY (ARRAY['manual'::text, 'upload'::text, 'employee_profile'::text]));
