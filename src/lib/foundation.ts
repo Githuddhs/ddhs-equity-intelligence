@@ -115,7 +115,11 @@ export function validateFoundation(f: Foundation) {
 
 export function foundationSnapshot(f: Foundation) {
   const counts = emptyWorkforce(), disability: Record<string, number> = {}, units = new Map<string, OrgUnit>();
+  const seen = new Set<string>();
   for (const e of f.employees) {
+    // One employee → one profile: rows without an ID, or repeating an ID, never add to totals.
+    if (!e.employeeId || seen.has(e.employeeId)) continue;
+    seen.add(e.employeeId);
     if (!activeAtSnapshot(e, f.snapshot_date)) continue;
     const key = employeeGroup(e), row = counts[e.level];
     if (!key || !row) continue;
@@ -210,7 +214,7 @@ export async function downloadFoundationWorkbook(f?: Foundation) {
  * terminations set the end date and Terminated status; recruitments fill a blank appointment date or level.
  */
 export function applyMovements(f: Foundation): { foundation: Foundation; changed: number } {
-  const byId = new Map(f.employees.map((e, i) => [e.employeeId, i]));
+  const byId = new Map(f.employees.flatMap((e, i) => (e.employeeId ? [[e.employeeId, i] as const] : [])));
   const employees = f.employees.map((e) => ({ ...e }));
   let changed = 0;
   for (const m of [...f.movements].sort((a, b) => a.date.localeCompare(b.date))) {
