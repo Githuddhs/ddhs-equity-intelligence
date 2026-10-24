@@ -79,6 +79,11 @@ function Portal() {
           <span className="font-semibold text-teal">Open →</span>
         </Link>
 
+        <Link to="/readiness" className="mt-4 flex items-center justify-between rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
+          <span><span className="card-title block text-primary">EE data readiness</span><span className="text-sm text-muted-foreground">Six-step onboarding checklist with your data readiness % before the plan is generated.</span></span>
+          <span className="font-semibold text-teal">Open →</span>
+        </Link>
+
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           <Stat label="EEA12 analyses" value={data?.analyses.length} />
