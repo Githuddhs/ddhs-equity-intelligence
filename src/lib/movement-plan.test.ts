@@ -25,3 +25,15 @@ describe("movement plan", () => {
     expect(r.netChange).toBe(0);
   });
 });
+
+import { yearlyProjection } from "@/lib/movement-plan";
+describe("yearly projection", () => {
+  it("accumulates movements by year and flags years below the manual goal", () => {
+    const moves = [{ ...blankMove(), year: "2", level: L, group: "FA", count: "2" }];
+    const ms = { [L]: ["60", "60"] };
+    const p = yearlyProjection(staff, "2025-01-01", moves, 2, ms).find((x) => x.level === L)!;
+    expect(p.years.map((y) => [y.projectedShare, y.status, y.gap])).toEqual([[50, "below", -10], [75, "meets", 15]]);
+    expect(ms[L]).toEqual(["60", "60"]);
+    expect(p.sources).toHaveLength(1);
+  });
+});
