@@ -70,12 +70,21 @@ const painCards = [
 ];
 
 const lifecycle = [
-  { icon: BarChart3, title: "Analyse", body: "EEA12 workforce analysis and representation insights." },
-  { icon: Target, title: "Plan", body: "EEA13 planning with targets, actions and owners." },
-  { icon: ClipboardCheck, title: "Implement", body: "Assign responsibilities and track progress." },
-  { icon: LineChart, title: "Monitor", body: "Measure implementation performance and risks." },
-  { icon: FileCheck2, title: "Evidence", body: "Maintain auditable records and approvals." },
-  { icon: Layers, title: "Report", body: "Generate leadership-ready reporting and dashboards." },
+  { icon: BarChart3, title: "Analyse", href: "/eea12", body: "EEA12 workforce analysis and representation insights." },
+  { icon: Target, title: "Plan", href: "/eea13-planning", body: "EEA13 planning with targets, actions and owners." },
+  { icon: ClipboardCheck, title: "Implement", href: "/accountability-management", body: "Assign responsibilities and track progress." },
+  { icon: LineChart, title: "Monitor", href: "/leadership-dashboard", body: "Measure implementation performance and risks." },
+  { icon: FileCheck2, title: "Evidence", href: "/evidence-governance", body: "Maintain auditable records and approvals." },
+  { icon: Layers, title: "Report", href: "/leadership-report", body: "Generate leadership-ready reporting and dashboards." },
+];
+
+const lifecycleSteps = [
+  { label: "Data", icon: Database, href: "/workforce-foundation" },
+  { label: "Analyse", icon: BarChart3, href: "/eea12" },
+  { label: "Plan", icon: Target, href: "/eea13-planning" },
+  { label: "Implement", icon: ClipboardCheck, href: "/accountability-management" },
+  { label: "Monitor", icon: LineChart, href: "/leadership-dashboard" },
+  { label: "Report", icon: Layers, href: "/leadership-report" },
 ];
 
 const suiteSteps = [
