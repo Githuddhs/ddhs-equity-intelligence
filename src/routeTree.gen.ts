@@ -25,6 +25,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
 import { Route as TourRouteImport } from './routes/tour'
 import { Route as VirtualConsultantRouteImport } from './routes/virtual-consultant'
@@ -147,6 +148,11 @@ const SetPasswordRoute = SetPasswordRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffLoginRoute = StaffLoginRouteImport.update({
@@ -392,6 +398,7 @@ export interface FileRoutesByFullPath {
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-login': typeof StaffLoginRoute
   '/tour': typeof TourRoute
   '/virtual-consultant': typeof VirtualConsultantRoute
@@ -452,6 +459,7 @@ export interface FileRoutesByTo {
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-login': typeof StaffLoginRoute
   '/tour': typeof TourRoute
   '/virtual-consultant': typeof VirtualConsultantRoute
@@ -514,6 +522,7 @@ export interface FileRoutesById {
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-login': typeof StaffLoginRoute
   '/tour': typeof TourRoute
   '/virtual-consultant': typeof VirtualConsultantRoute
@@ -576,6 +585,7 @@ export interface FileRouteTypes {
     | '/responsible-ai'
     | '/set-password'
     | '/signup'
+    | '/sitemap.xml'
     | '/staff-login'
     | '/tour'
     | '/virtual-consultant'
@@ -636,6 +646,7 @@ export interface FileRouteTypes {
     | '/responsible-ai'
     | '/set-password'
     | '/signup'
+    | '/sitemap.xml'
     | '/staff-login'
     | '/tour'
     | '/virtual-consultant'
@@ -697,6 +708,7 @@ export interface FileRouteTypes {
     | '/responsible-ai'
     | '/set-password'
     | '/signup'
+    | '/sitemap.xml'
     | '/staff-login'
     | '/tour'
     | '/virtual-consultant'
@@ -759,6 +771,7 @@ export interface RootRouteChildren {
   ResponsibleAiRoute: typeof ResponsibleAiRoute
   SetPasswordRoute: typeof SetPasswordRoute
   SignupRoute: typeof SignupRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StaffLoginRoute: typeof StaffLoginRoute
   TourRoute: typeof TourRoute
   VirtualConsultantRoute: typeof VirtualConsultantRoute
@@ -890,6 +903,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff-login': {
@@ -1275,6 +1295,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResponsibleAiRoute: ResponsibleAiRoute,
   SetPasswordRoute: SetPasswordRoute,
   SignupRoute: SignupRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StaffLoginRoute: StaffLoginRoute,
   TourRoute: TourRoute,
   VirtualConsultantRoute: VirtualConsultantRoute,
