@@ -3,7 +3,7 @@ import { addAppointment, pickPeriod } from "./recruitment-handoff";
 import { blankFoundation, employeeGroup, uniqueProfiles, foundationSnapshot } from "./foundation";
 
 const c = { full_name: "N. Dlamini", race: "African", gender: "Female", disability: false, foreign_national: false };
-const v = { title: "HR Officer", occupational_level: "Skilled technical", organisation: "Org", division: "Ops", department: "HR", section: "", province: "Western Cape" };
+const v = { title: "HR Officer", occupational_level: "Skilled Technical", organisation: "Org", division: "Ops", department: "HR", section: "", province: "Western Cape" };
 const h = { employeeId: "E100", startDate: "2026-03-01", contractType: "Permanent", workPattern: "Full-time", manager: "M1" };
 const period = { ...blankFoundation(), period_start: "2025-10-01", period_end: "2026-09-30", snapshot_date: "2026-09-30" };
 
@@ -12,7 +12,7 @@ describe("recruitment handoff to Employee Profile", () => {
     const f = addAppointment(period, c, v, h);
     expect(f.employees).toHaveLength(1);
     expect(employeeGroup(f.employees[0]!)).toBe("FA");
-    expect(f.employees[0]!.level).toBe("Skilled technical");
+    expect(f.employees[0]!.level).toBe("Skilled Technical");
     expect(f.movements[0]!.type).toBe("Recruitment");
     expect(foundationSnapshot(f).total_headcount).toBe(1);
   });
