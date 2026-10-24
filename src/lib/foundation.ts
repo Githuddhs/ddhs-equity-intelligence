@@ -24,10 +24,10 @@ export const missingOrgFields = (o: Partial<Record<string, string>>) => REQUIRED
 export const EMPLOYMENT_STATUSES = ["Active", "Suspended", "On leave", "Terminated"];
 export const CONTRACT_TYPES = ["Permanent", "Fixed-term", "Temporary"];
 export const WORK_PATTERNS = ["Full-time", "Part-time"];
-export const EMPLOYEE_LABELS: Record<string, string> = { employeeId: "Employee/staff number", populationGroup: "Race/designated group", nationality: "Citizenship/nationality", disability: "Disability (lawfully disclosed)", employmentStatus: "Employment status", employmentType: "Permanent/fixed-term", workPattern: "Full-time/part-time", startDate: "Date appointed", positionDate: "Current position appointment date", endDate: "Termination date", level: "Occupational level", department: "Department/business unit", faculty: "Faculty", division: "Division", location: "Workplace/location" };
-export const employeeSchema = z.object({ employeeId: text, populationGroup: text, gender: text, nationality: text, disability: text, employmentStatus: text, employmentType: text, workPattern: text, startDate: text, positionDate: text, location: text, endDate: text, level: text, jobTitle: text, gradingSystem: text, jobGrade: text, organisation: text, faculty: text, division: text, department: text, section: text });
+export const EMPLOYEE_LABELS: Record<string, string> = { salaryBand: "Salary grade / band", reportsTo: "Reports to (manager employee ID)", newDepartment: "New department / business unit (transfers)", employeeId: "Employee/staff number", populationGroup: "Race/designated group", nationality: "Citizenship/nationality", disability: "Disability (lawfully disclosed)", employmentStatus: "Employment status", employmentType: "Permanent/fixed-term", workPattern: "Full-time/part-time", startDate: "Date appointed", positionDate: "Current position appointment date", endDate: "Termination date", level: "Occupational level", department: "Department/business unit", faculty: "Faculty", division: "Division", location: "Workplace/location" };
+export const employeeSchema = z.object({ employeeId: text, populationGroup: text, gender: text, nationality: text, disability: text, employmentStatus: text, employmentType: text, workPattern: text, startDate: text, positionDate: text, location: text, endDate: text, level: text, jobTitle: text, gradingSystem: text, jobGrade: text, organisation: text, faculty: text, division: text, department: text, section: text, salaryBand: text, reportsTo: text });
 export const paySchema = z.object({ employeeId: text, periodStart: text, periodEnd: text, basicPay: text, variablePay: text, benefits: text, hours: text, fte: text });
-export const movementSchema = z.object({ employeeId: text, type: text, date: text, previousLevel: text, newLevel: text, reason: text });
+export const movementSchema = z.object({ employeeId: text, type: text, date: text, previousLevel: text, newLevel: text, reason: text, newDepartment: text });
 export const foundationSchema = z.object({ id: z.string().uuid().optional(), period_start: text, period_end: text, snapshot_date: text, organisation: organisationSchema, employees: z.array(employeeSchema).max(20000), remuneration: z.array(paySchema).max(40000), movements: z.array(movementSchema).max(40000) });
 export type Foundation = z.infer<typeof foundationSchema>;
 export type Employee = z.infer<typeof employeeSchema>;
@@ -102,6 +102,10 @@ export function validateFoundation(f: Foundation) {
     if (m.type !== "Termination" && !LEVELS.includes(m.newLevel)) errors.push(`${label}: new category is required.`);
     if (m.type === "Termination" && !m.reason) warnings.push(`${label}: termination reason is missing.`);
   });
+  for (const e of f.employees) {
+    if (e.reportsTo && !ids.has(e.reportsTo)) warnings.push(`Employee ${e.employeeId}: reports-to ID ${e.reportsTo} does not match an Employee Profile.`);
+    if (e.reportsTo && e.reportsTo === e.employeeId) errors.push(`Employee ${e.employeeId}: an employee cannot report to themselves.`);
+  }
   if (!f.movements.length) warnings.push("No workforce movements supplied; movement tables are not confirmed as zero.");
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
 }
@@ -196,4 +200,25 @@ export async function downloadFoundationWorkbook(f?: Foundation) {
   append("Pay", PAY_FIELDS, f?.remuneration ?? []);
   append("Movements", MOVEMENT_FIELDS, f?.movements ?? []);
   reportWorkbook(wb, f ? `DDHS-workforce-${f.period_start}-${f.period_end}.xlsx` : "DDHS-workforce-foundation-template.xlsx");
+}
+/**
+ * Capture once, use everywhere: movements update the Employee Profile (the master record) in date order;
+ * the movement rows stay as history. Promotions/transfers set the current level, position date and (transfers) unit;
+ * terminations set the end date and Terminated status; recruitments fill a blank appointment date or level.
+ */
+export function applyMovements(f: Foundation): { foundation: Foundation; changed: number } {
+  const byId = new Map(f.employees.map((e, i) => [e.employeeId, i]));
+  const employees = f.employees.map((e) => ({ ...e }));
+  let changed = 0;
+  for (const m of [...f.movements].sort((a, b) => a.date.localeCompare(b.date))) {
+    const i = byId.get(m.employeeId);
+    if (i === undefined || !m.date) continue;
+    const e = employees[i]!, before = JSON.stringify(e);
+    if (m.type === "Recruitment") { if (!e.startDate) e.startDate = m.date; if (!e.level && m.newLevel) e.level = m.newLevel; if (!e.positionDate) e.positionDate = m.date; }
+    if ((m.type === "Promotion" || m.type === "Transfer") && m.newLevel) { e.level = m.newLevel; if (!e.positionDate || e.positionDate < m.date) e.positionDate = m.date; }
+    if (m.type === "Transfer" && m.newDepartment) e.department = m.newDepartment;
+    if (m.type === "Termination") { e.endDate = m.date; e.employmentStatus = "Terminated"; }
+    if (JSON.stringify(e) !== before) changed++;
+  }
+  return { foundation: { ...f, employees }, changed };
 }

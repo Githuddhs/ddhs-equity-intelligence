@@ -54,9 +54,9 @@ export function FoundationRecords() {
     setSaving(true);
     try {
       const result = await save({ data: form });
-      setForm({ ...form, id: result.id }); setDirty(false);
+      setForm({ ...form, id: result.id, employees: result.employees }); setDirty(false);
       await qc.invalidateQueries();
-      toast.success("Reporting period saved; shared workforce figures updated.");
+      toast.success("Reporting period saved. Employee Profiles updated from movements; every report now uses these records.");
     } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save workforce records."); }
     finally { setSaving(false); }
   };
@@ -76,7 +76,7 @@ export function FoundationRecords() {
   };
   return <section className="mt-8 border-y border-border py-6" aria-label="Reporting-period workforce records">
     <div className="flex flex-wrap items-start justify-between gap-4">
-      <div><h2 className="section-title text-primary">Workforce reporting records</h2><p className="mt-2 flex max-w-2xl items-start gap-2 text-sm text-muted-foreground"><LockKeyhole className="mt-0.5 size-4 shrink-0" />Individual salary and disability records are account-owner only. Staff, managers and shared client links have no access to these records.</p></div>
+      <div><h2 className="section-title text-primary">Employee Profiles — the master workforce record</h2><p className="mt-2 flex max-w-2xl items-start gap-2 text-sm text-muted-foreground"><LockKeyhole className="mt-0.5 size-4 shrink-0" />Individual salary and disability records are account-owner only. Staff, managers and shared client links have no access to these records.</p></div>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={() => void downloadFoundationWorkbook()}><Download />Template</Button>
         <Button variant="outline" onClick={() => { if (dirty && !confirm("Discard unsaved changes?")) return; update(blankFoundation()); }}><Plus />New period</Button>
