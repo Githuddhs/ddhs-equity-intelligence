@@ -1,3 +1,4 @@
+import { RecruitmentPricing } from "@/components/recruitment-pricing";
 import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -158,6 +159,8 @@ function PricingPage() {
             {IMPLEMENTATION.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
           </ul>
         </section>
+
+        <RecruitmentPricing quoteHref="#quote" />
 
         <section className="mt-16 rounded-xl border border-border bg-card p-8">
           <h2 className="section-title text-primary">Software-only subscription</h2>

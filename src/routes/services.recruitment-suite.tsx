@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { RecruitmentPricing } from "@/components/recruitment-pricing";
 import { ServicePage, serviceHead } from "@/components/service-page";
 
 const JOURNEY: { title: string; intro: string; items: string[]; output: string; note?: string }[] = [
@@ -66,7 +67,7 @@ export const Route = createFileRoute("/services/recruitment-suite")({
         { title: "Risk dashboards", body: "Early flags on pools, missing evidence, deviations and slow-moving units." },
         { title: "Evidence management", body: "A defensible, traceable evidence pack for every recruitment process." },
       ],
-      extra: <Journey />,
+      extra: <><Journey /><RecruitmentPricing /></>,
       steps: [
         { title: "Plan", body: "Set the vacancy's transformation priority." },
         { title: "Recruit", body: "Approve, advertise and track candidates." },
