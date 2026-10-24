@@ -6,12 +6,12 @@ const sast = (y: number, m: number, d: number, h: number) => Date.UTC(y, m - 1, 
 describe("weekly release schedule", () => {
   it("releases one blog and one guide each week", () => {
     expect(SCHEDULE).toHaveLength(20);
-    expect(SCHEDULE[0].releaseAt).toBe(SCHEDULE[1].releaseAt);
-    expect(SCHEDULE[2].releaseAt - SCHEDULE[0].releaseAt).toBe(7 * 86400000);
+    expect(SCHEDULE[0]!.releaseAt).toBe(SCHEDULE[1]!.releaseAt);
+    expect(SCHEDULE[2]!.releaseAt - SCHEDULE[0]!.releaseAt).toBe(7 * 86400000);
   });
 
   it("second week's items come out Monday 26 October 2026 at 06:00 SA time, not before", () => {
-    const second = SCHEDULE[2];
+    const second = SCHEDULE[2]!;
     expect(isReleased(second.kind, second.slug, sast(2026, 10, 26, 5))).toBe(false);
     expect(isReleased(second.kind, second.slug, sast(2026, 10, 26, 6))).toBe(true);
   });
