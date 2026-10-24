@@ -31,13 +31,13 @@ export function assemblePlan(content: PlanContent, i: AssemblyInputs) {
   const bar = i.barriers.length ? `Barrier Analysis (${i.barriers.length} response${i.barriers.length === 1 ? "" : "s"})` : "";
   const join = (...x: string[]) => x.filter(Boolean).join(" + ") || "Platform default text";
   for (const k of r.filled) {
-    if (k === "barriers") sources.barriers = join(bar, i.workforce.length ? "Workforce Foundation" : "", eea);
-    else if (k === "measures") sources.measures = join(bar);
-    else if (k === "objectives") sources.objectives = join(bar, eea);
-    else if (k === "timetable") { sources.timetable = join(bar, eea, "plan dates"); }
-    else if (k === "timeline") sources.milestones = join(bar, eea, "plan dates");
+    if (k === "barriers") sources["barriers"] = join(bar, i.workforce.length ? "Workforce Foundation" : "", eea);
+    else if (k === "measures") sources["measures"] = join(bar);
+    else if (k === "objectives") sources["objectives"] = join(bar, eea);
+    else if (k === "timetable") { sources["timetable"] = join(bar, eea, "plan dates"); }
+    else if (k === "timeline") sources["milestones"] = join(bar, eea, "plan dates");
   }
-  if (r.goalsFilled) sources.goals = eea;
+  if (r.goalsFilled) sources["goals"] = eea;
   return { content: { ...r.content, sources }, filled: r.filled.length + (r.goalsFilled ? 1 : 0) };
 }
 
