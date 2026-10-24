@@ -58,7 +58,7 @@ export async function loadWorkforceSnapshot(): Promise<WfSnap | null> {
     const { supabase } = await import("@/integrations/supabase/client");
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return null;
-    const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,disability,units")
+    const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,disability,units").eq("source", "employee_profile")
       .eq("user_id", u.user.id).order("created_at", { ascending: false }).limit(1);
     const s = data?.[0];
     if (!s) return null;

@@ -33,7 +33,7 @@ export function useLiveOverview(): LiveOverview | null {
       const uid = auth.user?.id;
       if (!uid) return;
       const [snap, plan, barriers, dg, docs] = await Promise.all([
-        supabase.from("workforce_snapshots").select("id,snapshot_date,counts,disability").eq("user_id", uid).order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1),
+        supabase.from("workforce_snapshots").select("id,snapshot_date,counts,disability").eq("source", "employee_profile").eq("user_id", uid).order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1),
         supabase.from("ee_plans").select("sector,start_date,end_date,dg_review_due").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }).eq("user_id", uid),
         supabase.from("dg_reviews").select("score").eq("user_id", uid).order("updated_at", { ascending: false }).limit(1),
