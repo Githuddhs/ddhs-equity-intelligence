@@ -48,6 +48,7 @@ import { Route as AuthenticatedPlanLifecycleRouteImport } from './routes/_authen
 import { Route as AuthenticatedPlanReportRouteImport } from './routes/_authenticated/plan-report'
 import { Route as AuthenticatedPoliciesRouteImport } from './routes/_authenticated/policies'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedReadinessRouteImport } from './routes/_authenticated/readiness'
 import { Route as AuthenticatedRecruitmentRouteImport } from './routes/_authenticated/recruitment'
 import { Route as AuthenticatedRecruitmentDashboardRouteImport } from './routes/_authenticated/recruitment-dashboard'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
@@ -274,6 +275,11 @@ const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   path: '/portal',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReadinessRoute = AuthenticatedReadinessRouteImport.update({
+  id: '/readiness',
+  path: '/readiness',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRecruitmentRoute =
   AuthenticatedRecruitmentRouteImport.update({
     id: '/recruitment',
@@ -458,6 +464,7 @@ export interface FileRoutesByFullPath {
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/readiness': typeof AuthenticatedReadinessRoute
   '/recruitment': typeof AuthenticatedRecruitmentRoute
   '/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/review': typeof AuthenticatedReviewRoute
@@ -525,6 +532,7 @@ export interface FileRoutesByTo {
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/readiness': typeof AuthenticatedReadinessRoute
   '/recruitment': typeof AuthenticatedRecruitmentRoute
   '/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/review': typeof AuthenticatedReviewRoute
@@ -594,6 +602,7 @@ export interface FileRoutesById {
   '/_authenticated/plan-report': typeof AuthenticatedPlanReportRoute
   '/_authenticated/policies': typeof AuthenticatedPoliciesRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/_authenticated/readiness': typeof AuthenticatedReadinessRoute
   '/_authenticated/recruitment': typeof AuthenticatedRecruitmentRoute
   '/_authenticated/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
@@ -663,6 +672,7 @@ export interface FileRouteTypes {
     | '/plan-report'
     | '/policies'
     | '/portal'
+    | '/readiness'
     | '/recruitment'
     | '/recruitment-dashboard'
     | '/review'
@@ -730,6 +740,7 @@ export interface FileRouteTypes {
     | '/plan-report'
     | '/policies'
     | '/portal'
+    | '/readiness'
     | '/recruitment'
     | '/recruitment-dashboard'
     | '/review'
@@ -798,6 +809,7 @@ export interface FileRouteTypes {
     | '/_authenticated/plan-report'
     | '/_authenticated/policies'
     | '/_authenticated/portal'
+    | '/_authenticated/readiness'
     | '/_authenticated/recruitment'
     | '/_authenticated/recruitment-dashboard'
     | '/_authenticated/review'
@@ -1144,6 +1156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPortalRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/readiness': {
+      id: '/_authenticated/readiness'
+      path: '/readiness'
+      fullPath: '/readiness'
+      preLoaderRoute: typeof AuthenticatedReadinessRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recruitment': {
       id: '/_authenticated/recruitment'
       path: '/recruitment'
@@ -1354,6 +1373,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPlanReportRoute: typeof AuthenticatedPlanReportRoute
   AuthenticatedPoliciesRoute: typeof AuthenticatedPoliciesRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedReadinessRoute: typeof AuthenticatedReadinessRoute
   AuthenticatedRecruitmentRoute: typeof AuthenticatedRecruitmentRoute
   AuthenticatedRecruitmentDashboardRoute: typeof AuthenticatedRecruitmentDashboardRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
@@ -1384,6 +1404,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPlanReportRoute: AuthenticatedPlanReportRoute,
   AuthenticatedPoliciesRoute: AuthenticatedPoliciesRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedReadinessRoute: AuthenticatedReadinessRoute,
   AuthenticatedRecruitmentRoute: AuthenticatedRecruitmentRoute,
   AuthenticatedRecruitmentDashboardRoute:
     AuthenticatedRecruitmentDashboardRoute,
