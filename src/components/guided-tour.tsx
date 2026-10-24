@@ -10,7 +10,7 @@ const shareOrigin = () => (typeof window === "undefined" || /localhost|127\.0\.0
 export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string; hash?: string; access?: string };
 
 /** Icon for the step's access note: open/globe when the tool is free without signing in, padlock when it needs a client login. */
-export const tourAccessOpen = (access: string | undefined) => !!access && /free|no sign-in|open to (use|read)/i.test(access);
+export const tourAccessOpen = (access: string | undefined) => !!access && /free|no sign-in needed|open to use/i.test(access);
 
 /** Shared step-by-step tour layout used by the platform tour and the Recruitment Suite tour. */
 export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label = "site tour", exitTo = "/" }: { steps: TourStep[]; path: string; invitedFor?: string | undefined; invitedFrom?: string | undefined; label?: string; exitTo?: string }) {
