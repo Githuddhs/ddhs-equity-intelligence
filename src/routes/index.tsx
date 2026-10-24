@@ -473,8 +473,9 @@ function Index() {
             <p className="text-sm font-semibold uppercase tracking-widest text-teal">B-BBEE Verified Supplier</p>
             <h2 className="display-title mt-2 text-balance text-primary">A Transformation Partner That Counts Towards Your Scorecard</h2>
             <p className="mt-3 text-muted-foreground">
-              DDHS Equity Intelligence (Pty) Ltd is a B-BBEE verified supplier. Procuring from us can support the
-              preferential procurement element of your B-BBEE scorecard. Our B-BBEE certificate is available on request.
+              DDHS Equity Intelligence (Pty) Ltd is a B-BBEE verified supplier and a Level 1 B-BBEE contributor
+              with 135% procurement recognition. Procuring from us can support the preferential procurement
+              element of your B-BBEE scorecard. Our B-BBEE certificate is available on request.
             </p>
             <a href="#contact" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-teal hover:text-primary">
               Request our B-BBEE certificate <ArrowRight className="h-4 w-4" />
@@ -622,6 +623,14 @@ function Index() {
                 <span className="font-semibold text-primary">DDHS</span>{" "}
                 <span className="font-semibold text-teal">Equity Intelligence</span> (Pty) Ltd —
                 South African enterprise workforce transformation intelligence.
+              </p>
+              <address className="mt-4 text-sm not-italic text-muted-foreground">
+                26 Loubser Street, Ferndale, Brackenfell, Cape Town, 7560
+              </address>
+              <p className="mt-2 text-sm text-muted-foreground">
+                <a href="tel:+27735517885" className="transition-colors hover:text-primary">073 551 7885</a>
+                {" · "}
+                <a href="mailto:sdm@ddhs.co.za" className="transition-colors hover:text-primary">sdm@ddhs.co.za</a>
               </p>
             </div>
             <div>

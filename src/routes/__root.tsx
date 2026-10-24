@@ -94,6 +94,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               url: "https://ddhs-equity-intelligence.lovable.app",
               logo: "https://ddhs-equity-intelligence.lovable.app/icons/icon-512.png",
               email: "sdm@ddhs.co.za",
+              telephone: "+27 73 551 7885",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "26 Loubser Street, Ferndale",
+                addressLocality: "Brackenfell",
+                addressRegion: "Western Cape",
+                postalCode: "7560",
+                addressCountry: "ZA",
+              },
               areaServed: { "@type": "Country", name: "South Africa" },
             },
             {
