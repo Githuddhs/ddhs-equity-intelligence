@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Integration test on an isolated in-memory Postgres (PGlite) — never touches the live database.
  * Uses the real save_workforce_foundation SQL and the same executeHandoff the server runs.
