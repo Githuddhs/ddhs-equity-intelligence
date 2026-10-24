@@ -19,8 +19,10 @@ export function buildSchedule(blogs: { slug: string; title: string }[], guides: 
   const max = Math.max(blogs.length, guides.length);
   for (let i = 0; i < max; i++) {
     const releaseAt = FIRST_RELEASE_UTC + i * WEEK;
-    if (blogs[i]) out.push({ kind: "blog", slug: blogs[i].slug, title: blogs[i].title, releaseAt });
-    if (guides[i]) out.push({ kind: "guide", slug: guides[i].slug, title: guides[i].title, releaseAt });
+    const b = blogs[i];
+    const g = guides[i];
+    if (b) out.push({ kind: "blog", slug: b.slug, title: b.title, releaseAt });
+    if (g) out.push({ kind: "guide", slug: g.slug, title: g.title, releaseAt });
   }
   return out;
 }
