@@ -97,13 +97,35 @@ function brandLogo(): Promise<string | null> {
   }).catch(() => null);
   return logoCache;
 }
+/** Writes a workbook with brand styling: Aptos (Calibri fallback in Excel), navy text, navy header row, teal title. */
+async function brandedXlsx(wb: import("xlsx").WorkBook): Promise<Blob> {
+  const XS = (await import("xlsx-js-style")).default, B = EXPORT_BRAND;
+  for (const name of wb.SheetNames) {
+    const ws = wb.Sheets[name]; if (!ws?.["!ref"]) continue;
+    const r = XS.utils.decode_range(ws["!ref"]);
+    const widths: number[] = [];
+    for (let R = r.s.r; R <= r.e.r; R++) for (let C = r.s.c; C <= r.e.c; C++) {
+      const cell = ws[XS.utils.encode_cell({ r: R, c: C })] as { v?: unknown; s?: unknown } | undefined; if (!cell) continue;
+      widths[C] = Math.min(60, Math.max(widths[C] ?? 10, String(cell.v ?? "").length + 2));
+      const head = R === r.s.r;
+      const summaryTitle = name === "Summary" && R <= 1;
+      cell.s = {
+        font: { name: B.font, sz: summaryTitle && R === 0 ? 16 : 11, bold: head || summaryTitle, color: { rgb: summaryTitle ? (R === 0 ? B.navy : B.teal) : head ? "FFFFFF" : B.navy } },
+        ...(head && !summaryTitle ? { fill: { patternType: "solid", fgColor: { rgb: B.navy } } } : {}),
+        border: summaryTitle ? undefined : { top: { style: "thin", color: { rgb: B.border } }, bottom: { style: "thin", color: { rgb: B.border } }, left: { style: "thin", color: { rgb: B.border } }, right: { style: "thin", color: { rgb: B.border } } },
+        alignment: { vertical: "top", wrapText: true },
+      };
+    }
+    ws["!cols"] ??= widths.map((w) => ({ wch: w ?? 10 }));
+  }
+  return new Blob([XS.write(wb as never, { type: "array", bookType: "xlsx" })], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}
 const dataUrlBytes = (u: string) => Uint8Array.from(atob(u.split(",")[1] ?? ""), (c) => c.charCodeAt(0));
 
 export async function buildReportFile(request: ReportRequest, format: ReportFormat): Promise<Blob> {
   if (format === "pdf" && request.pdf) return request.pdf;
   if (format === "excel" && request.workbook) {
-    const XLSX = await import("xlsx");
-    return new Blob([XLSX.write(request.workbook, { type: "array", bookType: "xlsx" })], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    return brandedXlsx(request.workbook);
   }
   if (format === "powerpoint" && request.pdf) {
     const { default: Pptx } = await import("pptxgenjs");
@@ -161,7 +183,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     append("Summary", [[d.title], ["DDHS Equity Intelligence"], ...d.blocks.flatMap((b) => b.kind === "table" ? [] : [[b.text]])]);
     if (d.fields?.length) append("Fields", [["Field", "Value"], ...d.fields]);
     for (const b of d.blocks) if (b.kind === "table") append(b.title, b.head.length ? [b.head, ...b.body] : b.body);
-    return new Blob([XLSX.write(wb, { type: "array", bookType: "xlsx" })], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    return brandedXlsx(wb);
   }
   if (format === "pdf") {
     const { jsPDF } = await import("jspdf"), autoTable = (await import("jspdf-autotable")).default;
