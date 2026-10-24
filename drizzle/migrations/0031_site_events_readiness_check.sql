@@ -1,0 +1,2 @@
+ALTER TABLE public.site_events DROP CONSTRAINT site_events_event_check;
+ALTER TABLE public.site_events ADD CONSTRAINT site_events_event_check CHECK (event = ANY (ARRAY['visit','tour_complete','assessment_download','demo_request','app_install','readiness_check']));
