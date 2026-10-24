@@ -219,6 +219,9 @@ function Index() {
             <a href="/tour" className="inline-flex items-center rounded-lg border border-teal px-5 py-2.5 text-sm font-semibold text-teal transition-colors hover:bg-teal/10">
               Take the site tour
             </a>
+            <a href="/readiness-check" className="inline-flex items-center rounded-lg border border-teal px-5 py-2.5 text-sm font-semibold text-teal transition-colors hover:bg-teal/10">
+              Free readiness check
+            </a>
           </div>
         </div>
         <div className="relative mt-10">
