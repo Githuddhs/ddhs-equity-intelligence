@@ -23,6 +23,15 @@ export type Guide = {
 
 export const GUIDES_LAST_REVIEWED = "24 October 2026";
 
+/**
+ * Guides flagged needsPractitionerReview stay unpublished until their slug is listed here.
+ * Add a slug only when the owner explicitly approves that guide.
+ */
+export const PRACTITIONER_APPROVED_GUIDES: string[] = [];
+
+export const isGuideApproved = (g: Guide) =>
+  !g.needsPractitionerReview || PRACTITIONER_APPROVED_GUIDES.includes(g.slug);
+
 const ACT = { label: "Employment Equity Act 55 of 1998 (consolidated, SAFLII)", url: "https://www.saflii.org/za/legis/consol_act/eea1998240/" };
 const AMEND = { label: "Employment Equity Amendment Act 4 of 2022 and commencement (gov.za)", url: "https://www.gov.za/documents/acts/employment-equity-amendment-act-4-2022-english-xitsonga-14-apr-2023" };
 const REGS = { label: "Employment Equity Regulations, April 2025 (Department of Employment and Labour)", url: "https://ee.labour.gov.za/DMISO/Employment%20Equity%20Regulations.pdf" };
