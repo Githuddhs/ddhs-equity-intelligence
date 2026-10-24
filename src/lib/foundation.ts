@@ -21,7 +21,11 @@ export const ORG_LABELS: Record<string, string> = {
 /** Employer fields the EEA13 plan and EEA2 need; blanks are flagged as missing. */
 export const REQUIRED_ORG = ["name", "registration", "address", "postalAddress", "province", "contact", "totalEmployees", "businessActivity", "sector", "designatedStatus", "ceoName", "eeSeniorManager", "eeManager", "eeCommittee"] as const;
 export const missingOrgFields = (o: Partial<Record<string, string>>) => REQUIRED_ORG.filter((k) => !o[k]?.trim()).map((k) => ORG_LABELS[k]!);
-export const employeeSchema = z.object({ employeeId: text, populationGroup: text, gender: text, nationality: text, disability: text, employmentType: text, startDate: text, endDate: text, level: text, jobTitle: text, gradingSystem: text, jobGrade: text, organisation: text, faculty: text, division: text, department: text, section: text });
+export const EMPLOYMENT_STATUSES = ["Active", "Suspended", "On leave", "Terminated"];
+export const CONTRACT_TYPES = ["Permanent", "Fixed-term", "Temporary"];
+export const WORK_PATTERNS = ["Full-time", "Part-time"];
+export const EMPLOYEE_LABELS: Record<string, string> = { employeeId: "Employee/staff number", populationGroup: "Race/designated group", nationality: "Citizenship/nationality", disability: "Disability (lawfully disclosed)", employmentStatus: "Employment status", employmentType: "Permanent/fixed-term", workPattern: "Full-time/part-time", startDate: "Date appointed", positionDate: "Current position appointment date", endDate: "Termination date", level: "Occupational level", department: "Department/business unit", faculty: "Faculty", division: "Division", location: "Workplace/location" };
+export const employeeSchema = z.object({ employeeId: text, populationGroup: text, gender: text, nationality: text, disability: text, employmentStatus: text, employmentType: text, workPattern: text, startDate: text, positionDate: text, location: text, endDate: text, level: text, jobTitle: text, gradingSystem: text, jobGrade: text, organisation: text, faculty: text, division: text, department: text, section: text });
 export const paySchema = z.object({ employeeId: text, periodStart: text, periodEnd: text, basicPay: text, variablePay: text, benefits: text, hours: text, fte: text });
 export const movementSchema = z.object({ employeeId: text, type: text, date: text, previousLevel: text, newLevel: text, reason: text });
 export const foundationSchema = z.object({ id: z.string().uuid().optional(), period_start: text, period_end: text, snapshot_date: text, organisation: organisationSchema, employees: z.array(employeeSchema).max(20000), remuneration: z.array(paySchema).max(40000), movements: z.array(movementSchema).max(40000) });
@@ -61,12 +65,17 @@ export function validateFoundation(f: Foundation) {
     ids.add(e.employeeId);
     if (!LEVELS.includes(e.level)) errors.push(`${label}: select a recognised occupational category.`);
     if (!employeeGroup(e)) errors.push(`${label}: valid gender, nationality and population group are required for reporting.`);
-    for (const k of ["jobTitle", "gradingSystem", "jobGrade", "employmentType", "startDate", "disability"] as const) if (!e[k]) warnings.push(`${label}: ${k} is missing.`);
+    for (const k of ["jobTitle", "gradingSystem", "jobGrade", "employmentStatus", "employmentType", "workPattern", "startDate", "positionDate", "location", "disability"] as const) if (!e[k]) warnings.push(`${label}: ${fieldLabel(k).toLowerCase()} is missing.`);
+    if (!e.department) warnings.push(`${label}: department/business unit is missing.`);
+    if (e.employmentStatus && !EMPLOYMENT_STATUSES.includes(e.employmentStatus)) errors.push(`${label}: employment status must be ${EMPLOYMENT_STATUSES.join(", ")}.`);
+    if (e.employmentType && !CONTRACT_TYPES.includes(e.employmentType)) errors.push(`${label}: permanent/fixed-term status must be ${CONTRACT_TYPES.join(", ")}.`);
+    if (e.workPattern && !WORK_PATTERNS.includes(e.workPattern)) errors.push(`${label}: full-time/part-time status must be Full-time or Part-time.`);
+    if (e.positionDate && e.startDate && validDate(e.positionDate) && e.positionDate < e.startDate) errors.push(`${label}: current position date precedes the date appointed.`);
     if (e.gradingSystem && !["Paterson", "Peromnes", "Hay", "Equate", "Other"].includes(e.gradingSystem)) errors.push(`${label}: grading system is not recognised.`);
     if (e.disability && !["Yes", "No", "Not disclosed"].includes(e.disability)) errors.push(`${label}: disability must be Yes, No or Not disclosed.`);
     if (e.disability === "Not disclosed") warnings.push(`${label}: disability status not disclosed; disability totals are incomplete.`);
     if (e.organisation && f.organisation.name && e.organisation !== f.organisation.name) errors.push(`${label}: organisation must match this reporting period.`);
-    for (const k of ["startDate", "endDate"] as const) if (e[k] && !validDate(e[k])) errors.push(`${label}: invalid ${k}.`);
+    for (const k of ["startDate", "endDate", "positionDate"] as const) if (e[k] && !validDate(e[k])) errors.push(`${label}: invalid ${k}.`);
     if (e.startDate && e.endDate && e.endDate < e.startDate) errors.push(`${label}: end date precedes start date.`);
     if (![e.faculty, e.division, e.department, e.section].some(Boolean)) warnings.push(`${label}: no organisation-unit breakdown provided.`);
   });
@@ -141,7 +150,7 @@ export function foundationReportGrids(f: Foundation) {
 export const EMPLOYEE_FIELDS = Object.keys(employeeSchema.shape) as (keyof Employee)[];
 export const PAY_FIELDS = Object.keys(paySchema.shape) as (keyof z.infer<typeof paySchema>)[];
 export const MOVEMENT_FIELDS = Object.keys(movementSchema.shape) as (keyof z.infer<typeof movementSchema>)[];
-export const fieldLabel = (s: string) => s.replace(/([A-Z])/g, " $1").replace(/^./, (v) => v.toUpperCase());
+export const fieldLabel = (s: string) => EMPLOYEE_LABELS[s] ?? s.replace(/([A-Z])/g, " $1").replace(/^./, (v) => v.toUpperCase());
 
 export async function foundationWorkbook(file: File, current: Foundation): Promise<Foundation> {
   if (file.size > 20 * 1024 * 1024) throw new Error("Workbook exceeds 20 MB.");

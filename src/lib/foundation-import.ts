@@ -6,7 +6,7 @@ const keyOf = (s: string) => s.toLowerCase().replace(/[^a-z]/g, "");
 const aliases: Record<string, string[]> = {
   employeeId: ["employee number", "employee code", "staff number", "personnel number"],
   level: ["occupational level", "occupational category"], populationGroup: ["race", "population group"],
-  jobGrade: ["grade"], gradingSystem: ["job grading system"], basicPay: ["basic salary"],
+  jobGrade: ["grade"], department: ["business unit"], employmentStatus: ["status", "employee status"], employmentType: ["contract type", "permanent fixed term"], workPattern: ["full time part time", "work pattern"], startDate: ["date appointed", "appointment date", "date engaged"], positionDate: ["current position appointment date", "position date", "date in current position"], location: ["workplace", "work location", "geographical location", "site"], nationality: ["citizenship"], gradingSystem: ["job grading system"], basicPay: ["basic salary"],
   name: ["legal organisation name", "company name", "registered employer name"], doelRef: ["DoEL reference"],
   tradingName: ["trading as"], sdlNumber: ["SDL", "skills development levy number"], address: ["physical address"], ceoName: ["CEO", "accounting officer"],
   eeSeniorManager: ["senior manager responsible for EE", "EE senior manager"], eeManager: ["EE manager", "EE function"], eeCommittee: ["EE committee", "consultative forum"],
