@@ -193,7 +193,8 @@ export function CapabilityExplainer({
                 onClick={onClose}
                 className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
               >
-                Open the {capability.tool} <ArrowRight className="h-4 w-4" />
+                {capabilityCta(capability)} <ArrowRight className="h-4 w-4" />
+
               </Link>
               <a
                 href="#contact"
