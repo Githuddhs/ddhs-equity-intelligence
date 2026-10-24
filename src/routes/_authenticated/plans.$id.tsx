@@ -17,6 +17,7 @@ import { assemblePlan, EDITED, missingInputs, planDateProblem, sectionSource } f
 import { ORG_LABELS } from "@/lib/foundation";
 import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
 import { GoalForecast } from "@/components/goal-forecast";
+import { MovementPlan } from "@/components/movement-plan";
 import { BarrierRegister } from "@/components/barrier-register";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
@@ -262,6 +263,8 @@ function PlanBuilder() {
         </section>
 
         <GoalForecast forecast={content.forecast ?? {}} onChange={(forecast) => upContent({ forecast })} sector={meta.sector} start={meta.start_date} end={meta.end_date} />
+
+        <MovementPlan moves={content.movementPlan ?? []} onChange={(movementPlan) => upContent({ movementPlan })} years={meta.start_date && meta.end_date ? Math.min(5, Math.max(1, Math.round((Date.parse(meta.end_date) - Date.parse(meta.start_date)) / (365.25 * 864e5)))) : 5} />
 
         <BarrierRegister list={content.register ?? []} onChange={(register) => upContent({ register })} onCopy={(t) => { if ((content.barriers || content.measures) && !confirm("Replace the current barriers and measures text with the register?")) return; upContent({ ...t, sources: { ...(content.sources ?? {}), barriers: "Barrier register", measures: "Barrier register" } }); toast.success("Barriers and measures sections updated. Save the plan to keep them."); }} />
 

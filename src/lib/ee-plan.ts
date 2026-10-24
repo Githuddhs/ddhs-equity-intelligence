@@ -30,6 +30,7 @@ export type PlanContent = {
   register?: import("@/lib/barrier-register").BarrierEntry[] | undefined;
   /** Per-level five-year goals, milestones and forecast movements. */
   forecast?: Record<string, import("@/lib/goal-forecast").ForecastRow> | undefined;
+  movementPlan?: import("@/lib/movement-plan").PlannedMove[] | undefined;
 };
 
 export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milestones" | "signoff" | "orgSignoff" | "sources" | "corrective" | "register" | "forecast">; title: string; hint: string; ai: boolean }[] = [
