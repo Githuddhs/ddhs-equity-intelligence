@@ -632,6 +632,7 @@ function Index() {
                 {" · "}
                 <a href="mailto:sdm@ddhs.co.za" className="transition-colors hover:text-primary">sdm@ddhs.co.za</a>
               </p>
+              <FooterSocial />
             </div>
             <div>
               <h4 className="label-title text-primary">Platform</h4>
