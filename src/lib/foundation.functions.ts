@@ -36,18 +36,17 @@ export const sendAppointmentToProfile = createServerFn({ method: "POST" })
     contractType: z.string().max(40), workPattern: z.string().max(40), manager: z.string().max(150),
   }).parse(d))
   .handler(async ({ data, context }) => {
-    const { addAppointment, pickPeriod } = await import("@/lib/recruitment-handoff");
+    const { planHandoff } = await import("@/lib/recruitment-handoff");
     const sb = context.supabase;
     const { data: c } = await sb.from("recruitment_candidates").select("*, recruitment_vacancies(*)").eq("id", data.candidateId).maybeSingle();
-    if (!c || c.stage !== "appointed") throw new Error("Only appointed candidates can be sent to the Employee Profile.");
+    if (!c) throw new Error("Candidate not found.");
     const v = c.recruitment_vacancies as unknown as import("@/lib/recruitment-handoff").HandoffVacancy;
     const handover = (c.handover ?? {}) as Record<string, unknown>;
-    if (handover["profile_sent_at"]) throw new Error("This appointment is already on the Employee Profile.");
     const { data: periods } = await sb.from("workforce_foundation_periods").select("*").eq("user_id", context.userId);
-    const p = pickPeriod(periods ?? [], data.startDate);
-    if (!p) throw new Error("Save a Workforce Data reporting period first, then send the appointment.");
-    const current = foundationSchema.parse({ period_start: p.period_start, period_end: p.period_end, snapshot_date: p.snapshot_date, organisation: p.organisation, employees: p.employees, remuneration: p.remuneration, movements: p.movements });
-    const next = applyMovements(addAppointment(current, c, v, data)).foundation;
+    const plan = planHandoff({ stage: c.stage, handover, periods: periods ?? [], c, v, h: data,
+      toFoundation: (p) => foundationSchema.parse({ period_start: p.period_start, period_end: p.period_end, snapshot_date: p.snapshot_date, organisation: p.organisation, employees: p.employees, remuneration: p.remuneration, movements: p.movements }) });
+    const p = plan.period;
+    const next = applyMovements(plan.foundation).foundation;
     const check = validateFoundation(next);
     if (check.blocking.length) throw new Error(check.blocking.join(" "));
     const { error } = await sb.rpc("save_workforce_foundation", {
@@ -58,5 +57,5 @@ export const sendAppointmentToProfile = createServerFn({ method: "POST" })
     const stamp = { ...handover, start_date: data.startDate, manager: data.manager, employee_id: data.employeeId, profile_period: `${p.period_start} to ${p.period_end}`, profile_sent_at: new Date().toISOString(),
       done: [...new Set([...(Array.isArray(handover["done"]) ? (handover["done"] as string[]) : []), "Workforce Data movement recorded"])] };
     await sb.from("recruitment_candidates").update({ handover: stamp as unknown as Json }).eq("id", c.id);
-    return { period: stamp.profile_period, outsidePeriod: data.startDate < p.period_start || data.startDate > p.period_end };
+    return { period: stamp.profile_period, outsidePeriod: plan.outsidePeriod };
   });

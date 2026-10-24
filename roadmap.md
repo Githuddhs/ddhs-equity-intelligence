@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [x] Recruitment handoff tests: successful handoff, duplicate staff numbers, missing reporting periods, repeat submissions.
 - [x] Show missing provincial EAP as “Not available” in charts and printed/downloaded tables; leave gaps uncalculated and preserve genuine zero benchmarks. Screen/print charts and tables plus missing-EAP files checked; partial-benchmark and genuine-zero regression tests pass.
 - [x] Include shared percentage-point EAP explanations in all four EEA12 download formats, retaining selected unit, occupational-level and job-grade filters. Signed-in saved-fixture verification passed for grade, unit and summary reports in four formats with available and missing provincial EAP (24 files); 14 regression tests pass, no browser errors, temporary records removed. Summary PowerPoint retains canonical PDF pages as images.
 - [x] Add percentage-point EAP gaps and plain-language explanations beside EEA12 occupational levels and in unit downloads; entered workforce comparisons and missing-data explanations verified.

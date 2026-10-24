@@ -46,3 +46,16 @@ export function addAppointment(f: Foundation, c: HandoffCandidate, v: HandoffVac
   const { employee, movement } = appointmentRecords(c, v, h);
   return { ...base, employees: [...base.employees, employee], movements: [...base.movements, movement] };
 }
+
+/** Full handoff decision used by the server: rejects repeats and missing periods, then adds the appointment. */
+export function planHandoff<P extends { period_start: string; period_end: string }>(args: {
+  stage: string; handover: Record<string, unknown>; periods: P[]; toFoundation: (p: P) => Foundation;
+  c: HandoffCandidate; v: HandoffVacancy; h: HandoffInput;
+}) {
+  if (args.stage !== "appointed") throw new Error("Only appointed candidates can be sent to the Employee Profile.");
+  if (args.handover["profile_sent_at"]) throw new Error("This appointment is already on the Employee Profile.");
+  const period = pickPeriod(args.periods, args.h.startDate);
+  if (!period) throw new Error("Save a Workforce Data reporting period first, then send the appointment.");
+  const foundation = addAppointment(args.toFoundation(period), args.c, args.v, args.h);
+  return { period, foundation, outsidePeriod: args.h.startDate < period.period_start || args.h.startDate > period.period_end };
+}
