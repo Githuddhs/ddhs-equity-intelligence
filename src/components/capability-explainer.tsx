@@ -21,7 +21,7 @@ export type Capability = {
   icon: LucideIcon;
   /** Public page that hosts the tool. */
   href: string;
-  /** Name used in the "Open the …" call to action. */
+  /** Name used in the access note and elsewhere to identify the tool. */
   tool: string;
   /** Short explanation shown when a lifecycle icon is clicked. */
   summary: string;
@@ -31,6 +31,15 @@ export type Capability = {
   /** "open" when the tool itself runs publicly, "portal" when the working tool needs a client login. */
   accessMode: "open" | "portal";
 };
+
+/**
+ * Button wording follows the destination: the public EEA12 analysis is opened
+ * directly, while public pages that describe client-only tools are explored.
+ */
+export function capabilityCta(capability: Capability): string {
+  return capability.accessMode === "open" ? "Open analysis" : "Explore capability";
+}
+
 
 export const CAPABILITIES: Record<string, Capability> = {
   Data: {
@@ -184,7 +193,8 @@ export function CapabilityExplainer({
                 onClick={onClose}
                 className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
               >
-                Open the {capability.tool} <ArrowRight className="h-4 w-4" />
+                {capabilityCta(capability)} <ArrowRight className="h-4 w-4" />
+
               </Link>
               <a
                 href="#contact"

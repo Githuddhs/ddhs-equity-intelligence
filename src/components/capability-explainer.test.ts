@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { CAPABILITIES, type Capability } from "./capability-explainer";
+import { CAPABILITIES, capabilityCta, type Capability } from "./capability-explainer";
+
 
 const LIFECYCLE = ["Data", "Analyse", "Plan", "Implement", "Monitor", "Report", "Evidence"];
 
@@ -30,4 +31,13 @@ describe("Employment Equity Lifecycle capability explanations", () => {
       expect(cap!.href, `missing tool link for ${label}`).toMatch(/^\/[a-z0-9-]+$/);
     }
   });
+  it("names the button after what the destination actually offers", () => {
+    // EEA12 runs the analysis itself, so the button opens it.
+    expect(capabilityCta(CAPABILITIES["Analyse"]!)).toBe("Open analysis");
+    // The other pages describe tools that work in the client portal.
+    for (const label of LIFECYCLE.filter((l) => l !== "Analyse")) {
+      expect(capabilityCta(CAPABILITIES[label]!), `${label} should invite exploring`).toBe("Explore capability");
+    }
+  });
 });
+
