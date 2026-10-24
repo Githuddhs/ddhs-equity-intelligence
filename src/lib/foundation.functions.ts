@@ -36,26 +36,18 @@ export const sendAppointmentToProfile = createServerFn({ method: "POST" })
     contractType: z.string().max(40), workPattern: z.string().max(40), manager: z.string().max(150),
   }).parse(d))
   .handler(async ({ data, context }) => {
-    const { planHandoff } = await import("@/lib/recruitment-handoff");
+    const { executeHandoff } = await import("@/lib/recruitment-handoff");
     const sb = context.supabase;
-    const { data: c } = await sb.from("recruitment_candidates").select("*, recruitment_vacancies(*)").eq("id", data.candidateId).maybeSingle();
-    if (!c) throw new Error("Candidate not found.");
-    const v = c.recruitment_vacancies as unknown as import("@/lib/recruitment-handoff").HandoffVacancy;
-    const handover = (c.handover ?? {}) as Record<string, unknown>;
-    const { data: periods } = await sb.from("workforce_foundation_periods").select("*").eq("user_id", context.userId);
-    const plan = planHandoff({ stage: c.stage, handover, periods: periods ?? [], c, v, h: data,
-      toFoundation: (p) => foundationSchema.parse({ period_start: p.period_start, period_end: p.period_end, snapshot_date: p.snapshot_date, organisation: p.organisation, employees: p.employees, remuneration: p.remuneration, movements: p.movements }) });
-    const p = plan.period;
-    const next = applyMovements(plan.foundation).foundation;
-    const check = validateFoundation(next);
-    if (check.blocking.length) throw new Error(check.blocking.join(" "));
-    const { error } = await sb.rpc("save_workforce_foundation", {
-      p_record: { ...next, warnings: [...check.errors, ...check.warnings] } as unknown as Json,
-      p_snapshot: foundationSnapshot(next) as unknown as Json,
-    });
-    if (error) throw new Error("The Employee Profile could not be updated. Nothing was changed.");
-    const stamp = { ...handover, start_date: data.startDate, manager: data.manager, employee_id: data.employeeId, profile_period: `${p.period_start} to ${p.period_end}`, profile_sent_at: new Date().toISOString(),
-      done: [...new Set([...(Array.isArray(handover["done"]) ? (handover["done"] as string[]) : []), "Workforce Data movement recorded"])] };
-    await sb.from("recruitment_candidates").update({ handover: stamp as unknown as Json }).eq("id", c.id);
-    return { period: stamp.profile_period, outsidePeriod: plan.outsidePeriod };
+    return executeHandoff({
+      loadCandidate: async (id) => {
+        const { data: c } = await sb.from("recruitment_candidates").select("*, recruitment_vacancies(*)").eq("id", id).maybeSingle();
+        return c ? { ...c, vacancy: c.recruitment_vacancies as unknown as import("@/lib/recruitment-handoff").HandoffVacancy } : null;
+      },
+      loadPeriods: async () => (await sb.from("workforce_foundation_periods").select("*").eq("user_id", context.userId)).data ?? [],
+      saveFoundation: async (record, snapshot) => {
+        const { error } = await sb.rpc("save_workforce_foundation", { p_record: record as Json, p_snapshot: snapshot as Json });
+        if (error) throw new Error("The Employee Profile could not be updated. Nothing was changed.");
+      },
+      stampHandover: async (id, handover) => { await sb.from("recruitment_candidates").update({ handover: handover as unknown as Json }).eq("id", id); },
+    }, data);
   });
