@@ -8,6 +8,7 @@ import { InviteClientForm } from "@/components/invite-client-form";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/clients")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Client compliance dashboard — DDHS Equity Intelligence" },

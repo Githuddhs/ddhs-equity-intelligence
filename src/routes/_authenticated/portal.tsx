@@ -7,6 +7,7 @@ import { ShareLinks } from "@/components/share-links";
 import { TourInvite } from "@/components/tour-invite";
 
 export const Route = createFileRoute("/_authenticated/portal")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "My portal — DDHS Equity Intelligence" },

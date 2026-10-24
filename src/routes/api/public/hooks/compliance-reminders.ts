@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 // Daily job: emails each opted-in user the deadlines that hit one of their reminder lead days today.
 export const Route = createFileRoute("/api/public/hooks/compliance-reminders")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

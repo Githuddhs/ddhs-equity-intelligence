@@ -70,6 +70,7 @@ You are analysing an employer's latest Director-General review documents (the DG
 Base everything on the documents; never invent findings, dates or figures. Under 1000 words. Note it is guidance, not legal advice.`;
 
 export const Route = createFileRoute("/api/ee-assist")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

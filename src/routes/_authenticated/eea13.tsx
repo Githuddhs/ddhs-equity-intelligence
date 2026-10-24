@@ -16,6 +16,7 @@ import { latestDgFindings, type DgFindings } from "@/lib/form-drafts";
 import { latestFoundation } from "@/lib/foundation-source";
 
 export const Route = createFileRoute("/_authenticated/eea13")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "EEA13 planning — DDHS Equity Intelligence" },

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AppHeader } from "@/components/app-header";
 
 export const Route = createFileRoute("/_authenticated/review")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Platform review — DDHS Equity Intelligence" },

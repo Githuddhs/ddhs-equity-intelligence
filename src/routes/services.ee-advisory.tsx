@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage, serviceHead } from "@/components/service-page";
 
 export const Route = createFileRoute("/services/ee-advisory")({
+  staticData: { sitemap: true },
   head: () => serviceHead("/services/ee-advisory", "Specialist Employment Equity Advisory", "Specialist Employment Equity advisory from DDHS: EE plan reviews, barrier analysis, DG review preparation, corrective action plans and EE committee support."),
   component: () => (
     <ServicePage c={{

@@ -10,6 +10,7 @@ import { exportInvoicePdf, type InvoiceForPdf } from "@/lib/invoice-pdf";
 import { PAYFAST_PLANS, DG_REVIEW_FEE } from "@/lib/payfast.functions";
 
 export const Route = createFileRoute("/_authenticated/invoices")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Invoices — DDHS Equity Intelligence" },

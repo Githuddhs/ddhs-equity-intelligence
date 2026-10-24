@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { OrgFilterBar } from "@/components/org-filter";
 
 export const Route = createFileRoute("/_authenticated")({
+  staticData: { sitemap: "exclude-subtree" },
+  head: () => ({ meta: [{ name: "robots", content: "noindex, nofollow" }] }),
   ssr: false,
   beforeLoad: async ({ location }) => {
     const { data } = await supabase.auth.getUser();

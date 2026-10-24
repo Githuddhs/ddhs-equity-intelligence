@@ -6,6 +6,7 @@ import { normaliseContent } from "@/lib/ee-plan";
 import { POLICIES, downloadPolicy, downloadSeniorManagerLetter, type PolicyKey } from "@/lib/policy-docs";
 
 export const Route = createFileRoute("/_authenticated/policies")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "EE policies & letters — DDHS Equity Intelligence" },

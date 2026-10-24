@@ -8,6 +8,7 @@ import { ProfileForm } from "@/components/profile-form";
 import { pickProfile, profileSchema, type Profile } from "@/lib/account.functions";
 
 export const Route = createFileRoute("/_authenticated/account")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "My account — DDHS Equity Intelligence" },

@@ -16,6 +16,7 @@ import { EvidenceStep, RiskStep } from "@/components/recruitment-phase3";
 import { riskFlags, type C as RC, type V as RV } from "@/lib/recruitment-phase3";
 
 export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Vacancy — Recruitment Suite — DDHS Equity Intelligence" },

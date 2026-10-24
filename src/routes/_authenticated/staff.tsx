@@ -6,6 +6,7 @@ import { AppHeader } from "@/components/app-header";
 import { TourInvite } from "@/components/tour-invite";
 
 export const Route = createFileRoute("/_authenticated/staff")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Staff dashboard — DDHS Equity Intelligence" },

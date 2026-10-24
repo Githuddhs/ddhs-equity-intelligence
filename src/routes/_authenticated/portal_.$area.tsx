@@ -79,6 +79,7 @@ const AREAS: Record<Area, { title: string; intro: string; tool: "/eea12" | "/pla
 };
 
 export const Route = createFileRoute("/_authenticated/portal_/$area")({
+  staticData: { sitemap: false },
   params: {
     parse: (p) => {
       if (!(p.area in AREAS)) throw notFound();

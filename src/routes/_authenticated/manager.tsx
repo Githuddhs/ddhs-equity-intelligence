@@ -8,6 +8,7 @@ import { LIKERT_SECTIONS, sectionScores, type BarrierAnswers } from "@/lib/barri
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/manager")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Manager review portal — DDHS Equity Intelligence" },

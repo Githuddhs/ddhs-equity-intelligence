@@ -10,6 +10,7 @@ import { buildDeadlines, daysUntil, DG_ITEMS, type Deadline, type DgAnswer } fro
 import { exportComplianceExcel } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/compliance")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "EE compliance dashboard — DDHS Equity Intelligence" },

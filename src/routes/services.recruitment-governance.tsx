@@ -74,6 +74,7 @@ function Practice() {
 }
 
 export const Route = createFileRoute("/services/recruitment-governance")({
+  staticData: { sitemap: true },
   head: () => serviceHead("/services/recruitment-governance", "Recruitment Governance Intelligence", "Recruitment governance intelligence from DDHS: link appointments, promotions and terminations to EE targets with next-appointment priorities and accountable sign-off."),
   component: () => (
     <ServicePage c={{

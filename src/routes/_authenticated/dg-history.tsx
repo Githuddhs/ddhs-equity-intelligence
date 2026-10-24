@@ -9,6 +9,7 @@ import { DG_ITEMS, type DgAnswer } from "@/lib/ee-plan";
 import { exportDgReviewPdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/dg-history")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "DG review history — DDHS Equity Intelligence" },

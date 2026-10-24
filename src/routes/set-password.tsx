@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/set-password")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Set your password — DDHS Equity Intelligence" },
       { name: "description", content: "Accept your DDHS Equity Intelligence invite and choose a password for My portal." },
       { property: "og:title", content: "Set your password — DDHS Equity Intelligence" },
