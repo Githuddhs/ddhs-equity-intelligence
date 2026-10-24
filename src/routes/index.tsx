@@ -202,16 +202,16 @@ function Index() {
       <section className="mx-auto max-w-7xl px-6 pt-5 pb-10 sm:pt-8">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
-            Take Control of Employment Equity Implementation
+            From Workforce Data to Defensible Employment Equity Decisions
           </h1>
           <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
-            Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
-            and executive insight.
+            Turn workforce data into Employment Equity intelligence, compliance evidence and
+            actionable transformation decisions.
             <span className="hidden sm:inline">{" "}
               <span className="font-semibold text-primary">DDHS</span>{" "}
-              <span className="font-semibold text-teal">Equity Intelligence</span> helps South
-              African employers manage Employment Equity analysis, planning, monitoring, governance
-              and reporting from a single platform.
+              <span className="font-semibold text-teal">Equity Intelligence</span> brings Employment
+              Equity compliance, workforce analytics and recruitment governance together in one
+              platform for South African employers.
             </span>
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -273,6 +273,40 @@ function Index() {
           </div>
         </div>
       </section>
+
+      {/* Six integrated capabilities */}
+      <section id="six-capabilities" className="py-8">
+        <div className="mx-auto max-w-7xl px-6">
+          <SectionHeading
+            eyebrow="Six Integrated Capabilities"
+            title="Everything Employment Equity Needs, in One Platform"
+            body="Compliance, workforce intelligence, transformation analytics, recruitment governance, evidence and expert services work from the same Employee Profile data."
+          />
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { title: "Employment Equity Compliance", items: ["EEA2 and EEA4 reporting support", "EEA12 workforce analysis", "EEA13 Employment Equity Plan development", "Occupational level and designated-group analysis", "Numerical goals and annual targets", "Compliance evidence and document management"] },
+              { title: "Workforce Intelligence", items: ["One employee dataset for profiles, pay, levels and movements", "Representation and workforce-profile dashboards", "Recruitment, promotion and termination analysis", "Fixed-term and permanent employment analysis"] },
+              { title: "Transformation Analytics", items: ["Gap analysis against EE objectives and targets", "Barrier identification and tracking", "Transformation interventions", "Progress dashboards", "Management and committee reporting"] },
+              { title: "Recruitment Intelligence & Governance", items: ["Requisition and approval controls", "Candidate pipeline and applicant tracking", "Shortlisting and selection governance", "EE representation considerations", "Appointment decision records", "Audit trail for defensible decisions"] },
+              { title: "Governance & Evidence", items: ["EE committee governance", "Consultation records", "Evidence repository", "Actions, responsibilities and deadlines", "Audit-ready compliance records", "Executive and board reporting"] },
+              { title: "Professional Services", items: ["SaaS subscriptions", "Implementation and data onboarding", "Employment Equity advisory", "Workforce analysis", "EE Plan development", "Training and governance support"] },
+            ].map((c, i) => (
+              <div key={c.title} className="rounded-2xl border bg-card p-6 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-soft text-sm font-bold text-teal">{i + 1}</span>
+                  <h3 className="card-title text-primary">{c.title}</h3>
+                </div>
+                <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                  {c.items.map((x) => (
+                    <li key={x} className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal" />{x}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* Problems We Solve */}
       <section id="problems" className="bg-secondary/40 py-8">
