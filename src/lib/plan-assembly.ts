@@ -1,5 +1,6 @@
 import { TEXT_SECTIONS, type PlanContent, type SavedAnalysis } from "@/lib/ee-plan";
 import { autofillPlan } from "@/lib/plan-autofill";
+import { missingOrgFields } from "@/lib/foundation";
 
 export type SectionKey = (typeof TEXT_SECTIONS)[number]["key"] | "goals" | "milestones";
 export const EDITED = "Written or edited by you";
@@ -21,7 +22,7 @@ const NEEDS: Record<SectionKey, string> = {
   milestones: "Add milestones with a responsible owner",
 };
 
-export type AssemblyInputs = { analyses: SavedAnalysis[]; barriers: { answers: unknown; profile?: unknown }[]; workforce: string[]; start: string; end: string };
+export type AssemblyInputs = { analyses: SavedAnalysis[]; barriers: { answers: unknown; profile?: unknown }[]; workforce: string[]; start: string; end: string; org?: Partial<Record<string, string>> | null };
 
 /** Fills empty sections from saved lifecycle records and records where each one came from. */
 export function assemblePlan(content: PlanContent, i: AssemblyInputs) {
@@ -38,7 +39,11 @@ export function assemblePlan(content: PlanContent, i: AssemblyInputs) {
     else if (k === "timeline") sources["milestones"] = join(bar, eea, "plan dates");
   }
   if (r.goalsFilled) sources["goals"] = eea;
-  return { content: { ...r.content, sources }, filled: r.filled.length + (r.goalsFilled ? 1 : 0) };
+  let extra = 0;
+  const o = i.org ?? {};
+  if (!content.seniorManager.trim() && o["eeSeniorManager"]?.trim()) { r.content.seniorManager = o["eeSeniorManager"].trim(); sources["seniorManager"] = "Workforce Foundation employer details"; extra++; }
+  if (!content.committee.trim() && o["eeCommittee"]?.trim()) { r.content.committee = o["eeCommittee"].trim(); sources["committee"] = "Workforce Foundation employer details"; extra++; }
+  return { content: { ...r.content, sources }, filled: r.filled.length + (r.goalsFilled ? 1 : 0) + extra };
 }
 
 export function sectionSource(c: PlanContent, k: SectionKey): string | null {
@@ -48,9 +53,20 @@ export function sectionSource(c: PlanContent, k: SectionKey): string | null {
 }
 
 /** Inputs still missing before the plan can be signed off. */
-export function missingInputs(c: PlanContent, dates: { start: string; end: string }): { key: SectionKey | "dates"; need: string }[] {
-  const out: { key: SectionKey | "dates"; need: string }[] = [];
-  if (!dates.start || !dates.end) out.push({ key: "dates", need: "Set the plan start and end dates (s20(2)(e))" });
+export function planDateProblem(start: string, end: string): string | null {
+  if (!start || !end) return "Set specific plan commencement and termination dates (s20(2)(e))";
+  const a = new Date(start), b = new Date(end);
+  if (!(b > a)) return "The plan termination date must be after its commencement date";
+  const years = (+b - +a) / (365.25 * 86400000);
+  if (years < 0.99 || years > 5.01) return "A plan must run for between one and five years (s20(2)(e))";
+  return null;
+}
+
+export function missingInputs(c: PlanContent, dates: { start: string; end: string }, org?: Partial<Record<string, string>> | null): { key: SectionKey | "dates" | "employer"; need: string }[] {
+  const out: { key: SectionKey | "dates" | "employer"; need: string }[] = [];
+  const dp = planDateProblem(dates.start, dates.end);
+  if (dp) out.push({ key: "dates", need: dp });
+  if (org !== undefined) { const m = missingOrgFields(org ?? {}); if (m.length) out.push({ key: "employer", need: `Complete employer details in Workforce Foundation: ${m.join(", ")}` }); }
   if (c.goals.some((g) => !g.total.trim())) out.push({ key: "goals", need: NEEDS.goals });
   for (const s of TEXT_SECTIONS) if (!c[s.key].trim()) out.push({ key: s.key, need: NEEDS[s.key] });
   const ms = c.milestones ?? [];

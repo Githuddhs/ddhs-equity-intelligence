@@ -13,7 +13,8 @@ import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { latestEvidence, planFromEvidence } from "@/lib/evidence";
 import { autofillPlan, questionnaireSections } from "@/lib/plan-autofill";
-import { assemblePlan, EDITED, missingInputs, sectionSource } from "@/lib/plan-assembly";
+import { assemblePlan, EDITED, missingInputs, planDateProblem, sectionSource } from "@/lib/plan-assembly";
+import { ORG_LABELS } from "@/lib/foundation";
 import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
@@ -48,6 +49,7 @@ function PlanBuilder() {
   const [saving, setSaving] = useState(false);
   const [drafting, setDrafting] = useState<string | null>(null);
   const [signName, setSignName] = useState("");
+  const [org, setOrg] = useState<Record<string, string> | null>(null);
   const ai = useAiStream();
   const { data: wf } = useLatestOrgUnits();
 
@@ -63,6 +65,8 @@ function PlanBuilder() {
       const { data: u } = await supabase.auth.getUser();
       const b = await supabase.from("barrier_responses").select("answers,profile,priorities,open_feedback").eq("user_id", u.user?.id ?? "");
       setBarriers(b.data ?? []);
+      const fo = await supabase.from("workforce_foundation_periods").select("organisation").order("period_end", { ascending: false }).limit(1).maybeSingle();
+      setOrg((fo.data?.organisation ?? null) as Record<string, string> | null);
       const w = await latestWorkforce(); setWfLines(w ? workforceLines(w) : []);
     })();
   }, [id]);
@@ -94,7 +98,8 @@ function PlanBuilder() {
     setDrafting(null);
   };
 
-  const missing = missingInputs(content, { start: meta.start_date, end: meta.end_date });
+  const missing = missingInputs(content, { start: meta.start_date, end: meta.end_date }, org);
+  const dateProblem = planDateProblem(meta.start_date, meta.end_date);
   const Src = ({ k }: { k: Parameters<typeof sectionSource>[1] }) => { const v = sectionSource(content, k); return <p className={`mt-2 text-xs ${v ? "text-muted-foreground" : "font-semibold text-destructive"}`}>{v ? `Source: ${v}` : "Missing input — nothing saved for this section yet"}</p>; };
   const field = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";
   const del = async () => {
@@ -119,6 +124,25 @@ function PlanBuilder() {
           </div>
         </div>
 
+        <section className="mb-6 rounded-xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="section-title text-primary">Employer and plan information</h2>
+            <Link to="/workforce" className="text-sm font-semibold text-teal">Edit employer details →</Link>
+          </div>
+          {!org ? <p className="mt-2 text-sm font-semibold text-destructive">No employer details yet — capture them on the Organisation tab of the Workforce Foundation.</p> : (
+            <dl className="mt-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+              {Object.entries(ORG_LABELS).map(([k, l]) => (
+                <div key={k} className="flex flex-col"><dt className="text-xs text-muted-foreground">{l}</dt><dd className={org[k]?.trim() ? "font-medium" : "font-semibold text-destructive"}>{org[k]?.trim() || "Missing"}</dd></div>
+              ))}
+            </dl>
+          )}
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div><p className="text-xs text-muted-foreground">Plan commencement date</p><p className="font-medium">{meta.start_date || "Not set"}</p></div>
+            <div><p className="text-xs text-muted-foreground">Plan termination date</p><p className="font-medium">{meta.end_date || "Not set"}</p></div>
+          </div>
+          {dateProblem && <p className="mt-2 text-sm font-semibold text-destructive">{dateProblem}. Set the dates under Plan details below.</p>}
+        </section>
+
         <section className="mb-6 rounded-xl border border-primary/40 bg-card p-6 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -126,7 +150,7 @@ function PlanBuilder() {
               <p className="mt-1 text-sm text-muted-foreground">Builds empty sections from your saved EEA12 analyses ({rawAnalyses.length}), Barrier Analysis ({barriers.length} response(s)) and Workforce Foundation, and shows the source under each section. Anything you have written is kept.</p>
             </div>
             <button onClick={() => {
-              const r = assemblePlan(content, { analyses: rawAnalyses, barriers, workforce: wfLines, start: meta.start_date, end: meta.end_date });
+              const r = assemblePlan(content, { analyses: rawAnalyses, barriers, workforce: wfLines, start: meta.start_date, end: meta.end_date, org });
               setContent(r.content); setDirty(true);
               toast.success(r.filled ? `Assembled ${r.filled} part(s) of the plan — review, then Save plan.` : "Nothing new to assemble — see the missing inputs below.");
             }} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Assemble plan</button>
@@ -177,8 +201,8 @@ function PlanBuilder() {
               {SECTORS.map((s) => <option key={s.name} value={s.name}>{s.name}</option>)}
             </select></label>
             <div className="grid grid-cols-2 gap-3">
-              <label className="text-sm">Start date<input type="date" className={field} value={meta.start_date} onChange={(e) => upMeta({ start_date: e.target.value })} /></label>
-              <label className="text-sm">End date<input type="date" className={field} value={meta.end_date} onChange={(e) => upMeta({ end_date: e.target.value })} /></label>
+              <label className="text-sm">Commencement date<input type="date" className={field} value={meta.start_date} onChange={(e) => upMeta({ start_date: e.target.value })} /></label>
+              <label className="text-sm">Termination date<input type="date" className={field} value={meta.end_date} onChange={(e) => upMeta({ end_date: e.target.value })} /></label>
             </div>
           </div>
           <div className="mt-4 grid gap-4 md:grid-cols-3">

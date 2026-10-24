@@ -8,6 +8,7 @@ export type ChainStep = { id: string; title: string; role: string; status: Chain
 
 export type ChainInputs = {
   organisationName: string;
+  orgMissing?: number;
   employees: number;
   snapshotHeadcount: number | null;
   analyses: { sector: string; hasResults: boolean }[];
@@ -38,9 +39,9 @@ export function buildChain(i: ChainInputs): ChainStep[] {
   const resp = [filled(p?.seniorManager), filled(p?.timetable), owned > 0];
   const consult = [filled(p?.consultation), i.evidenceDocs > 0];
   const sections = p ? (["objectives", "barriers", "measures", "timetable", "monitoring", "disputes", "consultation"] as const).filter((k) => filled(p[k])).length : 0;
-  const planMissing = p ? missingInputs(p, i.planDates ?? { start: "", end: "" }).length : 0;
+  const planMissing = p ? missingInputs(p, i.planDates ?? { start: "", end: "" }).length + (i.orgMissing ? 1 : 0) : 0;
   const steps: Omit<ChainStep, "title">[] = [
-    { id: "employer", role: "Who the employer is", status: s(filled(i.organisationName), false), detail: filled(i.organisationName) ? i.organisationName : "Add organisation details", to: "/workforce" },
+    { id: "employer", role: "Who the employer is", status: s(filled(i.organisationName) && !i.orgMissing, filled(i.organisationName)), detail: filled(i.organisationName) ? (i.orgMissing ? `${i.organisationName} · ${i.orgMissing} employer field(s) missing` : i.organisationName) : "Add employer details", to: "/workforce" },
     { id: "employees", role: "Collected once, reused everywhere", status: s(i.employees > 0, false), detail: i.employees ? `${i.employees} employee records` : "Load employee records", to: "/workforce" },
     { id: "profile", role: "Headcount by level, group and gender", status: s(i.snapshotHeadcount !== null, false), detail: i.snapshotHeadcount !== null ? `${i.snapshotHeadcount} employees in latest snapshot` : "Save a workforce snapshot", to: "/workforce" },
     { id: "benchmarks", role: "What representation should look like", status: s(sectors > 0, false), detail: sectors ? `${sectors} analysis(es) with sector targets` : "Choose sector and province in EEA12", to: "/eea12" },

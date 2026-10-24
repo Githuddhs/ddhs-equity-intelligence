@@ -4,6 +4,7 @@ import { CheckCircle2, Circle, CircleDashed } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { normaliseContent } from "@/lib/ee-plan";
+import { missingOrgFields } from "@/lib/foundation";
 import { buildChain, nextStep, type ChainStatus } from "@/lib/plan-chain";
 
 export const Route = createFileRoute("/_authenticated/plan-lifecycle")({
@@ -43,6 +44,7 @@ function Lifecycle() {
       const org = (fp?.organisation ?? {}) as Record<string, unknown>;
       return buildChain({
         organisationName: String(org["legalName"] ?? org["name"] ?? org["tradingName"] ?? ""),
+        orgMissing: fp ? missingOrgFields(org as Record<string, string>).length : 0,
         employees: Array.isArray(fp?.employees) ? fp.employees.length : 0,
         snapshotHeadcount: w.data?.[0]?.total_headcount ?? null,
         analyses: (a.data ?? []).map((x) => ({ sector: x.sector, hasResults: !!(x.results as { sectoral?: unknown[] } | null)?.sectoral?.length })),

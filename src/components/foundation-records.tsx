@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LEVELS } from "@/lib/workforce";
 import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, type Foundation } from "@/lib/foundation";
+import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, organisationSchema, ORG_LABELS, DESIGNATED_STATUSES, type Foundation } from "@/lib/foundation";
 import { FOUNDATION_ACCEPT, importFoundationFile } from "@/lib/foundation-import";
 import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
@@ -25,7 +25,7 @@ const choices: Record<string, string[]> = {
   populationGroup: ["African", "Coloured", "Indian", "White", "Foreign national"], gender: ["Male", "Female"],
   disability: ["Yes", "No", "Not disclosed"], employmentType: ["Permanent", "Fixed-term", "Temporary", "Part-time"],
   level: LEVELS, previousLevel: LEVELS, newLevel: LEVELS, gradingSystem: ["Paterson", "Peromnes", "Hay", "Equate", "Other"],
-  type: ["Recruitment", "Promotion", "Transfer", "Termination"], province: Object.keys(PROVINCE_EAP).filter((p) => p !== "National"), sector: SECTORS.map((s) => s.name),
+  type: ["Recruitment", "Promotion", "Transfer", "Termination"], province: Object.keys(PROVINCE_EAP).filter((p) => p !== "National"), sector: SECTORS.map((s) => s.name), designatedStatus: DESIGNATED_STATUSES,
 };
 const input = "h-9 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm text-foreground";
 function Field({ name, value, onChange, label }: { name: string; value: string; onChange: (v: string) => void; label: string }) {
@@ -96,7 +96,7 @@ export function FoundationRecords() {
     <p className="mt-3 text-xs text-muted-foreground">Excel / ODS, Word (.docx), text-based PDF, CSV, TSV, TXT, Markdown, JSON and HTML tables. Up to 20 MB; PDF up to 10 MB. Record tables need named columns and employee IDs. Scans cannot be read; convert older .doc files to .docx.</p>
     <Tabs defaultValue="organisation" className="mt-5">
       <TabsList className="h-auto max-w-full flex-wrap justify-start"><TabsTrigger value="organisation">Organisation</TabsTrigger><TabsTrigger value="employees">Employees & job grades</TabsTrigger><TabsTrigger value="pay">Remuneration</TabsTrigger><TabsTrigger value="movements">Movements</TabsTrigger><TabsTrigger value="validation">Validation {check.errors.length || check.warnings.length ? `(${check.errors.length + check.warnings.length})` : ""}</TabsTrigger></TabsList>
-      <TabsContent value="organisation" className="py-4"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{Object.keys(form.organisation).map((key) => <label key={key} className="text-sm font-medium">{key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)}<div className="mt-1"><Field name={key} value={form.organisation[key as keyof typeof form.organisation]} label={key === "name" ? "Legal organisation name" : key === "doelRef" ? "DoEL reference" : fieldLabel(key)} onChange={(v) => update({ ...form, organisation: { ...form.organisation, [key]: v } })} /></div></label>)}</div></TabsContent>
+      <TabsContent value="organisation" className="py-4"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{Object.keys(organisationSchema.shape).map((key) => <label key={key} className={`text-sm font-medium ${key === "eeCommittee" ? "sm:col-span-2 lg:col-span-3" : ""}`}>{ORG_LABELS[key] ?? fieldLabel(key)}<div className="mt-1"><Field name={key} value={form.organisation[key as keyof typeof form.organisation] ?? ""} label={ORG_LABELS[key] ?? fieldLabel(key)} onChange={(v) => update({ ...form, organisation: { ...form.organisation, [key]: v } })} /></div></label>)}</div></TabsContent>
       <TabsContent value="employees" className="py-4">{table("employees", EMPLOYEE_FIELDS)}<div className="mt-6 divide-y divide-border">{LEVELS.map((level) => <div key={level} className="py-4"><OccupationalGrades level={level} /></div>)}</div><p className="mt-3 text-xs text-muted-foreground">Indicative EEA9 alignment: confirm against actual job responsibilities and your approved grading structure. Hay values are points; Equate public-service levels are indicative.</p></TabsContent>
       <TabsContent value="pay" className="py-4"><p className="mb-4 text-sm text-muted-foreground">Reporting-period totals in ZAR, not monthly rates. Blank amounts remain missing; enter 0 for confirmed zero.</p>{table("remuneration", PAY_FIELDS)}</TabsContent>
       <TabsContent value="movements" className="py-4">{table("movements", MOVEMENT_FIELDS)}</TabsContent>
