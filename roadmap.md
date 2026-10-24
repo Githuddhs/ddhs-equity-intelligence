@@ -87,5 +87,5 @@
 - [x] Shorter mobile opening text with Book a Demonstration visible without scrolling
 - [x] Clear demo data / example figures from all pages
 - [x] Page files + four-format (incl. PowerPoint) downloads on every signed-in page
-- [ ] Same front-page logo on every page
-- [ ] Aptos font on every page; standardise branding and colours
+- [x] Same front-page logo on every page
+- [x] Aptos font on every page; standardise branding and colours
