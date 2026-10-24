@@ -3,7 +3,7 @@ import { blankMove, demographicImpact, moveMissing } from "@/lib/movement-plan";
 import type { Employee } from "@/lib/foundation";
 
 const emp = (id: string, populationGroup: string, gender: string, level: string): Employee => ({ employeeId: id, populationGroup, gender, nationality: "South African", disability: "", employmentStatus: "Active", employmentType: "", workPattern: "", startDate: "2020-01-01", positionDate: "", location: "", endDate: "", level, jobTitle: "", gradingSystem: "", jobGrade: "", organisation: "", faculty: "", division: "", department: "HR", section: "" });
-const L = "Professionally qualified";
+const L = "Professionally Qualified";
 const staff = [emp("1", "White", "Male", L), emp("2", "African", "Female", L)];
 
 describe("movement plan", () => {
