@@ -68,7 +68,8 @@ export function validateFoundation(f: Foundation) {
     for (const k of ["jobTitle", "gradingSystem", "jobGrade", "employmentStatus", "employmentType", "workPattern", "startDate", "positionDate", "location", "disability"] as const) if (!e[k]) warnings.push(`${label}: ${fieldLabel(k).toLowerCase()} is missing.`);
     if (!e.department) warnings.push(`${label}: department/business unit is missing.`);
     if (e.employmentStatus && !EMPLOYMENT_STATUSES.includes(e.employmentStatus)) errors.push(`${label}: employment status must be ${EMPLOYMENT_STATUSES.join(", ")}.`);
-    if (e.employmentType && !CONTRACT_TYPES.includes(e.employmentType)) errors.push(`${label}: permanent/fixed-term status must be ${CONTRACT_TYPES.join(", ")}.`);
+    if (e.employmentType === "Part-time") warnings.push(`${label}: move "Part-time" to the full-time/part-time column and record permanent or fixed-term status.`);
+    else if (e.employmentType && !CONTRACT_TYPES.includes(e.employmentType)) errors.push(`${label}: permanent/fixed-term status must be ${CONTRACT_TYPES.join(", ")}.`);
     if (e.workPattern && !WORK_PATTERNS.includes(e.workPattern)) errors.push(`${label}: full-time/part-time status must be Full-time or Part-time.`);
     if (e.positionDate && e.startDate && validDate(e.positionDate) && e.positionDate < e.startDate) errors.push(`${label}: current position date precedes the date appointed.`);
     if (e.gradingSystem && !["Paterson", "Peromnes", "Hay", "Equate", "Other"].includes(e.gradingSystem)) errors.push(`${label}: grading system is not recognised.`);
