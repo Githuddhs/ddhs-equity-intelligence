@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 export const RECRUITMENT_PLANS = [
   { name: "Essentials", price: "R2,995", from: false, tagline: "Digitise and govern recruitment" },
   { name: "Intelligence", price: "R5,995", from: false, tagline: "Connect recruitment to Employment Equity outcomes", featured: true },
-  { name: "Pro", price: "R9,995", from: false, tagline: "Advanced recruitment intelligence, governance and compliance" },
+  { name: "Pro", price: "R9,995", from: false, tagline: "Advanced Recruitment Suite governance intelligence and compliance" },
   { name: "Enterprise", price: "R15,000", from: true, tagline: "Enterprise recruitment transformation and governance" },
 ] as const;
 
@@ -14,7 +14,7 @@ export const RECRUITMENT_FEES: [string, string][] = [
   ["Pro implementation", "R45,000–R75,000"],
   ["Enterprise implementation", "R75,000–R200,000+"],
   ["Custom HRIS/API integration", "Quoted separately"],
-  ["EE/recruitment governance advisory", "R1,750–R2,500/hour or project fee"],
+  ["Recruitment Suite governance advisory", "R1,750–R2,500/hour or project fee"],
 ];
 
 export function RecruitmentPricing({ id = "recruitment-pricing", quoteHref = "/pricing#quote" }: { id?: string; quoteHref?: string }) {

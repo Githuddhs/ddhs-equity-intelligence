@@ -44,7 +44,7 @@ function Journey() {
 
 export const Route = createFileRoute("/services/recruitment-suite")({
   staticData: { sitemap: true },
-  head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "Recruitment Suite with recruitment governance intelligence: an integrated applicant tracking system for South African employers linking every appointment to EE targets, selection governance and audit-ready evidence."),
+  head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "Recruitment Suite, including governance intelligence: an integrated applicant tracking system for South African employers linking every appointment to EE targets, selection governance and audit-ready evidence."),
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-suite",
@@ -82,9 +82,9 @@ export const Route = createFileRoute("/services/recruitment-suite")({
         "Recruitment decisions linked to EE priorities",
         "Visibility of where designated-group candidates are lost",
         "Consistent, defensible selection processes",
-        "Real-time recruitment intelligence for leadership",
+        "Real-time Recruitment Suite intelligence for leadership",
       ],
-      ctaTitle: "See the Suite in action",
+      ctaTitle: "See the Recruitment Suite in action",
       ctaBody: "We will show how one integrated recruitment journey connects your vacancies to your transformation goals.",
     }} />
   ),
