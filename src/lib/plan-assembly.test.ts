@@ -33,3 +33,22 @@ describe("plan assembly", () => {
     expect(sectionSource({ ...emptyContent(), disputes: "Our procedure" }, "disputes")).toBe(EDITED);
   });
 });
+
+import { planDateProblem } from "./plan-assembly";
+import { missingOrgFields } from "./foundation";
+describe("employer and plan information", () => {
+  it("requires termination after commencement", () => {
+    expect(planDateProblem("2027-01-01", "2026-01-01")).toMatch(/after/);
+  });
+  it("rejects plans longer than five years or shorter than one", () => {
+    expect(planDateProblem("2026-01-01", "2032-01-01")).toMatch(/one and five years/);
+    expect(planDateProblem("2026-01-01", "2026-06-01")).toMatch(/one and five years/);
+    expect(planDateProblem("2026-09-01", "2031-08-31")).toBeNull();
+  });
+  it("flags missing senior manager and EE committee", () => {
+    const m = missingOrgFields({ name: "DDHS" });
+    expect(m).toContain("Senior manager responsible for EE (s24)");
+    expect(m).toContain("EE committee / consultative forum details");
+    expect(m).not.toContain("SDL number (where applicable)");
+  });
+});
