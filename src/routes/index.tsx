@@ -200,11 +200,11 @@ function Index() {
 
       {/* Section 1: Hero */}
       <section className="mx-auto max-w-7xl px-6 pt-5 pb-10 sm:pt-8">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
             From Workforce Data to Defensible Employment Equity Decisions
           </h1>
-          <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
+          <p className="mx-auto mt-4 max-w-3xl text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
             Turn workforce data into Employment Equity intelligence, compliance evidence and
             actionable transformation decisions.
             <span className="hidden sm:inline">{" "}
