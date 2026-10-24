@@ -357,6 +357,13 @@ function Index() {
                 </div>
                 <h3 className="card-title mt-5 text-primary">{card.title}</h3>
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
+                <Link
+                  to={card.href}
+                  className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors hover:text-primary"
+                >
+                  Solved with {card.capability}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
             ))}
           </div>
