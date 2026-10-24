@@ -34,4 +34,4 @@ export function goalVariance(goals: GoalRow[], employees: Employee[], movements:
   });
 }
 
-export type CorrectiveAction = { id: string; level: string; action: string; owner: string; due: string; status: "open" | "in_progress" | "done"; evidence: { name: string; path: string }[] };
+export type { CorrectiveAction } from "@/lib/ee-plan";
