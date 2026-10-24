@@ -359,10 +359,10 @@ function Index() {
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
                 <Link
                   to={card.href}
-                  className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors hover:text-primary"
+                  className="group mt-5 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
                 >
-                  Solved with {card.capability}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  Solved with {card.capability}{" "}
+                  <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </div>
             ))}
@@ -560,10 +560,10 @@ function Index() {
                   <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
                   <Link
                     to={c.href}
-                    className="group mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors hover:text-primary"
+                    className="group mt-3 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
                   >
-                    Delivered by {c.capability}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    Delivered by {c.capability}{" "}
+                    <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
                   </Link>
                 </div>
               </div>
