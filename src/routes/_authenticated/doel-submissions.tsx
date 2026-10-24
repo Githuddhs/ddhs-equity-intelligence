@@ -1,3 +1,4 @@
+import { ExistingFormUpload } from "@/components/existing-form-upload";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -155,6 +156,7 @@ function DoelSubmissionsPage() {
       <AppHeader />
       <main className="mx-auto max-w-5xl px-4 py-8">
         <h1 className="font-display text-2xl font-bold text-navy">DoEL submissions — EEA2 &amp; EEA4</h1>
+        <div className="mt-4"><ExistingFormUpload forms={["eea2", "eea4"]} /></div>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
           Track your Employment Equity reports to the Department of Employment and Labour: the EEA2 workforce profile
           report and the EEA4 income differentials statement. Keep each submission's period, status and DoEL reference

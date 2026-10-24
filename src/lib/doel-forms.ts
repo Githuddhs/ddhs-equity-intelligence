@@ -34,8 +34,10 @@ export const EEA4_TABLES = [
 
 export const EMPLOYER_FIELDS = [
   ["name", "Employer trade name"], ["registration", "Company registration no."], ["doelRef", "DoEL reference no."],
-  ["sector", "Sector / SETA"], ["sic", "SIC code"], ["address", "Physical address"], ["ceo", "CEO name"],
-  ["seniorManager", "Assigned senior manager (s24)"], ["contact", "Contact email / phone"], ["period", "Reporting period"],
+  ["tradingName", "Trading name"], ["sdlNumber", "SDL number"],
+  ["sector", "Sector / SETA"], ["sic", "SIC code"], ["businessActivity", "Main business activity"], ["designatedStatus", "Designated-employer status"],
+  ["address", "Physical address"], ["postalAddress", "Postal address"], ["province", "Province"], ["totalEmployees", "Total number of employees"],
+  ["ceo", "CEO / accounting officer"], ["seniorManager", "Assigned senior manager (s24)"], ["eeManager", "EE manager"], ["contact", "Contact email / phone"], ["period", "Reporting period"],
 ] as const;
 
 export type DoelForms = {
