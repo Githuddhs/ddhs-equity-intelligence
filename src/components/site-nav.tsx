@@ -12,6 +12,7 @@ const LINKS = [
   { label: "Site Tour", href: "/tour" },
   { label: "Virtual Consultant", href: "/virtual-consultant" },
   { label: "Recruitment Suite", href: "/services/recruitment-suite" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const desk = "whitespace-nowrap transition-colors hover:text-primary";
