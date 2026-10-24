@@ -85,4 +85,4 @@
 - [x] Approve all ten guides for weekly publication
 - [x] Public EE readiness check leading to Book a Demonstration (browser-only answers)
 - [x] Shorter mobile opening text with Book a Demonstration visible without scrolling
-- [ ] Clear demo data / example figures from all pages
+- [x] Clear demo data / example figures from all pages

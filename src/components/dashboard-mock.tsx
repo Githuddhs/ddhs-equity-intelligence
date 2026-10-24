@@ -109,7 +109,7 @@ export function DashboardMock() {
                 </span>
               </p>
               <p className="text-[11px] text-muted-foreground">
-                {live ? `Workforce snapshot · ${live.snapshotDate}` : "Reporting period · FY2025/26"}
+                {live ? `Workforce snapshot · ${live.snapshotDate}` : "Reporting period · not set"}
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
@@ -215,8 +215,8 @@ export function DashboardMock() {
           {/* DG readiness, barriers, calendar */}
           <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
             {[
-              { icon: ClipboardCheck, title: "DG review readiness", note: live?.dgNote ?? "Process & reporting checklist · 7 of 12 complete" },
-              { icon: TriangleAlert, title: "Barrier analysis", note: live?.barrierNote ?? "Survey responses · 26 received" },
+              { icon: ClipboardCheck, title: "DG review readiness", note: live?.dgNote ?? "Process & reporting checklist · not started" },
+              { icon: TriangleAlert, title: "Barrier analysis", note: live?.barrierNote ?? "Survey responses · none yet" },
               { icon: Target, title: "Next statutory deadline", note: live?.deadlineNote ?? "EEA2 / EEA4 · due 15 Jan 2027" },
             ].map((c) => (
               <div key={c.title} className="rounded-xl border bg-background p-3">
