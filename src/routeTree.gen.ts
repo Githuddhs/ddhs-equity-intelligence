@@ -23,6 +23,7 @@ import { Route as LeadershipReportRouteImport } from './routes/leadership-report
 import { Route as PlanArchitectureRouteImport } from './routes/plan-architecture'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ReadinessCheckRouteImport } from './routes/readiness-check'
+import { Route as RecruitmentTourRouteImport } from './routes/recruitment-tour'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
@@ -146,6 +147,11 @@ const PricingRoute = PricingRouteImport.update({
 const ReadinessCheckRoute = ReadinessCheckRouteImport.update({
   id: '/readiness-check',
   path: '/readiness-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecruitmentTourRoute = RecruitmentTourRouteImport.update({
+  id: '/recruitment-tour',
+  path: '/recruitment-tour',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/readiness-check': typeof ReadinessCheckRoute
+  '/recruitment-tour': typeof RecruitmentTourRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
@@ -514,6 +521,7 @@ export interface FileRoutesByTo {
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/readiness-check': typeof ReadinessCheckRoute
+  '/recruitment-tour': typeof RecruitmentTourRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
@@ -585,6 +593,7 @@ export interface FileRoutesById {
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/readiness-check': typeof ReadinessCheckRoute
+  '/recruitment-tour': typeof RecruitmentTourRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
@@ -656,6 +665,7 @@ export interface FileRouteTypes {
     | '/plan-architecture'
     | '/pricing'
     | '/readiness-check'
+    | '/recruitment-tour'
     | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
@@ -725,6 +735,7 @@ export interface FileRouteTypes {
     | '/plan-architecture'
     | '/pricing'
     | '/readiness-check'
+    | '/recruitment-tour'
     | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
@@ -795,6 +806,7 @@ export interface FileRouteTypes {
     | '/plan-architecture'
     | '/pricing'
     | '/readiness-check'
+    | '/recruitment-tour'
     | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
@@ -866,6 +878,7 @@ export interface RootRouteChildren {
   PlanArchitectureRoute: typeof PlanArchitectureRoute
   PricingRoute: typeof PricingRoute
   ReadinessCheckRoute: typeof ReadinessCheckRoute
+  RecruitmentTourRoute: typeof RecruitmentTourRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ResponsibleAiRoute: typeof ResponsibleAiRoute
   SetPasswordRoute: typeof SetPasswordRoute
@@ -992,6 +1005,13 @@ declare module '@tanstack/react-router' {
       path: '/readiness-check'
       fullPath: '/readiness-check'
       preLoaderRoute: typeof ReadinessCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recruitment-tour': {
+      id: '/recruitment-tour'
+      path: '/recruitment-tour'
+      fullPath: '/recruitment-tour'
+      preLoaderRoute: typeof RecruitmentTourRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -1456,6 +1476,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanArchitectureRoute: PlanArchitectureRoute,
   PricingRoute: PricingRoute,
   ReadinessCheckRoute: ReadinessCheckRoute,
+  RecruitmentTourRoute: RecruitmentTourRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ResponsibleAiRoute: ResponsibleAiRoute,
   SetPasswordRoute: SetPasswordRoute,

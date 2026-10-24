@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ServicePage, serviceHead } from "@/components/service-page";
 
 const JOURNEY: { title: string; intro: string; items: string[]; output: string; note?: string }[] = [
@@ -16,7 +16,10 @@ const JOURNEY: { title: string; intro: string; items: string[]; output: string; 
 function Journey() {
   return (
     <section className="mt-16">
-      <h2 className="section-title text-primary">One integrated recruitment journey</h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="section-title text-primary">One integrated recruitment journey</h2>
+        <Link to="/recruitment-tour" className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Take the Recruitment Suite tour</Link>
+      </div>
       <ol className="mt-6 grid gap-6 lg:grid-cols-3">
         {JOURNEY.map((s, i) => (
           <li key={s.title} className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm">
