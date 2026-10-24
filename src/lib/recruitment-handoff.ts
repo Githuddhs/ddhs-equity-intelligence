@@ -1,4 +1,4 @@
-import { blankFoundation, employeeSchema, movementSchema, type Employee, type Foundation } from "@/lib/foundation";
+import { employeeSchema, movementSchema, type Employee, type Foundation } from "@/lib/foundation";
 
 export type HandoffCandidate = { full_name: string; race: string; gender: string; disability: boolean; foreign_national: boolean };
 export type HandoffVacancy = { title: string; occupational_level: string; organisation: string; division: string; department: string; section: string; province: string };
@@ -38,10 +38,10 @@ export function pickPeriod<T extends { period_start: string; period_end: string 
 }
 
 /** Adds the appointment to a period. Refuses a duplicate employee number so one employee keeps one profile. */
-export function addAppointment(f: Foundation | null, c: HandoffCandidate, v: HandoffVacancy, h: HandoffInput): Foundation {
+export function addAppointment(f: Foundation, c: HandoffCandidate, v: HandoffVacancy, h: HandoffInput): Foundation {
   if (!h.employeeId.trim()) throw new Error("Enter the new employee's staff number.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(h.startDate)) throw new Error("Set the start date first.");
-  const base = f ?? blankFoundation();
+  const base = f;
   if (base.employees.some((e) => e.employeeId === h.employeeId.trim())) throw new Error("That staff number already has an Employee Profile in this period.");
   const { employee, movement } = appointmentRecords(c, v, h);
   return { ...base, employees: [...base.employees, employee], movements: [...base.movements, movement] };
