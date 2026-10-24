@@ -89,3 +89,4 @@
 - [x] Page files + four-format (incl. PowerPoint) downloads on every signed-in page
 - [x] Same front-page logo on every page
 - [x] Aptos font on every page; standardise branding and colours
+- [x] Brand logo, navy/teal and Aptos in all four export formats

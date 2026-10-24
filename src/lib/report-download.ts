@@ -86,11 +86,46 @@ async function requestData(request: ReportRequest): Promise<ReportData> {
   } finally { await pdf.cleanup(); }
 }
 
+/** Shared export branding: the site logo, navy/teal brand colours and Aptos with standard fallbacks. */
+export const EXPORT_BRAND = { navy: "0D2A48", teal: "07A4A4", tealSoft: "E3F4F4", border: "CBD5E1", font: "Aptos", fallbackFont: "Calibri", name: "DDHS Equity Intelligence" } as const;
+let logoCache: Promise<string | null> | null = null;
+function brandLogo(): Promise<string | null> {
+  logoCache ??= fetch("/icons/icon-192.png").then(async (r) => {
+    if (!r.ok) return null;
+    const b = await r.blob();
+    return await new Promise<string>((ok, no) => { const f = new FileReader(); f.onload = () => ok(String(f.result)); f.onerror = no; f.readAsDataURL(b); });
+  }).catch(() => null);
+  return logoCache;
+}
+/** Writes a workbook with brand styling: Aptos (Calibri fallback in Excel), navy text, navy header row, teal title. */
+async function brandedXlsx(wb: import("xlsx").WorkBook): Promise<Blob> {
+  const XS = (await import("xlsx-js-style")).default, B = EXPORT_BRAND;
+  for (const name of wb.SheetNames) {
+    const ws = wb.Sheets[name]; if (!ws?.["!ref"]) continue;
+    const r = XS.utils.decode_range(ws["!ref"]);
+    const widths: number[] = [];
+    for (let R = r.s.r; R <= r.e.r; R++) for (let C = r.s.c; C <= r.e.c; C++) {
+      const cell = ws[XS.utils.encode_cell({ r: R, c: C })] as { v?: unknown; s?: unknown } | undefined; if (!cell) continue;
+      widths[C] = Math.min(60, Math.max(widths[C] ?? 10, String(cell.v ?? "").length + 2));
+      const head = R === r.s.r;
+      const summaryTitle = name === "Summary" && R <= 1;
+      cell.s = {
+        font: { name: B.font, sz: summaryTitle && R === 0 ? 16 : 11, bold: head || summaryTitle, color: { rgb: summaryTitle ? (R === 0 ? B.navy : B.teal) : head ? "FFFFFF" : B.navy } },
+        ...(head && !summaryTitle ? { fill: { patternType: "solid", fgColor: { rgb: B.navy } } } : {}),
+        border: summaryTitle ? undefined : { top: { style: "thin", color: { rgb: B.border } }, bottom: { style: "thin", color: { rgb: B.border } }, left: { style: "thin", color: { rgb: B.border } }, right: { style: "thin", color: { rgb: B.border } } },
+        alignment: { vertical: "top", wrapText: true },
+      };
+    }
+    ws["!cols"] ??= widths.map((w) => ({ wch: w ?? 10 }));
+  }
+  return new Blob([XS.write(wb as never, { type: "array", bookType: "xlsx" })], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}
+const dataUrlBytes = (u: string) => Uint8Array.from(atob(u.split(",")[1] ?? ""), (c) => c.charCodeAt(0));
+
 export async function buildReportFile(request: ReportRequest, format: ReportFormat): Promise<Blob> {
   if (format === "pdf" && request.pdf) return request.pdf;
   if (format === "excel" && request.workbook) {
-    const XLSX = await import("xlsx");
-    return new Blob([XLSX.write(request.workbook, { type: "array", bookType: "xlsx" })], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    return brandedXlsx(request.workbook);
   }
   if (format === "powerpoint" && request.pdf) {
     const { default: Pptx } = await import("pptxgenjs");
@@ -111,16 +146,32 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
   }
   const d = await requestData(request);
   if (format === "word") {
-    const { Document, Paragraph, Table, TableRow, TableCell, Packer, HeadingLevel, WidthType } = await import("docx");
-    const children = [new Paragraph({ text: d.title, heading: HeadingLevel.TITLE }), new Paragraph("DDHS Equity Intelligence")];
+    const { Document, Paragraph, Table, TableRow, TableCell, Packer, HeadingLevel, WidthType, TextRun, ImageRun, ShadingType, BorderStyle } = await import("docx");
+    const B = EXPORT_BRAND, logo = await brandLogo();
+    const brandLine = new Paragraph({ spacing: { after: 200 }, border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: B.teal, space: 4 } }, children: [
+      ...(logo ? [new ImageRun({ type: "png", data: dataUrlBytes(logo), transformation: { width: 36, height: 36 } })] : []),
+      new TextRun({ text: logo ? "  DDHS " : "DDHS ", bold: true, color: B.navy, size: 28 }), new TextRun({ text: "Equity Intelligence", bold: true, color: B.teal, size: 28 })] });
+    const children = [brandLine, new Paragraph({ text: d.title, heading: HeadingLevel.TITLE })];
     const content = d.blocks.flatMap<InstanceType<typeof Paragraph> | InstanceType<typeof Table>>((b) => {
       if (b.kind !== "table") return [new Paragraph({ text: b.text, ...(b.kind === "h" ? { heading: HeadingLevel.HEADING_2 } : {}) })];
       const rows = b.head.length ? [b.head, ...b.body] : b.body;
       if (!rows.length) return [];
       const cols = Math.max(...rows.map((r) => r.length));
-      return [new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: rows.map((r) => new TableRow({ children: Array.from({ length: cols }, (_, i) => new TableCell({ children: [new Paragraph(r[i] ?? "")] })) })) })];
+      return [new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: rows.map((r, ri) => {
+        const head = ri === 0 && b.head.length > 0;
+        return new TableRow({ tableHeader: head, children: Array.from({ length: cols }, (_, i) => new TableCell({
+          ...(head ? { shading: { type: ShadingType.CLEAR, color: "auto", fill: B.navy } } : {}),
+          children: [new Paragraph({ children: [new TextRun({ text: r[i] ?? "", bold: head, color: head ? "FFFFFF" : B.navy })] })] })) });
+      }) })];
     });
-    return Packer.toBlob(new Document({ sections: [{ children: [...children, ...content] }] }));
+    const font = { ascii: B.font, hAnsi: B.font, cs: B.font, eastAsia: B.font };
+    return Packer.toBlob(new Document({
+      creator: B.name, title: d.title,
+      styles: {
+        default: { document: { run: { font, size: 22, color: B.navy } }, title: { run: { font, size: 48, bold: true, color: B.navy } }, heading2: { run: { font, size: 30, bold: true, color: B.teal } } },
+      },
+      sections: [{ children: [...children, ...content] }],
+    }));
   }
   if (format === "excel") {
     const XLSX = await import("xlsx"), wb = XLSX.utils.book_new(), used = new Set<string>();
@@ -132,11 +183,19 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     append("Summary", [[d.title], ["DDHS Equity Intelligence"], ...d.blocks.flatMap((b) => b.kind === "table" ? [] : [[b.text]])]);
     if (d.fields?.length) append("Fields", [["Field", "Value"], ...d.fields]);
     for (const b of d.blocks) if (b.kind === "table") append(b.title, b.head.length ? [b.head, ...b.body] : b.body);
-    return new Blob([XLSX.write(wb, { type: "array", bookType: "xlsx" })], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    return brandedXlsx(wb);
   }
   if (format === "pdf") {
     const { jsPDF } = await import("jspdf"), autoTable = (await import("jspdf-autotable")).default;
-    const doc = new jsPDF(); let y = 18;
+    const B = EXPORT_BRAND, rgb = (h: string): [number, number, number] => [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+    const doc = new jsPDF(), logo = await brandLogo(); let y = 18;
+    // Aptos cannot be embedded in PDFs; Helvetica is the standard built-in fallback.
+    doc.setFont("helvetica", "bold"); doc.setFontSize(13);
+    if (logo) doc.addImage(logo, "PNG", 14, 9, 9, 9);
+    const bx = logo ? 26 : 14; doc.setTextColor(...rgb(B.navy)); doc.text("DDHS", bx, 15.5);
+    doc.setTextColor(...rgb(B.teal)); doc.text("Equity Intelligence", bx + doc.getTextWidth("DDHS "), 15.5);
+    doc.setDrawColor(...rgb(B.teal)); doc.setLineWidth(0.6); doc.line(14, 20, 196, 20); y = 30;
+    doc.setTextColor(...rgb(B.navy));
     doc.setFontSize(15);
     const titleLines = doc.splitTextToSize(d.title, 180) as string[];
     doc.text(titleLines, 14, y); y += titleLines.length * 6 + 6;
@@ -146,11 +205,11 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
         for (let c = 1; c < Math.max(columns, 2); c += 5) {
           const keys = columns === 1 ? [0] : [0, ...Array.from({ length: Math.min(5, columns - c) }, (_, i) => c + i)];
           if (y > 250) { doc.addPage(); y = 18; }
-          autoTable(doc, { startY: y, head: b.head.length ? [keys.map((k) => b.head[k] ?? "")] : [], body: b.body.map((row) => keys.map((k) => row[k] ?? "")), styles: { fontSize: 8 }, margin: 14 });
+          autoTable(doc, { startY: y, head: b.head.length ? [keys.map((k) => b.head[k] ?? "")] : [], body: b.body.map((row) => keys.map((k) => row[k] ?? "")), styles: { fontSize: 8, font: "helvetica", textColor: rgb(B.navy), lineColor: rgb(B.border), lineWidth: 0.1 }, headStyles: { fillColor: rgb(B.navy), textColor: [255, 255, 255] }, alternateRowStyles: { fillColor: rgb(B.tealSoft) }, margin: 14 });
           y = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? y; y += 8;
         }
       } else {
-        doc.setFontSize(b.kind === "h" ? 13 : 10);
+        doc.setFont("helvetica", b.kind === "h" ? "bold" : "normal"); doc.setFontSize(b.kind === "h" ? 13 : 10); doc.setTextColor(...rgb(b.kind === "h" ? B.teal : B.navy));
         const lines = doc.splitTextToSize(b.text, 180) as string[];
         for (const line of lines) { if (y > 280) { doc.addPage(); y = 18; } doc.text(line, 14, y); y += 5; } y += 4;
       }
@@ -158,21 +217,24 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     return doc.output("blob");
   }
   const { default: Pptx } = await import("pptxgenjs");
-  const pptx = new Pptx(); pptx.layout = "LAYOUT_WIDE"; pptx.title = d.title; pptx.author = "DDHS Equity Intelligence";
+  const B = EXPORT_BRAND, logo = await brandLogo();
+  const pptx = new Pptx(); pptx.layout = "LAYOUT_WIDE"; pptx.title = d.title; pptx.author = B.name;
+  pptx.theme = { headFontFace: B.font, bodyFontFace: B.font };
   let heading = d.title;
   const slide = (title: string) => {
     const s = pptx.addSlide();
-    s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 0.18, h: 7.5, fill: { color: "00A3A3" }, line: { color: "00A3A3" } });
-    s.addText(title, { x: 0.5, y: 0.4, w: 12.3, h: 1.05, fontFace: "Aptos Display", fontSize: 28, bold: true, color: "0A2540", margin: 0, breakLine: false });
-    s.addText("DDHS Equity Intelligence", { x: 0.5, y: 7.05, w: 12, h: 0.25, fontSize: 12, color: "00A3A3", margin: 0 });
+    s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 0.18, h: 7.5, fill: { color: B.teal }, line: { color: B.teal } });
+    s.addText(title, { x: 0.5, y: 0.4, w: 11.6, h: 1.05, fontFace: B.font, fontSize: 28, bold: true, color: B.navy, margin: 0, breakLine: false });
+    if (logo) s.addImage({ data: logo, x: 12.45, y: 0.45, w: 0.55, h: 0.55 });
+    s.addText([{ text: "DDHS ", options: { bold: true, color: B.navy } }, { text: "Equity Intelligence", options: { bold: true, color: B.teal } }], { x: 0.5, y: 7.0, w: 12, h: 0.3, fontFace: B.font, fontSize: 12, margin: 0 });
     return s;
   };
-  const cover = slide(d.title); cover.addText("Employment Equity report", { x: 0.5, y: 2.8, w: 12, h: 1, fontSize: 32, color: "0A2540" });
+  const cover = slide(d.title); cover.addText("Employment Equity report", { x: 0.5, y: 2.8, w: 12, h: 1, fontFace: B.font, fontSize: 32, color: B.teal });
   for (const b of d.blocks) {
     if (b.kind === "h") { heading = b.text; continue; }
     if (b.kind === "p") {
       const words = b.text.split(/\s+/);
-      for (let i = 0; i < words.length; i += 65) slide(heading).addText(words.slice(i, i + 65).join(" "), { x: 0.5, y: 1.7, w: 12.1, h: 4.7, fontSize: 24, color: "0A2540", margin: 0, valign: "top", fit: "resize" });
+      for (let i = 0; i < words.length; i += 65) slide(heading).addText(words.slice(i, i + 65).join(" "), { x: 0.5, y: 1.7, w: 12.1, h: 4.7, fontFace: B.font, fontSize: 24, color: B.navy, margin: 0, valign: "top", fit: "resize" });
     } else {
       const columns = Math.max(b.head.length, ...b.body.map((r) => r.length), 1);
       // Keep wide workforce registers readable by repeating the first column in each column group.
@@ -191,7 +253,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
           const pageRows = [...(header ? [header] : []), ...expanded.slice(i, i + 3)];
           if (!pageRows.length) continue;
           const s = slide(b.title || heading);
-          s.addTable(pageRows.map((r) => r.map((text) => ({ text }))), { x: 0.5, y: 1.6, w: 12.1, fontSize: 18, color: "0A2540", border: { pt: 0.5, color: "CBD5E1" }, margin: 6, autoPage: false });
+          s.addTable(pageRows.map((r, ri) => r.map((text) => ({ text, options: ri === 0 && header ? { bold: true, color: "FFFFFF", fill: { color: B.navy } } : {} }))), { x: 0.5, y: 1.6, w: 12.1, fontFace: B.font, fontSize: 18, color: B.navy, border: { pt: 0.5, color: B.border }, margin: 6, autoPage: false });
         }
       }
     }
