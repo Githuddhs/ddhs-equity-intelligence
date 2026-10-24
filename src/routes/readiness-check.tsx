@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/readiness-check")({
       description: "Answer 11 quick questions to see how ready your organisation is for EE analysis, EEA13 planning and EEA2/EEA4 reporting.",
       crumbs: [{ name: "Readiness check", path: "/readiness-check" }],
     }),
-  component: ReadinessCheck,
+  component: withStartOver(ReadinessCheck),
 });
 
 const OPTIONS: { v: CheckAnswer; label: string }[] = [{ v: "yes", label: "Yes" }, { v: "partly", label: "Partly" }, { v: "no", label: "No" }];

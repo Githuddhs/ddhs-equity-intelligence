@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -45,7 +46,7 @@ export const Route = createFileRoute("/_authenticated/workforce")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: WorkforcePage,
+  component: withStartOver(WorkforcePage),
 });
 
 const fmtDate = (d: string) =>

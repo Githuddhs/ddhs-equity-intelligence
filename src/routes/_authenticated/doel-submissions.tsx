@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { ExistingFormUpload } from "@/components/existing-form-upload";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/doel-submissions")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: DoelSubmissionsPage,
+  component: withStartOver(DoelSubmissionsPage, ["ddhs-doel-forms"]),
 });
 
 const STATUSES = [

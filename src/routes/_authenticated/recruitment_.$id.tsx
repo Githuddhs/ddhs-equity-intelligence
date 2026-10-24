@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: VacancyPage,
+  component: withStartOver(VacancyPage),
 });
 
 type Vacancy = Tables<"recruitment_vacancies">;
