@@ -193,22 +193,31 @@ export function CapabilityExplainer({
               >
                 {capabilityCta(capability)} <ArrowRight className="h-4 w-4" />
               </Link>
-              {capability.accessMode === "open" && (
-                <span className="flex min-w-[200px] flex-1 items-center gap-1.5 text-xs leading-relaxed text-muted-foreground">
+              {capability.accessMode === "open" ? (
+                <span className="flex min-w-0 flex-1 items-center gap-1.5 text-xs leading-relaxed text-muted-foreground">
                   <Globe className="h-3.5 w-3.5 shrink-0 text-teal" />
                   {capability.access}
                 </span>
+              ) : (
+                <a
+                  href="#contact"
+                  onClick={onClose}
+                  className="inline-flex items-center rounded-lg border border-input px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-accent"
+                >
+                  Book a Demonstration
+                </a>
               )}
-
-
+            </div>
+            {capability.accessMode === "open" && (
               <a
                 href="#contact"
                 onClick={onClose}
-                className="inline-flex items-center rounded-lg border border-input px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-accent"
+                className="mt-3 inline-flex items-center rounded-lg border border-input px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-accent"
               >
                 Book a Demonstration
               </a>
-            </div>
+            )}
+
 
           </>
         )}
