@@ -84,3 +84,4 @@
 - [x] Add screenshot walkthrough of dashboards, EEA12 and plan pages
 - [x] Approve all ten guides for weekly publication
 - [x] Public EE readiness check leading to Book a Demonstration (browser-only answers)
+- [ ] Shorter mobile opening text with Book a Demonstration visible without scrolling
