@@ -13,6 +13,7 @@ export function GuideShell({ children }: { children: ReactNode }) {
           <BrandMark />
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/guides" className="hidden text-teal hover:text-primary sm:inline">Guides</Link>
+            <Link to="/blog" className="hidden text-teal hover:text-primary sm:inline">Blog</Link>
             <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">Book a Demonstration</Link>
           </div>
