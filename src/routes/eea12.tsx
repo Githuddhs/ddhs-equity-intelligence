@@ -1,3 +1,4 @@
+import { ExistingFormUpload } from "@/components/existing-form-upload";
 import { pageHead } from "@/lib/seo";
 import { PROVINCE_EAP } from "@/lib/sectors";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -199,9 +200,10 @@ function Eea12Page() {
           <p className="text-sm font-semibold uppercase tracking-wider text-teal">EEA12 Workforce Analysis</p>
           <h1 className="page-title mt-2 text-primary">EEA12 workforce analysis: occupational level progress check</h1>
           <p className="page-lead mt-3 max-w-3xl text-muted-foreground">
-            Enter your headcount for one occupational level. The tool checks it against sectoral targets first, then the EAP,
+            Headcounts for each occupational level come from your Employee Profiles. The tool checks them against sectoral targets first, then the EAP,
             and ranks which designated groups to prioritise for the next appointment.
           </p>
+          <div className="mt-4"><ExistingFormUpload forms={["eea12"]} /></div>
           <ol className="mt-4 list-decimal space-y-1 pl-5 text-muted-foreground">
             <li>First, aim to meet the sectoral targets for Designated Males and Designated Females.</li>
             <li>Second, aim to achieve the EAP targets.</li>

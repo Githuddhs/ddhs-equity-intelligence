@@ -1,3 +1,4 @@
+import { ExistingFormUpload } from "@/components/existing-form-upload";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -157,7 +158,8 @@ function Eea13Page() {
       <main className="mx-auto max-w-6xl px-6 py-10">
         <div className="flex gap-4 text-sm"><Link to="/portal" className="text-teal">← My portal</Link><Link to="/evidence" className="text-teal">Document evidence</Link></div>
         <h1 className="mt-2 font-display text-3xl font-bold text-primary">EEA13 planning</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Numerical goals, targets and a yearly timeline for each occupational level. Headcount comes from your latest Workforce Data{wf ? ` (${wf.date})` : ""} and updates when you upload new data.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Numerical goals, targets and a yearly timeline for each occupational level. Headcount comes from your Employee Profiles{wf ? ` (snapshot ${wf.date})` : ""} and updates whenever the profiles are saved.</p>
+        <div className="mt-4"><ExistingFormUpload forms={["eea13"]} /></div>
 
         {!plans.length ? <p className="mt-6 text-sm">Create an EE plan first. <Link to="/plans" className="text-teal">EE plans →</Link></p> : (
           <>

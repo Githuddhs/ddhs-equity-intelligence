@@ -1,5 +1,5 @@
 // Builds draft EEA2 / EEA4 forms from the same shared sources every form uses:
-// the latest Workforce Data snapshot, the latest EE plan and the account profile.
+// the latest Employee Profile snapshot, the latest EE plan and the account profile.
 import { supabase } from "@/integrations/supabase/client";
 import { latestWorkforce } from "@/lib/barrier-response-doc";
 import { GROUPS, LEVELS, levelTotal, type Key } from "@/lib/workforce";
@@ -54,7 +54,7 @@ export async function latestDgFindings(): Promise<DgFindings> {
   return actions.length ? { date: data.created_at.slice(0, 10), actions } : null;
 }
 
-/** Draft EEA2 + EEA4 from the latest Workforce Data snapshot and EE plan — no AI, same numbers everywhere. */
+/** Draft EEA2 + EEA4 from the latest Employee Profile snapshot and EE plan — no AI, same numbers everywhere. */
 export async function buildFormDrafts(): Promise<DoelForms | null> {
   const [w, planRes, userRes, dg] = await Promise.all([
     latestWorkforce(),
@@ -78,11 +78,15 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
     } : {}),
   };
   if (!grids) eea2["disabled"] = {}; // Unknown demographic split must never be assigned to African males.
-  eea2.notes = `Draft from Workforce Data snapshot ${w.date}. ${foundation ? `Workforce movements from reporting period ${foundation.period_start} to ${foundation.period_end}. Skills development still needs a training register; blank or absent information is not confirmed as zero.` : "Recruitment, promotion, termination, disability demographic splits and skills tables require supporting records."}${dgText ? `\n\n${dgText}` : ""}`;
+  eea2.notes = `Draft from Employee Profile snapshot ${w.date}. ${foundation ? `Workforce movements from reporting period ${foundation.period_start} to ${foundation.period_end}. Skills development still needs a training register; blank or absent information is not confirmed as zero.` : "Recruitment, promotion, termination, disability demographic splits and skills tables require supporting records."}${dgText ? `\n\n${dgText}` : ""}`;
   return {
     employer: {
       name: org?.name || plan?.company || meta["company"] || "",
       registration: org?.registration || "", doelRef: org?.doelRef || "", address: org?.address || "", sic: org?.sic || "",
+      tradingName: org?.tradingName || "", sdlNumber: org?.sdlNumber || "", businessActivity: org?.businessActivity || "", designatedStatus: org?.designatedStatus || "",
+      postalAddress: org?.postalAddress || "", province: org?.province || "", ceo: org?.ceoName || "", seniorManager: org?.eeSeniorManager || "", eeManager: org?.eeManager || "",
+      // Total employees is calculated from Employee Profiles, never retyped.
+      totalEmployees: String(Object.values(w.counts as Record<string, Record<string, number>>).reduce((a, r) => a + Object.values(r ?? {}).reduce((x, y) => x + (Number(y) || 0), 0), 0)),
       sector: org?.sector || plan?.sector || meta["sector"] || "",
       contact: org?.contact || userRes.data.user?.email || "",
       period: foundation ? `${foundation.period_start} to ${foundation.period_end}` : "",
@@ -95,7 +99,7 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
       measures: dgText,
     },
     missing: ["Skills development register not supplied.", ...(foundation ? validateFoundation(foundation).warnings : ["Workforce movements, remuneration and disability demographic splits not supplied."])],
-    sources: [`Workforce Data snapshot ${w.date}`, foundation ? `Workforce Foundation ${foundation.period_start} to ${foundation.period_end}` : "", plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
+    sources: [`Employee Profile snapshot ${w.date}`, foundation ? `Workforce Foundation ${foundation.period_start} to ${foundation.period_end}` : "", plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
   };
 }
 
@@ -110,7 +114,7 @@ type SharedSources = {
   dg: DgFindings;
 };
 
-/** The single source of truth for every form: latest Workforce Data snapshot + latest EE plan + account province. */
+/** The single source of truth for every form: latest Employee Profile snapshot + latest EE plan + account province. */
 async function sharedSources(): Promise<SharedSources | null> {
   const [w, planRes, userRes, dg] = await Promise.all([
     latestWorkforce(),
@@ -183,7 +187,7 @@ export async function buildEea13Draft(): Promise<Eea13PdfInput | null> {
   const gaps = rows
     .filter((r) => r.n > 0 && r.desigPct < r.target.total)
     .map((r) => `${r.level}: designated ${r.desigPct}% vs ${r.target.total}% target — about ${r.hires} appointment(s) needed`);
-  for (const r of rows.filter((x) => x.n === 0)) gaps.push(`${r.level}: no headcount in the Workforce Data snapshot`);
+  for (const r of rows.filter((x) => x.n === 0)) gaps.push(`${r.level}: no headcount in the Employee Profile snapshot`);
   for (const a of s.dg?.actions ?? []) gaps.push(`DG review (${s.dg!.date}): ${a}`);
   return {
     planTitle: s.planTitle,
