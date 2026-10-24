@@ -229,3 +229,9 @@ export function applyMovements(f: Foundation): { foundation: Foundation; changed
   }
   return { foundation: { ...f, employees }, changed };
 }
+
+/** Report-ready profiles: one row per employee ID; rows without an ID or repeating an ID are excluded until fixed. */
+export function uniqueProfiles<T extends { employeeId: string }>(rows: T[]): T[] {
+  const seen = new Set<string>();
+  return rows.filter((e) => !!e.employeeId && !seen.has(e.employeeId) && (seen.add(e.employeeId), true));
+}
