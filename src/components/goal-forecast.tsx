@@ -38,7 +38,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
       <h2 className="font-display text-lg font-semibold">Numerical goals and forecast</h2>
-      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted sector target ({SECTOR_TARGET_SOURCE_LABEL}, {SECTOR_TARGET_PERIOD_LABEL}); Semi-skilled and Unskilled use provincial EAP as the target ({EAP_SOURCE_LABEL}). Blank inputs are flagged, never filled in.</p>
+      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted 5-year sector targets for {SECTOR_TARGET_PERIOD_LABEL} ({SECTOR_TARGET_SOURCE_LABEL}); Semi-skilled and Unskilled use provincial EAP as the target ({EAP_SOURCE_LABEL}). Blank inputs are flagged, never filled in.</p>
       {error && <p className="mt-3 text-sm text-destructive">Could not load workforce data.</p>}
       {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce" className="underline">add employee records</Link> to get baselines.</p>}
 
