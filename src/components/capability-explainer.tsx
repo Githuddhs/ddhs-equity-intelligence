@@ -29,7 +29,7 @@ export type Capability = {
 export const CAPABILITIES: Record<string, Capability> = {
   Data: {
     title: "Data",
-    icon: DatabaseIcon(),
+    icon: Database,
     href: "/workforce-foundation",
     tool: "Workforce Data",
     summary:
@@ -42,7 +42,7 @@ export const CAPABILITIES: Record<string, Capability> = {
   },
   Analyse: {
     title: "Analyse",
-    icon: BarChart3Icon(),
+    icon: BarChart3,
     href: "/eea12",
     tool: "EEA12 Analysis",
     summary:
@@ -55,7 +55,7 @@ export const CAPABILITIES: Record<string, Capability> = {
   },
   Plan: {
     title: "Plan",
-    icon: TargetIcon(),
+    icon: Target,
     href: "/eea13-planning",
     tool: "EEA13 Planning",
     summary:
@@ -68,7 +68,7 @@ export const CAPABILITIES: Record<string, Capability> = {
   },
   Implement: {
     title: "Implement",
-    icon: ClipboardCheckIcon(),
+    icon: ClipboardCheck,
     href: "/accountability-management",
     tool: "Accountability Management",
     summary:
@@ -81,7 +81,7 @@ export const CAPABILITIES: Record<string, Capability> = {
   },
   Monitor: {
     title: "Monitor",
-    icon: LineChartIcon(),
+    icon: LineChart,
     href: "/leadership-dashboard",
     tool: "Leadership Dashboard",
     summary:
@@ -94,7 +94,7 @@ export const CAPABILITIES: Record<string, Capability> = {
   },
   Report: {
     title: "Report",
-    icon: LayersIcon(),
+    icon: Layers,
     href: "/leadership-report",
     tool: "Leadership Report",
     summary:
@@ -107,7 +107,7 @@ export const CAPABILITIES: Record<string, Capability> = {
   },
   Evidence: {
     title: "Evidence",
-    icon: FileCheck2Icon(),
+    icon: FileCheck2,
     href: "/evidence-governance",
     tool: "Evidence & Governance Repository",
     summary:
