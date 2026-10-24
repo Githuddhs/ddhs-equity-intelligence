@@ -58,16 +58,22 @@ const painCards = [
     icon: Database,
     title: "Workforce Data",
     body: "Multiple spreadsheets. Conflicting reports. No single source of truth.",
+    capability: "Workforce Data",
+    href: "/workforce-foundation",
   },
   {
     icon: Users,
     title: "Accountability",
     body: "Actions are assigned but difficult to track and monitor.",
+    capability: "Accountability Management",
+    href: "/accountability-management",
   },
   {
     icon: FolderLock,
     title: "Evidence",
     body: "Supporting records are scattered across folders and systems.",
+    capability: "Evidence & Governance",
+    href: "/evidence-governance",
   },
 ];
 
@@ -262,7 +268,7 @@ function Index() {
 
 
       {/* Why DDHS */}
-      <section id="why-ddhs" className="py-8">
+      <section id="why-ddhs" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="Why DDHS"
@@ -295,7 +301,7 @@ function Index() {
       </section>
 
       {/* Six integrated capabilities */}
-      <section id="six-capabilities" className="py-8">
+      <section id="six-capabilities" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="Six Integrated Capabilities"
@@ -336,7 +342,7 @@ function Index() {
 
 
       {/* Problems We Solve */}
-      <section id="problems" className="bg-secondary/40 py-8">
+      <section id="problems" className="scroll-mt-28 bg-secondary/40 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <p className="text-center text-sm font-semibold uppercase tracking-widest text-teal">Problems We Solve</p>
           <SectionHeading
@@ -351,6 +357,13 @@ function Index() {
                 </div>
                 <h3 className="card-title mt-5 text-primary">{card.title}</h3>
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
+                <Link
+                  to={card.href}
+                  className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors hover:text-primary"
+                >
+                  Solved with {card.capability}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
             ))}
           </div>
@@ -358,7 +371,7 @@ function Index() {
       </section>
 
       {/* Section 3: The Solution */}
-      <section id="platform" className="py-8">
+      <section id="platform" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="The Platform"
@@ -459,7 +472,7 @@ function Index() {
       </section>
 
       {/* Section 4: Capability Stack */}
-      <section id="capabilities" className="bg-secondary/40 py-8">
+      <section id="capabilities" className="scroll-mt-28 bg-secondary/40 py-8">
         <div className="mx-auto max-w-5xl px-6">
           <SectionHeading
             eyebrow="Capability Stack"
@@ -498,7 +511,7 @@ function Index() {
       </section>
 
       {/* Section 5: Trust & Credibility */}
-      <section id="governance" className="bg-primary py-8">
+      <section id="governance" className="scroll-mt-28 bg-primary py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading dark title="Built for Compliance You Can Explain and Defend" />
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -524,7 +537,7 @@ function Index() {
       </section>
 
       {/* Client Outcomes */}
-      <section id="outcomes" className="py-8">
+      <section id="outcomes" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="Client Outcomes"
@@ -553,7 +566,7 @@ function Index() {
       </section>
 
       {/* B-BBEE Verified Supplier */}
-      <section id="bbbee" className="bg-secondary/40 py-8">
+      <section id="bbbee" className="scroll-mt-28 bg-secondary/40 py-8">
         <div className="mx-auto grid max-w-5xl items-center gap-8 px-6 md:grid-cols-[auto_1fr]">
           <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border-4 border-teal bg-card">
             <ShieldCheck className="h-12 w-12 text-teal" />
@@ -574,7 +587,7 @@ function Index() {
       </section>
 
       {/* Guided Tour */}
-      <section id="guided-tour" className="py-8">
+      <section id="guided-tour" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <SectionHeading
             eyebrow="Guided Tour"
@@ -593,7 +606,7 @@ function Index() {
       </section>
 
       {/* Platform walkthrough (empty screens, no client or example data) */}
-      <section id="walkthrough" className="py-8">
+      <section id="walkthrough" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="Platform walkthrough"
@@ -674,7 +687,7 @@ function Index() {
       </section>
 
       {/* Section 8: Founding Customer Programme */}
-      <section id="pilots" className="py-8">
+      <section id="pilots" className="scroll-mt-28 py-8">
         <div className="mx-auto max-w-5xl px-6">
           <div className="rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-10 text-center shadow-xl sm:px-16">
             <h2 className="display-title text-balance text-navy-foreground">
@@ -703,7 +716,7 @@ function Index() {
       </section>
 
       {/* Book a Demonstration */}
-      <section id="contact" className="bg-primary py-10">
+      <section id="contact" className="scroll-mt-28 bg-primary py-10">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <p className="text-sm font-semibold uppercase tracking-widest text-teal">Book a Demonstration</p>
           <h2 className="display-title mt-2 text-balance text-navy-foreground">
