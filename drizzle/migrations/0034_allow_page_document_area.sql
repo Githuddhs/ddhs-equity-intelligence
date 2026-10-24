@@ -1,0 +1,2 @@
+ALTER TABLE public.portal_documents DROP CONSTRAINT IF EXISTS portal_documents_area_check;
+ALTER TABLE public.portal_documents ADD CONSTRAINT portal_documents_area_check CHECK (area = ANY (ARRAY['eea12','plan','dg','doel','dg_outcome','hr','forms','page']));
