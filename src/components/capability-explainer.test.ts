@@ -11,6 +11,17 @@ describe("Employment Equity Lifecycle capability explanations", () => {
       expect(cap!.summary.split(" ").length).toBeGreaterThan(12);
       expect(cap!.points.length).toBeGreaterThanOrEqual(2);
       expect(cap!.tool.length).toBeGreaterThan(0);
+      expect(cap!.access.length).toBeGreaterThan(10);
+    }
+  });
+  it("labels access according to the real access rules of each tool", () => {
+    // EEA12 analysis runs fully without sign-in; saving needs a client login.
+    expect(CAPABILITIES["Analyse"]!.accessMode).toBe("open");
+    expect(CAPABILITIES["Analyse"]!.access).toContain("client login");
+    // Every other lifecycle tool runs inside the client portal.
+    for (const label of LIFECYCLE.filter((l) => l !== "Analyse")) {
+      expect(CAPABILITIES[label]!.accessMode, `${label} should need a client login`).toBe("portal");
+      expect(CAPABILITIES[label]!.access).toMatch(/client (portal after sign-in|login|sign-in)/);
     }
   });
   it("links every explanation to the tool it opens", () => {

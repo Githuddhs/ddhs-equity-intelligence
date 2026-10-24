@@ -6,8 +6,10 @@ import {
   ClipboardCheck,
   Database,
   FileCheck2,
+  Globe,
   Layers,
   LineChart,
+  Lock,
   type LucideIcon,
   Target,
 } from "lucide-react";
@@ -24,6 +26,10 @@ export type Capability = {
   /** Short explanation shown when a lifecycle icon is clicked. */
   summary: string;
   points: string[];
+  /** Access note based on how the linked page actually works. */
+  access: string;
+  /** "open" when the tool itself runs publicly, "portal" when the working tool needs a client login. */
+  accessMode: "open" | "portal";
 };
 
 export const CAPABILITIES: Record<string, Capability> = {
@@ -32,6 +38,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: Database,
     href: "/workforce-foundation",
     tool: "Workforce Data",
+    access: "Open to view — capturing and storing workforce records happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "One Employee Profile per person, captured once and used everywhere. Demographics, occupational levels, contracts, pay bands, locations and movements all come from the same record, so every report reads the same numbers.",
     points: [
@@ -45,6 +53,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: BarChart3,
     href: "/eea12",
     tool: "EEA12 Analysis",
+    access: "Open to use — the full analysis runs here without signing in; saving your analyses needs a client login.",
+    accessMode: "open",
     summary:
       "EEA12 analysis compares your workforce with gazetted sector targets and provincial EAP, and shows where you are under- or over-represented in percentage points at every occupational level.",
     points: [
@@ -58,6 +68,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: Target,
     href: "/eea13-planning",
     tool: "EEA13 Planning",
+    access: "Open to view — building and signing off your plan happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "EEA13 planning assembles your plan from records you have already saved: baselines flow into numerical goals, affirmative-action measures, objectives and owners, and the plan is not complete until your organisation signs it off.",
     points: [
@@ -71,6 +83,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: ClipboardCheck,
     href: "/accountability-management",
     tool: "Accountability Management",
+    access: "Open to view — assigning owners and tracking actions happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "Accountability management turns plan measures into named responsibilities with deadlines, so implementation is tracked rather than assumed.",
     points: [
@@ -84,6 +98,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: LineChart,
     href: "/leadership-dashboard",
     tool: "Leadership Dashboard",
+    access: "Open to view — the live dashboard runs in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "The leadership dashboard compares actual hires, promotions and exits with your plan goals, shows the variance at each occupational level, and records corrective actions with owners and deadlines.",
     points: [
@@ -97,6 +113,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: Layers,
     href: "/leadership-report",
     tool: "Leadership Report",
+    access: "Open to view — generating and downloading the report happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "Leadership reporting turns the same workforce records into board-ready summaries, and every download keeps the filters you selected in Word, Excel, PDF or PowerPoint.",
     points: [
@@ -110,6 +128,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: FileCheck2,
     href: "/evidence-governance",
     tool: "Evidence & Governance Repository",
+    access: "Open to view — the repository is private; storing and opening documents needs a client login.",
+    accessMode: "portal",
     summary:
       "The evidence repository keeps consultation records, approvals, policies and submissions together with access controls, so any claim you make can be traced back to a document.",
     points: [
@@ -150,6 +170,14 @@ export function CapabilityExplainer({
                 </li>
               ))}
             </ul>
+            <div className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
+              {capability.accessMode === "open" ? (
+                <Globe className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />
+              ) : (
+                <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />
+              )}
+              <p className="text-xs leading-relaxed text-muted-foreground">{capability.access}</p>
+            </div>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 to={capability.href}
