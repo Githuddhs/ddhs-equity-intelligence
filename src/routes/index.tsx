@@ -271,17 +271,25 @@ function Index() {
           />
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: ShieldCheck, title: "Compliance-first", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
-              { icon: Layers, title: "One source of truth", body: "Upload once; analysis, plans, monitoring and reports all read the same figures." },
-              { icon: FolderLock, title: "Privacy by design", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
-              { icon: Users, title: "Expert support", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
+              { icon: ShieldCheck, title: "Compliance-first", href: "/eea13-planning", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
+              { icon: Layers, title: "One source of truth", href: "/workforce-foundation", body: "Upload once; analysis, plans, monitoring and reports all read the same figures." },
+              { icon: FolderLock, title: "Privacy by design", href: "/evidence-governance", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
+              { icon: Users, title: "Expert support", href: "/virtual-consultant", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
             ].map((c) => (
-              <div key={c.title} className="rounded-2xl border bg-card p-6 shadow-sm">
+              <Link
+                key={c.title}
+                to={c.href}
+                className="group rounded-2xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+              >
                 <c.icon className="h-6 w-6 text-teal" />
                 <h3 className="card-title mt-4 text-primary">{c.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{c.body}</p>
-              </div>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors group-hover:text-primary">
+                  Read about this capability <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
             ))}
+
           </div>
         </div>
       </section>
