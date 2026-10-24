@@ -128,19 +128,38 @@ export function recruitmentFunnel(cands: { stage: string; history: unknown; race
   }));
 }
 
-export type AppointmentPlan = { gapPts: number | null; required: number | null; perYear: number[]; shares: number[] };
+export type AppointmentPlan = {
+  gapPts: number | null; required: number | null; perYear: number[]; shares: number[];
+  /** Highest whole-person share at or below the ceiling with current headcount. */
+  achievable: number | null; exact: boolean; nextShare: number | null;
+  /** Alternative: designated hires added on top of current headcount (no exits), capped so the share stays at or below the ceiling. */
+  additional: number | null; additionalShare: number | null; additionalHeadcount: number | null;
+};
+const EPS = 1e-9;
 /**
- * Designated appointments needed to move the current profile to the fixed five-year target (sector target or provincial EAP),
- * assuming headcount stays constant and each designated appointment replaces a non-designated incumbent. Spread evenly, front-loaded,
- * with yearly shares that never exceed the target and reach it by the last year.
+ * Replacement appointments: designated people filling posts vacated by non-designated employees (headcount unchanged).
+ * Additional hires: new designated posts on top of current headcount. Whole-person rounding is always down,
+ * so no suggested share ever exceeds the sector target or provincial EAP ceiling.
  */
 export function appointmentPlan(base: Baseline | null | undefined, target: number | null, years: number): AppointmentPlan {
   const n = Math.max(1, Math.min(5, years));
-  if (!base || !base.headcount || base.share === null || target === null) return { gapPts: null, required: null, perYear: [], shares: [] };
-  const gapPts = r1(Math.max(0, target - base.share));
-  const required = Math.max(0, Math.ceil((target / 100) * base.headcount - base.designated - 1e-9));
+  const none = { gapPts: null, required: null, perYear: [], shares: [], achievable: null, exact: false, nextShare: null, additional: null, additionalShare: null, additionalHeadcount: null };
+  if (!base || !base.headcount || base.share === null || target === null) return none;
+  const H = base.headcount, D = base.designated, t = target / 100;
+  const maxD = Math.max(D, Math.floor(t * H + EPS));
+  const required = maxD - D;
+  const achievable = r1Down((maxD / H) * 100);
+  const exact = Math.abs(maxD / H - t) < 1e-6 || D / H >= t;
+  const nextShare = maxD < H && !exact ? r1(((maxD + 1) / H) * 100) : null;
   const perYear = Array.from({ length: n }, (_, i) => Math.floor(required / n) + (i < required % n ? 1 : 0));
   let cum = 0;
-  const shares = perYear.map((a, i) => { cum += a; return i === n - 1 ? Math.max(base.share!, target) : Math.min(target, r1(((base.designated + cum) / base.headcount) * 100)); });
-  return { gapPts, required, perYear, shares };
+  const shares = perYear.map((a) => { cum += a; return D / H >= t ? base.share! : Math.min(target, r1Down(((D + cum) / H) * 100)); });
+  let additional: number | null = null, additionalShare: number | null = null, additionalHeadcount: number | null = null;
+  if (t >= 1) { additional = null; } else {
+    additional = Math.max(0, Math.floor((t * H - D) / (1 - t) + EPS));
+    additionalHeadcount = H + additional;
+    additionalShare = r1Down(((D + additional) / additionalHeadcount) * 100);
+  }
+  return { gapPts: r1(Math.max(0, target - base.share)), required, perYear, shares, achievable, exact, nextShare, additional, additionalShare, additionalHeadcount };
 }
+const r1Down = (x: number) => Math.floor(x * 10 + EPS) / 10;

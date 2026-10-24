@@ -35,13 +35,26 @@ describe("goal forecast", () => {
 
 import { appointmentPlan } from "./goal-forecast";
 describe("appointmentPlan", () => {
-  it("needs designated appointments equal to the gap between five-year target and current profile", () => {
+  it("rounds whole people down so no share exceeds the ceiling", () => {
     const p = appointmentPlan({ headcount: 20, designated: 10, share: 50 }, 85.8, 5);
-    expect(p.gapPts).toBe(35.8);
-    expect(p.required).toBe(8); // ceil(17.16) - 10
-    expect(p.perYear).toEqual([2, 2, 2, 1, 1]);
-    expect(p.shares[4]).toBe(85.8);
-    expect(p.shares.every((s) => s <= 85.8)).toBe(true);
+    expect(p.required).toBe(7); // 17 of 20 = 85%; 18 would be 90%
+    expect(p.perYear).toEqual([2, 2, 1, 1, 1]);
+    expect(p.achievable).toBe(85);
+    expect(p.exact).toBe(false);
+    expect(p.nextShare).toBe(90);
+    expect([...p.shares, p.achievable!].every((s) => s <= 85.8)).toBe(true);
+  });
+  it("reports an exact target when headcount allows it", () => {
+    const p = appointmentPlan({ headcount: 10, designated: 5, share: 50 }, 80, 5);
+    expect(p.required).toBe(3);
+    expect(p.exact).toBe(true);
+    expect(p.shares[4]).toBe(80);
+  });
+  it("separates additional hires from replacements and keeps them under the ceiling", () => {
+    const p = appointmentPlan({ headcount: 2, designated: 1, share: 50 }, 69.9, 5);
+    expect(p.required).toBe(0); // 2 of 2 = 100% > 69.9%
+    expect(p.additional).toBe(1); // 2 of 3 = 66.6%
+    expect(p.additionalShare).toBeLessThanOrEqual(69.9);
   });
   it("needs none when the profile already meets the target", () => {
     expect(appointmentPlan({ headcount: 10, designated: 10, share: 100 }, 92.8, 5).required).toBe(0);
