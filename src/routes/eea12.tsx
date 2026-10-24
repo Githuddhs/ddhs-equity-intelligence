@@ -288,11 +288,10 @@ function Eea12Page() {
               </thead>
               <tbody>
                 <tr>
-                  <td className={`${td} text-left font-medium`}>Actual headcount</td>
+                  <td className={`${td} text-left font-medium`}>Actual headcount<span className="block text-xs font-normal text-muted-foreground">From Employee Profiles</span></td>
                   {GROUPS.map((g) => (
                     <td key={g.key} className={td}>
-                      <input type="number" min={0} aria-label={`${NAMES[g.key]} headcount`} className={num} value={counts[g.key]}
-                        onChange={(e) => setCounts({ ...counts, [g.key]: Math.max(0, Number(e.target.value) || 0) })} />
+                      <span aria-label={`${NAMES[g.key]} headcount`} className="tabular-nums" title="From Employee Profiles">{counts[g.key]}</span>
                     </td>
                   ))}
                   <td className={`${td} font-semibold`}>{r.total}</td>
