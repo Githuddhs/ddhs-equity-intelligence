@@ -86,7 +86,7 @@ function Readiness() {
                     const I = it.done ? CheckCircle2 : Circle;
                     return (
                       <li key={it.label}>
-                        <Link to={it.to} params={it.area ? { area: it.area } : undefined} className="flex items-center gap-3 py-2 text-sm hover:text-teal">
+                        <Link to={it.to} {...(it.area ? { params: { area: it.area } } : {})} className="flex items-center gap-3 py-2 text-sm hover:text-teal">
                           <I className={`h-4 w-4 shrink-0 ${it.done ? "text-teal" : "text-muted-foreground"}`} aria-label={it.done ? "Complete" : "Not complete"} />
                           <span className="flex-1">{it.label}{it.detail && <span className="text-muted-foreground"> · {it.detail}</span>}</span>
                           <span className={`shrink-0 rounded-full border px-2 py-0.5 text-xs ${KIND_STYLE[it.kind]}`}>{it.kind}</span>

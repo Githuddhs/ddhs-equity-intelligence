@@ -27,7 +27,19 @@ export const GUIDES_LAST_REVIEWED = "24 October 2026";
  * Guides flagged needsPractitionerReview stay unpublished until their slug is listed here.
  * Add a slug only when the owner explicitly approves that guide.
  */
-export const PRACTITIONER_APPROVED_GUIDES: string[] = [];
+// All ten approved by the owner on 24 October 2026.
+export const PRACTITIONER_APPROVED_GUIDES: string[] = [
+  "how-to-complete-eea2-and-eea4",
+  "understanding-2025-sectoral-targets",
+  "what-happens-in-a-dg-review",
+  "ee-reporting-deadlines",
+  "reasonable-grounds-for-not-meeting-targets",
+  "eea12-workforce-analysis-explained",
+  "writing-an-ee-plan-eea13",
+  "consulting-the-ee-forum",
+  "income-differentials-and-the-eea4",
+  "role-of-the-assigned-senior-manager",
+];
 
 export const isGuideApproved = (g: Guide) =>
   !g.needsPractitionerReview || PRACTITIONER_APPROVED_GUIDES.includes(g.slug);

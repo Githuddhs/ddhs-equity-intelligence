@@ -15,6 +15,7 @@ export function GuideShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/guides" className="hidden text-teal hover:text-primary sm:inline">Guides</Link>
             <Link to="/blog" className="hidden text-teal hover:text-primary sm:inline">Blog</Link>
+            <Link to="/readiness-check" className="hidden text-teal hover:text-primary sm:inline">Readiness check</Link>
             <AuthCta />
             <Link to="/" hash="contact" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-primary-foreground">Book a Demonstration</Link>
           </div>

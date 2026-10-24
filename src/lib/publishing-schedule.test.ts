@@ -10,9 +10,9 @@ describe("weekly release schedule", () => {
     expect(SCHEDULE[2]!.releaseAt - SCHEDULE[0]!.releaseAt).toBe(7 * 86400000);
   });
 
-  it("guides needing practitioner review stay unpublished until approved, even after their date", () => {
+  it("approved guides release on schedule alongside blogs", () => {
     const late = sast(2027, 6, 1, 12);
-    expect(releasedGuides(late)).toHaveLength(0);
+    expect(releasedGuides(late)).toHaveLength(10);
     expect(releasedPosts(late)).toHaveLength(10);
   });
 

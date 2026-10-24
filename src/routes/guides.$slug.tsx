@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { getGuide, GUIDES_LAST_REVIEWED } from "@/lib/guides";
+import { getGuide, GUIDES_LAST_REVIEWED, PRACTITIONER_APPROVED_GUIDES } from "@/lib/guides";
 import { isReleased, releasedGuides } from "@/lib/publishing-schedule";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
@@ -67,7 +67,7 @@ function GuidePage() {
         </ul>
         <p className="mt-3 text-xs text-muted-foreground">Last reviewed: {GUIDES_LAST_REVIEWED}</p>
       </section>
-      {g.needsPractitionerReview && (
+      {g.needsPractitionerReview && !PRACTITIONER_APPROVED_GUIDES.includes(g.slug) && (
         <section className="mt-6 rounded-2xl border border-teal/40 bg-teal-soft p-5">
           <h2 className="font-display text-base font-semibold text-primary">Needs practitioner review</h2>
           <p className="mt-2 text-sm leading-relaxed">{g.needsPractitionerReview}</p>

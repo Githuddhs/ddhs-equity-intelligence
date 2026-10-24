@@ -3,6 +3,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SERVICES } from "@/components/service-page";
 import { InstallApp } from "@/components/install-app";
 import { AuthCta } from "@/components/auth-cta";
+import shotReady from "@/assets/walkthrough/ready.jpg.asset.json";
+import shotEea12 from "@/assets/walkthrough/eea12-filled.jpg.asset.json";
+import shotPlan from "@/assets/walkthrough/plan.jpg.asset.json";
+
+const WALKTHROUGH = [
+  { img: shotReady.url, alt: "Readiness check questions grouped by stage", title: "Check your readiness", body: "A score across organisation setup, workforce data, analysis, planning and monitoring, with the gaps to close first.", href: "/readiness-check", cta: "Try the free check" },
+  { img: shotEea12.url, alt: "Empty EEA12 analysis table with sector, occupational level and EAP columns", title: "Analyse with EEA12", body: "Headcount per occupational level against sector targets and provincial EAP, with gaps in percentage points and next-appointment priorities.", href: "/eea12", cta: "Open the EEA12 tool" },
+  { img: shotPlan.url, alt: "EEA13 plan page showing baseline and target per occupational level", title: "Build the EEA13 plan", body: "Baselines flow into numerical goals, measures, owners and dates, ready for sign-off and monitoring on the leadership dashboard.", href: "/eea13-planning", cta: "See plan building" },
+];
 import {
   ArrowRight,
   BarChart3,
@@ -190,18 +199,20 @@ function Index() {
 
 
       {/* Section 1: Hero */}
-      <section className="mx-auto max-w-7xl px-6 pt-8 pb-10">
+      <section className="mx-auto max-w-7xl px-6 pt-5 pb-10 sm:pt-8">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
             Take Control of Employment Equity Implementation
           </h1>
           <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
             Turn workforce data into measurable plans, accountable actions, audit-ready evidence,
-            and executive insight.{" "}
-            <span className="font-semibold text-primary">DDHS</span>{" "}
-            <span className="font-semibold text-teal">Equity Intelligence</span> helps South
-            African employers manage Employment Equity analysis, planning, monitoring, governance
-            and reporting from a single platform.
+            and executive insight.
+            <span className="hidden sm:inline">{" "}
+              <span className="font-semibold text-primary">DDHS</span>{" "}
+              <span className="font-semibold text-teal">Equity Intelligence</span> helps South
+              African employers manage Employment Equity analysis, planning, monitoring, governance
+              and reporting from a single platform.
+            </span>
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a
@@ -218,6 +229,9 @@ function Index() {
             </a>
             <a href="/tour" className="inline-flex items-center rounded-lg border border-teal px-5 py-2.5 text-sm font-semibold text-teal transition-colors hover:bg-teal/10">
               Take the site tour
+            </a>
+            <a href="/readiness-check" className="inline-flex items-center rounded-lg border border-teal px-5 py-2.5 text-sm font-semibold text-teal transition-colors hover:bg-teal/10">
+              Free readiness check
             </a>
           </div>
         </div>
@@ -500,6 +514,33 @@ function Index() {
             <a href="/virtual-consultant" className="inline-flex items-center rounded-lg border border-input px-6 py-3 text-sm font-semibold text-primary hover:bg-accent">
               Talk to a Virtual Consultant
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Platform walkthrough (empty screens, no client or example data) */}
+      <section id="walkthrough" className="py-8">
+        <div className="mx-auto max-w-7xl px-6">
+          <SectionHeading
+            eyebrow="Platform walkthrough"
+            title="See the Platform at Work"
+            body="Three screens from the platform, shown empty — no client information or example figures."
+          />
+          <ol className="mt-8 grid gap-6 md:grid-cols-3">
+            {WALKTHROUGH.map((w, i) => (
+              <li key={w.title} className="overflow-hidden rounded-2xl border border-border bg-card">
+                <a href={w.href}><img src={w.img} alt={w.alt} loading="lazy" className="aspect-[16/10] w-full object-cover object-top" /></a>
+                <div className="p-5">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-teal">Step {i + 1}</p>
+                  <h3 className="mt-1 font-display text-lg font-semibold text-primary">{w.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{w.body}</p>
+                  <a href={w.href} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-teal">{w.cta} <ArrowRight className="h-4 w-4" /></a>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-6 text-center">
+            <a href="#contact" className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground">Book a Demonstration <ArrowRight className="h-4 w-4" /></a>
           </div>
         </div>
       </section>

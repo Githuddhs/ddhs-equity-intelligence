@@ -81,3 +81,8 @@
 - [x] Stage 3: goal variance (hires, promotions, exits vs EEA13 goals) on Compliance, corrective actions with owner, deadline and evidence.
 - [x] Employer and plan information: full employer fields in Foundation Organisation tab, shown on each plan; 1–5 year commencement/termination dates enforced before sign-off.
 - [x] Suggest website improvements
+- [x] Add screenshot walkthrough of dashboards, EEA12 and plan pages
+- [x] Approve all ten guides for weekly publication
+- [x] Public EE readiness check leading to Book a Demonstration (browser-only answers)
+- [x] Shorter mobile opening text with Book a Demonstration visible without scrolling
+- [x] Clear demo data / example figures from all pages

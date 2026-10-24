@@ -22,6 +22,7 @@ import { Route as LeadershipDashboardRouteImport } from './routes/leadership-das
 import { Route as LeadershipReportRouteImport } from './routes/leadership-report'
 import { Route as PlanArchitectureRouteImport } from './routes/plan-architecture'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ReadinessCheckRouteImport } from './routes/readiness-check'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
@@ -140,6 +141,11 @@ const PlanArchitectureRoute = PlanArchitectureRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadinessCheckRoute = ReadinessCheckRouteImport.update({
+  id: '/readiness-check',
+  path: '/readiness-check',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -438,6 +444,7 @@ export interface FileRoutesByFullPath {
   '/leadership-report': typeof LeadershipReportRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
+  '/readiness-check': typeof ReadinessCheckRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
@@ -506,6 +513,7 @@ export interface FileRoutesByTo {
   '/leadership-report': typeof LeadershipReportRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
+  '/readiness-check': typeof ReadinessCheckRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
@@ -576,6 +584,7 @@ export interface FileRoutesById {
   '/leadership-report': typeof LeadershipReportRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
+  '/readiness-check': typeof ReadinessCheckRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
   '/set-password': typeof SetPasswordRoute
@@ -646,6 +655,7 @@ export interface FileRouteTypes {
     | '/leadership-report'
     | '/plan-architecture'
     | '/pricing'
+    | '/readiness-check'
     | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
@@ -714,6 +724,7 @@ export interface FileRouteTypes {
     | '/leadership-report'
     | '/plan-architecture'
     | '/pricing'
+    | '/readiness-check'
     | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
@@ -783,6 +794,7 @@ export interface FileRouteTypes {
     | '/leadership-report'
     | '/plan-architecture'
     | '/pricing'
+    | '/readiness-check'
     | '/reset-password'
     | '/responsible-ai'
     | '/set-password'
@@ -853,6 +865,7 @@ export interface RootRouteChildren {
   LeadershipReportRoute: typeof LeadershipReportRoute
   PlanArchitectureRoute: typeof PlanArchitectureRoute
   PricingRoute: typeof PricingRoute
+  ReadinessCheckRoute: typeof ReadinessCheckRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ResponsibleAiRoute: typeof ResponsibleAiRoute
   SetPasswordRoute: typeof SetPasswordRoute
@@ -972,6 +985,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/readiness-check': {
+      id: '/readiness-check'
+      path: '/readiness-check'
+      fullPath: '/readiness-check'
+      preLoaderRoute: typeof ReadinessCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -1435,6 +1455,7 @@ const rootRouteChildren: RootRouteChildren = {
   LeadershipReportRoute: LeadershipReportRoute,
   PlanArchitectureRoute: PlanArchitectureRoute,
   PricingRoute: PricingRoute,
+  ReadinessCheckRoute: ReadinessCheckRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ResponsibleAiRoute: ResponsibleAiRoute,
   SetPasswordRoute: SetPasswordRoute,

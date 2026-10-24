@@ -139,10 +139,10 @@ function Eea13PlanningPage() {
                     <tr key={l}>
                       <td className="border border-border px-2 py-1.5 text-left font-medium text-primary">{l}</td>
                       <td className="border border-border px-2 py-1.5 text-center tabular-nums text-muted-foreground">
-                        {i === 1 ? "41.2%" : "—"}
+                        —
                       </td>
                       <td className="border border-border px-2 py-1.5 text-center tabular-nums text-muted-foreground">
-                        {i === 1 ? "60.0%" : "—"}
+                        —
                       </td>
                     </tr>
                   ))}

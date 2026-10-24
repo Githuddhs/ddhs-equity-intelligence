@@ -23,42 +23,26 @@ const nav = [
   { icon: Layers, label: "Reports" },
 ];
 
+// No example figures: until the signed-in client has saved workforce data, the overview shows empty placeholders.
 const example_kpis = [
-  { label: "Workforce Size", value: "842", delta: "+37 this year", up: true },
-  { label: "Designated Groups", value: "64%", delta: "+3.2 pts vs last cycle", up: true },
-  { label: "Actions Open", value: "14", delta: "3 overdue", up: false },
-  { label: "Evidence Gaps", value: "6", delta: "4 due this quarter", up: false },
+  { label: "Workforce Size", value: "—", delta: "From your workforce data", up: true },
+  { label: "Designated Groups", value: "—", delta: "From your workforce data", up: true },
+  { label: "Actions Open", value: "—", delta: "From your EE plan", up: true },
+  { label: "Evidence Gaps", value: "—", delta: "From your evidence uploads", up: true },
 ];
-
 
 const example_scoreBands = [
-  { label: "Representation", value: 72 },
-  { label: "Targets On Track", value: 61 },
-  { label: "Action Completion", value: 78 },
-  { label: "Evidence Coverage", value: 64 },
+  { label: "Representation", value: 0 },
+  { label: "Targets On Track", value: 0 },
+  { label: "Action Completion", value: 0 },
+  { label: "Evidence Coverage", value: 0 },
 ];
 
-const example_eea12Levels = [
-  { level: "Top management", share: 18, target: 40, eap: 76 },
-  { level: "Senior management", share: 29, target: 45, eap: 76 },
-  { level: "Professionally qualified", share: 48, target: 55, eap: 76 },
-  { level: "Skilled technical", share: 63, target: 60, eap: 76 },
-  { level: "Semi-skilled", share: 78, target: 65, eap: 76 },
-  { level: "Unskilled", share: 88, target: 70, eap: 76 },
-];
+const example_eea12Levels: { level: string; share: number; target: number; eap: number }[] = [];
 
+const example_actions: { title: string; owner: string; status: string }[] = [];
 
-const example_actions: { title: string; owner: string; status: string }[] = [
-  { title: "Learnership intake · Skilled technical", owner: "HR Director", status: "In progress" },
-  { title: "Affirmative procurement review", owner: "Transformation Committee", status: "Overdue" },
-  { title: "EE forum quarterly meeting", owner: "Senior Manager", status: "Scheduled" },
-];
-
-const example_evidence: { label: string; state: string }[] = [
-  { label: "Workforce Data · Verified", state: "Verified" },
-  { label: "Training spend report · Pending", state: "Pending" },
-  { label: "EE committee minutes · Verified", state: "Verified" },
-];
+const example_evidence: { label: string; state: string }[] = [];
 
 function statusTone(status: string) {
   if (status === "Overdue") return "border-destructive/30 bg-destructive/10 text-destructive";
@@ -73,7 +57,7 @@ export function DashboardMock() {
   const eea12Levels = live?.levels ?? example_eea12Levels;
   const actions = live ? [] : example_actions;
   const evidence = live ? live.evidence : example_evidence;
-  const score = live ? live.score : 68;
+  const score = live ? live.score : 0;
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
 
@@ -121,11 +105,11 @@ export function DashboardMock() {
               <p className="flex flex-wrap items-center gap-2 font-display text-[15px] font-bold text-primary">
                 Equity Intelligence Overview
                 <span className="rounded-full border border-teal/30 bg-teal-soft px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-teal">
-                  {live ? "Your live data" : "Example figures"}
+                  {live ? "Your live data" : "Awaiting your data"}
                 </span>
               </p>
               <p className="text-[11px] text-muted-foreground">
-                {live ? `Workforce snapshot · ${live.snapshotDate}` : "Reporting period · FY2025/26"}
+                {live ? `Workforce snapshot · ${live.snapshotDate}` : "Reporting period · not set"}
               </p>
             </div>
             <span className="shrink-0 rounded-md border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
@@ -224,15 +208,15 @@ export function DashboardMock() {
                 ? live.province
                   ? `From your latest workforce snapshot · sector targets from your EE plan · ${live.province} EAP. Full detail on the EEA12 page.`
                   : "Province not set — add your province on your profile to see the provincial EAP comparison. National figures are not substituted."
-                : "Example figures — your own comparison appears once you load workforce data; full detail on the EEA12 page."}
+                : "Your comparison appears once you load workforce data; full detail on the EEA12 page."}
             </p>
           </div>
 
           {/* DG readiness, barriers, calendar */}
           <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
             {[
-              { icon: ClipboardCheck, title: "DG review readiness", note: live?.dgNote ?? "Process & reporting checklist · 7 of 12 complete" },
-              { icon: TriangleAlert, title: "Barrier analysis", note: live?.barrierNote ?? "Survey responses · 26 received" },
+              { icon: ClipboardCheck, title: "DG review readiness", note: live?.dgNote ?? "Process & reporting checklist · not started" },
+              { icon: TriangleAlert, title: "Barrier analysis", note: live?.barrierNote ?? "Survey responses · none yet" },
               { icon: Target, title: "Next statutory deadline", note: live?.deadlineNote ?? "EEA2 / EEA4 · due 15 Jan 2027" },
             ].map((c) => (
               <div key={c.title} className="rounded-xl border bg-background p-3">
