@@ -1,4 +1,5 @@
 import type { PlanContent } from "@/lib/ee-plan";
+import { missingInputs } from "@/lib/plan-assembly";
 
 /** The DDHS plan-assembly chain: each step feeds the next, ending in the EEA13 plan. */
 export type ChainStatus = "done" | "partial" | "missing";
@@ -12,6 +13,7 @@ export type ChainInputs = {
   analyses: { sector: string; hasResults: boolean }[];
   barrierResponses: number;
   plan: PlanContent | null;
+  planDates?: { start: string; end: string };
   evidenceDocs: number;
   dgReviews: number;
 };
@@ -36,6 +38,7 @@ export function buildChain(i: ChainInputs): ChainStep[] {
   const resp = [filled(p?.seniorManager), filled(p?.timetable), owned > 0];
   const consult = [filled(p?.consultation), i.evidenceDocs > 0];
   const sections = p ? (["objectives", "barriers", "measures", "timetable", "monitoring", "disputes", "consultation"] as const).filter((k) => filled(p[k])).length : 0;
+  const planMissing = p ? missingInputs(p, i.planDates ?? { start: "", end: "" }).length : 0;
   const steps: Omit<ChainStep, "title">[] = [
     { id: "employer", role: "Who the employer is", status: s(filled(i.organisationName), false), detail: filled(i.organisationName) ? i.organisationName : "Add organisation details", to: "/workforce" },
     { id: "employees", role: "Collected once, reused everywhere", status: s(i.employees > 0, false), detail: i.employees ? `${i.employees} employee records` : "Load employee records", to: "/workforce" },
@@ -49,7 +52,7 @@ export function buildChain(i: ChainInputs): ChainStep[] {
     { id: "responsibilities", role: "Who does what, by when", status: s(resp.every(Boolean), resp.some(Boolean)), detail: `${owned} milestone(s) with an owner`, to: "/plans" },
     { id: "consultation", role: "Audit trail", status: s(consult.every(Boolean), consult.some(Boolean)), detail: `${i.evidenceDocs} evidence document(s)`, to: "/evidence" },
     { id: "monitoring", role: "Management control", status: s(tracked > 0 && i.dgReviews > 0, tracked > 0 || i.dgReviews > 0), detail: `${tracked} milestone(s) under way, ${i.dgReviews} DG review(s)`, to: "/compliance" },
-    { id: "plan", role: "Strategic plan", status: s(!!p?.orgSignoff, sections > 0), detail: p?.orgSignoff ? `Signed off by ${p.orgSignoff.by}` : `${sections} of 7 plan sections written`, to: "/plans" },
+    { id: "plan", role: "Strategic plan", status: s(!!p?.orgSignoff && planMissing === 0, sections > 0 || !!p?.orgSignoff), detail: p?.orgSignoff ? (planMissing ? `Signed off, but ${planMissing} input(s) still missing` : `Signed off by ${p.orgSignoff.by}`) : `${sections} of 7 plan sections written · ${planMissing} input(s) missing`, to: "/plans" },
   ];
   return steps.map((x, n) => ({ ...x, title: CHAIN_TITLES[n]! }));
 }

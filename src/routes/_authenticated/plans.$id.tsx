@@ -13,6 +13,7 @@ import { templateFromSector } from "@/lib/plan-template";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { latestEvidence, planFromEvidence } from "@/lib/evidence";
 import { autofillPlan, questionnaireSections } from "@/lib/plan-autofill";
+import { assemblePlan, EDITED, missingInputs, sectionSource } from "@/lib/plan-assembly";
 import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
 import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
@@ -93,6 +94,8 @@ function PlanBuilder() {
     setDrafting(null);
   };
 
+  const missing = missingInputs(content, { start: meta.start_date, end: meta.end_date });
+  const Src = ({ k }: { k: Parameters<typeof sectionSource>[1] }) => { const v = sectionSource(content, k); return <p className={`mt-2 text-xs ${v ? "text-muted-foreground" : "font-semibold text-destructive"}`}>{v ? `Source: ${v}` : "Missing input — nothing saved for this section yet"}</p>; };
   const field = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";
   const del = async () => {
     if (!confirm("Delete this plan permanently?")) return;
@@ -115,6 +118,26 @@ function PlanBuilder() {
             </button>
           </div>
         </div>
+
+        <section className="mb-6 rounded-xl border border-primary/40 bg-card p-6 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="section-title text-primary">Assemble from my lifecycle records</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Builds empty sections from your saved EEA12 analyses ({rawAnalyses.length}), Barrier Analysis ({barriers.length} response(s)) and Workforce Foundation, and shows the source under each section. Anything you have written is kept.</p>
+            </div>
+            <button onClick={() => {
+              const r = assemblePlan(content, { analyses: rawAnalyses, barriers, workforce: wfLines, start: meta.start_date, end: meta.end_date });
+              setContent(r.content); setDirty(true);
+              toast.success(r.filled ? `Assembled ${r.filled} part(s) of the plan — review, then Save plan.` : "Nothing new to assemble — see the missing inputs below.");
+            }} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Assemble plan</button>
+          </div>
+          {missing.length ? (
+            <div className="mt-4 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
+              <p className="text-sm font-semibold text-destructive">{missing.length} input(s) missing before sign-off</p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{missing.map((m) => <li key={m.key}>{m.need}</li>)}</ul>
+            </div>
+          ) : <p className="mt-4 rounded-lg bg-teal/10 px-4 py-2 text-sm font-semibold text-teal">All inputs are in place{content.orgSignoff ? " and the plan is signed off — complete." : ". The plan is ready for organisation sign-off."}</p>}
+        </section>
 
         <section className="mb-6 rounded-xl border border-teal/50 bg-muted/40 p-6 shadow-sm">
           <h2 className="section-title text-primary">Auto-fill from my data</h2>
@@ -209,6 +232,7 @@ function PlanBuilder() {
               </tbody>
             </table>
           </div>
+          <Src k="goals" />
         </section>
 
         {TEXT_SECTIONS.map((s) => (
@@ -226,7 +250,8 @@ function PlanBuilder() {
                 </button>
               ))}
             </div>
-            <textarea rows={8} className={`${field} mt-3 font-mono text-xs leading-relaxed`} value={content[s.key]} onChange={(e) => upContent({ [s.key]: e.target.value } as Partial<PlanContent>)} />
+            <textarea rows={8} className={`${field} mt-3 font-mono text-xs leading-relaxed`} value={content[s.key]} onChange={(e) => upContent({ [s.key]: e.target.value, sources: { ...(content.sources ?? {}), [s.key]: EDITED } } as Partial<PlanContent>)} />
+            <Src k={s.key} />
             {drafting === s.key && ai.error && <p className="mt-2 text-sm text-destructive">{ai.error}</p>}
           </section>
         ))}
@@ -247,9 +272,10 @@ function PlanBuilder() {
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <input value={signName} onChange={(e) => setSignName(e.target.value)} placeholder="Full name of the person signing off…" className={`${field} max-w-sm`} />
-                <button disabled={signName.trim().length < 2} onClick={() => { upContent({ orgSignoff: { by: signName.trim(), at: new Date().toISOString() } }); toast.success("Sign-off recorded — click Save plan to keep it."); }}
+                <button disabled={signName.trim().length < 2 || missing.length > 0} onClick={() => { upContent({ orgSignoff: { by: signName.trim(), at: new Date().toISOString() } }); toast.success("Sign-off recorded — click Save plan to keep it."); }}
                   className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Sign off plan</button>
               </div>
+              {missing.length > 0 && <p className="mt-2 text-xs font-semibold text-destructive">Sign-off unlocks once the {missing.length} missing input(s) listed at the top are in place.</p>}
             </>
           )}
         </section>

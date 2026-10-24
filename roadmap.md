@@ -77,5 +77,5 @@
 - [ ] Website social links: footer "Follow DDHS Equity Intelligence" row built into all 11 footers + Organization sameAs (src/lib/social.ts); stays hidden until a real page address is added.
 - [ ] Create the DDHS Equity Intelligence LinkedIn company page (owner action). Once live, send me its address and the footer link plus the business search listing go live on every page at once.
 - [x] Plan architecture stage 1: 13-step lifecycle tracker in My portal + public /plan-architecture page.
-- [ ] Stage 2: auto-assemble EEA13 with a source shown for every section.
+- [x] Stage 2: assemble EEA13 from lifecycle records, source per section, missing inputs, sign-off gated on complete inputs.
 - [ ] Stage 3: monitoring/variance — actual movements vs goals, suggested corrective actions.
