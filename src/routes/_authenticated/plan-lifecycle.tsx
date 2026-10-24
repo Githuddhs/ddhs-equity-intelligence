@@ -34,7 +34,7 @@ function Lifecycle() {
         supabase.from("workforce_snapshots").select("total_headcount").order("snapshot_date", { ascending: false }).limit(1),
         supabase.from("eea12_analyses").select("sector,results"),
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }),
-        supabase.from("ee_plans").select("content").order("updated_at", { ascending: false }).limit(1),
+        supabase.from("ee_plans").select("content,start_date,end_date").order("updated_at", { ascending: false }).limit(1),
         supabase.from("portal_documents").select("id", { count: "exact", head: true }),
         supabase.from("dg_reviews").select("id", { count: "exact", head: true }),
       ]);
@@ -48,6 +48,7 @@ function Lifecycle() {
         analyses: (a.data ?? []).map((x) => ({ sector: x.sector, hasResults: !!(x.results as { sectoral?: unknown[] } | null)?.sectoral?.length })),
         barrierResponses: b.count ?? 0,
         plan: p.data?.[0] ? normaliseContent(p.data[0].content) : null,
+        planDates: { start: p.data?.[0]?.start_date ?? "", end: p.data?.[0]?.end_date ?? "" },
         evidenceDocs: d.count ?? 0,
         dgReviews: r.count ?? 0,
       });
