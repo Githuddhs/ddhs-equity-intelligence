@@ -66,6 +66,12 @@ function GuidePage() {
         </ul>
         <p className="mt-3 text-xs text-muted-foreground">Last reviewed: {GUIDES_LAST_REVIEWED}</p>
       </section>
+      {g.needsPractitionerReview && (
+        <section className="mt-6 rounded-2xl border border-teal/40 bg-teal-soft p-5">
+          <h2 className="font-display text-base font-semibold text-primary">Needs practitioner review</h2>
+          <p className="mt-2 text-sm leading-relaxed">{g.needsPractitionerReview}</p>
+        </section>
+      )}
       <p className="mt-6 text-xs text-muted-foreground">{GUIDE_DISCLAIMER}</p>
       <GuideCta />
       <h2 className="mt-12 font-display text-lg font-semibold text-primary">More guides</h2>
