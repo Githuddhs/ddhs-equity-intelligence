@@ -16,7 +16,6 @@ import { useQuery } from "@tanstack/react-query";
 import { exportEea12SummaryPdf } from "@/lib/eea12-summary-report";
 import { EeaCrosswalk, OccupationalGrades } from "@/components/eea-crosswalk";
 import { latestDgFindings } from "@/lib/form-drafts";
-import { PageExport } from "@/components/page-export";
 import { latestFoundation } from "@/lib/foundation-source";
 import { Eea12UnitView } from "@/components/eea12-unit-view";
 import { Button } from "@/components/ui/button";
@@ -195,7 +194,6 @@ function Eea12Page() {
         </div>
       </header>
 
-      <PageExport />
       <main className="mx-auto max-w-7xl space-y-10 px-6 py-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-teal">EEA12 Workforce Analysis</p>
