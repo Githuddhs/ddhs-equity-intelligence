@@ -54,9 +54,9 @@ export function FoundationRecords() {
     setSaving(true);
     try {
       const result = await save({ data: form });
-      setForm({ ...form, id: result.id }); setDirty(false);
+      setForm({ ...form, id: result.id, employees: result.employees }); setDirty(false);
       await qc.invalidateQueries();
-      toast.success("Reporting period saved; shared workforce figures updated.");
+      toast.success("Reporting period saved. Employee Profiles updated from movements; every report now uses these records.");
     } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save workforce records."); }
     finally { setSaving(false); }
   };
