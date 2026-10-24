@@ -26,7 +26,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
   const years = start && end ? Math.min(5, Math.max(1, Math.round((Date.parse(end) - Date.parse(start)) / (365.25 * 864e5)))) : 5;
   const period = data?.period;
   const employees = (period?.employees ?? []) as Employee[];
-  const province = ((period?.organisation ?? {}) as Record<string, string>).province ?? "";
+  const province = ((period?.organisation ?? {}) as Record<string, string>)["province"] ?? "";
   const base = baselineByLevel(employees, period?.snapshot_date ?? "");
   const row = (l: string) => ({ ...blankForecast(), ...(forecast[l] ?? {}) });
   const set = (l: string, p: Partial<ForecastRow>) => onChange({ ...forecast, [l]: { ...row(l), ...p } });
