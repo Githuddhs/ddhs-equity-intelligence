@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import type { Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
+import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";
 import { FORECAST_FIELDS, baselineByLevel, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
 
 const cell = "h-8 w-16 rounded border border-input bg-background px-1 text-right text-sm";
@@ -37,7 +38,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
       <h2 className="font-display text-lg font-semibold">Numerical goals and forecast</h2>
-      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted sector target; Semi-skilled and Unskilled use provincial EAP as the target. Blank inputs are flagged, never filled in.</p>
+      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted sector target ({SECTOR_TARGET_SOURCE_LABEL}, {SECTOR_TARGET_PERIOD_LABEL}); Semi-skilled and Unskilled use provincial EAP as the target ({EAP_SOURCE_LABEL}). Blank inputs are flagged, never filled in.</p>
       {error && <p className="mt-3 text-sm text-destructive">Could not load workforce data.</p>}
       {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce" className="underline">add employee records</Link> to get baselines.</p>}
 
