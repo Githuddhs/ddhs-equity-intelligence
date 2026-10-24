@@ -160,7 +160,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
       return [new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: rows.map((r, ri) => {
         const head = ri === 0 && b.head.length > 0;
         return new TableRow({ tableHeader: head, children: Array.from({ length: cols }, (_, i) => new TableCell({
-          shading: head ? { type: ShadingType.CLEAR, color: "auto", fill: B.navy } : undefined,
+          ...(head ? { shading: { type: ShadingType.CLEAR, color: "auto", fill: B.navy } } : {}),
           children: [new Paragraph({ children: [new TextRun({ text: r[i] ?? "", bold: head, color: head ? "FFFFFF" : B.navy })] })] })) });
       }) })];
     });
