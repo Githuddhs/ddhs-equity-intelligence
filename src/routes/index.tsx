@@ -370,16 +370,20 @@ function Index() {
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {lifecycle.map((f) => (
-              <div
+              <Link
                 key={f.title}
-                className="rounded-2xl border bg-card p-7 shadow-sm transition-shadow hover:shadow-md"
+                to={f.href}
+                className="group rounded-2xl border bg-card p-7 shadow-sm transition-shadow hover:shadow-md"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary transition-colors group-hover:bg-teal">
                   <f.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <h3 className="card-title mt-4 text-primary">{f.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
-              </div>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors group-hover:text-primary">
+                  Read about this capability <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
             ))}
           </div>
           <div className="mt-12 overflow-hidden rounded-2xl border border-teal/30 bg-primary p-7 shadow-sm sm:p-9">
