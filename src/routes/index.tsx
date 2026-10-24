@@ -77,6 +77,35 @@ const painCards = [
   },
 ];
 
+/**
+ * Capability link used by the homepage cards. The final word and the arrow are
+ * kept on one line so the arrow never ends up alone on its own line.
+ */
+function CapabilityLink({
+  href,
+  prefix,
+  capability,
+  className,
+}: {
+  href: string;
+  prefix: string;
+  capability: string;
+  className: string;
+}) {
+  const words = capability.split(" ");
+  const last = words.pop() ?? capability;
+  const rest = words.length ? `${words.join(" ")} ` : "";
+  return (
+    <Link to={href} className={className}>
+      {prefix} {rest}
+      <span className="whitespace-nowrap">
+        {last}
+        <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
+      </span>
+    </Link>
+  );
+}
+
 const lifecycle = [
   { icon: BarChart3, title: "Analyse", body: "EEA12 workforce analysis and representation insights." },
   { icon: Target, title: "Plan", body: "EEA13 planning with targets, actions and owners." },
