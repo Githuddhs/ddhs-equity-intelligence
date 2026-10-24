@@ -18,7 +18,11 @@ describe("Employment Equity Lifecycle capability explanations", () => {
   it("labels access according to the real access rules of each tool", () => {
     // EEA12 analysis runs fully without sign-in; saving needs a client login.
     expect(CAPABILITIES["Analyse"]!.accessMode).toBe("open");
+    // The note beside "Open analysis" states both halves of the rule.
+    expect(CAPABILITIES["Analyse"]!.access).toMatch(/free/i);
+    expect(CAPABILITIES["Analyse"]!.access).toContain("without signing in");
     expect(CAPABILITIES["Analyse"]!.access).toContain("client login");
+
     // Every other lifecycle tool runs inside the client portal.
     for (const label of LIFECYCLE.filter((l) => l !== "Analyse")) {
       expect(CAPABILITIES[label]!.accessMode, `${label} should need a client login`).toBe("portal");
