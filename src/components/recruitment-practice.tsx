@@ -31,9 +31,9 @@ export const PRACTICE: { title: string; status: "live" | "partial" | "proposed";
   },
   {
     title: "Leadership and evidence are updated",
-    status: "live",
-    body: "The onboarding handover checklist confirms the appointment is recorded in Workforce Data, where it feeds job-grade progress and DG-review evidence. The vacancy evidence pack and leadership dashboard draw from the same saved data.",
-    shows: "Leadership dashboards and reports in Word, Excel, PDF and PowerPoint, from one data source",
+    status: "partial",
+    body: "The vacancy evidence pack and Recruitment Suite Dashboard update automatically from the saved vacancy and candidate records. The onboarding handover includes a checklist item to record the appointment in Workforce Data; today HR records that movement on the Employee Profile, and only then does it feed job-grade progress and DG-review evidence. Automatic transfer of the appointment into the Employee Profile is planned.",
+    shows: "Leadership dashboard and evidence pack in Word, Excel, PDF and PowerPoint today; automatic Employee Profile update planned",
   },
 ];
 
@@ -52,7 +52,7 @@ export function RecruitmentPractice() {
     <section className="mt-16">
       <h2 className="section-title text-primary">Recruitment Suite governance intelligence in practice</h2>
       <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
-        A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Every step below runs in the platform today.
+        A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Each step is labelled with what runs in the platform today.
       </p>
       <ol className="mt-6 space-y-4">
         {PRACTICE.map((s, i) => (
