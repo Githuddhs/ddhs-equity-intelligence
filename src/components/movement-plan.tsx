@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Employee } from "@/lib/foundation";
+import { uniqueProfiles, type Employee } from "@/lib/foundation";
 import { GROUPS, LEVELS } from "@/lib/workforce";
 import { EXIT_TYPES, FUNNEL_FIELDS, MOVE_KINDS, blankMove, demographicImpact, groupLabel, historyBy, moveMissing, type PlannedMove } from "@/lib/movement-plan";
 

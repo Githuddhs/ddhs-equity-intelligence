@@ -1,4 +1,4 @@
-import { activeAtSnapshot, employeeGroup, type Foundation } from "@/lib/foundation";
+import { activeAtSnapshot, uniqueProfiles, employeeGroup, type Foundation } from "@/lib/foundation";
 import { ALL_UNITS, matches, UNASSIGNED, type UnitFilter } from "@/lib/org-units";
 import { emptyCounts, emptyWorkforce, type Counts } from "@/lib/workforce";
 
