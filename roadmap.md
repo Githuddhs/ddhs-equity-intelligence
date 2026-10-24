@@ -73,3 +73,4 @@
 - [x] Mobile menu: include "Recruitment Suite" after "Virtual Consultant", pointing to /services/recruitment-suite
 - [x] Rename "Executive Recruitment Intelligence Dashboard" to "Recruitment Suite Dashboard" (page, meta, Suite step 9, all four downloads)
 - [x] Blog in main menu; weekly release every Monday 06:00 SAST. Guides flagged for practitioner review are held until the owner explicitly approves each one.
+- [ ] Social media advertising: clarify which platform and what to connect.
