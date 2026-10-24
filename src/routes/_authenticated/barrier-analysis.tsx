@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/barrier-analysis")({
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { mode?: "questionnaire" } => (s["mode"] === "questionnaire" ? { mode: "questionnaire" } : {}),
-  component: BarrierAnalysisPage,
+  component: withStartOver(BarrierAnalysisPage),
 });
 
 type Saved = {

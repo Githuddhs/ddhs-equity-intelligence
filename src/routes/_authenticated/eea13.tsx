@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { ExistingFormUpload } from "@/components/existing-form-upload";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/eea13")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Eea13Page,
+  component: withStartOver(Eea13Page),
 });
 
 type Plan = { id: string; title: string; company: string; sector: string; start_date: string | null; end_date: string | null; division: string; department: string; section: string; content: PlanContent };

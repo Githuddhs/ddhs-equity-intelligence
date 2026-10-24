@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -34,7 +35,7 @@ export const Route = createFileRoute("/_authenticated/plans/$id")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: PlanBuilder,
+  component: withStartOver(PlanBuilder),
 });
 
 type Meta = { title: string; company: string; sector: string; start_date: string; end_date: string; division: string; department: string; section: string };

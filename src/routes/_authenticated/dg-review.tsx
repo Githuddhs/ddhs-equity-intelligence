@@ -1,3 +1,4 @@
+import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/dg-review")({
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { id?: string } => (typeof s["id"] === "string" ? { id: s["id"] } : {}),
-  component: DgReviewPage,
+  component: withStartOver(DgReviewPage),
 });
 
 type Plan = { id: string; title: string; company: string; sector: string; start_date: string | null; end_date: string | null; content: Json };
