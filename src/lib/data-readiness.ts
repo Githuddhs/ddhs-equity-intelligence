@@ -15,7 +15,7 @@ export type ReadinessInputs = {
   /** Lower-cased "area category file_name" for each uploaded document. */
   docs: string[];
 };
-export type ReadinessItem = { label: string; kind: ItemKind; done: boolean; detail?: string; to: string };
+export type ReadinessItem = { label: string; kind: ItemKind; done: boolean; detail?: string; to: "/workforce" | "/eea12" | "/barrier-analysis" | "/plans" | "/evidence" | "/compliance" };
 export type ReadinessStep = { step: number; title: string; summary: string; items: ReadinessItem[] };
 
 const f = (s: string | undefined) => !!s && s.trim().length > 0;
@@ -25,7 +25,7 @@ const doc = (docs: string[], ...words: string[]) => { const n = docs.filter((d) 
 
 export function buildReadiness(i: ReadinessInputs): ReadinessStep[] {
   const o = i.org, e = i.employees, p = i.plan, d = i.docs;
-  const org = (k: string, label: string, kind: ItemKind = "Required"): ReadinessItem => ({ label, kind, done: f(o[k]), to: "/workforce" });
+  const org = (k: string, label: string, kind: ItemKind = "Required"): ReadinessItem => ({ label, kind, done: f(o[k]), to: "/workforce" as const });
   const emp = (k: keyof Employee, label: string, kind: ItemKind = "Required"): ReadinessItem => ({ label, kind, ...coverage(e, k), to: "/workforce" });
   const ev = (label: string, ...w: string[]): ReadinessItem => ({ label, kind: "Evidence upload", ...doc(d, ...w), to: "/evidence" });
   const reg = p?.register ?? [];
