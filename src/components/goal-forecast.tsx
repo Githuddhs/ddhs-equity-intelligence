@@ -39,7 +39,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
       <h2 className="font-display text-lg font-semibold">Numerical goals and forecast</h2>
       <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Blank inputs are flagged, never filled in.</p>
       {error && <p className="mt-3 text-sm text-destructive">Could not load workforce data.</p>}
-      {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce-foundation" className="underline">add employee records</Link> to get baselines.</p>}
+      {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce" className="underline">add employee records</Link> to get baselines.</p>}
 
       <div className="mt-4 overflow-x-auto">
         <table className="w-full min-w-[1100px] text-sm">
