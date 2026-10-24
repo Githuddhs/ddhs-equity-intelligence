@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/manager")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: ManagerPortal,
+  component: withPageTools(ManagerPortal),
 });
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" });

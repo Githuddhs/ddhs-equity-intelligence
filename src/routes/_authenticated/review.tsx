@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppHeader } from "@/components/app-header";
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/review")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: ReviewPage,
+  component: withPageTools(ReviewPage),
 });
 
 const KEY = "ddhs-review-v1";

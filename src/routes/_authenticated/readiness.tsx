@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Circle } from "lucide-react";
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/readiness")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: Readiness,
+  component: withPageTools(Readiness),
 });
 
 const KIND_STYLE: Record<ItemKind, string> = {

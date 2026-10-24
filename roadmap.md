@@ -86,3 +86,4 @@
 - [x] Public EE readiness check leading to Book a Demonstration (browser-only answers)
 - [x] Shorter mobile opening text with Book a Demonstration visible without scrolling
 - [x] Clear demo data / example figures from all pages
+- [x] Page files + four-format (incl. PowerPoint) downloads on every signed-in page

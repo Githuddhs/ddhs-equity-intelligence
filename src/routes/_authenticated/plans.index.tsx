@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/plans/")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: PlansPage,
+  component: withPageTools(PlansPage),
 });
 
 function PlansPage() {

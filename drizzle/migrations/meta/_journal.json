@@ -239,6 +239,13 @@
       "when": 1792864131934,
       "tag": "0033_snapshot_source_employee_profile",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1792864979874,
+      "tag": "0034_allow_page_document_area",
+      "breakpoints": true
     }
   ]
 }

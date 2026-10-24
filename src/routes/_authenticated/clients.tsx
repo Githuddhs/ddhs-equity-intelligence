@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/clients")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: ClientsDashboard,
+  component: withPageTools(ClientsDashboard),
 });
 
 const DOC_TOTAL = { eea12: 4, plan: 5, dg: 6 } as const;

@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/recruitment-dashboard")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: DashboardPage,
+  component: withPageTools(DashboardPage),
 });
 
 function Stat({ label, value, note }: { label: string; value: string | number; note?: string | undefined }) {

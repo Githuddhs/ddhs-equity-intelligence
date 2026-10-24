@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
@@ -100,7 +101,7 @@ export const Route = createFileRoute("/_authenticated/portal_/$area")({
       ],
     };
   },
-  component: AreaPage,
+  component: withPageTools(AreaPage),
 });
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" });

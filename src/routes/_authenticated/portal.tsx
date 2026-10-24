@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/portal")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Portal,
+  component: withPageTools(Portal),
 });
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" });

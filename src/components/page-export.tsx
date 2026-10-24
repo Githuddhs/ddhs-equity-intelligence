@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
@@ -49,20 +48,19 @@ function extract(root: HTMLElement): { title: string; blocks: Block[]; fields: [
   return { title, blocks, fields };
 }
 
+/** Collects the visible page and opens the Word / Excel / PDF / PowerPoint chooser. */
+export function exportCurrentPage() {
+  const root = document.querySelector("main") as HTMLElement | null;
+  if (!root) { toast.error("Nothing on this page to download."); return; }
+  try {
+    const data = extract(root);
+    if (!data.blocks.length) { toast.error("Nothing on this page to download yet."); return; }
+    offerReport({ name: data.title.replace(/[^a-z0-9]+/gi, "-").slice(0, 60), data });
+  } catch (e) { toast.error(e instanceof Error ? e.message : "Download failed"); }
+}
+
 export function PageExport() {
-  const [busy, setBusy] = useState(false);
-  const run = () => {
-    const root = document.querySelector("main") as HTMLElement | null;
-    if (!root) { toast.error("Nothing on this page to download."); return; }
-    setBusy(true);
-    try {
-      const data = extract(root);
-      if (!data.blocks.length) { toast.error("Nothing on this page to download yet."); return; }
-      offerReport({ name: data.title.replace(/[^a-z0-9]+/gi, "-").slice(0, 60), data });
-    } catch (e) { toast.error(e instanceof Error ? e.message : "Download failed"); }
-    finally { setBusy(false); }
-  };
   return <div data-no-export className="fixed bottom-4 right-4 z-40 print:hidden">
-    <Button disabled={busy} onClick={run}><Download />Download · Word / Excel / PDF / PPT</Button>
+    <Button onClick={exportCurrentPage}><Download />Download · Word / Excel / PDF / PPT</Button>
   </div>;
 }

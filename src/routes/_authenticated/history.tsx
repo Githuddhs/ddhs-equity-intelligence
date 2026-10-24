@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/history")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: HistoryPage,
+  component: withPageTools(HistoryPage),
 });
 
 type Sectoral = { name: string; target: number; actual: number };
