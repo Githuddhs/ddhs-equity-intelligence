@@ -93,7 +93,7 @@ function WorkforcePage() {
   // Start the form from the most recent snapshot so an update is an edit, not a retype.
   useEffect(() => {
     if (seeded || !snapshots.length) return;
-    const latest = snapshots[0];
+    const latest = snapshots.find((x) => x.source === "employee_profile");
     if (!latest) return;
     setCounts(normaliseWorkforce(latest.counts));
     setDisability(normaliseDisability(latest.disability));
@@ -277,179 +277,7 @@ function WorkforcePage() {
           <Stat label="Levels captured" value={`${levelsFilled} of ${LEVELS.length}`} />
         </div>
 
-        <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h2 className="section-title text-primary">Capture your workforce numbers</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Enter whole employees. The total for each level updates as you type.
-              </p>
-            </div>
-            <label className="flex items-center gap-2 text-sm">
-              <span className="font-semibold text-primary">Snapshot date</span>
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                aria-label="Snapshot date"
-                className="rounded border border-border bg-background px-2 py-1.5 text-sm"
-              />
-            </label>
-          </div>
-
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[900px] border-collapse">
-              <thead>
-                <tr className="bg-muted">
-                  <th className={`${th} text-left`} rowSpan={2}>Occupational level</th>
-                  <th className={th} colSpan={4}>Male</th>
-                  <th className={th} colSpan={4}>Female</th>
-                  <th className={th} colSpan={2}>Foreign national</th>
-                  <th className={th} rowSpan={2}>Total</th>
-                  <th className={th} rowSpan={2}>{DISABILITY_COLUMN}</th>
-                </tr>
-                <tr className="bg-muted">
-                  {GROUPS.map((g) => <th key={g.key} className={th} title={g.label}>{g.short}</th>)}
-                </tr>
-              </thead>
-              <tbody>
-                {LEVELS.map((l) => (
-                  <tr key={l}>
-                    <td className={`${td} min-w-80 text-left font-medium text-primary`}><OccupationalGrades level={l} /></td>
-                    {GROUPS.map((g) => (
-                      <td key={g.key} className={td}>
-                        <input
-                          type="number"
-                          min={0}
-                          inputMode="numeric"
-                          aria-label={`${l} ${g.label} headcount`}
-                          className={num}
-                          value={counts[l]?.[g.key] ?? 0}
-                          onChange={(e) => setCell(l, g.key, Number(e.target.value) || 0)}
-                        />
-                      </td>
-                    ))}
-                    <td className={`${td} font-semibold`}>{levelTotal(counts[l])}</td>
-                    <td className={td}>
-                      <input
-                        type="number"
-                        min={0}
-                        inputMode="numeric"
-                        aria-label={`${l} employees with disabilities`}
-                        className={num}
-                        value={disability[l] ?? 0}
-                        onChange={(e) => setDisability({ ...disability, [l]: Math.max(0, Math.floor(Number(e.target.value) || 0)) })}
-                      />
-                    </td>
-                  </tr>
-                ))}
-                <tr className="bg-teal/10">
-                  <td className={`${td} text-left font-bold text-primary`}>All levels</td>
-                  {GROUP_KEYS.map((k) => <td key={k} className={`${td} font-semibold`}>{byGroup[k] ?? 0}</td>)}
-                  <td className={`${td} font-bold`}>{total}</td>
-                  <td className={`${td} font-bold`}>{disabled}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground">
-              The disability column records employees with disabilities at each level, so Table 1 of your EEA12
-              report can be built from the same figures.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => { setCounts(emptyWorkforce()); setDisability({}); }}
-                className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-accent"
-              >
-                Clear form
-              </button>
-              <button
-                onClick={() => void save({ source: "manual" })}
-                disabled={saving || total <= 0}
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-              >
-                {saving ? "Saving…" : "Save snapshot"}
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="section-title text-primary">Or upload your HR export</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Upload an Excel spreadsheet (.xlsx or .xls), a Word document (.docx), a CSV export or a PDF of your workforce table. We read
-            the levels and groups, show you every number we found, and only save it once you confirm.
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <input
-              ref={file}
-              type="file"
-              accept=".csv,.tsv,.txt,.xlsx,.xls,.pdf,.docx,.doc,text/csv,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              className="hidden"
-              aria-label="Upload workforce file (Excel, CSV or PDF)"
-              onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }}
-            />
-            <button
-              onClick={() => file.current?.click()}
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            >
-              Choose a file
-            </button>
-            <button onClick={downloadTemplate} className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">
-              Download template
-            </button>
-          </div>
-
-          {pending && (
-            <div className="mt-5 rounded-xl border border-border bg-secondary/40 p-4">
-              <p className="font-semibold text-primary">
-                We read {pending.total.toLocaleString("en-ZA")} employees across {pending.rowCount} level
-                {pending.rowCount === 1 ? "" : "s"} from {pending.fileName}
-              </p>
-              <div className="mt-3 overflow-x-auto">
-                <table className="w-full min-w-[760px] border-collapse">
-                  <thead>
-                    <tr className="bg-muted">
-                      <th className={`${th} text-left`}>Level</th>
-                      {GROUPS.map((g) => <th key={g.key} className={th} title={g.label}>{g.short}</th>)}
-                      <th className={th}>Total</th>
-                      <th className={th}>Dis</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {LEVELS.filter((l) => pending.levelsFound.includes(l)).map((l) => (
-                      <tr key={l}>
-                        <td className={`${td} text-left font-medium`}>{l}</td>
-                        {GROUP_KEYS.map((k) => <td key={k} className={td}>{pending.counts[l]?.[k] ?? 0}</td>)}
-                        <td className={`${td} font-semibold`}>{levelTotal(pending.counts[l])}</td>
-                        <td className={td}>{pending.disability[l] ?? 0}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {pending.warnings.length > 0 && (
-                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-destructive">
-                  {pending.warnings.map((w) => <li key={w}>{w}</li>)}
-                </ul>
-              )}
-              <div className="mt-4 flex flex-wrap gap-2">
-                <button
-                  onClick={() => void save({ source: "upload", fileName: pending.fileName, from: pending })}
-                  disabled={saving || pending.total <= 0}
-                  className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-                >
-                  {saving ? "Saving…" : "Confirm & save"}
-                </button>
-                <button onClick={() => setPending(null)} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold">
-                  Discard
-                </button>
-              </div>
-            </div>
-          )}
-        </section>
+        <p className="mt-6 rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground"><strong className="text-primary">Capture once, use everywhere.</strong> Every headcount, report and analysis on this platform is calculated from the Employee Profiles above. To change a figure, update the employee's profile or record a movement, then save the reporting period; separately typed or uploaded totals are no longer accepted.</p>
 
         <ExistingPlanGap workforce={counts} />
 
@@ -535,12 +363,12 @@ function WorkforcePage() {
                   <div>
                     <p className="font-semibold text-primary">{fmtDate(s.snapshot_date)} · {s.total_headcount.toLocaleString("en-ZA")} employees</p>
                     <p className="text-sm text-muted-foreground">
-                      {s.source === "upload" ? `Uploaded from ${s.file_name ?? "a file"}` : "Typed in"} · saved {fmtDate(s.created_at)}
+                      {s.source === "employee_profile" ? "Calculated from Employee Profiles" : <span className="font-semibold text-destructive">Legacy {s.source === "upload" ? `upload (${s.file_name ?? "a file"})` : "typed-in totals"} — not used in any report</span>} · saved {fmtDate(s.created_at)}
                     </p>
                   </div>
                   <div className="flex gap-3 text-sm font-semibold">
-                    <button onClick={() => loadIntoForm(s)} className="text-teal hover:underline">Load into form</button>
-                    <button onClick={() => void removeSnapshot(s)} className="text-destructive hover:underline">Delete</button>
+                    {s.source === "employee_profile" && <button onClick={() => loadIntoForm(s)} className="text-teal hover:underline">Show</button>}
+                    {s.source !== "employee_profile" && <button onClick={() => void removeSnapshot(s)} className="text-destructive hover:underline">Delete</button>}
                   </div>
                 </li>
               ))}
