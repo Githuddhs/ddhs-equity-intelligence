@@ -10,7 +10,6 @@ export const SERVICES = [
   { to: "/services/saas-subscriptions", label: "SaaS subscriptions" },
   { to: "/services/implementation", label: "Implementation services" },
   { to: "/services/ee-advisory", label: "Specialist EE advisory" },
-  { to: "/services/recruitment-governance", label: "Recruitment governance intelligence" },
   { to: "/services/recruitment-suite", label: "Recruitment Suite" },
 ] as const;
 

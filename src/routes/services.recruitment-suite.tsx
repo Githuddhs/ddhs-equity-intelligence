@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { RecruitmentPractice } from "@/components/recruitment-practice";
 import { RecruitmentPricing } from "@/components/recruitment-pricing";
 import { ServicePage, serviceHead } from "@/components/service-page";
 
@@ -43,7 +44,7 @@ function Journey() {
 
 export const Route = createFileRoute("/services/recruitment-suite")({
   staticData: { sitemap: true },
-  head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "An integrated transformation applicant tracking system for South African employers, combining ATS, Employment Equity intelligence, selection governance, analytics and audit-ready evidence."),
+  head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "Recruitment Suite with recruitment governance intelligence: an integrated applicant tracking system for South African employers linking every appointment to EE targets, selection governance and audit-ready evidence."),
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-suite",
@@ -66,8 +67,11 @@ export const Route = createFileRoute("/services/recruitment-suite")({
         { title: "Predictive analytics", body: "Candidate-flow conversion and appointment impact before final approval." },
         { title: "Risk dashboards", body: "Early flags on pools, missing evidence, deviations and slow-moving units." },
         { title: "Evidence management", body: "A defensible, traceable evidence pack for every recruitment process." },
+        { title: "Next-appointment priorities", body: "Designated groups ranked per occupational level by shortfall against sector targets and provincial EAP." },
+        { title: "Movement and job-grade insight", body: "Appointments, promotions and terminations tracked against your EE plan, by unit and Paterson, Peromnes, Hay or Equate grade." },
+        { title: "Manager sign-off", body: "Recorded approvals and justifications for appointments that move away from targets." },
       ],
-      extra: <><Journey /><RecruitmentPricing /></>,
+      extra: <><Journey /><div id="governance"><RecruitmentPractice /></div><RecruitmentPricing /></>,
       steps: [
         { title: "Plan", body: "Set the vacancy's transformation priority." },
         { title: "Recruit", body: "Approve, advertise and track candidates." },
