@@ -49,7 +49,7 @@ export function ExistingFormUpload({ forms }: { forms: EeaForm[] }) {
           <p className="font-semibold text-primary">Alternative: add an existing {forms.map((f) => NAMES[f]).join(" or ")}</p>
           <p className="text-sm text-muted-foreground">Already completed this form elsewhere? Add the file to keep it with your records. It is stored privately as evidence; figures in reports still come from your Employee Profiles, so nothing is captured twice.</p>
         </div>
-        {data === null ? <Link to="/auth" className="text-sm font-semibold text-teal underline">Sign in to add a form</Link> : (
+        {data === null ? <Link to="/auth" search={{ next: "/eea12" }} className="text-sm font-semibold text-teal underline">Sign in to add a form</Link> : (
           <div className="flex items-center gap-2">
             {forms.length > 1 && <select aria-label="Form type" className="h-9 rounded-md border border-input bg-background px-2 text-sm" value={target} onChange={(e) => setTarget(e.target.value as EeaForm)}>{forms.map((f) => <option key={f} value={f}>{NAMES[f]}</option>)}</select>}
             <input ref={input} type="file" className="hidden" aria-label={`Upload existing ${NAMES[target]}`} onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
