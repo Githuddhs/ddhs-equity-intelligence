@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Globe, Lock } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { track } from "@/lib/track";
 
