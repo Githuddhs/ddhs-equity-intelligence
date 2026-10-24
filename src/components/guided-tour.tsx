@@ -59,7 +59,7 @@ export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label 
           <ul className="mt-5 space-y-2">
             {s.points.map((p) => <li key={p} className="flex gap-2 text-sm"><span className="text-teal">✓</span>{p}</li>)}
           </ul>
-          <Link to={s.to} hash={s.hash} className="mt-6 inline-block text-sm font-semibold text-teal underline">{s.cta}</Link>
+          <Link to={s.to} {...(s.hash ? { hash: s.hash } : {})} className="mt-6 inline-block text-sm font-semibold text-teal underline">{s.cta}</Link>
         </section>
         <div className="mt-6 flex items-center justify-between">
           <button onClick={() => setI(i - 1)} disabled={i === 0} className="inline-flex items-center gap-2 rounded-lg border border-input px-4 py-2 text-sm font-semibold text-primary disabled:opacity-40">
