@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://ddhs-equity-intelligence.lovable.app/sitemap.xml
