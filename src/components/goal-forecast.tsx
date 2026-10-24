@@ -4,13 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
 import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";
+import { groupLabel, yearlyProjection, type PlannedMove } from "@/lib/movement-plan";
 import { FORECAST_FIELDS, baselineByLevel, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
 
 const cell = "h-8 w-16 rounded border border-input bg-background px-1 text-right text-sm";
 const pct = (n: number | null) => (n === null ? <span className="text-destructive">Missing</span> : `${n}%`);
 const fc = (c: { total: number; designated: number }) => (c.total ? `${c.total} (${c.designated} D)` : "0");
 
-export function GoalForecast({ forecast, onChange, sector, start, end }: { forecast: Record<string, ForecastRow>; onChange: (f: Record<string, ForecastRow>) => void; sector: string; start: string; end: string }) {
+export function GoalForecast({ forecast, onChange, sector, start, end, moves = [] }: { moves?: PlannedMove[]; forecast: Record<string, ForecastRow>; onChange: (f: Record<string, ForecastRow>) => void; sector: string; start: string; end: string }) {
   const { data, error } = useQuery({
     queryKey: ["goal-forecast-sources"],
     queryFn: async () => {
@@ -33,6 +34,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
   const set = (l: string, p: Partial<ForecastRow>) => onChange({ ...forecast, [l]: { ...row(l), ...p } });
   const results = LEVELS.map((l) => forecastLevel(l, base[l], row(l), { province, sector, years }));
   const history = movementHistory(employees, (period?.movements ?? []) as never);
+  const proj = yearlyProjection(employees, period?.snapshot_date ?? "", moves, years, Object.fromEntries(LEVELS.map((l) => [l, row(l).milestones])));
   const funnel = recruitmentFunnel(data?.cands ?? []);
 
   return (
@@ -66,6 +68,22 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
           </tbody>
         </table>
       </div>
+
+      <h3 className="mt-6 text-sm font-semibold">Planned movements vs yearly goals</h3>
+      <p className="mt-1 text-xs text-muted-foreground">Projected designated share at the end of each year, built only from complete rows in Workforce movement information. Your yearly goals above are never changed; a shortfall is flagged instead.</p>
+      {!moves.length ? <p className="mt-2 text-sm text-muted-foreground">No planned movements saved yet.</p> : (
+      <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[800px] text-sm">
+        <thead className="text-left text-xs text-muted-foreground"><tr><th className="py-2">Level</th>{Array.from({ length: years }, (_, i) => <th key={i}>Yr {i + 1}: projected vs goal</th>)}<th>Source records</th></tr></thead>
+        <tbody>{proj.map((p) => (
+          <tr key={p.level} className="border-t border-border align-top">
+            <td className="py-2 font-medium">{p.level}</td>
+            {p.years.map((y) => <td key={y.year} className="pr-2">{y.status === "no-data" ? "—" : <>{y.projectedShare}% <span className="text-muted-foreground">vs {y.milestone === null ? "no goal" : `${y.milestone}%`}</span>
+              {y.status === "below" && <span className="block text-xs font-semibold text-destructive">Below goal by {Math.abs(y.gap!)} pts</span>}
+              {y.status === "meets" && <span className="block text-xs text-teal">Meets goal{y.gap ? ` (+${y.gap} pts)` : ""}</span>}
+              {y.status === "no-goal" && <span className="block text-xs text-destructive">Yearly goal missing</span>}</>}</td>)}
+            <td className="text-xs text-muted-foreground">{p.sources.length ? p.sources.map((m) => <span key={m.id} className="block">Yr {m.year} · {m.kind === "Termination" ? `Exit (${m.reason})` : m.kind === "Promotion" ? `Promotion ${m.fromLevel} → ${m.level}` : m.kind}{m.unit ? ` · ${m.unit}` : ""} · {groupLabel(m.group)} × {m.count}</span>) : "None"}</td>
+          </tr>))}</tbody>
+      </table></div>)}
 
       <h3 className="mt-6 text-sm font-semibold">What the forecast means</h3>
       <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[800px] text-sm">

@@ -83,3 +83,25 @@ export function demographicImpact(employees: Employee[], snapshot: string, moves
 }
 
 export const groupLabel = (k: string) => GROUPS.find((g) => g.key === (k as Key))?.label ?? k;
+
+export type YearCheck = { year: number; projectedShare: number | null; milestone: number | null; gap: number | null; status: "below" | "meets" | "no-goal" | "no-data" };
+export type LevelProjection = { level: string; years: YearCheck[]; sources: PlannedMove[] };
+/** Cumulative projection per plan year from complete planned movements, compared with manually entered yearly milestones (never changed). */
+export function yearlyProjection(employees: Employee[], snapshot: string, moves: PlannedMove[], years: number, milestones: Record<string, string[] | undefined>): LevelProjection[] {
+  const complete = moves.filter((m) => !moveMissing(m).length);
+  const perYear = Array.from({ length: years }, (_, i) => demographicImpact(employees, snapshot, complete.filter((m) => Number(m.year) <= i + 1)));
+  return LEVELS.map((level) => ({
+    level,
+    sources: complete.filter((m) => m.level === level || (m.kind === "Promotion" && m.fromLevel === level)),
+    years: perYear.map((imp, i) => {
+      const r = imp.find((x) => x.level === level)!;
+      const raw = milestones[level]?.[i] ?? "";
+      const milestone = num(raw);
+      const p = r.projected ? r.projectedShare : null;
+      if (p === null) return { year: i + 1, projectedShare: null, milestone, gap: null, status: "no-data" as const };
+      if (milestone === null) return { year: i + 1, projectedShare: p, milestone, gap: null, status: "no-goal" as const };
+      const gap = Math.round((p - milestone) * 10) / 10;
+      return { year: i + 1, projectedShare: p, milestone, gap, status: gap < 0 ? "below" as const : "meets" as const };
+    }),
+  }));
+}
