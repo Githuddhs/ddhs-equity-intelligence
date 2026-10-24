@@ -284,14 +284,18 @@ function Index() {
           />
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
-              { title: "Employment Equity Compliance", items: ["EEA2 and EEA4 reporting support", "EEA12 workforce analysis", "EEA13 Employment Equity Plan development", "Occupational level and designated-group analysis", "Numerical goals and annual targets", "Compliance evidence and document management"] },
-              { title: "Workforce Intelligence", items: ["One employee dataset for profiles, pay, levels and movements", "Representation and workforce-profile dashboards", "Recruitment, promotion and termination analysis", "Fixed-term and permanent employment analysis"] },
-              { title: "Transformation Analytics", items: ["Gap analysis against EE objectives and targets", "Barrier identification and tracking", "Transformation interventions", "Progress dashboards", "Management and committee reporting"] },
-              { title: "Recruitment Intelligence & Governance", items: ["Requisition and approval controls", "Candidate pipeline and applicant tracking", "Shortlisting and selection governance", "EE representation considerations", "Appointment decision records", "Audit trail for defensible decisions"] },
-              { title: "Governance & Evidence", items: ["EE committee governance", "Consultation records", "Evidence repository", "Actions, responsibilities and deadlines", "Audit-ready compliance records", "Executive and board reporting"] },
-              { title: "Professional Services", items: ["SaaS subscriptions", "Implementation and data onboarding", "Employment Equity advisory", "Workforce analysis", "EE Plan development", "Training and governance support"] },
+              { title: "Employment Equity Compliance", href: "/eea13-planning", items: ["EEA2 and EEA4 reporting support", "EEA12 workforce analysis", "EEA13 Employment Equity Plan development", "Occupational level and designated-group analysis", "Numerical goals and annual targets", "Compliance evidence and document management"] },
+              { title: "Workforce Intelligence", href: "/workforce-foundation", items: ["One employee dataset for profiles, pay, levels and movements", "Representation and workforce-profile dashboards", "Recruitment, promotion and termination analysis", "Fixed-term and permanent employment analysis"] },
+              { title: "Transformation Analytics", href: "/executive-intelligence", items: ["Gap analysis against EE objectives and targets", "Barrier identification and tracking", "Transformation interventions", "Progress dashboards", "Management and committee reporting"] },
+              { title: "Recruitment Intelligence & Governance", href: "/services/recruitment-suite", items: ["Requisition and approval controls", "Candidate pipeline and applicant tracking", "Shortlisting and selection governance", "EE representation considerations", "Appointment decision records", "Audit trail for defensible decisions"] },
+              { title: "Governance & Evidence", href: "/evidence-governance", items: ["EE committee governance", "Consultation records", "Evidence repository", "Actions, responsibilities and deadlines", "Audit-ready compliance records", "Executive and board reporting"] },
+              { title: "Professional Services", href: "/services/saas-subscriptions", items: ["SaaS subscriptions", "Implementation and data onboarding", "Employment Equity advisory", "Workforce analysis", "EE Plan development", "Training and governance support"] },
             ].map((c, i) => (
-              <div key={c.title} className="rounded-2xl border bg-card p-6 shadow-sm">
+              <Link
+                key={c.title}
+                to={c.href}
+                className="group rounded-2xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+              >
                 <div className="flex items-center gap-3">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-soft text-sm font-bold text-teal">{i + 1}</span>
                   <h3 className="card-title text-primary">{c.title}</h3>
@@ -301,7 +305,10 @@ function Index() {
                     <li key={x} className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal" />{x}</li>
                   ))}
                 </ul>
-              </div>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors group-hover:text-primary">
+                  Explore <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
             ))}
           </div>
         </div>
