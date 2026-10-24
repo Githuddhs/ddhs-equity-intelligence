@@ -38,6 +38,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: Database,
     href: "/workforce-foundation",
     tool: "Workforce Data",
+    access: "Open to view — capturing and storing workforce records happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "One Employee Profile per person, captured once and used everywhere. Demographics, occupational levels, contracts, pay bands, locations and movements all come from the same record, so every report reads the same numbers.",
     points: [
@@ -51,6 +53,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: BarChart3,
     href: "/eea12",
     tool: "EEA12 Analysis",
+    access: "Open to use — the full analysis runs here without signing in; saving your analyses needs a client login.",
+    accessMode: "open",
     summary:
       "EEA12 analysis compares your workforce with gazetted sector targets and provincial EAP, and shows where you are under- or over-represented in percentage points at every occupational level.",
     points: [
@@ -64,6 +68,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: Target,
     href: "/eea13-planning",
     tool: "EEA13 Planning",
+    access: "Open to view — building and signing off your plan happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "EEA13 planning assembles your plan from records you have already saved: baselines flow into numerical goals, affirmative-action measures, objectives and owners, and the plan is not complete until your organisation signs it off.",
     points: [
@@ -77,6 +83,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: ClipboardCheck,
     href: "/accountability-management",
     tool: "Accountability Management",
+    access: "Open to view — assigning owners and tracking actions happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "Accountability management turns plan measures into named responsibilities with deadlines, so implementation is tracked rather than assumed.",
     points: [
