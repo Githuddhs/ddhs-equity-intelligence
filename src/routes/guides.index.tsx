@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { GUIDES, GUIDES_LAST_REVIEWED } from "@/lib/guides";
+import { GUIDES_LAST_REVIEWED } from "@/lib/guides";
+import { releasedGuides } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -23,7 +24,7 @@ function GuidesIndex() {
       <h1 className="display-title mt-2 text-balance text-primary">Employment Equity guides</h1>
       <p className="page-lead mt-4 text-muted-foreground">Plain-language answers to the questions employers ask most about Employment Equity compliance.</p>
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-        {GUIDES.map((g) => (
+        {releasedGuides().map((g) => (
           <li key={g.slug}>
             <Link to="/guides/$slug" params={{ slug: g.slug }} className="block h-full rounded-2xl border border-border p-5 hover:border-teal">
               <h2 className="font-display text-lg font-semibold text-primary">{g.title}</h2>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { BLOG_POSTS } from "@/lib/blog";
+import { releasedPosts } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell } from "@/components/guide-shell";
 
@@ -23,7 +23,7 @@ function BlogIndex() {
       <h1 className="display-title mt-2 text-balance text-primary">Employment Equity insights</h1>
       <p className="page-lead mt-4 text-muted-foreground">Practical thinking on Employment Equity compliance, planning and workforce intelligence.</p>
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-        {BLOG_POSTS.map((p) => (
+        {releasedPosts().map((p) => (
           <li key={p.slug}>
             <Link to="/blog/$slug" params={{ slug: p.slug }} className="block h-full rounded-2xl border border-border p-5 hover:border-teal">
               <h2 className="font-display text-lg font-semibold text-primary">{p.title}</h2>
