@@ -1,6 +1,6 @@
 /**
  * Weekly release of the already-written blog articles and guides.
- * Items alternate blog → guide, one per week, every Monday 06:00 South African time.
+ * Each week one blog article and one guide come out, every Monday 06:00 South African time.
  * Release is worked out from the date when a page is requested, so no scheduled job is needed.
  */
 import { BLOG_POSTS, type BlogPost } from "@/lib/blog";
@@ -17,10 +17,10 @@ export type ScheduledItem =
 export function buildSchedule(blogs: { slug: string; title: string }[], guides: { slug: string; title: string }[]): ScheduledItem[] {
   const out: ScheduledItem[] = [];
   const max = Math.max(blogs.length, guides.length);
-  let week = 0;
   for (let i = 0; i < max; i++) {
-    if (blogs[i]) out.push({ kind: "blog", slug: blogs[i].slug, title: blogs[i].title, releaseAt: FIRST_RELEASE_UTC + week++ * WEEK });
-    if (guides[i]) out.push({ kind: "guide", slug: guides[i].slug, title: guides[i].title, releaseAt: FIRST_RELEASE_UTC + week++ * WEEK });
+    const releaseAt = FIRST_RELEASE_UTC + i * WEEK;
+    if (blogs[i]) out.push({ kind: "blog", slug: blogs[i].slug, title: blogs[i].title, releaseAt });
+    if (guides[i]) out.push({ kind: "guide", slug: guides[i].slug, title: guides[i].title, releaseAt });
   }
   return out;
 }
