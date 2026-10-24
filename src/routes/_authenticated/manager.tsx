@@ -178,7 +178,7 @@ function ManagerPortal() {
                             ? <span className="text-xs font-semibold text-teal">✓ {m.approvedBy} · {fmt(m.approvedAt)}</span>
                             : <span className="text-xs text-muted-foreground">Awaiting approval</span>}
                           <button disabled={busy === plan.id} onClick={() => toggleMilestone(plan, m)}
-                            className={`rounded-lg px-3 py-1 text-xs font-semibold disabled:opacity-50 ${m.approvedAt ? "border border-border text-muted-foreground" : "bg-teal text-white"}`}>
+                            className={`rounded-lg px-3 py-1 text-xs font-semibold disabled:opacity-50 ${m.approvedAt ? "border border-border text-muted-foreground" : "bg-teal text-teal-foreground"}`}>
                             {m.approvedAt ? "Revoke" : "Approve"}
                           </button>
                         </li>

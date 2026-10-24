@@ -98,7 +98,7 @@ function ConsultantPage() {
       <section id="profile" className="mt-10 scroll-mt-8 rounded-xl border border-border bg-card p-8">
         <h2 className="card-title text-primary">Consultant profile</h2>
         <div className="mt-4 grid gap-6 md:grid-cols-[auto_1fr]">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">DDHS</div>
+          <img src="/icons/icon-192.png" alt="DDHS Equity Intelligence logo" width={96} height={96} className="h-24 w-24 rounded-xl" />
           <div className="text-sm">
             <p className="font-semibold text-primary">DDHS Employment Equity consulting team</p>
             <p className="mt-2 text-muted-foreground">

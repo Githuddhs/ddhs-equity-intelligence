@@ -128,7 +128,7 @@ function InvoicesPage() {
       </div>
       <span
         className={`rounded-full px-3 py-1 text-xs font-semibold ${
-          inv.status === "paid" ? "bg-teal-100 text-teal-800" : inv.status === "cancelled" ? "bg-muted text-muted-foreground" : "bg-amber-100 text-amber-800"
+          inv.status === "paid" ? "bg-teal-soft text-teal" : inv.status === "cancelled" ? "bg-muted text-muted-foreground" : "bg-accent text-accent-foreground"
         }`}
       >
         {inv.status}
@@ -178,7 +178,7 @@ function InvoicesPage() {
                   <button
                     key={q.label}
                     onClick={() => setItems((xs) => [...xs, { description: q.description, amount: q.amount }])}
-                    className="rounded-full border border-teal-600 px-3 py-1 text-xs text-teal-700 hover:bg-teal-50"
+                    className="rounded-full border border-teal px-3 py-1 text-xs text-teal hover:bg-teal-soft"
                   >
                     + {q.label} ({zar(q.amount)})
                   </button>

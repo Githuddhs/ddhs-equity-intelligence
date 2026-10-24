@@ -35,8 +35,8 @@
   --color-teal: var(--teal);
   --color-teal-foreground: var(--teal-foreground);
   --color-teal-soft: var(--teal-soft);
-  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Aptos", "Aptos Display", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
