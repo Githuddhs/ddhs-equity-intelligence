@@ -14,7 +14,15 @@ describe("data readiness", () => {
     expect(readinessScore(s).done).toBe(0);
   });
   it("counts an uploaded EEA2 file as evidence", () => {
-    const s = buildReadiness({ ...base, docs: ["forms eea2 2025.pdf"] });
+    const s = buildReadiness({ ...base, docs: ["eea2 2025.pdf"] });
     expect(s[2]!.items.find((i) => i.label === "Previous EEA2 submission")!.done).toBe(true);
+  });
+  it("does not count an EEA12-area workforce file as a previous EEA12 analysis", () => {
+    const s = buildReadiness({ ...base, docs: ["workforce headcount.xlsx"] });
+    expect(s[2]!.items.find((i) => i.label === "Previous EEA12 analysis")!.done).toBe(false);
+  });
+  it("links evidence items to the matching upload library", () => {
+    const s = buildReadiness(base);
+    expect(s[2]!.items.find((i) => i.label === "Previous EEA2 submission")!.area).toBe("forms");
   });
 });
