@@ -10,13 +10,14 @@ export const saveFoundation = createServerFn({ method: "POST" })
   .handler(async ({ data: input, context }) => {
     const data = applyMovements(input).foundation;
     const check = validateFoundation(data);
-    if (check.errors.length) throw new Error(check.errors.slice(0, 5).join(" "));
+    if (check.blocking.length) throw new Error(check.blocking.join(" "));
+    const flagged = [...check.errors, ...check.warnings];
     const { data: id, error } = await context.supabase.rpc("save_workforce_foundation", {
-      p_record: { ...data, warnings: check.warnings } as unknown as Json,
+      p_record: { ...data, warnings: flagged } as unknown as Json,
       p_snapshot: foundationSnapshot(data) as unknown as Json,
     });
     if (error) throw new Error("Workforce records could not be saved. No changes were committed.");
-    return { id, warnings: check.warnings, employees: data.employees };
+    return { id, warnings: flagged, employees: data.employees };
   });
 
 export const deleteFoundation = createServerFn({ method: "POST" })

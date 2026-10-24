@@ -27,3 +27,16 @@ describe("Employee Profile is the master record", () => {
     expect(validateFoundation(f).warnings.some((w) => w.includes("X9"))).toBe(true);
   });
 });
+
+describe("Saving incomplete workforce data", () => {
+  it("only invalid reporting-period dates block saving", () => {
+    const f = { ...blankFoundation(), period_start: "2026-01-01", period_end: "2026-12-31", snapshot_date: "2026-12-31", employees: [employeeSchema.parse({ employeeId: "E1" })] };
+    const c = validateFoundation(f);
+    expect(c.errors.length).toBeGreaterThan(0);
+    expect(c.blocking).toEqual([]);
+    expect(validateFoundation({ ...f, period_start: "" }).blocking.length).toBe(1);
+  });
+  it("an organisation with no employees yet can still be saved", () => {
+    expect(validateFoundation({ ...blankFoundation(), period_start: "2026-01-01", period_end: "2026-12-31", snapshot_date: "2026-06-30" }).blocking).toEqual([]);
+  });
+});

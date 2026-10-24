@@ -49,8 +49,11 @@ const validDate = (v: string) => /^\d{4}-\d{2}-\d{2}$/.test(v) && Number.isFinit
 
 export function validateFoundation(f: Foundation) {
   const errors: string[] = [], warnings: string[] = [];
-  if (![f.period_start, f.period_end, f.snapshot_date].every(validDate)) errors.push("Enter valid reporting-period and snapshot dates.");
-  else if (f.period_start > f.period_end || f.snapshot_date < f.period_start || f.snapshot_date > f.period_end) errors.push("Snapshot date must fall within the reporting period; start must not follow end.");
+  // Only the reporting-period dates block saving (records are filed under them); everything else is saved and flagged.
+  const blocking: string[] = [];
+  if (![f.period_start, f.period_end, f.snapshot_date].every(validDate)) blocking.push("Enter valid reporting-period and snapshot dates.");
+  else if (f.period_start > f.period_end || f.snapshot_date < f.period_start || f.snapshot_date > f.period_end) blocking.push("Snapshot date must fall within the reporting period; start must not follow end.");
+  errors.push(...blocking);
   for (const k of [...REQUIRED_ORG, "doelRef"] as const) if (!f.organisation[k]) warnings.push(`Organisation: ${ORG_LABELS[k]} is missing.`);
   if (f.organisation.totalEmployees && !/^\d+$/.test(f.organisation.totalEmployees)) errors.push("Organisation: total number of employees must be a whole number.");
   if (f.organisation.designatedStatus && !DESIGNATED_STATUSES.includes(f.organisation.designatedStatus)) errors.push("Organisation: select a designated-employer status.");
@@ -107,7 +110,7 @@ export function validateFoundation(f: Foundation) {
     if (e.reportsTo && e.reportsTo === e.employeeId) errors.push(`Employee ${e.employeeId}: an employee cannot report to themselves.`);
   }
   if (!f.movements.length) warnings.push("No workforce movements supplied; movement tables are not confirmed as zero.");
-  return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
+  return { errors: [...new Set(errors)], warnings: [...new Set(warnings)], blocking };
 }
 
 export function foundationSnapshot(f: Foundation) {
