@@ -77,6 +77,35 @@ const painCards = [
   },
 ];
 
+/**
+ * Capability link used by the homepage cards. The final word and the arrow are
+ * kept on one line so the arrow never ends up alone on its own line.
+ */
+function CapabilityLink({
+  href,
+  prefix,
+  capability,
+  className,
+}: {
+  href: string;
+  prefix: string;
+  capability: string;
+  className: string;
+}) {
+  const words = capability.split(" ");
+  const last = words.pop() ?? capability;
+  const rest = words.length ? `${words.join(" ")} ` : "";
+  return (
+    <Link to={href} className={className}>
+      {prefix} {rest}
+      <span className="whitespace-nowrap">
+        {last}
+        <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
+      </span>
+    </Link>
+  );
+}
+
 const lifecycle = [
   { icon: BarChart3, title: "Analyse", body: "EEA12 workforce analysis and representation insights." },
   { icon: Target, title: "Plan", body: "EEA13 planning with targets, actions and owners." },
@@ -357,13 +386,12 @@ function Index() {
                 </div>
                 <h3 className="card-title mt-5 text-primary">{card.title}</h3>
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
-                <Link
-                  to={card.href}
-                  className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors hover:text-primary"
-                >
-                  Solved with {card.capability}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                <CapabilityLink
+                  href={card.href}
+                  prefix="Solved with"
+                  capability={card.capability}
+                  className="group mt-5 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
+                />
               </div>
             ))}
           </div>
@@ -546,18 +574,24 @@ function Index() {
           />
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { icon: Target, title: "Clear, defensible targets", body: "Numerical goals set against sector targets and provincial EAP, level by level." },
-              { icon: ClipboardCheck, title: "On-time DoEL submissions", body: "Drafted EEA2 and EEA4 forms and a submission log with references." },
-              { icon: FileCheck2, title: "Audit-ready evidence", body: "Every action linked to owners, deadlines and supporting documents." },
-              { icon: LineChart, title: "Visible progress", body: "Leadership dashboards showing under-representation closing over time." },
-              { icon: CheckCircle2, title: "DG review readiness", body: "Checklists and corrective actions before an inspection arrives." },
-              { icon: Sparkles, title: "Less admin time", body: "Spend effort on transformation, not on reconciling spreadsheets." },
+              { icon: Target, title: "Clear, defensible targets", body: "Numerical goals set against sector targets and provincial EAP, level by level.", capability: "EEA13 Planning", href: "/eea13-planning" },
+              { icon: ClipboardCheck, title: "On-time DoEL submissions", body: "Drafted EEA2 and EEA4 forms and a submission log with references.", capability: "Accountability Management", href: "/accountability-management" },
+              { icon: FileCheck2, title: "Audit-ready evidence", body: "Every action linked to owners, deadlines and supporting documents.", capability: "Evidence & Governance", href: "/evidence-governance" },
+              { icon: LineChart, title: "Visible progress", body: "Leadership dashboards showing under-representation closing over time.", capability: "Leadership Dashboard", href: "/leadership-dashboard" },
+              { icon: CheckCircle2, title: "DG review readiness", body: "Checklists and corrective actions before an inspection arrives.", capability: "DG Review Evidence", href: "/evidence-governance" },
+              { icon: Sparkles, title: "Less admin time", body: "Spend effort on transformation, not on reconciling spreadsheets.", capability: "Workforce Data", href: "/workforce-foundation" },
             ].map((c) => (
               <div key={c.title} className="flex gap-4 rounded-2xl border bg-card p-6 shadow-sm">
                 <c.icon className="h-6 w-6 shrink-0 text-teal" />
-                <div>
+                <div className="min-w-0">
                   <h3 className="card-title text-primary">{c.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
+                  <CapabilityLink
+                    href={c.href}
+                    prefix="Delivered by"
+                    capability={c.capability}
+                    className="group mt-3 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
+                  />
                 </div>
               </div>
             ))}
