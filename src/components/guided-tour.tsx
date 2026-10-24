@@ -7,7 +7,10 @@ import { track } from "@/lib/track";
 
 const shareOrigin = () => (typeof window === "undefined" || /localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
 
-export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string; hash?: string };
+export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string; hash?: string; access?: string };
+
+/** Icon for the step's access note: open/globe when the tool is free without signing in, padlock when it needs a client login. */
+export const tourAccessOpen = (access: string | undefined) => !!access && /free|no sign-in|open to (use|read)/i.test(access);
 
 /** Shared step-by-step tour layout used by the platform tour and the Recruitment Suite tour. */
 export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label = "site tour", exitTo = "/" }: { steps: TourStep[]; path: string; invitedFor?: string | undefined; invitedFrom?: string | undefined; label?: string; exitTo?: string }) {
@@ -59,6 +62,12 @@ export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label 
           <ul className="mt-5 space-y-2">
             {s.points.map((p) => <li key={p} className="flex gap-2 text-sm"><span className="text-teal">✓</span>{p}</li>)}
           </ul>
+          {s.access && (
+            <div className="mt-5 flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
+              {tourAccessOpen(s.access) ? <Globe className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" /> : <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />}
+              <p className="text-xs leading-relaxed text-muted-foreground">{s.access}</p>
+            </div>
+          )}
           <Link to={s.to} {...(s.hash ? { hash: s.hash } : {})} className="mt-6 inline-block text-sm font-semibold text-teal underline">{s.cta}</Link>
         </section>
         <div className="mt-6 flex items-center justify-between">
