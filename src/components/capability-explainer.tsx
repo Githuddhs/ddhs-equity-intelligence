@@ -62,7 +62,7 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: BarChart3,
     href: "/eea12",
     tool: "EEA12 Analysis",
-    access: "Open to use — the full analysis runs here without signing in; saving your analyses needs a client login.",
+    access: "Free to use without signing in — saving needs a client login.",
     accessMode: "open",
     summary:
       "EEA12 analysis compares your workforce with gazetted sector targets and provincial EAP, and shows where you are under- or over-represented in percentage points at every occupational level.",
@@ -179,23 +179,26 @@ export function CapabilityExplainer({
                 </li>
               ))}
             </ul>
-            <div className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
-              {capability.accessMode === "open" ? (
-                <Globe className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />
-              ) : (
+            {capability.accessMode === "portal" && (
+              <div className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
                 <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />
-              )}
-              <p className="text-xs leading-relaxed text-muted-foreground">{capability.access}</p>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-3">
+                <p className="text-xs leading-relaxed text-muted-foreground">{capability.access}</p>
+              </div>
+            )}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
               <Link
                 to={capability.href}
                 onClick={onClose}
                 className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
               >
                 {capabilityCta(capability)} <ArrowRight className="h-4 w-4" />
-
               </Link>
+              {capability.accessMode === "open" && (
+                <span className="inline-flex items-center gap-1.5 text-xs leading-relaxed text-muted-foreground">
+                  <Globe className="h-3.5 w-3.5 shrink-0 text-teal" />
+                  {capability.access}
+                </span>
+              )}
               <a
                 href="#contact"
                 onClick={onClose}
@@ -204,6 +207,7 @@ export function CapabilityExplainer({
                 Book a Demonstration
               </a>
             </div>
+
           </>
         )}
       </DialogContent>
