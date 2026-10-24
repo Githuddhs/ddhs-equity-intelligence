@@ -518,13 +518,13 @@ function Index() {
         </div>
       </section>
 
-      {/* Platform walkthrough (example figures only, no client data) */}
+      {/* Platform walkthrough (empty screens, no client or example data) */}
       <section id="walkthrough" className="py-8">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading
             eyebrow="Platform walkthrough"
             title="See the Platform at Work"
-            body="Three screens from the platform, shown with example figures only — no client information."
+            body="Three screens from the platform, shown empty — no client information or example figures."
           />
           <ol className="mt-8 grid gap-6 md:grid-cols-3">
             {WALKTHROUGH.map((w, i) => (
