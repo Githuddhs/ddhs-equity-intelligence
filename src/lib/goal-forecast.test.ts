@@ -7,6 +7,10 @@ const base = { headcount: 10, designated: 5, share: 50 };
 describe("goal forecast", () => {
   it("never substitutes national EAP when province is missing", () => expect(eapBenchmark("")).toBeNull());
   it("has no sector target below skilled level", () => expect(sectorTarget("Wholesale and Retail Trade; Repair of Motor Vehicles and Motorcycles", "Semi-skilled")).toBeNull());
+  it("uses provincial EAP as the target for the two lowest levels", () => {
+    expect(forecastLevel("Unskilled", base, full, { province: "Gauteng", sector: "", years: 5 }).target).toBe(eapBenchmark("Gauteng"));
+    expect(forecastLevel("Semi-skilled", base, full, { province: "", sector: "", years: 5 }).target).toBeNull();
+  });
   it("projects headcount and designated people needed", () => {
     const r = forecastLevel("Semi-skilled", base, full, { province: "Gauteng", sector: "", years: 5 });
     expect(r.projected).toBe(13); // 10 - 2 exits + 5 inflows

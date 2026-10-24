@@ -37,14 +37,14 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
       <h2 className="font-display text-lg font-semibold">Numerical goals and forecast</h2>
-      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Blank inputs are flagged, never filled in.</p>
+      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted sector target; Semi-skilled and Unskilled use provincial EAP as the target. Blank inputs are flagged, never filled in.</p>
       {error && <p className="mt-3 text-sm text-destructive">Could not load workforce data.</p>}
       {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce" className="underline">add employee records</Link> to get baselines.</p>}
 
       <div className="mt-4 overflow-x-auto">
         <table className="w-full min-w-[1100px] text-sm">
           <thead className="text-left text-xs text-muted-foreground"><tr>
-            <th className="py-2 pr-2">Level</th><th>Baseline</th><th>Base %</th><th>EAP</th><th>Sector target</th><th>5-yr goal %</th>
+            <th className="py-2 pr-2">Level</th><th>Baseline</th><th>Base %</th><th>EAP</th><th>Target</th><th>5-yr goal %</th>
             {Array.from({ length: years }, (_, i) => <th key={i}>Yr {i + 1} %</th>)}
             {FORECAST_FIELDS.map(([k, l]) => <th key={k} title={l}>{l.replace(/^(Expected|Planned) /, "")}</th>)}
           </tr></thead>
@@ -55,7 +55,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
                 <td>{r.baseline ? r.baseline.headcount : <span className="text-destructive">Missing</span>}</td>
                 <td>{pct(r.baseline?.share ?? null)}</td>
                 <td>{pct(r.benchmark)}</td>
-                <td>{r.target === null ? <span className="text-muted-foreground">Not gazetted</span> : `${r.target}%`}</td>
+                <td>{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}{r.targetSource === "eap" && <span className="block text-xs text-muted-foreground">Provincial EAP</span>}</td>
                 <td><input aria-label={`${r.level} five-year goal`} className={cell} inputMode="decimal" value={f.goal} onChange={(e) => set(r.level, { goal: e.target.value })} /></td>
                 {Array.from({ length: years }, (_, i) => <td key={i}><input aria-label={`${r.level} year ${i + 1}`} className={cell} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; m[i] = e.target.value; set(r.level, { milestones: m }); }} /></td>)}
                 {FORECAST_FIELDS.map(([k, l]) => <td key={k}><input aria-label={`${r.level} ${l}`} className={cell} inputMode="numeric" value={f[k]} onChange={(e) => set(r.level, { [k]: e.target.value })} /></td>)}
