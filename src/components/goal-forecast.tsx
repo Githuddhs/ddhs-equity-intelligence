@@ -5,7 +5,7 @@ import type { Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
 import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";
 import { groupLabel, yearlyProjection, type PlannedMove } from "@/lib/movement-plan";
-import { FORECAST_FIELDS, baselineByLevel, fixedMilestones, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
+import { appointmentPlan, FORECAST_FIELDS, baselineByLevel, fixedMilestones, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
 
 const cell = "h-8 w-16 rounded border border-input bg-background px-1 text-right text-sm";
 const pct = (n: number | null) => (n === null ? <span className="text-destructive">Missing</span> : `${n}%`);
@@ -63,12 +63,27 @@ export function GoalForecast({ forecast, onChange, sector, start, end, moves = [
                   ? <span className="block text-xs text-muted-foreground">Provincial EAP · {EAP_SOURCE_LABEL}</span>
                   : <span className="block text-xs text-muted-foreground">Sector target · {SECTOR_TARGET_SOURCE_LABEL}<br />{SECTOR_TARGET_PERIOD_LABEL}</span>}</td>
                 <td title="Fixed to the target; updates when new targets or EAP data are published">{r.goal === null ? <span className="text-destructive">Missing</span> : `${r.goal}%`}<span className="block text-xs text-muted-foreground">Fixed</span></td>
-                {Array.from({ length: years }, (_, i) => i === 4 ? <td key={i} title="Year 5 equals the fixed target">{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}<span className="block text-xs text-muted-foreground">Fixed</span></td> : <td key={i}><input max={r.target ?? undefined} aria-label={`${r.level} year ${i + 1}`} aria-invalid={r.target !== null && Number(f.milestones[i]) > r.target} className={`${cell} ${r.target !== null && Number(f.milestones[i]) > r.target ? "border-destructive ring-1 ring-destructive" : ""}`} title={r.target !== null && Number(f.milestones[i]) > r.target ? `Above the ${r.targetSource === "eap" ? "provincial EAP" : "sector target"} maximum of ${r.target}%` : undefined} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; m[i] = e.target.value; set(r.level, { milestones: m }); }} /></td>)}
+                {Array.from({ length: years }, (_, i) => i === 4 ? <td key={i} title="Year 5 equals the fixed target">{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}<span className="block text-xs text-muted-foreground">Fixed</span></td> : <td key={i}><input max={r.target ?? undefined} aria-label={`${r.level} year ${i + 1}`} aria-invalid={r.target !== null && Number(f.milestones[i]) > r.target} className={`${cell} ${r.target !== null && Number(f.milestones[i]) > r.target ? "border-destructive ring-1 ring-destructive" : ""}`} title={r.target !== null && Number(f.milestones[i]) > r.target ? `Above the ${r.targetSource === "eap" ? "provincial EAP" : "sector target"} maximum of ${r.target}%` : undefined} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; const v = e.target.value; m[i] = r.target !== null && Number(v) > r.target ? String(r.target) : v; set(r.level, { milestones: m }); }} /></td>)}
                 {FORECAST_FIELDS.map(([k, l]) => <td key={k}><input aria-label={`${r.level} ${l}`} className={cell} inputMode="numeric" value={f[k]} onChange={(e) => set(r.level, { [k]: e.target.value })} /></td>)}
               </tr>); })}
           </tbody>
         </table>
       </div>
+
+      <h3 className="mt-6 text-sm font-semibold">Required designated appointments to reach the five-year targets</h3>
+      <p className="mt-1 max-w-3xl text-xs text-muted-foreground">Based on the difference between each level's fixed five-year target (sector target or provincial EAP) and its current designated profile, assuming headcount stays the same and each designated appointment fills a vacancy left by a non-designated employee. Suggested appointments are spread evenly over the plan so the target is reached by the final year and never exceeded.</p>
+      <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[800px] text-sm">
+        <thead className="text-left text-xs text-muted-foreground"><tr><th className="py-2">Level</th><th>Current</th><th>Target</th><th>Gap</th><th>Required</th>{Array.from({ length: years }, (_, i) => <th key={i}>Yr {i + 1}</th>)}<th></th></tr></thead>
+        <tbody>{results.map((r) => { const a = appointmentPlan(r.baseline, r.target, years); return (
+          <tr key={r.level} className="border-t border-border">
+            <td className="py-2 font-medium">{r.level}</td>
+            <td>{pct(r.baseline?.share ?? null)}</td><td>{pct(r.target)}</td>
+            <td>{a.gapPts === null ? <span className="text-destructive">Missing</span> : `${a.gapPts} pts`}</td>
+            <td className="font-semibold">{a.required ?? "—"}</td>
+            {Array.from({ length: years }, (_, i) => <td key={i}>{a.perYear[i] === undefined ? "—" : <>{a.perYear[i]}<span className="block text-xs text-muted-foreground">→ {a.shares[i]}%</span></>}</td>)}
+            <td>{a.required !== null && <button type="button" className="text-xs text-teal underline" onClick={() => { const m = [...row(r.level).milestones]; a.shares.forEach((s, i) => { if (i < 4) m[i] = String(s); }); set(r.level, { milestones: m, appointments: String(a.required) }); }}>Use as yearly goals</button>}</td>
+          </tr>); })}</tbody>
+      </table></div>
 
       <h3 className="mt-6 text-sm font-semibold">Planned movements vs yearly goals</h3>
       <p className="mt-1 text-xs text-muted-foreground">Projected designated share at the end of each year, built only from complete rows in Workforce movement information. Your yearly goals above are never changed; a shortfall is flagged instead.</p>

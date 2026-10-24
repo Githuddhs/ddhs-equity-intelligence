@@ -141,6 +141,6 @@ export function appointmentPlan(base: Baseline | null | undefined, target: numbe
   const required = Math.max(0, Math.ceil((target / 100) * base.headcount - base.designated - 1e-9));
   const perYear = Array.from({ length: n }, (_, i) => Math.floor(required / n) + (i < required % n ? 1 : 0));
   let cum = 0;
-  const shares = perYear.map((a, i) => { cum += a; return i === n - 1 ? Math.max(base.share!, target) === base.share! ? base.share! : target : Math.min(target, r1(((base.designated + cum) / base.headcount) * 100)); });
+  const shares = perYear.map((a, i) => { cum += a; return i === n - 1 ? Math.max(base.share!, target) : Math.min(target, r1(((base.designated + cum) / base.headcount) * 100)); });
   return { gapPts, required, perYear, shares };
 }
