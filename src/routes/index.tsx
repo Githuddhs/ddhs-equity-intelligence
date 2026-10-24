@@ -345,7 +345,7 @@ function Index() {
                     to="/services/recruitment-suite"
                     className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
                   >
-                    Explore the Suite <ArrowRight className="h-4 w-4" />
+                    Explore the Recruitment Suite <ArrowRight className="h-4 w-4" />
                   </Link>
                   <a
                     href="#contact"

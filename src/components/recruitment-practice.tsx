@@ -50,7 +50,7 @@ export function RecruitmentPractice() {
     status === "proposed" ? "Planned:" : status === "partial" ? "Today and planned:" : "Platform shows:";
   return (
     <section className="mt-16">
-      <h2 className="section-title text-primary">Recruitment governance in practice</h2>
+      <h2 className="section-title text-primary">Recruitment Suite governance intelligence in practice</h2>
       <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
         A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Every step below runs in the platform today.
       </p>
