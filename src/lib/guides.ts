@@ -28,6 +28,7 @@ const TARGETS = { label: "Determination of sectoral numerical targets, Gazette 5
 const DOEL_REGS = { label: "Department notice: publication of the EE Regulations (15 April 2025)", url: "https://www.labour.gov.za/publication-of-the-two-sets-of-employment-equity-regulations-following-the-commencement-of-the-ee-amendment-act-no-4-of-2" };
 const PORTAL = { label: "Employment Equity Online reporting portal", url: "https://ee.labour.gov.za/" };
 const CYCLE = { label: "Department notice: 2025 reporting cycle opens 1 September 2025", url: "https://www.labour.gov.za/the-opening-of-the-2025-ee-reporting-cycle-is-imminent-%E2%80%93-employers-are-you-ready-to-submit-the-ee-reports-and-request-an-ee" };
+const CYCLE2026 = { label: "Department of Employment and Labour: 2026 reporting cycle (online submissions close 15 January 2027)", url: "https://www.labour.gov.za/the-department-of-employment-and-labour-urges-employers-to-comply-with-employment-equity-reporting-requirements" };
 const GROUNDS = { label: "Department notice: grounds to justify failure to comply", url: "https://www.labour.gov.za/amended-employment-equity-act-(eea)-is-flexible-in-that-it-provides-grounds-to-justify-failure-to-comply" };
 
 export const GUIDES: Guide[] = [
@@ -103,6 +104,7 @@ export const GUIDES: Guide[] = [
       { heading: "The yearly cycle", body: [
         "The EEA2 covers the preceding 12-month period. The EEA2 and EEA4 are submitted together, online, while the Department's reporting window is open. The portal accepts only the EEA2 and EEA4 — the EEA12 analysis and EEA13 plan are kept by the employer, not submitted.",
         "The current window closes at midnight on 15 January 2027. Build your timetable backwards from that date and allow time for consultation and sign-off before the final week.",
+        "Employers who cannot report online file manually instead, and that window is far shorter — for the 2026 cycle manual submissions closed on 1 October 2026, a month after the window opened.",
         "Dates can change, so check the Department of Employment and Labour announcement before planning your timetable.",
       ] },
       { heading: "A workable timetable", body: [
@@ -113,7 +115,7 @@ export const GUIDES: Guide[] = [
       ] },
     ],
     related: { to: "/accountability-management", label: "Track deadlines and owners" },
-    sources: [CYCLE, PORTAL, AMEND],
+    sources: [CYCLE2026, CYCLE, PORTAL, AMEND],
   },
   {
     slug: "reasonable-grounds-for-not-meeting-targets",
