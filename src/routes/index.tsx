@@ -313,11 +313,11 @@ function Index() {
               { icon: FolderLock, title: "Privacy by design", capability: "Evidence & Governance", href: "/evidence-governance", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
               { icon: Users, title: "Expert support", capability: "Virtual Consultant", href: "/virtual-consultant", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
             ].map((c) => (
-              <div key={c.title} className="rounded-2xl border bg-card p-6 shadow-sm">
+              <div key={c.title} className="flex flex-col rounded-2xl border bg-card p-6 shadow-sm">
                 <c.icon className="h-6 w-6 text-teal" />
                 <h3 className="card-title mt-4 text-primary">{c.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{c.body}</p>
-                <CapabilityLink href={c.href} capability={c.capability} className="mt-4" />
+                <CapabilityLink href={c.href} capability={c.capability} className="mt-auto pt-4" />
               </div>
             ))}
 
@@ -376,7 +376,7 @@ function Index() {
           />
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {painCards.map((card) => (
-              <div key={card.title} className="rounded-2xl border bg-card p-8 shadow-sm">
+              <div key={card.title} className="flex flex-col rounded-2xl border bg-card p-8 shadow-sm">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-soft">
                   <card.icon className="h-6 w-6 text-teal" />
                 </div>
@@ -385,7 +385,7 @@ function Index() {
                 <CapabilityLink
                   href={card.href}
                   capability={card.capability}
-                  className="mt-5"
+                  className="mt-auto pt-5"
                 />
               </div>
             ))}
@@ -578,13 +578,13 @@ function Index() {
             ].map((c) => (
               <div key={c.title} className="flex gap-4 rounded-2xl border bg-card p-6 shadow-sm">
                 <c.icon className="h-6 w-6 shrink-0 text-teal" />
-                <div className="min-w-0">
+                <div className="flex min-w-0 flex-col">
                   <h3 className="card-title text-primary">{c.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
                   <CapabilityLink
                     href={c.href}
                     capability={c.capability}
-                    className="mt-3"
+                    className="mt-auto pt-3"
                   />
                 </div>
               </div>
