@@ -54,6 +54,8 @@ import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authentica
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as ApplyTokenRouteImport } from './routes/apply.$token'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as ServicesEeAdvisoryRouteImport } from './routes/services.ee-advisory'
 import { Route as ServicesImplementationRouteImport } from './routes/services.implementation'
 import { Route as ServicesRecruitmentGovernanceRouteImport } from './routes/services.recruitment-governance'
@@ -299,6 +301,16 @@ const ApplyTokenRoute = ApplyTokenRouteImport.update({
   path: '/apply/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesEeAdvisoryRoute = ServicesEeAdvisoryRouteImport.update({
   id: '/services/ee-advisory',
   path: '/services/ee-advisory',
@@ -427,6 +439,7 @@ export interface FileRoutesByFullPath {
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/apply/$token': typeof ApplyTokenRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -434,6 +447,7 @@ export interface FileRoutesByFullPath {
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
+  '/guides/': typeof GuidesIndexRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
@@ -488,6 +502,7 @@ export interface FileRoutesByTo {
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/apply/$token': typeof ApplyTokenRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -495,6 +510,7 @@ export interface FileRoutesByTo {
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
+  '/guides': typeof GuidesIndexRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
@@ -551,6 +567,7 @@ export interface FileRoutesById {
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/apply/$token': typeof ApplyTokenRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -558,6 +575,7 @@ export interface FileRoutesById {
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
+  '/guides/': typeof GuidesIndexRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
@@ -614,6 +632,7 @@ export interface FileRouteTypes {
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/apply/$token'
+    | '/guides/$slug'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -621,6 +640,7 @@ export interface FileRouteTypes {
     | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
+    | '/guides/'
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
@@ -675,6 +695,7 @@ export interface FileRouteTypes {
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/apply/$token'
+    | '/guides/$slug'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -682,6 +703,7 @@ export interface FileRouteTypes {
     | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
+    | '/guides'
     | '/clients/$id'
     | '/plans/$id'
     | '/portal/$area'
@@ -737,6 +759,7 @@ export interface FileRouteTypes {
     | '/api/ee-assist'
     | '/api/eea-insights'
     | '/apply/$token'
+    | '/guides/$slug'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -744,6 +767,7 @@ export interface FileRouteTypes {
     | '/services/saas-subscriptions'
     | '/survey/$token'
     | '/view/$token'
+    | '/guides/'
     | '/_authenticated/clients_/$id'
     | '/_authenticated/plans/$id'
     | '/_authenticated/portal_/$area'
@@ -779,6 +803,7 @@ export interface RootRouteChildren {
   ApiEeAssistRoute: typeof ApiEeAssistRoute
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   ApplyTokenRoute: typeof ApplyTokenRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   ServicesEeAdvisoryRoute: typeof ServicesEeAdvisoryRoute
   ServicesImplementationRoute: typeof ServicesImplementationRoute
   ServicesRecruitmentGovernanceRoute: typeof ServicesRecruitmentGovernanceRoute
@@ -786,6 +811,7 @@ export interface RootRouteChildren {
   ServicesSaasSubscriptionsRoute: typeof ServicesSaasSubscriptionsRoute
   SurveyTokenRoute: typeof SurveyTokenRoute
   ViewTokenRoute: typeof ViewTokenRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
   ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -1108,6 +1134,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplyTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/ee-advisory': {
       id: '/services/ee-advisory'
       path: '/services/ee-advisory'
@@ -1303,6 +1343,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiEeAssistRoute: ApiEeAssistRoute,
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   ApplyTokenRoute: ApplyTokenRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   ServicesEeAdvisoryRoute: ServicesEeAdvisoryRoute,
   ServicesImplementationRoute: ServicesImplementationRoute,
   ServicesRecruitmentGovernanceRoute: ServicesRecruitmentGovernanceRoute,
@@ -1310,6 +1351,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesSaasSubscriptionsRoute: ServicesSaasSubscriptionsRoute,
   SurveyTokenRoute: SurveyTokenRoute,
   ViewTokenRoute: ViewTokenRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
   ApiPublicHooksComplianceRemindersRoute:
     ApiPublicHooksComplianceRemindersRoute,
   ApiPublicHooksPayfastItnRoute: ApiPublicHooksPayfastItnRoute,
