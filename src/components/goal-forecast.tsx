@@ -55,8 +55,10 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
                 <td className="py-2 pr-2 font-medium">{r.level}</td>
                 <td>{r.baseline ? r.baseline.headcount : <span className="text-destructive">Missing</span>}</td>
                 <td>{pct(r.baseline?.share ?? null)}</td>
-                <td>{pct(r.benchmark)}</td>
-                <td>{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}{r.targetSource === "eap" && <span className="block text-xs text-muted-foreground">Provincial EAP</span>}</td>
+                <td>{pct(r.benchmark)}{r.benchmark !== null && <span className="block whitespace-nowrap text-xs text-muted-foreground">{EAP_SOURCE_LABEL}</span>}</td>
+                <td>{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}{r.targetSource === "eap"
+                  ? <span className="block text-xs text-muted-foreground">Provincial EAP · {EAP_SOURCE_LABEL}</span>
+                  : <span className="block text-xs text-muted-foreground">Sector target · {SECTOR_TARGET_SOURCE_LABEL}<br />{SECTOR_TARGET_PERIOD_LABEL}</span>}</td>
                 <td><input aria-label={`${r.level} five-year goal`} className={cell} inputMode="decimal" value={f.goal} onChange={(e) => set(r.level, { goal: e.target.value })} /></td>
                 {Array.from({ length: years }, (_, i) => <td key={i}><input aria-label={`${r.level} year ${i + 1}`} className={cell} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; m[i] = e.target.value; set(r.level, { milestones: m }); }} /></td>)}
                 {FORECAST_FIELDS.map(([k, l]) => <td key={k}><input aria-label={`${r.level} ${l}`} className={cell} inputMode="numeric" value={f[k]} onChange={(e) => set(r.level, { [k]: e.target.value })} /></td>)}
