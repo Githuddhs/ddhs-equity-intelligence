@@ -5,7 +5,22 @@ import type { OrgUnit } from "@/lib/org-units";
 import { reportWorkbook } from "@/lib/report-download";
 
 const text = z.string().trim().max(200).default("");
-export const organisationSchema = z.object({ name: text, registration: text, doelRef: text, sector: text, province: text, address: text, sic: text, contact: text });
+const longText = z.string().trim().max(2000).default("");
+export const organisationSchema = z.object({
+  name: text, tradingName: text, registration: text, sdlNumber: text, doelRef: text, address: text, postalAddress: text, province: text, contact: text,
+  totalEmployees: text, businessActivity: text, sic: text, sector: text, designatedStatus: text,
+  ceoName: text, ceoContact: text, eeSeniorManager: text, eeManager: text, eeCommittee: longText,
+});
+export const DESIGNATED_STATUSES = ["Designated: 50 or more employees", "Designated: organ of state or municipality", "Designated by collective agreement", "Voluntarily designated", "Not a designated employer"];
+export const ORG_LABELS: Record<string, string> = {
+  name: "Registered employer name", tradingName: "Trading name", registration: "Registration number", sdlNumber: "SDL number (where applicable)", doelRef: "DoEL reference",
+  address: "Physical address", postalAddress: "Postal address", province: "Province", contact: "Contact details (phone and email)", totalEmployees: "Total number of employees",
+  businessActivity: "Main business activity", sic: "SIC code", sector: "Economic sector for EE purposes", designatedStatus: "Designated-employer status",
+  ceoName: "CEO / accounting officer", ceoContact: "CEO / accounting officer contact", eeSeniorManager: "Senior manager responsible for EE (s24)", eeManager: "EE manager / EE function", eeCommittee: "EE committee / consultative forum details",
+};
+/** Employer fields the EEA13 plan and EEA2 need; blanks are flagged as missing. */
+export const REQUIRED_ORG = ["name", "registration", "address", "postalAddress", "province", "contact", "totalEmployees", "businessActivity", "sector", "designatedStatus", "ceoName", "eeSeniorManager", "eeManager", "eeCommittee"] as const;
+export const missingOrgFields = (o: Partial<Record<string, string>>) => REQUIRED_ORG.filter((k) => !o[k]?.trim()).map((k) => ORG_LABELS[k]!);
 export const employeeSchema = z.object({ employeeId: text, populationGroup: text, gender: text, nationality: text, disability: text, employmentType: text, startDate: text, endDate: text, level: text, jobTitle: text, gradingSystem: text, jobGrade: text, organisation: text, faculty: text, division: text, department: text, section: text });
 export const paySchema = z.object({ employeeId: text, periodStart: text, periodEnd: text, basicPay: text, variablePay: text, benefits: text, hours: text, fte: text });
 export const movementSchema = z.object({ employeeId: text, type: text, date: text, previousLevel: text, newLevel: text, reason: text });
@@ -32,7 +47,9 @@ export function validateFoundation(f: Foundation) {
   const errors: string[] = [], warnings: string[] = [];
   if (![f.period_start, f.period_end, f.snapshot_date].every(validDate)) errors.push("Enter valid reporting-period and snapshot dates.");
   else if (f.period_start > f.period_end || f.snapshot_date < f.period_start || f.snapshot_date > f.period_end) errors.push("Snapshot date must fall within the reporting period; start must not follow end.");
-  for (const k of ["name", "registration", "doelRef", "sector", "province"] as const) if (!f.organisation[k]) warnings.push(`Organisation: ${k === "doelRef" ? "DoEL reference" : k} is missing.`);
+  for (const k of [...REQUIRED_ORG, "doelRef"] as const) if (!f.organisation[k]) warnings.push(`Organisation: ${ORG_LABELS[k]} is missing.`);
+  if (f.organisation.totalEmployees && !/^\d+$/.test(f.organisation.totalEmployees)) errors.push("Organisation: total number of employees must be a whole number.");
+  if (f.organisation.designatedStatus && !DESIGNATED_STATUSES.includes(f.organisation.designatedStatus)) errors.push("Organisation: select a designated-employer status.");
   if (f.organisation.province && (!PROVINCE_EAP[f.organisation.province] || f.organisation.province === "National")) errors.push("Select a valid organisation province.");
   if (f.organisation.sector && !SECTORS.some((s) => s.name === f.organisation.sector)) errors.push("Select a recognised economic sector.");
   if (!f.employees.length) errors.push("Add at least one employee record.");
