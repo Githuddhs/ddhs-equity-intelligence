@@ -37,6 +37,8 @@ import { DashboardMock } from "@/components/dashboard-mock";
 import { BrandMark } from "@/components/brand-mark";
 import { FooterSocial } from "@/components/footer-social";
 import { SiteNav } from "@/components/site-nav";
+import { useState } from "react";
+import { CAPABILITIES, CapabilityExplainer, type Capability } from "@/components/capability-explainer";
 
 export const Route = createFileRoute("/")({
   staticData: { sitemap: true },
@@ -70,21 +72,21 @@ const painCards = [
 ];
 
 const lifecycle = [
-  { icon: BarChart3, title: "Analyse", href: "/eea12", body: "EEA12 workforce analysis and representation insights." },
-  { icon: Target, title: "Plan", href: "/eea13-planning", body: "EEA13 planning with targets, actions and owners." },
-  { icon: ClipboardCheck, title: "Implement", href: "/accountability-management", body: "Assign responsibilities and track progress." },
-  { icon: LineChart, title: "Monitor", href: "/leadership-dashboard", body: "Measure implementation performance and risks." },
-  { icon: FileCheck2, title: "Evidence", href: "/evidence-governance", body: "Maintain auditable records and approvals." },
-  { icon: Layers, title: "Report", href: "/leadership-report", body: "Generate leadership-ready reporting and dashboards." },
+  { icon: BarChart3, title: "Analyse", body: "EEA12 workforce analysis and representation insights." },
+  { icon: Target, title: "Plan", body: "EEA13 planning with targets, actions and owners." },
+  { icon: ClipboardCheck, title: "Implement", body: "Assign responsibilities and track progress." },
+  { icon: LineChart, title: "Monitor", body: "Measure implementation performance and risks." },
+  { icon: FileCheck2, title: "Evidence", body: "Maintain auditable records and approvals." },
+  { icon: Layers, title: "Report", body: "Generate leadership-ready reporting and dashboards." },
 ];
 
 const lifecycleSteps = [
-  { label: "Data", icon: Database, href: "/workforce-foundation" },
-  { label: "Analyse", icon: BarChart3, href: "/eea12" },
-  { label: "Plan", icon: Target, href: "/eea13-planning" },
-  { label: "Implement", icon: ClipboardCheck, href: "/accountability-management" },
-  { label: "Monitor", icon: LineChart, href: "/leadership-dashboard" },
-  { label: "Report", icon: Layers, href: "/leadership-report" },
+  { label: "Data", icon: Database },
+  { label: "Analyse", icon: BarChart3 },
+  { label: "Plan", icon: Target },
+  { label: "Implement", icon: ClipboardCheck },
+  { label: "Monitor", icon: LineChart },
+  { label: "Report", icon: Layers },
 ];
 
 const suiteSteps = [
@@ -185,6 +187,7 @@ function SectionHeading({
 }
 
 function Index() {
+  const [openCap, setOpenCap] = useState<Capability | null>(null);
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -356,24 +359,26 @@ function Index() {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-teal">
             {lifecycleSteps.map((step, i, arr) => (
               <span key={step.label} className="flex items-center gap-2">
-                <Link
-                  to={step.href}
+                <button
+                  type="button"
+                  onClick={() => setOpenCap(CAPABILITIES[step.label] ?? null)}
                   className="group flex items-center gap-1.5 rounded-full bg-teal-soft px-4 py-2 transition-colors hover:bg-teal hover:text-teal-foreground"
                   title={`Read about ${step.label.toLowerCase()} capabilities`}
                 >
                   <step.icon className="h-4 w-4 shrink-0" />
                   {step.label}
-                </Link>
+                </button>
                 {i < arr.length - 1 && <ArrowRight className="h-4 w-4 text-teal/50" />}
               </span>
             ))}
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {lifecycle.map((f) => (
-              <Link
+              <button
+                type="button"
                 key={f.title}
-                to={f.href}
-                className="group rounded-2xl border bg-card p-7 shadow-sm transition-shadow hover:shadow-md"
+                onClick={() => setOpenCap(CAPABILITIES[f.title] ?? null)}
+                className="group rounded-2xl border bg-card p-7 text-left shadow-sm transition-shadow hover:shadow-md"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary transition-colors group-hover:bg-teal">
                   <f.icon className="h-5 w-5 text-primary-foreground" />
@@ -383,7 +388,7 @@ function Index() {
                 <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors group-hover:text-primary">
                   Read about this capability <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
-              </Link>
+              </button>
             ))}
           </div>
           <div className="mt-12 overflow-hidden rounded-2xl border border-teal/30 bg-primary p-7 shadow-sm sm:p-9">
@@ -793,6 +798,7 @@ function Index() {
           </div>
         </div>
       </footer>
+      <CapabilityExplainer capability={openCap} onClose={() => setOpenCap(null)} />
     </div>
   );
 }
