@@ -73,4 +73,5 @@
 - [x] Mobile menu: include "Recruitment Suite" after "Virtual Consultant", pointing to /services/recruitment-suite
 - [x] Rename "Executive Recruitment Intelligence Dashboard" to "Recruitment Suite Dashboard" (page, meta, Suite step 9, all four downloads)
 - [x] Blog in main menu; weekly release every Monday 06:00 SAST. Guides flagged for practitioner review are held until the owner explicitly approves each one.
-- [ ] Social advertising: Facebook / Instagram connection skipped by user; Google Ads connection card closed by user (24 Oct); website social links waiting for page addresses.
+- [ ] Social advertising: Facebook / Instagram connection skipped by user; Google Ads connection card closed by user (24 Oct).
+- [ ] Website social links: footer "Follow DDHS Equity Intelligence" row built into all 11 footers + Organization sameAs (src/lib/social.ts); BLOCKED: owner supplied only the name "ddhs equity intelligence", no page address, and no DDHS social page could be found online.
