@@ -8,8 +8,8 @@ import shotEea12 from "@/assets/walkthrough/eea12-filled.jpg.asset.json";
 import shotPlan from "@/assets/walkthrough/plan.jpg.asset.json";
 
 const WALKTHROUGH = [
-  { img: shotReady.url, alt: "Readiness check result showing a percentage score and focus areas", title: "Check your readiness", body: "A score across organisation setup, workforce data, analysis, planning and monitoring, with the gaps to close first.", href: "/readiness-check", cta: "Try the free check" },
-  { img: shotEea12.url, alt: "EEA12 analysis table comparing example headcount with EAP in percentage points", title: "Analyse with EEA12", body: "Headcount per occupational level against sector targets and provincial EAP, with gaps in percentage points and next-appointment priorities.", href: "/eea12", cta: "Open the EEA12 tool" },
+  { img: shotReady.url, alt: "Readiness check questions grouped by stage", title: "Check your readiness", body: "A score across organisation setup, workforce data, analysis, planning and monitoring, with the gaps to close first.", href: "/readiness-check", cta: "Try the free check" },
+  { img: shotEea12.url, alt: "Empty EEA12 analysis table with sector, occupational level and EAP columns", title: "Analyse with EEA12", body: "Headcount per occupational level against sector targets and provincial EAP, with gaps in percentage points and next-appointment priorities.", href: "/eea12", cta: "Open the EEA12 tool" },
   { img: shotPlan.url, alt: "EEA13 plan page showing baseline and target per occupational level", title: "Build the EEA13 plan", body: "Baselines flow into numerical goals, measures, owners and dates, ready for sign-off and monitoring on the leadership dashboard.", href: "/eea13-planning", cta: "See plan building" },
 ];
 import {
