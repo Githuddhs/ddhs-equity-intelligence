@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { getGuide, GUIDES } from "@/lib/guides";
+import { getGuide, GUIDES, GUIDES_LAST_REVIEWED } from "@/lib/guides";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -26,6 +26,7 @@ export const Route = createFileRoute("/guides/$slug")({
         headline: loaderData.title,
         description: loaderData.description,
         mainEntityOfPage: `${SITE_URL}${path}`,
+        dateModified: "2026-10-24",
         publisher: { "@type": "Organization", name: "DDHS Equity Intelligence" },
       }],
     });
@@ -56,7 +57,16 @@ function GuidePage() {
       <Link to={g.related.to} className="mt-8 inline-flex items-center gap-2 rounded-lg border border-teal px-5 py-3 text-sm font-semibold text-teal hover:bg-accent">
         {g.related.label} <ArrowRight className="h-4 w-4" />
       </Link>
-      <p className="mt-8 text-xs text-muted-foreground">{GUIDE_DISCLAIMER}</p>
+      <section className="mt-10 rounded-2xl border border-border p-5">
+        <h2 className="font-display text-base font-semibold text-primary">Official sources</h2>
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+          {g.sources.map((src) => (
+            <li key={src.url}><a href={src.url} target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">{src.label}</a></li>
+          ))}
+        </ul>
+        <p className="mt-3 text-xs text-muted-foreground">Last reviewed: {GUIDES_LAST_REVIEWED}</p>
+      </section>
+      <p className="mt-6 text-xs text-muted-foreground">{GUIDE_DISCLAIMER}</p>
       <GuideCta />
       <h2 className="mt-12 font-display text-lg font-semibold text-primary">More guides</h2>
       <ul className="mt-3 space-y-2">

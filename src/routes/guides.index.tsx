@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { GUIDES } from "@/lib/guides";
+import { GUIDES, GUIDES_LAST_REVIEWED } from "@/lib/guides";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -33,7 +33,7 @@ function GuidesIndex() {
           </li>
         ))}
       </ul>
-      <p className="mt-8 text-xs text-muted-foreground">{GUIDE_DISCLAIMER}</p>
+      <p className="mt-8 text-xs text-muted-foreground">{GUIDE_DISCLAIMER} Last reviewed: {GUIDES_LAST_REVIEWED}.</p>
       <GuideCta />
     </GuideShell>
   );
