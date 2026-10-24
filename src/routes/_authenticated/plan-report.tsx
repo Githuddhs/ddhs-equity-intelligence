@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { reportPdf } from "@/lib/report-download";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/plan-report")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: PlanReport,
+  component: withPageTools(PlanReport),
 });
 
 const parse = (s: string) => { const [y, m, d] = s.split("-").map(Number); return new Date(y ?? 0, (m ?? 1) - 1, d ?? 1); };

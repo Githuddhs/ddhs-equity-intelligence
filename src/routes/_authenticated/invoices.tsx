@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/invoices")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: InvoicesPage,
+  component: withPageTools(InvoicesPage),
 });
 
 const zar = (n: number) => `R ${n.toLocaleString("en-ZA", { minimumFractionDigits: 2 })}`;

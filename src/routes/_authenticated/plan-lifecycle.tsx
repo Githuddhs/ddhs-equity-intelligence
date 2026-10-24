@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Circle, CircleDashed } from "lucide-react";
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/plan-lifecycle")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: Lifecycle,
+  component: withPageTools(Lifecycle),
 });
 
 const ICON: Record<ChainStatus, typeof Circle> = { done: CheckCircle2, partial: CircleDashed, missing: Circle };

@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/staff")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: StaffDashboard,
+  component: withPageTools(StaffDashboard),
 });
 
 const DOCS = {

@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/compliance")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Compliance,
+  component: withPageTools(Compliance),
 });
 
 const ymd = (d: Date) => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;

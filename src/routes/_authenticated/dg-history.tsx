@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/dg-history")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: DgHistory,
+  component: withPageTools(DgHistory),
 });
 
 function DgHistory() {

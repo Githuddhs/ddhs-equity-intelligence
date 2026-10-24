@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/policies")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Policies,
+  component: withPageTools(Policies),
 });
 
 function Policies() {

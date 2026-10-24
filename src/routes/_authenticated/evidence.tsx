@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/evidence")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: EvidencePage,
+  component: withPageTools(EvidencePage),
 });
 
 function List({ title, items }: { title: string; items?: string[] | undefined }) {

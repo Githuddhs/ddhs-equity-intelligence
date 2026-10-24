@@ -1,3 +1,4 @@
+import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/clients_/$id")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: ManageClient,
+  component: withPageTools(ManageClient),
 });
 
 const input = "rounded-lg border border-border bg-background px-3 py-2 text-sm";
