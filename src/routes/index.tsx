@@ -354,9 +354,16 @@ function Index() {
             title="One Platform for the Employment Equity Lifecycle"
           />
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-teal">
-            {["Data", "Analyse", "Plan", "Implement", "Monitor", "Report"].map((step, i, arr) => (
-              <span key={step} className="flex items-center gap-2">
-                <span className="rounded-full bg-teal-soft px-4 py-2">{step}</span>
+            {lifecycleSteps.map((step, i, arr) => (
+              <span key={step.label} className="flex items-center gap-2">
+                <Link
+                  to={step.href}
+                  className="group flex items-center gap-1.5 rounded-full bg-teal-soft px-4 py-2 transition-colors hover:bg-teal hover:text-teal-foreground"
+                  title={`Read about ${step.label.toLowerCase()} capabilities`}
+                >
+                  <step.icon className="h-4 w-4 shrink-0" />
+                  {step.label}
+                </Link>
                 {i < arr.length - 1 && <ArrowRight className="h-4 w-4 text-teal/50" />}
               </span>
             ))}
