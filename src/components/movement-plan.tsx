@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Employee } from "@/lib/foundation";
+import { uniqueProfiles, type Employee } from "@/lib/foundation";
 import { GROUPS, LEVELS } from "@/lib/workforce";
 import { EXIT_TYPES, FUNNEL_FIELDS, MOVE_KINDS, blankMove, demographicImpact, groupLabel, historyBy, moveMissing, type PlannedMove } from "@/lib/movement-plan";
 
@@ -14,7 +14,7 @@ export function MovementPlan({ moves, onChange, years }: { moves: PlannedMove[];
     queryKey: ["movement-plan-period"],
     queryFn: async () => (await supabase.from("workforce_foundation_periods").select("period_start,period_end,snapshot_date,employees,movements").order("period_end", { ascending: false }).limit(1).maybeSingle()).data,
   });
-  const employees = (data?.employees ?? []) as Employee[];
+  const employees = uniqueProfiles((data?.employees ?? []) as Employee[]);
   const movements = (data?.movements ?? []) as { employeeId: string; type: string; reason?: string }[];
   const units = [...new Set(employees.map((e) => e.department).filter(Boolean))].sort();
   const hist = historyBy(employees, movements, by);

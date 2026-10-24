@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import type { Employee } from "@/lib/foundation";
+import { uniqueProfiles, type Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
 import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";
 import { groupLabel, yearlyProjection, type PlannedMove } from "@/lib/movement-plan";
@@ -27,7 +27,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end, moves = [
   });
   const years = start && end ? Math.min(5, Math.max(1, Math.round((Date.parse(end) - Date.parse(start)) / (365.25 * 864e5)))) : 5;
   const period = data?.period;
-  const employees = (period?.employees ?? []) as Employee[];
+  const employees = uniqueProfiles((period?.employees ?? []) as Employee[]);
   const province = ((period?.organisation ?? {}) as Record<string, string>)["province"] ?? "";
   const base = baselineByLevel(employees, period?.snapshot_date ?? "");
   const row = (l: string) => ({ ...blankForecast(), ...(forecast[l] ?? {}) });
