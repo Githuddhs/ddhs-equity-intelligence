@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -15,24 +17,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/eea13-planning")({
-  head: () => ({
-    meta: [
-      { title: "EEA13 Planning & Monitoring — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "Build a compliant Employment Equity plan with sectoral targets, annual objectives, affirmative action measures and a monitoring calendar — auto-filled from your own workforce analysis.",
-      },
-      { property: "og:title", content: "EEA13 Planning & Monitoring — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "A signed, dated EE plan built from your workforce position, with numerical goals per occupational level and quarterly monitoring built in.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/eea13-planning", title: "EEA13 Employment Equity Plan Builder | DDHS", description: "Build a section 20 compliant EEA13 Employment Equity plan with sectoral targets, numerical goals, affirmative action measures and a monitoring calendar.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "EEA13 Employment Equity Plan Builder", "path": "/eea13-planning"}] }),
   component: Eea13PlanningPage,
 });
 
@@ -257,6 +243,7 @@ function Eea13PlanningPage() {
         </section>
       </main>
 
+      <RelatedLinks current="/eea13-planning" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

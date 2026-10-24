@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -13,24 +15,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/evidence-governance")({
-  head: () => ({
-    meta: [
-      { title: "Evidence & Governance Repository — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "A private, organised home for every Employment Equity document: analyses, plans, consultation records, policies and review evidence — dated, access-controlled and audit-ready.",
-      },
-      { property: "og:title", content: "Evidence & Governance Repository — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "Every compliance document in one private repository, organised by obligation and ready for a Director-General review.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/evidence-governance", title: "DG Review Evidence & EE Governance Repository | DDHS", description: "A private, organised repository for Employment Equity evidence: analyses, plans, consultation records and policies, ready for a Director-General review.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "DG Review Evidence & EE Governance Repository", "path": "/evidence-governance"}] }),
   component: EvidencePage,
 });
 
@@ -210,6 +196,7 @@ function EvidencePage() {
         </section>
       </main>
 
+      <RelatedLinks current="/evidence-governance" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { track } from "@/lib/track";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -16,16 +17,8 @@ export const Route = createFileRoute("/tour")({
     if (typeof r === "string" && r.trim()) out.from = r.trim().slice(0, 140);
     return out;
   },
-  head: () => ({
-    meta: [
-      { title: "Platform tour — DDHS Equity Intelligence" },
-      { name: "description", content: "A quick guided tour of every DDHS Equity Intelligence capability, from workforce data to DoEL reporting." },
-      { property: "og:title", content: "Platform tour — DDHS Equity Intelligence" },
-      { property: "og:description", content: "See every Employment Equity capability in a few minutes, one step at a time." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/tour", title: "Employment Equity Platform Tour | DDHS Equity Intelligence", description: "A quick guided tour of every DDHS Equity Intelligence capability, from workforce data and EEA12 analysis to EE plans and DoEL reporting." }),
   component: TourPage,
 });
 

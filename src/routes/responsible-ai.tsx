@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -13,24 +15,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/responsible-ai")({
-  head: () => ({
-    meta: [
-      { title: "Responsible AI Assistant — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "AI that drafts, summarises and advises inside your Employment Equity workflow — always from your own figures, always reviewed by a human before anything is saved.",
-      },
-      { property: "og:title", content: "Responsible AI Assistant — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "AI assistance with human sign-off built in: it drafts from your data, you decide what stands.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/responsible-ai", title: "Responsible AI for Employment Equity | DDHS", description: "AI that drafts and summarises inside your Employment Equity workflow, always from your own figures and always reviewed by a person before anything is saved.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "Responsible AI for Employment Equity", "path": "/responsible-ai"}] }),
   component: ResponsibleAiPage,
 });
 
@@ -208,6 +194,7 @@ function ResponsibleAiPage() {
         </section>
       </main>
 
+      <RelatedLinks current="/responsible-ai" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

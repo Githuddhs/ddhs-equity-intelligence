@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -12,24 +14,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/executive-intelligence")({
-  head: () => ({
-    meta: [
-      { title: "Executive Intelligence — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "Board-ready Employment Equity reporting: representation by level and group, movement between snapshots, target variance and the decisions that need executive attention.",
-      },
-      { property: "og:title", content: "Executive Intelligence — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "The workforce picture, the gaps and the decisions — in a format a board can act on in one meeting.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/executive-intelligence", title: "Executive Employment Equity Reporting | DDHS", description: "Board-ready Employment Equity reporting: representation by level and group, movement between snapshots, target variance and decisions needing executive attention.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "Executive Employment Equity Reporting", "path": "/executive-intelligence"}] }),
   component: ExecutiveIntelligencePage,
 });
 
@@ -197,6 +183,7 @@ function ExecutiveIntelligencePage() {
         </section>
       </main>
 
+      <RelatedLinks current="/executive-intelligence" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

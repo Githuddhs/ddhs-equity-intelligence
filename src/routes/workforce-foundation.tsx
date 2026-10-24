@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -17,24 +19,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/workforce-foundation")({
-  head: () => ({
-    meta: [
-      { title: "Workforce Data Foundation — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "One clean, auditable picture of your workforce: headcount by occupational level, population group, gender and disability — the single source behind your EEA12 analysis, EE plan and DG review evidence.",
-      },
-      { property: "og:title", content: "Workforce Data Foundation — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "Capture headcount by occupational level, population group, gender and disability once, then use it for analysis, planning, monitoring and evidence.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/workforce-foundation", title: "Employment Equity Workforce Data Foundation | DDHS", description: "One auditable workforce record by occupational level, population group, gender and disability: the single source for EEA12, EE plans and DG review evidence.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "Employment Equity Workforce Data Foundation", "path": "/workforce-foundation"}] }),
   component: WorkforceFoundationPage,
 });
 
@@ -307,6 +293,7 @@ function WorkforceFoundationPage() {
         </section>
       </main>
 
+      <RelatedLinks current="/workforce-foundation" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

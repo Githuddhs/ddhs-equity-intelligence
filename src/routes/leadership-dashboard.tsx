@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -12,24 +14,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/leadership-dashboard")({
-  head: () => ({
-    meta: [
-      { title: "Leadership Dashboard — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "A live leadership view of Employment Equity compliance: readiness across analysis, barriers and plan, milestone progress, overdue actions and pending approvals — updated as your team works.",
-      },
-      { property: "og:title", content: "Leadership Dashboard — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "The compliance position at a glance: readiness rings, plan progress, overdue actions and approvals waiting on you.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/leadership-dashboard", title: "Employment Equity Leadership Dashboard | DDHS", description: "A leadership view of Employment Equity compliance: readiness across analysis, barriers and plan, milestone progress, overdue actions and pending approvals.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "Employment Equity Leadership Dashboard", "path": "/leadership-dashboard"}] }),
   component: LeadershipDashboardPage,
 });
 
@@ -198,6 +184,7 @@ function LeadershipDashboardPage() {
         </section>
       </main>
 
+      <RelatedLinks current="/leadership-dashboard" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

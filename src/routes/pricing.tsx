@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,16 +14,8 @@ export const Route = createFileRoute("/pricing")({
     paid: search["paid"] === "1",
     cancelled: search["cancelled"] === "1",
   }),
-  head: () => ({
-    meta: [
-      { title: "Subscription plans — DDHS Equity Intelligence" },
-      { name: "description", content: "Compare DDHS Equity Intelligence plans for Employment Equity compliance, EE plans and DG review readiness." },
-      { property: "og:title", content: "Subscription plans — DDHS Equity Intelligence" },
-      { property: "og:description", content: "Compare plans for Employment Equity compliance, EE plans and DG review readiness." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/pricing", title: "Employment Equity Software Pricing | DDHS Equity Intelligence", description: "Compare DDHS Equity Intelligence subscription plans and onboarding for small, medium and large South African employers managing Employment Equity compliance." }),
   component: PricingPage,
 });
 

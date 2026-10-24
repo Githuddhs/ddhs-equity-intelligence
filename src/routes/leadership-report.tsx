@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -12,24 +14,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/leadership-report")({
-  head: () => ({
-    meta: [
-      { title: "Leadership Report — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "A dated Employment Equity report for senior managers: representation against target, barrier findings, plan progress, overdue actions and a signed approval trail — exported as Excel or PDF.",
-      },
-      { property: "og:title", content: "Leadership Report — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "The period's transformation position as a signed document: progress, gaps, barriers, actions and approvals.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/leadership-report", title: "Employment Equity Leadership Report | DDHS", description: "A dated Employment Equity report for senior managers: representation against target, barrier findings, plan progress and a signed approval trail.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "Employment Equity Leadership Report", "path": "/leadership-report"}] }),
   component: LeadershipReportPage,
 });
 
@@ -198,6 +184,7 @@ function LeadershipReportPage() {
         </section>
       </main>
 
+      <RelatedLinks current="/leadership-report" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />
