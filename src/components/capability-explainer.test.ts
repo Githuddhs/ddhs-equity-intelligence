@@ -21,7 +21,7 @@ describe("Employment Equity Lifecycle capability explanations", () => {
     // Every other lifecycle tool runs inside the client portal.
     for (const label of LIFECYCLE.filter((l) => l !== "Analyse")) {
       expect(CAPABILITIES[label]!.accessMode, `${label} should need a client login`).toBe("portal");
-      expect(CAPABILITIES[label]!.access).toContain("sign-in");
+      expect(CAPABILITIES[label]!.access).toMatch(/client (login|sign-in)/);
     }
   });
   it("links every explanation to the tool it opens", () => {
