@@ -262,7 +262,7 @@ function PlanBuilder() {
           <Src k="goals" />
         </section>
 
-        <GoalForecast forecast={content.forecast ?? {}} onChange={(forecast) => upContent({ forecast })} sector={meta.sector} start={meta.start_date} end={meta.end_date} />
+        <GoalForecast forecast={content.forecast ?? {}} onChange={(forecast) => upContent({ forecast })} sector={meta.sector} start={meta.start_date} end={meta.end_date} moves={content.movementPlan ?? []} />
 
         <MovementPlan moves={content.movementPlan ?? []} onChange={(movementPlan) => upContent({ movementPlan })} years={meta.start_date && meta.end_date ? Math.min(5, Math.max(1, Math.round((Date.parse(meta.end_date) - Date.parse(meta.start_date)) / (365.25 * 864e5)))) : 5} />
 
