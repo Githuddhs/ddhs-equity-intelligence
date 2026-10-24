@@ -31,9 +31,9 @@ export const PRACTICE: { title: string; status: "live" | "partial" | "proposed";
   },
   {
     title: "Leadership and evidence are updated",
-    status: "partial",
-    body: "The vacancy evidence pack and Recruitment Suite Dashboard update automatically from the saved vacancy and candidate records. The onboarding handover includes a checklist item to record the appointment in Workforce Data; today HR records that movement on the Employee Profile, and only then does it feed job-grade progress and DG-review evidence. Automatic transfer of the appointment into the Employee Profile is planned.",
-    shows: "Leadership dashboard and evidence pack in Word, Excel, PDF and PowerPoint today; automatic Employee Profile update planned",
+    status: "live",
+    body: "The vacancy evidence pack and Recruitment Suite Dashboard update automatically from the saved vacancy and candidate records. In the onboarding handover, HR enters the staff number and clicks Send to Employee Profile: the new employee's profile and recruitment movement are created from the vacancy and the candidate's own declaration, so the appointment feeds job-grade progress, EEA reports and DG-review evidence without retyping.",
+    shows: "Leadership dashboard and evidence pack in Word, Excel, PDF and PowerPoint, plus an automatic Employee Profile update",
   },
 ];
 
