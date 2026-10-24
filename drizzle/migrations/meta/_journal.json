@@ -211,6 +211,13 @@
       "when": 1792718345650,
       "tag": "0029_candidate_handover",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1792830484742,
+      "tag": "0030_allow_hr_forms_document_areas",
+      "breakpoints": true
     }
   ]
 }
