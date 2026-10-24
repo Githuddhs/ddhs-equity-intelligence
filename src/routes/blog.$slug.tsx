@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight, Compass } from "lucide-react";
-import { BLOG_POSTS, BLOG_PUBLISHED, BLOG_PUBLISHED_LABEL, getPost } from "@/lib/blog";
+import { getPost } from "@/lib/blog";
+import { formatReleaseDate, isReleased, releaseDate, releasedPosts } from "@/lib/publishing-schedule";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/blog/$slug")({
   staticData: { sitemap: false },
   loader: ({ params }) => {
     const post = getPost(params.slug);
-    if (!post) throw notFound();
+    if (!post || !isReleased("blog", post.slug)) throw notFound();
     return post;
   },
   head: ({ loaderData }) => {
@@ -26,8 +27,8 @@ export const Route = createFileRoute("/blog/$slug")({
         headline: loaderData.title,
         description: loaderData.description,
         mainEntityOfPage: `${SITE_URL}${path}`,
-        datePublished: BLOG_PUBLISHED,
-        dateModified: BLOG_PUBLISHED,
+        datePublished: releaseDate("blog", loaderData.slug).toISOString(),
+        dateModified: releaseDate("blog", loaderData.slug).toISOString(),
         publisher: { "@type": "Organization", name: "DDHS Equity Intelligence" },
       }],
     });
@@ -43,12 +44,12 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPostPage() {
   const p = Route.useLoaderData();
-  const others = BLOG_POSTS.filter((x) => x.slug !== p.slug).slice(0, 3);
+  const others = releasedPosts().filter((x) => x.slug !== p.slug).slice(0, 3);
   return (
     <GuideShell>
       <Link to="/blog" className="text-sm font-semibold text-teal">← All articles</Link>
       <h1 className="display-title mt-3 text-balance text-primary">{p.title}</h1>
-      <p className="mt-2 text-xs text-muted-foreground">Published {BLOG_PUBLISHED_LABEL}</p>
+      <p className="mt-2 text-xs text-muted-foreground">Published {formatReleaseDate(releaseDate("blog", p.slug))}</p>
       <p className="page-lead mt-4 text-muted-foreground">{p.intro}</p>
       {p.sections.map((s) => (
         <section key={s.heading} className="mt-8">
