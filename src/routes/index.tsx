@@ -58,16 +58,22 @@ const painCards = [
     icon: Database,
     title: "Workforce Data",
     body: "Multiple spreadsheets. Conflicting reports. No single source of truth.",
+    capability: "Workforce Data",
+    href: "/workforce-foundation",
   },
   {
     icon: Users,
     title: "Accountability",
     body: "Actions are assigned but difficult to track and monitor.",
+    capability: "Accountability Management",
+    href: "/accountability-management",
   },
   {
     icon: FolderLock,
     title: "Evidence",
     body: "Supporting records are scattered across folders and systems.",
+    capability: "Evidence & Governance",
+    href: "/evidence-governance",
   },
 ];
 
