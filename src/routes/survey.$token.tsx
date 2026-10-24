@@ -61,7 +61,7 @@ function SurveyPage() {
   };
 
   const card = "mt-6 rounded-xl border border-border bg-card p-6 shadow-sm";
-  const chip = (on: boolean) => `rounded-full border px-3 py-1 text-xs ${on ? "border-teal bg-teal text-white" : "border-border"}`;
+  const chip = (on: boolean) => `rounded-full border px-3 py-1 text-xs ${on ? "border-teal bg-teal text-teal-foreground" : "border-border"}`;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -133,7 +133,7 @@ function SurveyPage() {
               <div className="mt-1 flex flex-wrap gap-2">{PRIORITY_OPTIONS.map((p) => <button key={p} type="button" className={chip(priorities.includes(p))} onClick={() => toggle(priorities, setPriorities, p, PRIORITY_LIMIT)}>{p}</button>)}</div>
             </section>
 
-            <button type="button" disabled={busy} onClick={() => void submit()} className="mt-6 rounded-lg bg-teal px-6 py-3 font-semibold text-white hover:opacity-90 disabled:opacity-50">{busy ? "Submitting…" : "Submit my response"}</button>
+            <button type="button" disabled={busy} onClick={() => void submit()} className="mt-6 rounded-lg bg-teal px-6 py-3 font-semibold text-teal-foreground hover:opacity-90 disabled:opacity-50">{busy ? "Submitting…" : "Submit my response"}</button>
           </>
         )}
       </main>

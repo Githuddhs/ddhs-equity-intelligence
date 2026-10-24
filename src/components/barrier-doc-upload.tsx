@@ -91,7 +91,7 @@ export function BarrierDocUpload({ onSaved }: { onSaved: () => void }) {
         onChange={(e) => { const f = e.target.files?.[0]; if (f) void handle(f); }} />
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <button type="button" disabled={!!busy} onClick={() => input.current?.click()}
-          className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50">
+          className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90 disabled:opacity-50">
           {busy ? "Working…" : "Upload barrier analysis document"}
         </button>
         {busy && <span className="text-sm text-muted-foreground">{busy}</span>}

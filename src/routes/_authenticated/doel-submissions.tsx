@@ -176,7 +176,7 @@ function DoelSubmissionsPage() {
             <button
               type="button"
               onClick={downloadEea4Summary}
-              className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+              className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90"
             >
               Download EEA4 summary
             </button>
@@ -197,7 +197,7 @@ function DoelSubmissionsPage() {
                 setForm(EMPTY);
                 setShowForm((v) => !v);
               }}
-              className="rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+              className="rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-navy-foreground hover:opacity-90"
             >
               {showForm ? "Close" : "Add submission"}
             </button>
@@ -255,7 +255,7 @@ function DoelSubmissionsPage() {
                   type="button"
                   disabled={saveMut.isPending}
                   onClick={() => saveMut.mutate()}
-                  className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                  className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90 disabled:opacity-50"
                 >
                   {saveMut.isPending ? "Saving…" : form.id ? "Update submission" : "Save submission"}
                 </button>

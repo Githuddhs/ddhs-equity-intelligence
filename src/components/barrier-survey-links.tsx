@@ -44,7 +44,7 @@ export function BarrierSurveyLinks({ counts }: { counts: Record<string, number> 
         <label className="text-xs">Organisation name shown<input className={`${input} mt-0.5 block`} value={org} onChange={(e) => setOrg(e.target.value)} placeholder="e.g. Acme (Pty) Ltd" /></label>
         <label className="text-xs">Label (optional)<input className={`${input} mt-0.5 block`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. 2026 staff consultation" /></label>
         <label className="text-xs">Open for<select className={`${input} mt-0.5 block`} value={days} onChange={(e) => setDays(Number(e.target.value))}>{[7, 14, 30, 60, 90].map((d) => <option key={d} value={d}>{d} days</option>)}</select></label>
-        <button type="button" onClick={() => void create()} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90">Create survey link</button>
+        <button type="button" onClick={() => void create()} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90">Create survey link</button>
       </div>
       {links.length > 0 && (
         <div className="mt-4 space-y-2">

@@ -127,7 +127,7 @@ export function DoelAutofill() {
         })}
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <button type="button" disabled={!!busy} onClick={() => void analyse()} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50">
+        <button type="button" disabled={!!busy} onClick={() => void analyse()} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90 disabled:opacity-50">
           {busy ? "Working…" : "Analyse documents & fill EEA2 / EEA4"}
         </button>
         {busy && <span className="text-sm text-muted-foreground">{busy}</span>}
@@ -137,11 +137,11 @@ export function DoelAutofill() {
         <div className="mt-6">
           <div className="flex flex-wrap items-center gap-2">
             {(["EEA2", "EEA4"] as const).map((t) => (
-              <button key={t} onClick={() => setTab(t)} className={`rounded-md px-3 py-1.5 text-sm font-semibold ${tab === t ? "bg-navy text-white" : "border border-border"}`}>{t}</button>
+              <button key={t} onClick={() => setTab(t)} className={`rounded-md px-3 py-1.5 text-sm font-semibold ${tab === t ? "bg-navy text-navy-foreground" : "border border-border"}`}>{t}</button>
             ))}
             <div className="ml-auto flex gap-2">
               <button onClick={() => void exportDoelPdf(tab, forms)} className="rounded-md border border-teal px-3 py-1.5 text-sm font-semibold text-teal">Download {tab} (PDF)</button>
-              <button onClick={() => void saveDraft()} className="rounded-md bg-teal px-3 py-1.5 text-sm font-semibold text-white">Save {tab} as draft submission</button>
+              <button onClick={() => void saveDraft()} className="rounded-md bg-teal px-3 py-1.5 text-sm font-semibold text-teal-foreground">Save {tab} as draft submission</button>
             </div>
           </div>
 

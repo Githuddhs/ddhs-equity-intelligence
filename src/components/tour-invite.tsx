@@ -54,7 +54,7 @@ export function TourInvite({ defaultCompany = "", defaultEmail = "", defaultName
       </div>
       <p className="mt-3 truncate rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground" title={link}>{link}</p>
       <div className="mt-3 flex flex-wrap gap-2">
-        <button type="button" onClick={() => void copy(link, "Tour link")} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white hover:opacity-90">Copy tour link</button>
+        <button type="button" onClick={() => void copy(link, "Tour link")} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90">Copy tour link</button>
         <button type="button" onClick={() => void copy(message(), "Email message")} className="rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal hover:bg-teal/10">Copy email message</button>
         <a href={`mailto:${email.trim()}?subject=${encodeURIComponent("You're invited: DDHS Equity Intelligence site tour")}&body=${encodeURIComponent(message())}`} className={btn}>Open in email</a>
         <a href={`https://wa.me/?text=${encodeURIComponent(message())}`} target="_blank" rel="noreferrer" className={btn}>Send on WhatsApp</a>
