@@ -51,9 +51,3 @@ export const sendAppointmentToProfile = createServerFn({ method: "POST" })
       stampHandover: async (id, handover) => { await sb.from("recruitment_candidates").update({ handover: handover as unknown as Json }).eq("id", id); },
     }, data);
   });
-    if (error) throw new Error("The Employee Profile could not be updated. Nothing was changed.");
-    const stamp = { ...handover, start_date: data.startDate, manager: data.manager, employee_id: data.employeeId, profile_period: `${p.period_start} to ${p.period_end}`, profile_sent_at: new Date().toISOString(),
-      done: [...new Set([...(Array.isArray(handover["done"]) ? (handover["done"] as string[]) : []), "Workforce Data movement recorded"])] };
-    await sb.from("recruitment_candidates").update({ handover: stamp as unknown as Json }).eq("id", c.id);
-    return { period: stamp.profile_period, outsidePeriod: plan.outsidePeriod };
-  });
