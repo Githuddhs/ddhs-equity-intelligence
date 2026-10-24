@@ -16,6 +16,10 @@ describe("plan chain", () => {
   it("plan is only complete once the organisation signs it off", () => {
     const plan = { ...emptyContent(), objectives: "x" };
     expect(buildChain({ ...base, plan })[12]!.status).toBe("partial");
-    expect(buildChain({ ...base, plan: { ...plan, orgSignoff: { by: "CEO", at: "2026-10-24" } } })[12]!.status).toBe("done");
+    const signed = { ...plan, orgSignoff: { by: "CEO", at: "2026-10-24" } };
+    expect(buildChain({ ...base, plan: signed })[12]!.status).toBe("partial");
+    const full = { ...signed, milestones: [{ id: "1", kind: "goal" as const, title: "t", owner: "HR", due: "2027-01-01", status: "planned" as const }], goals: signed.goals.map((g) => ({ ...g, total: "50" })) };
+    for (const k of ["seniorManager","committee","barriers","measures","timetable","monitoring","disputes","reasonableGrounds","incomeDifferentials","consultation"] as const) full[k] = "x";
+    expect(buildChain({ ...base, plan: full, planDates: { start: "2026-01-01", end: "2030-12-31" } })[12]!.status).toBe("done");
   });
 });
