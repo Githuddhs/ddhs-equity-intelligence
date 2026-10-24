@@ -20,6 +20,7 @@ import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-govern
 import { Route as ExecutiveIntelligenceRouteImport } from './routes/executive-intelligence'
 import { Route as LeadershipDashboardRouteImport } from './routes/leadership-dashboard'
 import { Route as LeadershipReportRouteImport } from './routes/leadership-report'
+import { Route as PlanArchitectureRouteImport } from './routes/plan-architecture'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleAiRouteImport } from './routes/responsible-ai'
@@ -43,6 +44,7 @@ import { Route as AuthenticatedEvidenceRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedManagerRouteImport } from './routes/_authenticated/manager'
+import { Route as AuthenticatedPlanLifecycleRouteImport } from './routes/_authenticated/plan-lifecycle'
 import { Route as AuthenticatedPlanReportRouteImport } from './routes/_authenticated/plan-report'
 import { Route as AuthenticatedPoliciesRouteImport } from './routes/_authenticated/policies'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
@@ -127,6 +129,11 @@ const LeadershipDashboardRoute = LeadershipDashboardRouteImport.update({
 const LeadershipReportRoute = LeadershipReportRouteImport.update({
   id: '/leadership-report',
   path: '/leadership-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanArchitectureRoute = PlanArchitectureRouteImport.update({
+  id: '/plan-architecture',
+  path: '/plan-architecture',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -246,6 +253,12 @@ const AuthenticatedManagerRoute = AuthenticatedManagerRouteImport.update({
   path: '/manager',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPlanLifecycleRoute =
+  AuthenticatedPlanLifecycleRouteImport.update({
+    id: '/plan-lifecycle',
+    path: '/plan-lifecycle',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPlanReportRoute = AuthenticatedPlanReportRouteImport.update({
   id: '/plan-report',
   path: '/plan-report',
@@ -417,6 +430,7 @@ export interface FileRoutesByFullPath {
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
+  '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
@@ -440,6 +454,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/manager': typeof AuthenticatedManagerRoute
+  '/plan-lifecycle': typeof AuthenticatedPlanLifecycleRoute
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
@@ -482,6 +497,7 @@ export interface FileRoutesByTo {
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
+  '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
@@ -505,6 +521,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/manager': typeof AuthenticatedManagerRoute
+  '/plan-lifecycle': typeof AuthenticatedPlanLifecycleRoute
   '/plan-report': typeof AuthenticatedPlanReportRoute
   '/policies': typeof AuthenticatedPoliciesRoute
   '/portal': typeof AuthenticatedPortalRoute
@@ -549,6 +566,7 @@ export interface FileRoutesById {
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
+  '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/responsible-ai': typeof ResponsibleAiRoute
@@ -572,6 +590,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/manager': typeof AuthenticatedManagerRoute
+  '/_authenticated/plan-lifecycle': typeof AuthenticatedPlanLifecycleRoute
   '/_authenticated/plan-report': typeof AuthenticatedPlanReportRoute
   '/_authenticated/policies': typeof AuthenticatedPoliciesRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
@@ -616,6 +635,7 @@ export interface FileRouteTypes {
     | '/executive-intelligence'
     | '/leadership-dashboard'
     | '/leadership-report'
+    | '/plan-architecture'
     | '/pricing'
     | '/reset-password'
     | '/responsible-ai'
@@ -639,6 +659,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/invoices'
     | '/manager'
+    | '/plan-lifecycle'
     | '/plan-report'
     | '/policies'
     | '/portal'
@@ -681,6 +702,7 @@ export interface FileRouteTypes {
     | '/executive-intelligence'
     | '/leadership-dashboard'
     | '/leadership-report'
+    | '/plan-architecture'
     | '/pricing'
     | '/reset-password'
     | '/responsible-ai'
@@ -704,6 +726,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/invoices'
     | '/manager'
+    | '/plan-lifecycle'
     | '/plan-report'
     | '/policies'
     | '/portal'
@@ -747,6 +770,7 @@ export interface FileRouteTypes {
     | '/executive-intelligence'
     | '/leadership-dashboard'
     | '/leadership-report'
+    | '/plan-architecture'
     | '/pricing'
     | '/reset-password'
     | '/responsible-ai'
@@ -770,6 +794,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/invoices'
     | '/_authenticated/manager'
+    | '/_authenticated/plan-lifecycle'
     | '/_authenticated/plan-report'
     | '/_authenticated/policies'
     | '/_authenticated/portal'
@@ -814,6 +839,7 @@ export interface RootRouteChildren {
   ExecutiveIntelligenceRoute: typeof ExecutiveIntelligenceRoute
   LeadershipDashboardRoute: typeof LeadershipDashboardRoute
   LeadershipReportRoute: typeof LeadershipReportRoute
+  PlanArchitectureRoute: typeof PlanArchitectureRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ResponsibleAiRoute: typeof ResponsibleAiRoute
@@ -920,6 +946,13 @@ declare module '@tanstack/react-router' {
       path: '/leadership-report'
       fullPath: '/leadership-report'
       preLoaderRoute: typeof LeadershipReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plan-architecture': {
+      id: '/plan-architecture'
+      path: '/plan-architecture'
+      fullPath: '/plan-architecture'
+      preLoaderRoute: typeof PlanArchitectureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -1081,6 +1114,13 @@ declare module '@tanstack/react-router' {
       path: '/manager'
       fullPath: '/manager'
       preLoaderRoute: typeof AuthenticatedManagerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/plan-lifecycle': {
+      id: '/_authenticated/plan-lifecycle'
+      path: '/plan-lifecycle'
+      fullPath: '/plan-lifecycle'
+      preLoaderRoute: typeof AuthenticatedPlanLifecycleRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/plan-report': {
@@ -1310,6 +1350,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedManagerRoute: typeof AuthenticatedManagerRoute
+  AuthenticatedPlanLifecycleRoute: typeof AuthenticatedPlanLifecycleRoute
   AuthenticatedPlanReportRoute: typeof AuthenticatedPlanReportRoute
   AuthenticatedPoliciesRoute: typeof AuthenticatedPoliciesRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
@@ -1339,6 +1380,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedManagerRoute: AuthenticatedManagerRoute,
+  AuthenticatedPlanLifecycleRoute: AuthenticatedPlanLifecycleRoute,
   AuthenticatedPlanReportRoute: AuthenticatedPlanReportRoute,
   AuthenticatedPoliciesRoute: AuthenticatedPoliciesRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
@@ -1370,6 +1412,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExecutiveIntelligenceRoute: ExecutiveIntelligenceRoute,
   LeadershipDashboardRoute: LeadershipDashboardRoute,
   LeadershipReportRoute: LeadershipReportRoute,
+  PlanArchitectureRoute: PlanArchitectureRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ResponsibleAiRoute: ResponsibleAiRoute,
