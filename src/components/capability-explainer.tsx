@@ -98,6 +98,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: LineChart,
     href: "/leadership-dashboard",
     tool: "Leadership Dashboard",
+    access: "Open to view — the live dashboard runs in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "The leadership dashboard compares actual hires, promotions and exits with your plan goals, shows the variance at each occupational level, and records corrective actions with owners and deadlines.",
     points: [
@@ -111,6 +113,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: Layers,
     href: "/leadership-report",
     tool: "Leadership Report",
+    access: "Open to view — generating and downloading the report happens in your client portal after sign-in.",
+    accessMode: "portal",
     summary:
       "Leadership reporting turns the same workforce records into board-ready summaries, and every download keeps the filters you selected in Word, Excel, PDF or PowerPoint.",
     points: [
@@ -124,6 +128,8 @@ export const CAPABILITIES: Record<string, Capability> = {
     icon: FileCheck2,
     href: "/evidence-governance",
     tool: "Evidence & Governance Repository",
+    access: "Open to view — the repository is private; storing and opening documents needs a client login.",
+    accessMode: "portal",
     summary:
       "The evidence repository keeps consultation records, approvals, policies and submissions together with access controls, so any claim you make can be traced back to a document.",
     points: [
@@ -164,6 +170,14 @@ export function CapabilityExplainer({
                 </li>
               ))}
             </ul>
+            <div className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
+              {capability.accessMode === "open" ? (
+                <Globe className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />
+              ) : (
+                <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" />
+              )}
+              <p className="text-xs leading-relaxed text-muted-foreground">{capability.access}</p>
+            </div>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 to={capability.href}
