@@ -1,0 +1,194 @@
+/** Public Employment Equity guides. General guidance only, written from the Employment Equity Act. */
+export type GuideLink =
+  | "/eea12"
+  | "/eea13-planning"
+  | "/workforce-foundation"
+  | "/evidence-governance"
+  | "/accountability-management"
+  | "/executive-intelligence"
+  | "/services/ee-advisory"
+  | "/services/recruitment-suite";
+
+export type Guide = {
+  slug: string;
+  title: string;
+  description: string;
+  summary: string;
+  sections: { heading: string; body: string[] }[];
+  related: { to: GuideLink; label: string };
+};
+
+export const GUIDES: Guide[] = [
+  {
+    slug: "how-to-complete-eea2-and-eea4",
+    title: "How to complete the EEA2 and EEA4",
+    description: "A practical walk-through of the EEA2 Employment Equity report and the EEA4 income differential statement for South African employers.",
+    summary: "The EEA2 reports your workforce profile and progress; the EEA4 reports pay differences. Both are submitted every year by designated employers.",
+    sections: [
+      { heading: "What each form is for", body: [
+        "The EEA2 is the annual Employment Equity report. It shows your workforce profile by occupational level, race, gender and disability, plus recruitment, promotions, terminations, training and progress against your Employment Equity plan.",
+        "The EEA4 is the income differential statement required by section 27 of the Act. It shows remuneration and benefits by occupational level so that disproportionate pay differences can be identified and addressed.",
+      ] },
+      { heading: "Before you start", body: [
+        "Gather one clean workforce list for the reporting period: every employee with occupational level, race, gender, disability status, nationality, and pay. Add movements for the year — new appointments, promotions, terminations and skills development.",
+        "Confirm your Employment Equity plan, its numerical targets and the name of the assigned senior manager, because the report refers to all of them.",
+      ] },
+      { heading: "Common mistakes", body: [
+        "Totals that do not match between sections, people counted at the wrong occupational level, temporary staff left out, and pay figures that mix monthly and annual amounts are the issues that most often cause reports to be queried.",
+        "Keep the source workforce list and your consultation records — they are the evidence behind every number you submit.",
+      ] },
+    ],
+    related: { to: "/workforce-foundation", label: "Build one workforce record that feeds both forms" },
+  },
+  {
+    slug: "understanding-2025-sectoral-targets",
+    title: "Understanding the 2025 sectoral targets",
+    description: "What the gazetted 2025 Employment Equity sectoral targets mean, which occupational levels they cover and how they affect your EE plan.",
+    summary: "Sectoral numerical targets, gazetted in 2025 under section 15A, set five-year goals for designated groups in the top occupational levels of each economic sector.",
+    sections: [
+      { heading: "What changed", body: [
+        "The Employment Equity Amendment Act gave the Minister power to set numerical targets per economic sector. Targets were published for 18 sectors and apply to the top four occupational levels, together with a target for people with disabilities.",
+        "Your Employment Equity plan must now take the targets for your sector into account when you set your own numerical goals.",
+      ] },
+      { heading: "How to work with them", body: [
+        "Start from your current profile at each level, compare it with your sector target and provincial or national economically active population (EAP), and plan realistic yearly steps using expected vacancies, promotions and turnover.",
+        "Where you cannot reach a target, record the reasons as they arise — not at the end of the plan period.",
+      ] },
+      { heading: "Check the official text", body: [
+        "Always read the gazette for your sector to confirm which targets apply to you. Sector classification is based on your main business activity.",
+      ] },
+    ],
+    related: { to: "/eea12", label: "Compare your workforce with sector targets and EAP" },
+  },
+  {
+    slug: "what-happens-in-a-dg-review",
+    title: "What happens in a DG review",
+    description: "How a Director-General review of Employment Equity compliance works, what is requested and how to respond to recommendations.",
+    summary: "A Director-General review checks whether you are complying with the Employment Equity Act. It usually starts with a request for documents and ends with recommendations you must respond to.",
+    sections: [
+      { heading: "How a review starts", body: [
+        "Under the Act the Director-General may review an employer's compliance. You will normally be asked for your workforce analysis, Employment Equity plan, reports, consultation records, policies and evidence of progress.",
+      ] },
+      { heading: "Recommendations and your response", body: [
+        "After assessing the documents, the Director-General may make recommendations with timeframes. You are expected to respond, agree corrective actions and show that they are carried out.",
+        "If recommendations are not followed, the Director-General can refer the matter to the Labour Court, which can order compliance and impose fines.",
+      ] },
+      { heading: "How to be ready", body: [
+        "Keep evidence in one place, link every target to a measure and an owner, and make sure your reports, plan and analysis tell the same story.",
+      ] },
+    ],
+    related: { to: "/evidence-governance", label: "Keep DG review evidence in one place" },
+  },
+  {
+    slug: "ee-reporting-deadlines",
+    title: "Employment Equity reporting deadlines",
+    description: "The yearly Employment Equity reporting cycle for designated employers in South Africa, including the January submission deadline.",
+    summary: "Designated employers report once a year. The online reporting window has traditionally closed on 15 January — confirm the exact dates the Department of Employment and Labour publishes each year.",
+    sections: [
+      { heading: "The yearly cycle", body: [
+        "The reporting period runs over a 12-month window chosen by your organisation. Reports (EEA2 and EEA4) are submitted online during the window the Department opens each year.",
+        "Dates can change, so check the Department of Employment and Labour announcement before planning your timetable.",
+      ] },
+      { heading: "A workable timetable", body: [
+        "About three months before the deadline: freeze the workforce list. Two months before: complete the analysis and consult the Employment Equity forum. One month before: senior manager sign-off. Submit early — online systems are busiest in the final days.",
+      ] },
+      { heading: "Who must report", body: [
+        "Since 1 January 2025 designated employers are those with 50 or more employees, municipalities and organs of state, plus employers designated by collective agreement. The previous turnover threshold no longer applies.",
+      ] },
+    ],
+    related: { to: "/accountability-management", label: "Track deadlines and owners" },
+  },
+  {
+    slug: "reasonable-grounds-for-not-meeting-targets",
+    title: "Reasonable grounds for not meeting targets",
+    description: "How South African employers can justify not meeting Employment Equity targets, and what evidence to keep.",
+    summary: "If you do not meet your numerical targets you may rely on reasonable grounds — but only if you can show them with evidence.",
+    sections: [
+      { heading: "Grounds that are generally recognised", body: [
+        "Typical grounds include too few vacancies, insufficient promotion opportunities, a lack of suitably qualified people from designated groups despite active recruitment, restructuring, mergers or economic conditions, and obligations under court orders or collective agreements.",
+      ] },
+      { heading: "Evidence matters most", body: [
+        "Keep advertisements, shortlists, interview records, vacancy numbers and retrenchment or restructuring decisions. Record the reason when it happens and link it to the affected target.",
+        "A ground stated without supporting records is unlikely to be accepted.",
+      ] },
+    ],
+    related: { to: "/eea13-planning", label: "Record grounds against each EE plan target" },
+  },
+  {
+    slug: "eea12-workforce-analysis-explained",
+    title: "The EEA12 workforce analysis explained",
+    description: "What the EEA12 workforce analysis covers, how to find under-representation and how it feeds your Employment Equity plan.",
+    summary: "The EEA12 is the starting point of every Employment Equity plan: a profile of your workforce at every occupational level compared with the EAP.",
+    sections: [
+      { heading: "What it covers", body: [
+        "The analysis shows headcount by occupational level, race, gender and disability, and compares it with the economically active population to identify under-representation.",
+      ] },
+      { heading: "Reading the gaps", body: [
+        "A gap is best shown in percentage points: your workforce share minus the benchmark. A negative value indicates under-representation.",
+      ] },
+    ],
+    related: { to: "/eea12", label: "Run your EEA12 analysis" },
+  },
+  {
+    slug: "writing-an-ee-plan-eea13",
+    title: "Writing an Employment Equity plan (EEA13)",
+    description: "The parts of an Employment Equity plan, how long it should run and how to set realistic numerical goals.",
+    summary: "An Employment Equity plan sets objectives, measures, numerical goals, timelines and responsibilities for a period of one to five years.",
+    sections: [
+      { heading: "What the plan must include", body: [
+        "Yearly objectives, affirmative action measures, numerical goals and targets, timetables, internal procedures for disputes and the people responsible for monitoring.",
+      ] },
+      { heading: "Setting goals", body: [
+        "Base goals on your EEA12 analysis, sector targets and expected movements. Goals you can link to actual vacancies are far easier to achieve and defend.",
+      ] },
+    ],
+    related: { to: "/eea13-planning", label: "Plan goals and timelines" },
+  },
+  {
+    slug: "consulting-the-ee-forum",
+    title: "Consulting your Employment Equity forum",
+    description: "Why consultation with employees is required under the Employment Equity Act and how to record it properly.",
+    summary: "The Act requires you to consult employees — through a representative trade union or forum — on the analysis, plan and report.",
+    sections: [
+      { heading: "Who to consult", body: [
+        "Consult a representative trade union where one exists, and employees or their representatives across occupational levels and designated and non-designated groups.",
+      ] },
+      { heading: "Keeping records", body: [
+        "Keep agendas, attendance registers, minutes and the documents tabled. These are among the first items requested in a DG review.",
+      ] },
+    ],
+    related: { to: "/evidence-governance", label: "Store consultation evidence" },
+  },
+  {
+    slug: "income-differentials-and-the-eea4",
+    title: "Income differentials and the EEA4",
+    description: "How to identify and reduce disproportionate income differentials under section 27 of the Employment Equity Act.",
+    summary: "Section 27 requires you to report pay differences and take steps to reduce disproportionate ones.",
+    sections: [
+      { heading: "What to analyse", body: [
+        "Compare remuneration and benefits by occupational level, race and gender, and between the highest- and lowest-paid employees.",
+      ] },
+      { heading: "Taking action", body: [
+        "Where differences are disproportionate, include measures in your Employment Equity plan, such as structured pay reviews and clear grading, and track them each year.",
+      ] },
+    ],
+    related: { to: "/workforce-foundation", label: "Keep pay data secure and report-ready" },
+  },
+  {
+    slug: "role-of-the-assigned-senior-manager",
+    title: "The role of the assigned senior manager",
+    description: "What the senior manager assigned under section 24 of the Employment Equity Act is responsible for.",
+    summary: "Every designated employer must assign one or more senior managers to take responsibility for Employment Equity and give them the authority and resources to do so.",
+    sections: [
+      { heading: "Responsibilities", body: [
+        "Overseeing the analysis, plan and reports, making sure consultation happens, monitoring progress and signing off submissions.",
+      ] },
+      { heading: "Making it practical", body: [
+        "A regular leadership summary of progress against targets helps the senior manager act early instead of at report time.",
+      ] },
+    ],
+    related: { to: "/executive-intelligence", label: "Give leadership a clear progress view" },
+  },
+];
+
+export const getGuide = (slug: string) => GUIDES.find((g) => g.slug === slug);
