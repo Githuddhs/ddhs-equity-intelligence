@@ -97,11 +97,12 @@ export const GUIDES: Guide[] = [
   {
     slug: "ee-reporting-deadlines",
     title: "Employment Equity reporting deadlines",
-    description: "The yearly Employment Equity reporting cycle for designated employers in South Africa, including the January submission deadline.",
-    summary: "Designated employers report once a year. For the 2025 cycle the online window opened on 1 September 2025 and closed at midnight on 15 January 2026. Confirm the dates the Department publishes each year.",
+    description: "The yearly Employment Equity reporting cycle for designated employers in South Africa. The current online window closes at midnight on 15 January 2027.",
+    summary: "Designated employers report once a year. The online window opened on 1 September and closes at midnight on 15 January 2027. Confirm the dates the Department publishes each year.",
     sections: [
       { heading: "The yearly cycle", body: [
         "The EEA2 covers the preceding 12-month period. The EEA2 and EEA4 are submitted together, online, while the Department's reporting window is open. The portal accepts only the EEA2 and EEA4 — the EEA12 analysis and EEA13 plan are kept by the employer, not submitted.",
+        "The current window closes at midnight on 15 January 2027. Build your timetable backwards from that date and allow time for consultation and sign-off before the final week.",
         "Dates can change, so check the Department of Employment and Labour announcement before planning your timetable.",
       ] },
       { heading: "A workable timetable", body: [
