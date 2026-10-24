@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { getGuide, GUIDES_LAST_REVIEWED } from "@/lib/guides";
+import { getGuide, GUIDES_LAST_REVIEWED, PRACTITIONER_APPROVED_GUIDES } from "@/lib/guides";
 import { isReleased, releasedGuides } from "@/lib/publishing-schedule";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
