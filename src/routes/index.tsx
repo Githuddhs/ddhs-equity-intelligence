@@ -77,27 +77,29 @@ const painCards = [
   },
 ];
 
+const CAPABILITY_LINK =
+  "group inline-block text-sm font-semibold text-teal transition-colors hover:text-primary";
+
 /**
- * Capability link used by the homepage cards. The final word and the arrow are
- * kept on one line so the arrow never ends up alone on its own line.
+ * Capability link used by the Why DDHS, Problems We Solve and What Clients Gain
+ * cards. The final word and the arrow stay on one line so the arrow never ends
+ * up alone on its own line.
  */
 function CapabilityLink({
   href,
-  prefix,
   capability,
   className,
 }: {
   href: string;
-  prefix: string;
   capability: string;
-  className: string;
+  className?: string;
 }) {
   const words = capability.split(" ");
   const last = words.pop() ?? capability;
   const rest = words.length ? `${words.join(" ")} ` : "";
   return (
-    <Link to={href} className={className}>
-      {prefix} {rest}
+    <Link to={href} className={`${CAPABILITY_LINK}${className ? ` ${className}` : ""}`}>
+      Read about {rest}
       <span className="whitespace-nowrap">
         {last}
         <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
@@ -306,23 +308,17 @@ function Index() {
           />
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: ShieldCheck, title: "Compliance-first", href: "/eea13-planning", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
-              { icon: Layers, title: "One source of truth", href: "/workforce-foundation", body: "Upload once; analysis, plans, monitoring and reports all read the same figures." },
-              { icon: FolderLock, title: "Privacy by design", href: "/evidence-governance", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
-              { icon: Users, title: "Expert support", href: "/virtual-consultant", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
+              { icon: ShieldCheck, title: "Compliance-first", capability: "EEA13 Planning", href: "/eea13-planning", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
+              { icon: Layers, title: "One source of truth", capability: "Workforce Data", href: "/workforce-foundation", body: "Upload once; analysis, plans, monitoring and reports all read the same figures." },
+              { icon: FolderLock, title: "Privacy by design", capability: "Evidence & Governance", href: "/evidence-governance", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
+              { icon: Users, title: "Expert support", capability: "Virtual Consultant", href: "/virtual-consultant", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
             ].map((c) => (
-              <Link
-                key={c.title}
-                to={c.href}
-                className="group rounded-2xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
-              >
+              <div key={c.title} className="rounded-2xl border bg-card p-6 shadow-sm">
                 <c.icon className="h-6 w-6 text-teal" />
                 <h3 className="card-title mt-4 text-primary">{c.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{c.body}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal transition-colors group-hover:text-primary">
-                  Read about this capability <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
+                <CapabilityLink href={c.href} capability={c.capability} className="mt-4" />
+              </div>
             ))}
 
           </div>
@@ -388,9 +384,8 @@ function Index() {
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
                 <CapabilityLink
                   href={card.href}
-                  prefix="Solved with"
                   capability={card.capability}
-                  className="group mt-5 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
+                  className="mt-5"
                 />
               </div>
             ))}
@@ -588,9 +583,8 @@ function Index() {
                   <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
                   <CapabilityLink
                     href={c.href}
-                    prefix="Delivered by"
                     capability={c.capability}
-                    className="group mt-3 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
+                    className="mt-3"
                   />
                 </div>
               </div>
