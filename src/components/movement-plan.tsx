@@ -5,7 +5,7 @@ import type { Employee } from "@/lib/foundation";
 import { GROUPS, LEVELS } from "@/lib/workforce";
 import { EXIT_TYPES, FUNNEL_FIELDS, MOVE_KINDS, blankMove, demographicImpact, groupLabel, historyBy, moveMissing, type PlannedMove } from "@/lib/movement-plan";
 
-const inp = "h-8 rounded border border-input bg-background px-1 text-sm";
+const inp = "h-8 max-w-40 rounded border border-input bg-background px-1 text-sm";
 const n = "h-8 w-16 rounded border border-input bg-background px-1 text-right text-sm";
 
 export function MovementPlan({ moves, onChange, years }: { moves: PlannedMove[]; onChange: (m: PlannedMove[]) => void; years: number }) {
