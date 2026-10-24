@@ -12,10 +12,10 @@ export type ReadinessInputs = {
   barrierResponses: number;
   plan: PlanContent | null;
   planDates: { start: string; end: string };
-  /** Lower-cased "area category file_name" for each uploaded document. */
+  /** Lower-cased "category file_name" for each uploaded document. */
   docs: string[];
 };
-export type ReadinessItem = { label: string; kind: ItemKind; done: boolean; detail?: string; to: "/workforce" | "/eea12" | "/barrier-analysis" | "/plans" | "/evidence" | "/compliance" };
+export type ReadinessItem = { label: string; kind: ItemKind; done: boolean; detail?: string; to: "/workforce" | "/eea12" | "/barrier-analysis" | "/plans" | "/compliance" | "/portal/$area"; area?: "forms" | "plan" | "dg" | "hr" };
 export type ReadinessStep = { step: number; title: string; summary: string; items: ReadinessItem[] };
 
 const f = (s: string | undefined) => !!s && s.trim().length > 0;
@@ -27,7 +27,7 @@ export function buildReadiness(i: ReadinessInputs): ReadinessStep[] {
   const o = i.org, e = i.employees, p = i.plan, d = i.docs;
   const org = (k: string, label: string, kind: ItemKind = "Required"): ReadinessItem => ({ label, kind, done: f(o[k]), to: "/workforce" as const });
   const emp = (k: keyof Employee, label: string, kind: ItemKind = "Required"): ReadinessItem => ({ label, kind, ...coverage(e, k), to: "/workforce" });
-  const ev = (label: string, ...w: string[]): ReadinessItem => ({ label, kind: "Evidence upload", ...doc(d, ...w), to: "/evidence" });
+  const ev = (label: string, area: NonNullable<ReadinessItem["area"]>, ...w: string[]): ReadinessItem => ({ label, kind: "Evidence upload", ...doc(d, ...w), to: "/portal/$area", area });
   const reg = p?.register ?? [];
   const ms = p?.milestones ?? [];
   const goals = p?.goals.filter((g) => f(g.total)).length ?? 0;
@@ -51,9 +51,9 @@ export function buildReadiness(i: ReadinessInputs): ReadinessStep[] {
       { label: "Remuneration data for EEA4", kind: "Required", done: i.remuneration > 0, detail: `${i.remuneration} pay records`, to: "/workforce" },
     ] },
     { step: 3, title: "Establish compliance baseline", summary: "Previous submissions, plans and policies", items: [
-      ev("Previous EEA2 submission", "eea2"), ev("Previous EEA4 submission", "eea4"), ev("Previous EEA12 analysis", "eea12"),
-      ev("Existing EE plan / EEA13", "eea13", "ee plan", "employment equity plan"), { ...ev("EE Certificate of Compliance", "certificate"), kind: "Conditional" },
-      ev("Recruitment, promotion and other HR policies", "policy", "policies"),
+      ev("Previous EEA2 submission", "forms", "eea2", "submissions", "prior"), ev("Previous EEA4 submission", "forms", "eea4", "income"), ev("Previous EEA12 analysis", "forms", "eea12", "prior"),
+      ev("Existing EE plan / EEA13", "forms", "eea13", "signed_plan", "ee plan", "employment equity plan"), { ...ev("EE Certificate of Compliance", "dg", "certificate"), kind: "Conditional" },
+      ev("Recruitment, promotion and other HR policies", "dg", "policy", "policies"),
     ] },
     { step: 4, title: "Conduct analysis", summary: "Workforce profile, EAP, sector targets and barriers", items: [
       { label: "Baseline workforce profile", kind: "System-calculated", done: e.length > 0, detail: e.length ? "Derived from employee records" : "Needs employee records", to: "/eea12" },
@@ -74,10 +74,10 @@ export function buildReadiness(i: ReadinessInputs): ReadinessStep[] {
     { step: 6, title: "Monitor implementation", summary: "Movements, evidence, consultation, KPIs and corrective action", items: [
       { label: "Actual workforce movements recorded", kind: "Required", done: i.movements > 0, detail: `${i.movements} movement(s)`, to: "/workforce" },
       { label: "Consultation record in the plan", kind: "Required", done: f(p?.consultation), to: "/plans" },
-      ev("EE committee minutes and attendance", "minute", "attendance", "agenda"),
-      ev("Consultation evidence", "consult"),
-      ev("Training records", "training", "wsp", "skills plan"),
-      ev("Disability accommodation records", "disab", "accommodat"),
+      ev("EE committee minutes and attendance", "plan", "minute", "forum", "attendance", "agenda"),
+      ev("Consultation evidence", "plan", "consult"),
+      ev("Training records", "hr", "training", "wsp", "skills plan"),
+      ev("Disability accommodation records", "hr", "disab", "accommodat"),
       { label: "Corrective actions with owner and deadline", kind: "Conditional", done: (p?.corrective ?? []).length > 0, detail: `${(p?.corrective ?? []).length} action(s)`, to: "/compliance" },
       { label: "Organisational sign-off", kind: "Required", done: !!p?.orgSignoff, detail: p?.orgSignoff ? `Signed by ${p.orgSignoff.by}` : "Not signed off", to: "/plans" },
     ] },
