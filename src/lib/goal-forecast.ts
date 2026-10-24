@@ -39,6 +39,13 @@ export function sectorTarget(sector: string, level: string): number | null {
   return key && s ? s.targets[key].total : null;
 }
 
+/** Year 5 is locked to the fixed target (gazetted sector target or provincial EAP); earlier years stay user-entered. */
+export function fixedMilestones(milestones: string[], target: number | null, years: number): string[] {
+  const m = [...milestones];
+  if (years >= 5) m[4] = target === null ? "" : String(target);
+  return m;
+}
+
 export type ForecastResult = {
   level: string; targetSource: "sector" | "eap"; baseline: Baseline | null; benchmark: number | null; target: number | null; goal: number | null;
   exits: number | null; inflows: number | null; projected: number | null; opportunities: number | null;
@@ -59,9 +66,12 @@ export function forecastLevel(level: string, base: Baseline | undefined, f: Fore
   // Semi-skilled and Unskilled have no gazetted sector target: provincial EAP is the target.
   const target = gazetted ? sectorTarget(ctx.sector, level) : benchmark;
   if (target === null && gazetted) missing.push("sector target (set the plan's sector)");
-  const goal = num(f.goal);
-  if (goal === null) missing.push("five-year goal");
-  const blankMs = f.milestones.slice(0, ctx.years).filter((m) => num(m) === null).length;
+  // The five-year goal is fixed: gazetted sector target (top four levels) or provincial EAP (two lowest levels).
+  const goal = target;
+  const ms = fixedMilestones(f.milestones, target, ctx.years);
+  const blankMs = ms.slice(0, ctx.years).filter((m) => num(m) === null).length;
+  const overMs = target === null ? 0 : ms.slice(0, ctx.years).filter((m) => (num(m) ?? 0) > target).length;
+  if (overMs) missing.push(`${overMs} annual milestone${overMs > 1 ? "s" : ""} above the ${gazetted ? "sector target" : "provincial EAP"} maximum`);
   if (blankMs) missing.push(`${blankMs} annual milestone${blankMs > 1 ? "s" : ""}`);
   const blanks = FORECAST_FIELDS.filter(([k]) => num(f[k]) === null).map(([, l]) => l.toLowerCase());
   if (blanks.length) missing.push(...blanks);

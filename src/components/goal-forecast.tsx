@@ -5,7 +5,7 @@ import type { Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
 import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";
 import { groupLabel, yearlyProjection, type PlannedMove } from "@/lib/movement-plan";
-import { FORECAST_FIELDS, baselineByLevel, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
+import { FORECAST_FIELDS, baselineByLevel, fixedMilestones, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
 
 const cell = "h-8 w-16 rounded border border-input bg-background px-1 text-right text-sm";
 const pct = (n: number | null) => (n === null ? <span className="text-destructive">Missing</span> : `${n}%`);
@@ -32,15 +32,16 @@ export function GoalForecast({ forecast, onChange, sector, start, end, moves = [
   const base = baselineByLevel(employees, period?.snapshot_date ?? "");
   const row = (l: string) => ({ ...blankForecast(), ...(forecast[l] ?? {}) });
   const set = (l: string, p: Partial<ForecastRow>) => onChange({ ...forecast, [l]: { ...row(l), ...p } });
+  const targetOf = (l: string) => forecastLevel(l, base[l], row(l), { province, sector, years }).target;
   const results = LEVELS.map((l) => forecastLevel(l, base[l], row(l), { province, sector, years }));
   const history = movementHistory(employees, (period?.movements ?? []) as never);
-  const proj = yearlyProjection(employees, period?.snapshot_date ?? "", moves, years, Object.fromEntries(LEVELS.map((l) => [l, row(l).milestones])));
+  const proj = yearlyProjection(employees, period?.snapshot_date ?? "", moves, years, Object.fromEntries(LEVELS.map((l) => [l, fixedMilestones(row(l).milestones, targetOf(l), years)])));
   const funnel = recruitmentFunnel(data?.cands ?? []);
 
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
       <h2 className="font-display text-lg font-semibold">Numerical goals and forecast</h2>
-      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted 5-year sector targets for {SECTOR_TARGET_PERIOD_LABEL} ({SECTOR_TARGET_SOURCE_LABEL}); Semi-skilled and Unskilled use provincial EAP as the target ({EAP_SOURCE_LABEL}). Blank inputs are flagged, never filled in.</p>
+      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted 5-year sector targets for {SECTOR_TARGET_PERIOD_LABEL} ({SECTOR_TARGET_SOURCE_LABEL}); Semi-skilled and Unskilled use provincial EAP as the target ({EAP_SOURCE_LABEL}). The 5-year goal and Year 5 milestone are fixed to these targets (earlier years may not exceed them) and update automatically when new targets or EAP data are published. Blank inputs are flagged, never filled in.</p>
       {error && <p className="mt-3 text-sm text-destructive">Could not load workforce data.</p>}
       {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce" className="underline">add employee records</Link> to get baselines.</p>}
 
@@ -61,8 +62,8 @@ export function GoalForecast({ forecast, onChange, sector, start, end, moves = [
                 <td>{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}{r.targetSource === "eap"
                   ? <span className="block text-xs text-muted-foreground">Provincial EAP · {EAP_SOURCE_LABEL}</span>
                   : <span className="block text-xs text-muted-foreground">Sector target · {SECTOR_TARGET_SOURCE_LABEL}<br />{SECTOR_TARGET_PERIOD_LABEL}</span>}</td>
-                <td><input aria-label={`${r.level} five-year goal`} className={cell} inputMode="decimal" value={f.goal} onChange={(e) => set(r.level, { goal: e.target.value })} /></td>
-                {Array.from({ length: years }, (_, i) => <td key={i}><input aria-label={`${r.level} year ${i + 1}`} className={cell} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; m[i] = e.target.value; set(r.level, { milestones: m }); }} /></td>)}
+                <td title="Fixed to the target; updates when new targets or EAP data are published">{r.goal === null ? <span className="text-destructive">Missing</span> : `${r.goal}%`}<span className="block text-xs text-muted-foreground">Fixed</span></td>
+                {Array.from({ length: years }, (_, i) => i === 4 ? <td key={i} title="Year 5 equals the fixed target">{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}<span className="block text-xs text-muted-foreground">Fixed</span></td> : <td key={i}><input max={r.target ?? undefined} aria-label={`${r.level} year ${i + 1}`} className={cell} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; m[i] = e.target.value; set(r.level, { milestones: m }); }} /></td>)}
                 {FORECAST_FIELDS.map(([k, l]) => <td key={k}><input aria-label={`${r.level} ${l}`} className={cell} inputMode="numeric" value={f[k]} onChange={(e) => set(r.level, { [k]: e.target.value })} /></td>)}
               </tr>); })}
           </tbody>
