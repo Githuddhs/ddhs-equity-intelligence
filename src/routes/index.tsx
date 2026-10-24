@@ -361,7 +361,7 @@ function Index() {
                   to={card.href}
                   className="group mt-5 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
                 >
-                  Solved with {card.capability}{" "}
+                  Solved with {card.capability}{"\u00A0"}
                   <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </div>
@@ -562,7 +562,7 @@ function Index() {
                     to={c.href}
                     className="group mt-3 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
                   >
-                    Delivered by {c.capability}{" "}
+                    Delivered by {c.capability}{"\u00A0"}
                     <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
                   </Link>
                 </div>
