@@ -71,17 +71,21 @@ export function GoalForecast({ forecast, onChange, sector, start, end, moves = [
       </div>
 
       <h3 className="mt-6 text-sm font-semibold">Required designated appointments to reach the five-year targets</h3>
-      <p className="mt-1 max-w-3xl text-xs text-muted-foreground">Based on the difference between each level's fixed five-year target (sector target or provincial EAP) and its current designated profile, assuming headcount stays the same and each designated appointment fills a vacancy left by a non-designated employee. Suggested appointments are spread evenly over the plan so the target is reached by the final year and never exceeded.</p>
-      <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[800px] text-sm">
-        <thead className="text-left text-xs text-muted-foreground"><tr><th className="py-2">Level</th><th>Current</th><th>Target</th><th>Gap</th><th>Required</th>{Array.from({ length: years }, (_, i) => <th key={i}>Yr {i + 1}</th>)}<th></th></tr></thead>
+      <p className="mt-1 max-w-3xl text-xs text-muted-foreground">Based on the gap between each level's fixed five-year ceiling (sector target or provincial EAP) and its current designated profile. Counts are whole people and always rounded down, so no suggested share is above the ceiling. <strong>Replacement appointments</strong> fill posts left by non-designated employees, so headcount stays the same. <strong>Additional hires</strong> are new posts on top of current headcount, with no exits. Use one route or a mix; planned exits and growth are entered in the forecast above.</p>
+      <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[900px] text-sm">
+        <thead className="text-left text-xs text-muted-foreground"><tr><th className="py-2">Level</th><th>Current</th><th>Ceiling</th><th>Gap</th><th>Replacement appointments</th>{Array.from({ length: years }, (_, i) => <th key={i}>Yr {i + 1}</th>)}<th>Or additional hires</th><th></th></tr></thead>
         <tbody>{results.map((r) => { const a = appointmentPlan(r.baseline, r.target, years); return (
-          <tr key={r.level} className="border-t border-border">
+          <tr key={r.level} className="border-t border-border align-top">
             <td className="py-2 font-medium">{r.level}</td>
-            <td>{pct(r.baseline?.share ?? null)}</td><td>{pct(r.target)}</td>
+            <td>{pct(r.baseline?.share ?? null)}{r.baseline && <span className="block text-xs text-muted-foreground">{r.baseline.designated} of {r.baseline.headcount}</span>}</td>
+            <td>{pct(r.target)}</td>
             <td>{a.gapPts === null ? <span className="text-destructive">Missing</span> : `${a.gapPts} pts`}</td>
-            <td className="font-semibold">{a.required ?? "—"}</td>
+            <td><span className="font-semibold">{a.required ?? "—"}</span>
+              {a.achievable !== null && <span className="block text-xs text-muted-foreground">Reaches {a.achievable}%</span>}
+              {a.achievable !== null && !a.exact && <span className="block max-w-[220px] text-xs text-destructive">Exact {r.target}% is not possible with {r.baseline!.headcount} people; {a.achievable}% is the closest without exceeding it{a.nextShare !== null ? ` (one more would give ${a.nextShare}%)` : ""}.</span>}</td>
             {Array.from({ length: years }, (_, i) => <td key={i}>{a.perYear[i] === undefined ? "—" : <>{a.perYear[i]}<span className="block text-xs text-muted-foreground">→ {a.shares[i]}%</span></>}</td>)}
-            <td>{a.required !== null && <button type="button" className="text-xs text-teal underline" onClick={() => { const m = [...row(r.level).milestones]; a.shares.forEach((s, i) => { if (i < 4) m[i] = String(s); }); set(r.level, { milestones: m, appointments: String(a.required) }); }}>Use as yearly goals</button>}</td>
+            <td>{a.additional === null ? "—" : <>{a.additional}<span className="block text-xs text-muted-foreground">Headcount {a.additionalHeadcount}, reaches {a.additionalShare}%</span></>}</td>
+            <td>{a.required !== null && <button type="button" className="text-xs text-teal underline" onClick={() => { const m = [...row(r.level).milestones]; a.shares.forEach((s, i) => { if (i < 4) m[i] = String(s); }); set(r.level, { milestones: m }); }}>Use as yearly goals</button>}</td>
           </tr>); })}</tbody>
       </table></div>
 
