@@ -4,7 +4,7 @@
  * Release is worked out from the date when a page is requested, so no scheduled job is needed.
  */
 import { BLOG_POSTS, type BlogPost } from "@/lib/blog";
-import { GUIDES, type Guide } from "@/lib/guides";
+import { GUIDES, isGuideApproved, type Guide } from "@/lib/guides";
 
 /** First release: Monday 19 October 2026, 06:00 SAST. */
 export const FIRST_RELEASE_UTC = Date.UTC(2026, 9, 19, 4, 0, 0);
@@ -32,7 +32,14 @@ export const SCHEDULE = buildSchedule(BLOG_POSTS, GUIDES);
 const releaseOf = (kind: "blog" | "guide", slug: string) =>
   SCHEDULE.find((s) => s.kind === kind && s.slug === slug)?.releaseAt ?? Infinity;
 
-export const isReleased = (kind: "blog" | "guide", slug: string, now = Date.now()) => releaseOf(kind, slug) <= now;
+/** Blogs follow the weekly date; guides flagged for practitioner review also need explicit approval. */
+export const isReleased = (kind: "blog" | "guide", slug: string, now = Date.now()) => {
+  if (kind === "guide") {
+    const g = GUIDES.find((x) => x.slug === slug);
+    if (!g || !isGuideApproved(g)) return false;
+  }
+  return releaseOf(kind, slug) <= now;
+};
 export const releaseDate = (kind: "blog" | "guide", slug: string) => new Date(releaseOf(kind, slug));
 
 export const releasedPosts = (now = Date.now()): BlogPost[] => BLOG_POSTS.filter((p) => isReleased("blog", p.slug, now));
