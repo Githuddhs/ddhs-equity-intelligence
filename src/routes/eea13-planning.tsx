@@ -15,6 +15,7 @@ import {
 import { TEXT_SECTIONS, PLAN_LEVELS } from "@/lib/ee-plan";
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { FooterSocial } from "@/components/footer-social";
 
 export const Route = createFileRoute("/eea13-planning")({
   staticData: { sitemap: true },
@@ -251,6 +252,7 @@ function Eea13PlanningPage() {
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>
           </p>
+          <FooterSocial />
         </div>
       </footer>
     </div>
