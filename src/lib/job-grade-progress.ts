@@ -7,7 +7,7 @@ export type GradeGroup = { system: string; grade: string; counts: Counts; total:
 /** Only aggregate headcounts leave this helper; no IDs, pay or disability fields. */
 export function jobGradeGroups(f: Foundation, level: string, filter: UnitFilter = ALL_UNITS): GradeGroup[] {
   const groups = new Map<string, GradeGroup>();
-  for (const e of f.employees) {
+  for (const e of uniqueProfiles(f.employees)) {
     if (e.level !== level || !activeAtSnapshot(e, f.snapshot_date)) continue;
     const key = employeeGroup(e);
     if (!key || !matches({ organisation: e.organisation || f.organisation.name || UNASSIGNED, faculty: e.faculty || UNASSIGNED, division: e.division || UNASSIGNED, department: e.department || UNASSIGNED, section: e.section || UNASSIGNED, counts: emptyWorkforce(), disability: {} }, filter)) continue;

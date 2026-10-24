@@ -14,7 +14,7 @@ export function MovementPlan({ moves, onChange, years }: { moves: PlannedMove[];
     queryKey: ["movement-plan-period"],
     queryFn: async () => (await supabase.from("workforce_foundation_periods").select("period_start,period_end,snapshot_date,employees,movements").order("period_end", { ascending: false }).limit(1).maybeSingle()).data,
   });
-  const employees = (data?.employees ?? []) as Employee[];
+  const employees = uniqueProfiles((data?.employees ?? []) as Employee[]);
   const movements = (data?.movements ?? []) as { employeeId: string; type: string; reason?: string }[];
   const units = [...new Set(employees.map((e) => e.department).filter(Boolean))].sort();
   const hist = historyBy(employees, movements, by);
