@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addAppointment, pickPeriod } from "./recruitment-handoff";
+import { addAppointment, pickPeriod, planHandoff } from "./recruitment-handoff";
 import { blankFoundation, employeeGroup, uniqueProfiles, foundationSnapshot } from "./foundation";
 
 const c = { full_name: "N. Dlamini", race: "African", gender: "Female", disability: false, foreign_national: false };
@@ -26,5 +26,28 @@ describe("recruitment handoff to Employee Profile", () => {
     expect(pickPeriod(ps, "2025-01-01")).toBe(ps[0]);
     expect(pickPeriod(ps, "2027-01-01")).toBe(ps[1]);
     expect(pickPeriod([], "2026-01-01")).toBeNull();
+  });
+});
+
+describe("planHandoff (server decision)", () => {
+  const base = { stage: "appointed", handover: {}, periods: [period], toFoundation: (p: typeof period) => p, c, v, h };
+  it("succeeds into the period covering the start date", () => {
+    const r = planHandoff(base);
+    expect(r.period).toBe(period);
+    expect(r.outsidePeriod).toBe(false);
+    expect(r.foundation.employees.map((e) => e.employeeId)).toEqual(["E100"]);
+  });
+  it("rejects a duplicate staff number", () => {
+    const withE100 = addAppointment(period, c, v, h);
+    expect(() => planHandoff({ ...base, periods: [withE100] })).toThrow(/already has an Employee Profile/);
+  });
+  it("rejects when no reporting period exists", () => {
+    expect(() => planHandoff({ ...base, periods: [] })).toThrow(/reporting period first/);
+  });
+  it("rejects a repeat submission", () => {
+    expect(() => planHandoff({ ...base, handover: { profile_sent_at: "2026-03-02T00:00:00Z" } })).toThrow(/already on the Employee Profile/);
+  });
+  it("rejects candidates who are not appointed", () => {
+    expect(() => planHandoff({ ...base, stage: "interview" })).toThrow(/Only appointed/);
   });
 });
