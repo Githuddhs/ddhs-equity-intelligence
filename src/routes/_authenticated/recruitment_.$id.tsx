@@ -2,6 +2,9 @@ import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { sendAppointmentToProfile } from "@/lib/foundation.functions";
+import { CONTRACT_TYPES, WORK_PATTERNS } from "@/lib/foundation";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json, Tables } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
@@ -266,7 +269,7 @@ function CandidateStep({ v, cands, reload }: { v: Vacancy; cands: Candidate[]; r
       </div>
       <p className="mt-2 text-xs text-muted-foreground">Current stage labels: {Object.values(STAGE_LABEL).join(", ")}. Every stage change is kept in the candidate's history.</p>
 
-      {cands.filter((c) => c.stage === "appointed").map((c) => <Handover key={c.id} c={c} save={(h: HandoverData) => update(c, { handover: h } as unknown as Partial<Candidate>)} />)}
+      {cands.filter((c) => c.stage === "appointed").map((c) => <Handover key={c.id} c={c} reload={reload} save={(h: HandoverData) => update(c, { handover: h } as unknown as Partial<Candidate>)} />)}
 
       <form onSubmit={add} className="mt-6 rounded-xl border border-border bg-card p-5">
         <p className="font-semibold text-primary">Capture a candidate</p>
@@ -306,9 +309,12 @@ const HANDOVER_ITEMS = [
   "Induction and orientation scheduled",
   "Workforce Data movement recorded",
 ] as const;
-type HandoverData = { start_date?: string; manager?: string; notes?: string; done?: string[]; completed_at?: string | null };
+type HandoverData = { start_date?: string; manager?: string; notes?: string; done?: string[]; completed_at?: string | null; employee_id?: string; profile_period?: string; profile_sent_at?: string };
 
-function Handover({ c, save }: { c: Candidate; save: (h: HandoverData) => Promise<void> | void }) {
+function Handover({ c, save, reload }: { c: Candidate; save: (h: HandoverData) => Promise<void> | void; reload: () => Promise<void> }) {
+  const send = useServerFn(sendAppointmentToProfile);
+  const [emp, setEmp] = useState({ employeeId: "", contractType: "Permanent", workPattern: "Full-time" });
+  const [sending, setSending] = useState(false);
   const initial = ((c as unknown as { handover?: HandoverData }).handover ?? {}) as HandoverData;
   const [h, setH] = useState<HandoverData>({ done: [], ...initial });
   const done = h.done ?? [];
@@ -333,6 +339,31 @@ function Handover({ c, save }: { c: Candidate; save: (h: HandoverData) => Promis
             <input type="checkbox" checked={done.includes(i)} disabled={!!h.completed_at} onChange={(e) => commit({ ...h, done: e.target.checked ? [...done, i] : done.filter((x) => x !== i) })} />{i}
           </label>
         ))}
+      </div>
+      <div className="mt-4 rounded-lg border border-border bg-secondary/40 p-4">
+        <p className="text-sm font-semibold text-primary">Send to Employee Profile</p>
+        {h.profile_sent_at ? (
+          <p className="mt-1 text-sm text-teal">Added to Workforce Data as staff number {h.employee_id} in the {h.profile_period} reporting period on {new Date(h.profile_sent_at).toLocaleDateString("en-ZA")}. It now feeds every report.</p>
+        ) : (
+          <>
+            <p className="mt-1 text-xs text-muted-foreground">Creates the new employee's profile from the vacancy and the candidate's own declaration, plus a recruitment movement — no retyping.</p>
+            <div className="mt-2 grid gap-3 sm:grid-cols-3">
+              <label className="text-sm font-medium">Staff number<input className={box} maxLength={60} value={emp.employeeId} onChange={(e) => setEmp({ ...emp, employeeId: e.target.value })} /></label>
+              <label className="text-sm font-medium">Contract<select className={box} value={emp.contractType} onChange={(e) => setEmp({ ...emp, contractType: e.target.value })}>{CONTRACT_TYPES.map((t) => <option key={t}>{t}</option>)}</select></label>
+              <label className="text-sm font-medium">Work pattern<select className={box} value={emp.workPattern} onChange={(e) => setEmp({ ...emp, workPattern: e.target.value })}>{WORK_PATTERNS.map((t) => <option key={t}>{t}</option>)}</select></label>
+            </div>
+            <button type="button" disabled={sending || !emp.employeeId.trim() || !h.start_date} onClick={async () => {
+              setSending(true);
+              try {
+                const r = await send({ data: { candidateId: c.id, startDate: h.start_date!, manager: h.manager ?? "", ...emp } });
+                toast.success(r.outsidePeriod ? `Added to the ${r.period} period. The start date falls outside it — check Workforce Data.` : `Added to the Employee Profile (${r.period}).`);
+                await reload();
+              } catch (e) { toast.error(e instanceof Error ? e.message : "Couldn't update the Employee Profile."); }
+              finally { setSending(false); }
+            }} className="mt-3 rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">{sending ? "Sending…" : "Send to Employee Profile"}</button>
+            {!h.start_date && <p className="mt-1 text-xs text-muted-foreground">Set the start date above first.</p>}
+          </>
+        )}
       </div>
       <label className="mt-3 block text-sm font-medium">Handover notes<textarea rows={2} maxLength={2000} className={box} value={h.notes ?? ""} onChange={(e) => setH({ ...h, notes: e.target.value })} onBlur={() => void save(h)} /></label>
       <div className="mt-3 flex flex-wrap gap-2">
