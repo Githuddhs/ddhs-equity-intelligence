@@ -189,16 +189,17 @@ export function CapabilityExplainer({
               <Link
                 to={capability.href}
                 onClick={onClose}
-                className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
               >
                 {capabilityCta(capability)} <ArrowRight className="h-4 w-4" />
               </Link>
               {capability.accessMode === "open" && (
-                <span className="inline-flex items-center gap-1.5 text-xs leading-relaxed text-muted-foreground">
+                <span className="flex min-w-0 flex-1 items-center gap-1.5 text-xs leading-relaxed text-muted-foreground">
                   <Globe className="h-3.5 w-3.5 shrink-0 text-teal" />
                   {capability.access}
                 </span>
               )}
+
               <a
                 href="#contact"
                 onClick={onClose}
