@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LEVELS } from "@/lib/workforce";
 import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
-import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, organisationSchema, ORG_LABELS, DESIGNATED_STATUSES, type Foundation } from "@/lib/foundation";
+import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, organisationSchema, ORG_LABELS, DESIGNATED_STATUSES, EMPLOYMENT_STATUSES, CONTRACT_TYPES, WORK_PATTERNS, type Foundation } from "@/lib/foundation";
 import { FOUNDATION_ACCEPT, importFoundationFile } from "@/lib/foundation-import";
 import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
@@ -23,7 +23,7 @@ export const foundationQuery = () => ({ queryKey: ["foundation-periods"], queryF
 
 const choices: Record<string, string[]> = {
   populationGroup: ["African", "Coloured", "Indian", "White", "Foreign national"], gender: ["Male", "Female"],
-  disability: ["Yes", "No", "Not disclosed"], employmentType: ["Permanent", "Fixed-term", "Temporary", "Part-time"],
+  disability: ["Yes", "No", "Not disclosed"], employmentType: CONTRACT_TYPES, employmentStatus: EMPLOYMENT_STATUSES, workPattern: WORK_PATTERNS,
   level: LEVELS, previousLevel: LEVELS, newLevel: LEVELS, gradingSystem: ["Paterson", "Peromnes", "Hay", "Equate", "Other"],
   type: ["Recruitment", "Promotion", "Transfer", "Termination"], province: Object.keys(PROVINCE_EAP).filter((p) => p !== "National"), sector: SECTORS.map((s) => s.name), designatedStatus: DESIGNATED_STATUSES,
 };
