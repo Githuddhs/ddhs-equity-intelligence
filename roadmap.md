@@ -78,4 +78,4 @@
 - [ ] Create the DDHS Equity Intelligence LinkedIn company page (owner action). Once live, send me its address and the footer link plus the business search listing go live on every page at once.
 - [x] Plan architecture stage 1: 13-step lifecycle tracker in My portal + public /plan-architecture page.
 - [x] Stage 2: assemble EEA13 from lifecycle records, source per section, missing inputs, sign-off gated on complete inputs.
-- [ ] Stage 3: monitoring/variance — actual movements vs goals, suggested corrective actions.
+- [x] Stage 3: goal variance (hires, promotions, exits vs EEA13 goals) on Compliance, corrective actions with owner, deadline and evidence.
