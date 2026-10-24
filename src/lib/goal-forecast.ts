@@ -40,7 +40,7 @@ export function sectorTarget(sector: string, level: string): number | null {
 }
 
 export type ForecastResult = {
-  level: string; baseline: Baseline | null; benchmark: number | null; target: number | null; goal: number | null;
+  level: string; targetSource: "sector" | "eap"; baseline: Baseline | null; benchmark: number | null; target: number | null; goal: number | null;
   exits: number | null; inflows: number | null; projected: number | null; opportunities: number | null;
   designatedNeeded: number | null; feasible: boolean | null; missing: string[];
 };
@@ -55,8 +55,10 @@ export function forecastLevel(level: string, base: Baseline | undefined, f: Fore
   if (!baseline) missing.push("baseline headcount (no saved Workforce Foundation employees at this level)");
   const benchmark = eapBenchmark(ctx.province);
   if (benchmark === null) missing.push("provincial EAP (set the province in Workforce Foundation)");
-  const target = sectorTarget(ctx.sector, level);
-  if (target === null && LEVEL_TO_TARGET_KEY[level]) missing.push("sector target (set the plan's sector)");
+  const gazetted = !!LEVEL_TO_TARGET_KEY[level];
+  // Semi-skilled and Unskilled have no gazetted sector target: provincial EAP is the target.
+  const target = gazetted ? sectorTarget(ctx.sector, level) : benchmark;
+  if (target === null && gazetted) missing.push("sector target (set the plan's sector)");
   const goal = num(f.goal);
   if (goal === null) missing.push("five-year goal");
   const blankMs = f.milestones.slice(0, ctx.years).filter((m) => num(m) === null).length;
@@ -75,7 +77,7 @@ export function forecastLevel(level: string, base: Baseline | undefined, f: Fore
     const fillable = (v("appointments") ?? 0) + (v("promotions") ?? 0) + (v("transfers") ?? 0);
     feasible = designatedNeeded <= fillable;
   }
-  return { level, baseline, benchmark, target, goal, exits, inflows, projected, opportunities, designatedNeeded, feasible, missing };
+  return { level, targetSource: gazetted ? "sector" : "eap", baseline, benchmark, target, goal, exits, inflows, projected, opportunities, designatedNeeded, feasible, missing };
 }
 
 export type FlowCount = { total: number; designated: number };
