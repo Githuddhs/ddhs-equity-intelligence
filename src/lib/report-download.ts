@@ -148,7 +148,6 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
       styles: {
         default: { document: { run: { font, size: 22, color: B.navy } }, title: { run: { font, size: 48, bold: true, color: B.navy } }, heading2: { run: { font, size: 30, bold: true, color: B.teal } } },
       },
-      fonts: [],
       sections: [{ children: [...children, ...content] }],
     }));
   }
