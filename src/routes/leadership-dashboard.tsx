@@ -12,6 +12,7 @@ import {
 
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { FooterSocial } from "@/components/footer-social";
 
 export const Route = createFileRoute("/leadership-dashboard")({
   staticData: { sitemap: true },
@@ -192,6 +193,7 @@ function LeadershipDashboardPage() {
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>
           </p>
+          <FooterSocial />
         </div>
       </footer>
     </div>

@@ -26,6 +26,7 @@ import {
 import { ContactForm } from "@/components/contact-form";
 import { DashboardMock } from "@/components/dashboard-mock";
 import { BrandMark } from "@/components/brand-mark";
+import { FooterSocial } from "@/components/footer-social";
 import { SiteNav } from "@/components/site-nav";
 
 export const Route = createFileRoute("/")({
@@ -632,6 +633,7 @@ function Index() {
                 {" · "}
                 <a href="mailto:sdm@ddhs.co.za" className="transition-colors hover:text-primary">sdm@ddhs.co.za</a>
               </p>
+              <FooterSocial />
             </div>
             <div>
               <h4 className="label-title text-primary">Platform</h4>

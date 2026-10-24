@@ -17,6 +17,7 @@ import {
 import { DISABILITY_COLUMN, GROUPS, LEVELS, TEMPLATE_HEADER } from "@/lib/workforce";
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { FooterSocial } from "@/components/footer-social";
 
 export const Route = createFileRoute("/workforce-foundation")({
   staticData: { sitemap: true },
@@ -301,6 +302,7 @@ function WorkforceFoundationPage() {
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>
           </p>
+          <FooterSocial />
         </div>
       </footer>
     </div>

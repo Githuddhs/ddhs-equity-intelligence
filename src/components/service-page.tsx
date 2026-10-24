@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { FooterSocial } from "@/components/footer-social";
 import { RelatedLinks } from "@/components/related-links";
 import { pageHead, SITE_URL } from "@/lib/seo";
 
@@ -166,6 +167,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>
           </p>
+          <FooterSocial />
         </div>
       </footer>
     </div>

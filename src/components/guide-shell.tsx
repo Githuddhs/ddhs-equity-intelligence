@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { BrandMark } from "@/components/brand-mark";
+import { FooterSocial } from "@/components/footer-social";
 import { AuthCta } from "@/components/auth-cta";
 import { RelatedLinks } from "@/components/related-links";
 
@@ -28,6 +29,7 @@ export function GuideShell({ children }: { children: ReactNode }) {
             Data. Accountability. Transformation. ·{" "}
             <a href="mailto:sdm@ddhs.co.za" className="font-semibold text-teal hover:underline">sdm@ddhs.co.za</a>
           </p>
+          <FooterSocial />
         </div>
       </footer>
     </div>

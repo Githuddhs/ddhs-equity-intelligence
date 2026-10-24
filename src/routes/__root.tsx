@@ -16,6 +16,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { ReportDownloadDialog } from "@/components/report-download-dialog";
+import { SOCIAL_SAMEAS } from "@/lib/social";
 
 function NotFoundComponent() {
   return (
@@ -104,6 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 addressCountry: "ZA",
               },
               areaServed: { "@type": "Country", name: "South Africa" },
+              ...(SOCIAL_SAMEAS.length ? { sameAs: SOCIAL_SAMEAS } : {}),
             },
             {
               "@type": "WebSite",
