@@ -1,5 +1,16 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, type LucideIcon } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  CheckCircle2,
+  ClipboardCheck,
+  Database,
+  FileCheck2,
+  Layers,
+  LineChart,
+  type LucideIcon,
+  Target,
+} from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export type Capability = {
