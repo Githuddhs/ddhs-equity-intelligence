@@ -13,7 +13,7 @@ const A = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const B = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
 const VAC_A = "11111111-1111-4111-8111-111111111111";
 const CAND_A = "22222222-2222-4222-8222-222222222222";
-const TABLES = /public\.(recruitment_vacancies|recruitment_candidates|workforce_foundation_periods|workforce_snapshots)\b/;
+const TABLES = /(?:\bON|ALTER TABLE) public\.(recruitment_vacancies|recruitment_candidates|workforce_foundation_periods|workforce_snapshots)\b/i;
 
 /** Every ENABLE RLS / CREATE / DROP POLICY statement for the four tables, in migration order. */
 function migrationRules(): string[] {
