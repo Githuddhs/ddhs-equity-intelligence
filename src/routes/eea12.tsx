@@ -26,7 +26,7 @@ import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/eea12")({
   staticData: { sitemap: true },
-  head: () => pageHead({ path: "/eea12", title: "EEA12 Workforce Analysis Tool | DDHS Equity Intelligence", description: "Free EEA12 workforce analysis: compare each occupational level with gazetted sectoral targets and provincial EAP, and rank designated groups for the next appointment.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "EEA12 Workforce Analysis Tool", "path": "/eea12"}] }),
+  head: () => pageHead({ path: "/eea12", title: "EEA12 Workforce Analysis Tool | DDHS Equity Intelligence", description: "EEA12 workforce analysis: compare each occupational level with gazetted sectoral targets and provincial EAP, and rank designated groups for the next appointment.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "EEA12 Workforce Analysis Tool", "path": "/eea12"}] }),
   component: Eea12Page,
 });
 
