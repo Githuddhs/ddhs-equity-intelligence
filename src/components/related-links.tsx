@@ -32,6 +32,7 @@ const GROUPS = [
       { to: "/pricing", label: "Pricing" },
       { to: "/tour", label: "Site Tour" },
       { to: "/guides", label: "Employment Equity guides" },
+      { to: "/blog", label: "Blog" },
     ],
   },
 ] as const;
