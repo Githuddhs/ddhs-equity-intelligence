@@ -26,9 +26,11 @@ export type PlanContent = {
   sources?: Record<string, string> | undefined;
   /** Corrective actions recorded against goal variances (monitoring). */
   corrective?: CorrectiveAction[] | undefined;
+  /** Structured EEA12 barrier register. */
+  register?: import("@/lib/barrier-register").BarrierEntry[] | undefined;
 };
 
-export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milestones" | "signoff" | "orgSignoff" | "sources" | "corrective">; title: string; hint: string; ai: boolean }[] = [
+export const TEXT_SECTIONS: { key: Exclude<keyof PlanContent, "goals" | "milestones" | "signoff" | "orgSignoff" | "sources" | "corrective" | "register">; title: string; hint: string; ai: boolean }[] = [
   { key: "seniorManager", title: "Assigned senior manager(s)", hint: "Name and role of the senior manager(s) responsible for the plan (s24).", ai: false },
   { key: "committee", title: "EE consultative forum", hint: "Committee members, representation of designated groups, unions (s16).", ai: false },
   { key: "objectives", title: "Objectives for each year of the plan", hint: "Annual objectives that are measurable and time-bound (s20(2)(a)).", ai: true },
