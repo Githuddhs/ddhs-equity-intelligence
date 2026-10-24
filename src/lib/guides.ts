@@ -17,6 +17,8 @@ export type Guide = {
   sections: { heading: string; body: string[] }[];
   related: { to: GuideLink; label: string };
   sources: { label: string; url: string }[];
+  /** Set when a claim still needs an Employment Equity practitioner's sign-off before it is relied on. */
+  needsPractitionerReview?: string;
 };
 
 export const GUIDES_LAST_REVIEWED = "24 October 2026";
@@ -28,6 +30,7 @@ const TARGETS = { label: "Determination of sectoral numerical targets, Gazette 5
 const DOEL_REGS = { label: "Department notice: publication of the EE Regulations (15 April 2025)", url: "https://www.labour.gov.za/publication-of-the-two-sets-of-employment-equity-regulations-following-the-commencement-of-the-ee-amendment-act-no-4-of-2" };
 const PORTAL = { label: "Employment Equity Online reporting portal", url: "https://ee.labour.gov.za/" };
 const CYCLE = { label: "Department notice: 2025 reporting cycle opens 1 September 2025", url: "https://www.labour.gov.za/the-opening-of-the-2025-ee-reporting-cycle-is-imminent-%E2%80%93-employers-are-you-ready-to-submit-the-ee-reports-and-request-an-ee" };
+const CYCLE2026 = { label: "Department notice, 23 July 2026: 2026 reporting cycle — online submissions close 15 January 2027", url: "https://www.labour.gov.za/the-department-of-employment-and-labour-urges-employers-to-comply-with-employment-equity-reporting-requirements" };
 const GROUNDS = { label: "Department notice: grounds to justify failure to comply", url: "https://www.labour.gov.za/amended-employment-equity-act-(eea)-is-flexible-in-that-it-provides-grounds-to-justify-failure-to-comply" };
 
 export const GUIDES: Guide[] = [
@@ -52,6 +55,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/workforce-foundation", label: "Build one workforce record that feeds both forms" },
     sources: [ACT, PORTAL, CYCLE],
+    needsPractitionerReview: "The common-mistakes list reflects what most often causes reports to be queried in practice. It is not an official Department checklist — confirm your own submission against the current portal instructions and the Act.",
   },
   {
     slug: "understanding-2025-sectoral-targets",
@@ -73,6 +77,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/eea12", label: "Compare your workforce with sector targets and EAP" },
     sources: [TARGETS, DOEL_REGS, REGS],
+    needsPractitionerReview: "Which sector table applies to your business, how the disability provisions read against your sector, and whether to benchmark against provincial or national EAP are judgement calls. Confirm them with a practitioner before setting numerical targets.",
   },
   {
     slug: "what-happens-in-a-dg-review",
@@ -93,15 +98,18 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/evidence-governance", label: "Keep DG review evidence in one place" },
     sources: [ACT],
+    needsPractitionerReview: "The steps follow sections 43 to 45 of the Act, but what an individual reviewer asks for varies. Have a practitioner confirm your evidence pack before a review rather than after the first request.",
   },
   {
     slug: "ee-reporting-deadlines",
     title: "Employment Equity reporting deadlines",
-    description: "The yearly Employment Equity reporting cycle for designated employers in South Africa, including the January submission deadline.",
-    summary: "Designated employers report once a year. For the 2025 cycle the online window opened on 1 September 2025 and closed at midnight on 15 January 2026. Confirm the dates the Department publishes each year.",
+    description: "The yearly Employment Equity reporting cycle for designated employers in South Africa. The 2026 online window closes at midnight on 15 January 2027.",
+    summary: "Designated employers report once a year. The 2026 window opened on 1 September 2026, manual submissions closed on 1 October 2026 and online submissions close on 15 January 2027.",
     sections: [
       { heading: "The yearly cycle", body: [
         "The EEA2 covers the preceding 12-month period. The EEA2 and EEA4 are submitted together, online, while the Department's reporting window is open. The portal accepts only the EEA2 and EEA4 — the EEA12 analysis and EEA13 plan are kept by the employer, not submitted.",
+        "The Department's notice of 23 July 2026 confirms the dates for the current cycle: the reporting period opened on 1 September 2026, employers filing manually had to submit by 1 October 2026, and those reporting online have until 15 January 2027.",
+        "Build your timetable backwards from 15 January 2027 and allow time for consultation and sign-off before the final week — the online system is busiest in the last days.",
         "Dates can change, so check the Department of Employment and Labour announcement before planning your timetable.",
       ] },
       { heading: "A workable timetable", body: [
@@ -112,24 +120,32 @@ export const GUIDES: Guide[] = [
       ] },
     ],
     related: { to: "/accountability-management", label: "Track deadlines and owners" },
-    sources: [CYCLE, PORTAL, AMEND],
+    sources: [CYCLE2026, CYCLE, PORTAL, AMEND],
+    needsPractitionerReview: "The 2026 dates are confirmed against the Department's notice of 23 July 2026 and the online reporting portal. The notice for the next cycle had not been published when this guide was last reviewed — confirm its dates before relying on this timetable.",
   },
   {
     slug: "reasonable-grounds-for-not-meeting-targets",
     title: "Reasonable grounds for not meeting targets",
     description: "How South African employers can justify not meeting Employment Equity targets, and what evidence to keep.",
-    summary: "If you do not meet your numerical targets you may rely on reasonable grounds — but only if you can show them with evidence.",
+    summary: "If you do not meet a numerical target you may rely on one of the seven grounds the April 2025 Regulations list — but only with evidence that the ground applies to you.",
     sections: [
-      { heading: "Grounds that are generally recognised", body: [
-        "Section 42(4) of the amended Act and the April 2025 Regulations recognise grounds such as insufficient recruitment opportunities, insufficient promotion opportunities, and insufficient people from designated groups with the relevant qualifications, experience or capacity despite reasonable recruitment efforts. Other grounds in the Regulations cover matters such as mergers, acquisitions and the impact of economic conditions — read the Regulations for the full list and conditions.",
+      { heading: "The grounds the Regulations list", body: [
+        "Regulation 16(5) of the April 2025 Regulations lists seven justifiable reasonable grounds for not complying with a target: insufficient recruitment opportunities; insufficient promotion opportunities; insufficient people from designated groups with the relevant formal qualifications, prior learning, relevant experience or capacity to acquire, within a reasonable time, the ability to do the job; the impact of a CCMA award or court order; a transfer of a business; mergers or acquisitions; and the impact of economic conditions on the business.",
+        "Regulation 16(4) requires you to state the ground you rely on in your EEA15 application for a compliance certificate.",
+      ] },
+      { heading: "What the protection covers, and what it does not", body: [
+        "Regulation 9(14) states that a designated employer will incur no penalty or any form of disadvantage if there are reasonable grounds to justify its failure to comply with any target, as contemplated by section 53(6)(b) read with section 42(4) of the Act.",
+        "The protection is narrow and tied to the target you have justified. Section 42(4) lets you raise a reasonable ground to justify a failure to comply in an assessment of compliance or in court proceedings, and section 53(6)(b) allows a compliance certificate to be issued where, for any target you did not meet, you have raised such a ground.",
+        "It does not cover your other duties. You must still submit the annual report, consult employees, prepare and implement a plan and address income differentials. Section 53(6) also requires that your report was submitted, that there was no CCMA or court finding of unfair discrimination in the previous 12 months and no CCMA minimum-wage award in that period. Shortfalls there can still bring a Director-General review, a compliance order or a Labour Court fine.",
       ] },
       { heading: "Evidence matters most", body: [
         "Keep advertisements, shortlists, interview records, vacancy numbers and retrenchment or restructuring decisions. Record the reason when it happens and link it to the affected target.",
-        "A ground stated without supporting records is unlikely to be accepted. Under the Regulations, an employer with reasonable grounds for missing a target incurs no penalty or disadvantage.",
+        "A ground stated without supporting records is unlikely to be accepted.",
       ] },
     ],
     related: { to: "/eea13-planning", label: "Record grounds against each EE plan target" },
-    sources: [REGS, GROUNDS, ACT],
+    sources: [REGS, ACT, GROUNDS],
+    needsPractitionerReview: "Whether a ground is reasonable on your facts is decided by the Department, the CCMA or a court — not by us. Have an Employment Equity practitioner or attorney confirm the ground you intend to rely on before you submit an EEA15 or answer a DG review.",
   },
   {
     slug: "eea12-workforce-analysis-explained",
@@ -146,6 +162,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/eea12", label: "Run your EEA12 analysis" },
     sources: [ACT, REGS],
+    needsPractitionerReview: "Showing gaps in percentage points is DDHS's presentation choice, not a format prescribed by the Act. Confirm with a practitioner how you intend to present gaps in a report or before a DG review.",
   },
   {
     slug: "writing-an-ee-plan-eea13",
@@ -162,6 +179,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/eea13-planning", label: "Plan goals and timelines" },
     sources: [ACT, REGS, DOEL_REGS],
+    needsPractitionerReview: "The Act sets what a plan must contain, but whether your goals are reasonable and defensible depends on your workforce, sector and vacancies. Have a practitioner review a draft plan before it is signed off.",
   },
   {
     slug: "consulting-the-ee-forum",
@@ -178,6 +196,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/evidence-governance", label: "Store consultation evidence" },
     sources: [ACT],
+    needsPractitionerReview: "Who counts as representative in your workplace — which union, which forum, which occupational levels — depends on your own facts. Confirm your consultation approach with a practitioner.",
   },
   {
     slug: "income-differentials-and-the-eea4",
@@ -194,6 +213,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/workforce-foundation", label: "Keep pay data secure and report-ready" },
     sources: [ACT, REGS],
+    needsPractitionerReview: "The Act does not define when a differential is 'disproportionate', and the measures suggested here are practice rather than a prescribed method. Have a practitioner review your pay analysis before you commit measures to a plan.",
   },
   {
     slug: "role-of-the-assigned-senior-manager",
@@ -210,6 +230,7 @@ export const GUIDES: Guide[] = [
     ],
     related: { to: "/executive-intelligence", label: "Give leadership a clear progress view" },
     sources: [ACT],
+    needsPractitionerReview: "Section 24 requires authority and means, but how far that extends in your organisation is a management decision. Confirm the assignment and its mandate with a practitioner.",
   },
 ];
 

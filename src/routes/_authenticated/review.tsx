@@ -84,6 +84,7 @@ const GROUPS: Group[] = [
       { id: "tour-wording", to: "/tour", label: "Site tour wording", note: "I wrote the nine steps from what the platform does — read them and send changes." },
       { id: "consultant-wording", to: "/virtual-consultant", label: "Consultant profile", note: "Written in general terms. Send a real name, photo, qualifications and experience and I'll put them in." },
       { id: "vat", to: "/pricing", label: "VAT on prices", note: "The pricing page says prices exclude VAT, while invoices add 15% VAT. Tell me which is correct and I'll match them." },
+      { id: "guides-practitioner", to: "/guides", label: "Guide claims need a practitioner", note: "All ten guides carry a 'Needs practitioner review' note naming the claim that still needs sign-off — the reasonable-grounds scope, sector and EAP choices, and the next cycle's dates. A practitioner should read them before publication." },
       { id: "hrfile", to: "/workforce-foundation", label: "Your HR export columns", note: "The Organisation, Faculty, Division, Department and Section menus only appear once your HR file has those columns." },
       { id: "demo", to: "/clients", label: "Demo account", note: "demo@ddhs.co.za still exists with no data. Say the word and I'll remove it." },
       { id: "managers", to: "/clients", label: "Senior manager invites", note: "Real senior managers still need inviting and granting manager access." },

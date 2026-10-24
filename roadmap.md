@@ -20,6 +20,7 @@
 - DG review price: confirm real price (placeholder R4,025 incl. VAT).
 - sdm@ddhs.co.za activation: password-reset link sent to a reachable address; Sello must open it and set a password before staff sign-in works.
 - Publish decision: published site still runs the older build (shows "Sign up"); preview is current.
+- [x] Guides verification: 2026/27 deadline confirmed against the Department notice of 23 July 2026 and the online portal (manual 1 October 2026, online 15 January 2027); reasonable-grounds guide rewritten around the seven grounds in regulation 16(5) and the narrow scope of regulation 9(14) / s42(4) / s53(6); every guide now carries a "Needs practitioner review" note naming the claim that still needs a practitioner's sign-off. Browser-checked: badges on all 10 cards, both rewritten guides render with correct dates and regulation numbers, no page errors, build OK.
 
 ## Done
 - Capability stack: 11 layers — added EE Plans (/plans), DG Review (/dg-review), Leadership Dashboard (/leadership-dashboard) and Leadership Report (/leadership-report); removed EEA12 Analysis / EE Plans / DG Review from the site top menu and the logged-in app header (clients reach them from My portal cards and the dashboard). Page eyebrows renumbered "Capability N of 11"; footer Platform list includes the leadership pages. Removed the duplicated "Sign in" header link from all eight capability pages (AuthCta already renders one).
