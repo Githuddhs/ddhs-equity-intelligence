@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import type { Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
+import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";
 import { FORECAST_FIELDS, baselineByLevel, blankForecast, forecastLevel, movementHistory, recruitmentFunnel, type ForecastRow } from "@/lib/goal-forecast";
 
 const cell = "h-8 w-16 rounded border border-input bg-background px-1 text-right text-sm";
@@ -37,7 +38,7 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
       <h2 className="font-display text-lg font-semibold">Numerical goals and forecast</h2>
-      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted sector target; Semi-skilled and Unskilled use provincial EAP as the target. Blank inputs are flagged, never filled in.</p>
+      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Current workforce → forecast movements → available opportunities → EE gap → annual goal. Baselines come from your latest saved Workforce Foundation period{period ? ` (${period.period_start} to ${period.period_end})` : ""}; percentages are designated-group shares. Top four levels use the gazetted 5-year sector targets for {SECTOR_TARGET_PERIOD_LABEL} ({SECTOR_TARGET_SOURCE_LABEL}); Semi-skilled and Unskilled use provincial EAP as the target ({EAP_SOURCE_LABEL}). Blank inputs are flagged, never filled in.</p>
       {error && <p className="mt-3 text-sm text-destructive">Could not load workforce data.</p>}
       {data && !period && <p className="mt-3 text-sm font-semibold text-destructive">No saved Workforce Foundation period — <Link to="/workforce" className="underline">add employee records</Link> to get baselines.</p>}
 
@@ -54,8 +55,10 @@ export function GoalForecast({ forecast, onChange, sector, start, end }: { forec
                 <td className="py-2 pr-2 font-medium">{r.level}</td>
                 <td>{r.baseline ? r.baseline.headcount : <span className="text-destructive">Missing</span>}</td>
                 <td>{pct(r.baseline?.share ?? null)}</td>
-                <td>{pct(r.benchmark)}</td>
-                <td>{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}{r.targetSource === "eap" && <span className="block text-xs text-muted-foreground">Provincial EAP</span>}</td>
+                <td>{pct(r.benchmark)}{r.benchmark !== null && <span className="block whitespace-nowrap text-xs text-muted-foreground">{EAP_SOURCE_LABEL}</span>}</td>
+                <td>{r.target === null ? <span className="text-destructive">Missing</span> : `${r.target}%`}{r.targetSource === "eap"
+                  ? <span className="block text-xs text-muted-foreground">Provincial EAP · {EAP_SOURCE_LABEL}</span>
+                  : <span className="block text-xs text-muted-foreground">Sector target · {SECTOR_TARGET_SOURCE_LABEL}<br />{SECTOR_TARGET_PERIOD_LABEL}</span>}</td>
                 <td><input aria-label={`${r.level} five-year goal`} className={cell} inputMode="decimal" value={f.goal} onChange={(e) => set(r.level, { goal: e.target.value })} /></td>
                 {Array.from({ length: years }, (_, i) => <td key={i}><input aria-label={`${r.level} year ${i + 1}`} className={cell} inputMode="decimal" value={f.milestones[i] ?? ""} onChange={(e) => { const m = [...f.milestones]; m[i] = e.target.value; set(r.level, { milestones: m }); }} /></td>)}
                 {FORECAST_FIELDS.map(([k, l]) => <td key={k}><input aria-label={`${r.level} ${l}`} className={cell} inputMode="numeric" value={f[k]} onChange={(e) => set(r.level, { [k]: e.target.value })} /></td>)}

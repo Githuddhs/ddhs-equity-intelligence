@@ -33,6 +33,9 @@ export const LEVEL_TO_TARGET_KEY: Partial<Record<string, TargetKey>> = {
 };
 
 // EAP by province — Statistics South Africa, QLFS Q3 2024.
+export const EAP_SOURCE_LABEL = "Stats SA QLFS Q3 2024";
+export const SECTOR_TARGET_SOURCE_LABEL = "GN 6124, GG 52514 (15 Apr 2025)";
+export const SECTOR_TARGET_PERIOD_LABEL = "2025–2029";
 export type EapKey = "MA" | "MC" | "MI" | "MW" | "FA" | "FC" | "FI" | "FW" | "FNM" | "FNF";
 export const PROVINCE_EAP: Record<string, Record<EapKey, number>> = {
   "National": { MA: 43.5, MC: 4.6, MI: 1.7, MW: 4.1, FA: 37.5, FC: 4.2, FI: 1.0, FW: 3.4, FNM: 0, FNF: 0 },
