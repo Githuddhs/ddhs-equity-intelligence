@@ -7,6 +7,7 @@ import { emptyContent, type PlanContent } from "@/lib/ee-plan";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/view/$token")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Shared client view — DDHS Equity Intelligence" },

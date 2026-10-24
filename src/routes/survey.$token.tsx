@@ -11,6 +11,7 @@ import {
 } from "@/lib/barrier";
 
 export const Route = createFileRoute("/survey/$token")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Employment Equity barrier analysis survey — DDHS Equity Intelligence" },

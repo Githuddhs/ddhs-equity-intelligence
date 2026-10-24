@@ -19,6 +19,7 @@ function itnSignature(entries: [string, string][], passphrase: string): string {
 }
 
 export const Route = createFileRoute("/api/public/hooks/payfast-itn")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

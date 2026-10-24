@@ -16,6 +16,7 @@ import { DOEL_PORTAL_URL } from "@/lib/doel-forms";
 import { reportText } from "@/lib/report-download";
 
 export const Route = createFileRoute("/_authenticated/doel-submissions")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "DoEL submissions (EEA2 & EEA4) — DDHS Equity Intelligence" },

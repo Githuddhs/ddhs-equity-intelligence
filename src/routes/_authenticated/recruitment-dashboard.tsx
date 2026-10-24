@@ -7,6 +7,7 @@ import { STATUS_LABEL, type VacancyStatus } from "@/lib/recruitment";
 import { dashboardReport, recruitmentDashboard, type C, type V } from "@/lib/recruitment-phase3";
 
 export const Route = createFileRoute("/_authenticated/recruitment-dashboard")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Recruitment Suite Dashboard — DDHS Equity Intelligence" },

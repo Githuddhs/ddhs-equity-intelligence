@@ -13,6 +13,7 @@ import { dgFromEvidence, latestEvidence } from "@/lib/evidence";
 import { DG_ITEMS, normaliseContent, scoreAnswers, TEXT_SECTIONS, type DgAnswer, type PlanContent , dgFromAnalyses } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/dg-review")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Director-General review readiness — DDHS Equity Intelligence" },

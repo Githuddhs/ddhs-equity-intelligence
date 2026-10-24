@@ -12,6 +12,7 @@ import { daysUntil, normaliseContent, type Milestone } from "@/lib/ee-plan";
 import { unitsForPlan, planMatchesFilter } from "@/lib/plan-units";
 
 export const Route = createFileRoute("/_authenticated/plan-report")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Organisation EE plan report — DDHS Equity Intelligence" },

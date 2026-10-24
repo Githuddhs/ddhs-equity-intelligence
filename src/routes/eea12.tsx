@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { PROVINCE_EAP } from "@/lib/sectors";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SECTORS, LEVEL_TO_TARGET_KEY, type Targets, type TargetKey } from "@/lib/sectors";
@@ -24,16 +25,8 @@ import { EapLevelExplanation } from "@/components/eap-level-explanation";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/eea12")({
-  head: () => ({
-    meta: [
-      { title: "EEA12 Workforce Analysis Tool — DDHS Equity Intelligence" },
-      { name: "description", content: "Analyse an occupational level against sectoral and EAP targets and see which designated groups to prioritise for the next appointment." },
-      { property: "og:title", content: "EEA12 Workforce Analysis Tool — DDHS Equity Intelligence" },
-      { property: "og:description", content: "Sectoral targets, EAP variance and next-appointment ranking for Employment Equity compliance." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/eea12", title: "EEA12 Workforce Analysis Tool | DDHS Equity Intelligence", description: "EEA12 workforce analysis: compare each occupational level with gazetted sectoral targets and provincial EAP, and rank designated groups for the next appointment.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "EEA12 Workforce Analysis Tool", "path": "/eea12"}] }),
   component: Eea12Page,
 });
 
@@ -204,7 +197,7 @@ function Eea12Page() {
       <main className="mx-auto max-w-7xl space-y-10 px-6 py-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-teal">EEA12 Workforce Analysis</p>
-          <h1 className="page-title mt-2 text-primary">Occupational level progress check</h1>
+          <h1 className="page-title mt-2 text-primary">EEA12 workforce analysis: occupational level progress check</h1>
           <p className="page-lead mt-3 max-w-3xl text-muted-foreground">
             Enter your headcount for one occupational level. The tool checks it against sectoral targets first, then the EAP,
             and ranks which designated groups to prioritise for the next appointment.

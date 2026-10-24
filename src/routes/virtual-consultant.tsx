@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -7,16 +8,8 @@ import { submitQuoteRequest } from "@/lib/quote.functions";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/virtual-consultant")({
-  head: () => ({
-    meta: [
-      { title: "Virtual EE Consultant — DDHS Equity Intelligence" },
-      { name: "description", content: "Book remote, hourly Employment Equity consulting: EEA12, EE plans, DG review readiness and EEA2/EEA4 support." },
-      { property: "og:title", content: "Virtual EE Consultant — DDHS Equity Intelligence" },
-      { property: "og:description", content: "Book hourly Employment Equity expertise that works from your own platform data." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/virtual-consultant", title: "Online Employment Equity Consultant | DDHS Virtual EE Consultant", description: "Book remote, hourly Employment Equity consulting for EEA12 analysis, EE plans, DG review readiness and EEA2/EEA4 reporting support.", crumbs: [{"name": "Services", "path": "/services/ee-advisory"}, {"name": "Online Employment Equity Consultant", "path": "/virtual-consultant"}] }),
   component: ConsultantPage,
 });
 
@@ -91,7 +84,7 @@ function ConsultantPage() {
     <main className="mx-auto max-w-6xl px-6 py-10">
       <BrandMark className="mb-6" />
       <Link to="/pricing" search={{ paid: false, cancelled: false }} className="text-sm font-semibold text-teal">← Back to pricing</Link>
-      <h1 className="section-title mt-3 text-primary">Virtual EE Consultant</h1>
+      <h1 className="section-title mt-3 text-primary">Virtual Employment Equity Consultant</h1>
       <p className="mt-2 max-w-3xl text-muted-foreground">
         Remote, on-demand Employment Equity expertise by the hour — no monthly commitment. Every session works from your own platform data: workforce profile, EE plan, barrier analysis and compliance deadlines.
       </p>

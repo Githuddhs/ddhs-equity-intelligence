@@ -8,6 +8,7 @@ import { AppHeader } from "@/components/app-header";
 import { exportEea12Pdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/history")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "EEA12 analysis history — DDHS Equity Intelligence" },

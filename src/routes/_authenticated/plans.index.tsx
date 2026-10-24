@@ -6,6 +6,7 @@ import { AppHeader } from "@/components/app-header";
 import { emptyContent } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/plans/")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Employment Equity plans — DDHS Equity Intelligence" },

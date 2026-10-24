@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead, SITE_URL } from "@/lib/seo";
 
 export const SERVICES = [
   { to: "/services/saas-subscriptions", label: "SaaS subscriptions" },
@@ -29,20 +31,22 @@ export type ServiceContent = {
 };
 
 export function serviceHead(path: string, title: string, description: string) {
-  const full = `${title} — DDHS Equity Intelligence`;
-  const url = `https://ddhs-equity-intelligence.lovable.app${path}`;
-  return {
-    meta: [
-      { title: full },
-      { name: "description", content: description },
-      { property: "og:title", content: full },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: url },
-      { name: "twitter:card", content: "summary" },
-    ],
-    links: [{ rel: "canonical", href: url }],
-  };
+  const isModule = path === "/services/recruitment-suite";
+  return pageHead({
+    path,
+    title: `${title} | DDHS Equity Intelligence`,
+    description,
+    crumbs: [isModule ? { name: "Platform", path: "/" } : { name: "Services", path: "/services/saas-subscriptions" }, { name: title, path }],
+    jsonLd: [{
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: title,
+      description,
+      url: `${SITE_URL}${path}`,
+      areaServed: { "@type": "Country", name: "South Africa" },
+      provider: { "@type": "Organization", name: "DDHS Equity Intelligence (Pty) Ltd", url: SITE_URL },
+    }],
+  });
 }
 
 export function ServicePage({ c }: { c: ServiceContent }) {
@@ -154,6 +158,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </section>
       </main>
 
+      <RelatedLinks current={c.current} />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

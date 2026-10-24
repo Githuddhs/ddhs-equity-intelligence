@@ -26,3 +26,4 @@
 - Recruitment Suite vacancies and candidates are owner-only; public applicants reach a vacancy only through security-definer token functions and upload CVs into a private bucket folder named by vacancy id, so applicant data never needs a public read policy.
 - Recruitment appointments are gated by a database trigger requiring an approved, named human review for that candidate on the vacancy, so the UI cannot be bypassed to appoint without review.
 - Recruitment risk flags, evidence packs and the leadership dashboard are derived on read from vacancy and candidate rows (no stored copies), and high-severity flags only add an acknowledgement to the human review, never an automatic decision.
+- Public page metadata uses `pageHead` in src/lib/seo.ts (canonical, share card, breadcrumbs) and every route declares `staticData.sitemap`; the router-derived /sitemap.xml follows these, so private sections stay excluded via "exclude-subtree" plus noindex.

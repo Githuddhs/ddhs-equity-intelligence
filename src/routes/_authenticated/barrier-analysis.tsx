@@ -15,6 +15,7 @@ import { exportBarrierExcel, exportBarrierPdf } from "@/lib/barrier-export";
 import { downloadBarrierResponseDoc } from "@/lib/barrier-response-doc";
 
 export const Route = createFileRoute("/_authenticated/barrier-analysis")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "EEA13 barrier analysis — DDHS Equity Intelligence" },

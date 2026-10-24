@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage, serviceHead } from "@/components/service-page";
 
 export const Route = createFileRoute("/services/implementation")({
+  staticData: { sitemap: true },
   head: () => serviceHead("/services/implementation", "Implementation Services", "Once-off DDHS implementation and onboarding: data mapping, organisation structure set-up, user training and a first full EE reporting cycle."),
   component: () => (
     <ServicePage c={{

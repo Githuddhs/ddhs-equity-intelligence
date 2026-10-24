@@ -11,6 +11,7 @@ import { STATUS_LABEL, type Priority, type VacancyStatus } from "@/lib/recruitme
 import { loadBaseline, priorityFor, type Baseline } from "@/lib/recruitment-data";
 
 export const Route = createFileRoute("/_authenticated/recruitment")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Recruitment Suite — vacancies — DDHS Equity Intelligence" },

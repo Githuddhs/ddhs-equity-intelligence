@@ -34,6 +34,7 @@ import {
 } from "@/lib/workforce";
 
 export const Route = createFileRoute("/_authenticated/workforce")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Workforce Data — My portal — DDHS Equity Intelligence" },

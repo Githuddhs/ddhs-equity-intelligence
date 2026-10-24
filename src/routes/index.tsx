@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SERVICES } from "@/components/service-page";
 import { InstallApp } from "@/components/install-app";
@@ -28,24 +29,8 @@ import { BrandMark } from "@/components/brand-mark";
 import { SiteNav } from "@/components/site-nav";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "DDHS Equity Intelligence — Employment Equity, Managed Intelligently" },
-      {
-        name: "description",
-        content:
-          "Turn workforce data into measurable plans, accountable actions, audit-ready evidence and executive insight. Purpose-built for South African Employment Equity workflows.",
-      },
-      { property: "og:title", content: "DDHS Equity Intelligence — Employment Equity, Managed Intelligently" },
-      {
-        property: "og:description",
-        content:
-          "Turn workforce data into measurable plans, accountable actions, audit-ready evidence and executive insight.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/", title: "Employment Equity Software South Africa | DDHS Equity Intelligence", description: "AI-assisted Employment Equity software for South African employers: EEA12 workforce analysis, EEA13 EE plans, DoEL reporting, DG review evidence and executive insight." }),
   component: Index,
 });
 

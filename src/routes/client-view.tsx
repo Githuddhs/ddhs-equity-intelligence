@@ -4,8 +4,10 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/client-view")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Client view — DDHS Equity Intelligence" },
       { name: "description", content: "Open your organisation's read-only Employment Equity view and reports with a private link — no sign-in needed." },
       { property: "og:title", content: "Client view — DDHS Equity Intelligence" },

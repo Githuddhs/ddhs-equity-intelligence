@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/staff-login")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Staff sign-in — DDHS Equity Intelligence" },

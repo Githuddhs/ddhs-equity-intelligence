@@ -1,3 +1,5 @@
+import { RelatedLinks } from "@/components/related-links";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -14,24 +16,8 @@ import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/accountability-management")({
-  head: () => ({
-    meta: [
-      { title: "Accountability Management — DDHS Equity Intelligence" },
-      {
-        name: "description",
-        content:
-          "Named owners for every Employment Equity obligation: assigned senior managers, consultative forum duties, deadline alerts and a clear record of who committed to what.",
-      },
-      { property: "og:title", content: "Accountability Management — DDHS Equity Intelligence" },
-      {
-        property: "og:description",
-        content:
-          "Every measure, report and review has a named owner and a date — so Employment Equity stops being everyone's job and nobody's.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  head: () => pageHead({ path: "/accountability-management", title: "Employment Equity Accountability & Deadlines | DDHS", description: "Named owners for every Employment Equity obligation: assigned senior managers, EE consultative forum duties, DoEL deadline reminders and a sign-off trail.", crumbs: [{"name": "Platform", "path": "/#platform"}, {"name": "Employment Equity Accountability & Deadlines", "path": "/accountability-management"}] }),
   component: AccountabilityPage,
 });
 
@@ -234,6 +220,7 @@ function AccountabilityPage() {
         </section>
       </main>
 
+      <RelatedLinks current="/accountability-management" />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
           <BrandMark />

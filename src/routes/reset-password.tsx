@@ -5,8 +5,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/reset-password")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Reset password — DDHS Equity Intelligence" },
       { name: "description", content: "Set a new password for your DDHS Equity Intelligence account." },
       { property: "og:title", content: "Reset password — DDHS Equity Intelligence" },

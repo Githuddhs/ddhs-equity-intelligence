@@ -8,6 +8,7 @@ import { useAiStream } from "@/components/use-ai-stream";
 import { gatherAppData, gatherDocuments, parseEvidence, type SavedEvidence, type Evidence } from "@/lib/evidence";
 
 export const Route = createFileRoute("/_authenticated/evidence")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Document evidence — DDHS Equity Intelligence" },

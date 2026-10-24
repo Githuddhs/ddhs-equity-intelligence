@@ -38,6 +38,7 @@ function Journey() {
 }
 
 export const Route = createFileRoute("/services/recruitment-suite")({
+  staticData: { sitemap: true },
   head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "An integrated transformation applicant tracking system for South African employers, combining ATS, Employment Equity intelligence, selection governance, analytics and audit-ready evidence."),
   component: () => (
     <ServicePage c={{

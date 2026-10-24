@@ -8,6 +8,7 @@ import { ClientProfileAdmin, ClientPortalData } from "@/components/client-portal
 import { TourInvite } from "@/components/tour-invite";
 
 export const Route = createFileRoute("/_authenticated/clients_/$id")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Manage client — DDHS Equity Intelligence" },

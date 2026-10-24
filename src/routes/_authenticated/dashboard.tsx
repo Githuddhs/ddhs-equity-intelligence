@@ -15,6 +15,7 @@ import { aggregate, describeFilter } from "@/lib/org-units";
 import { GROUPS, grandTotal, groupTotals, normaliseWorkforce } from "@/lib/workforce";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Compliance dashboard — DDHS Equity Intelligence" },

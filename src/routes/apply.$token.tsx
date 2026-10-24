@@ -7,6 +7,7 @@ import { RACES } from "@/lib/recruitment";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/apply/$token")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Apply for this vacancy — DDHS Equity Intelligence" },

@@ -78,7 +78,35 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  staticData: { sitemap: false },
   head: () => ({
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://ddhs-equity-intelligence.lovable.app/#org",
+              name: "DDHS Equity Intelligence",
+              legalName: "DDHS Equity Intelligence (Pty) Ltd",
+              url: "https://ddhs-equity-intelligence.lovable.app",
+              logo: "https://ddhs-equity-intelligence.lovable.app/icons/icon-512.png",
+              email: "sdm@ddhs.co.za",
+              areaServed: { "@type": "Country", name: "South Africa" },
+            },
+            {
+              "@type": "WebSite",
+              name: "DDHS Equity Intelligence",
+              url: "https://ddhs-equity-intelligence.lovable.app",
+              inLanguage: "en-ZA",
+              publisher: { "@id": "https://ddhs-equity-intelligence.lovable.app/#org" },
+            },
+          ],
+        }),
+      },
+    ],
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },

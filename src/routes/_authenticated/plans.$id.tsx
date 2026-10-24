@@ -18,6 +18,7 @@ import { PlanTimeline } from "@/components/plan-timeline";
 import { exportPlanPdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "EE plan builder — DDHS Equity Intelligence" },

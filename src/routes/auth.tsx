@@ -17,9 +17,11 @@ const publicOrigin = () => {
 };
 
 export const Route = createFileRoute("/auth")({
+  staticData: { sitemap: false },
   validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s["next"]) }),
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Sign in — DDHS Equity Intelligence" },
       { name: "description", content: "Sign in to save EEA12 analyses and AI summaries." },
       { property: "og:title", content: "Sign in — DDHS Equity Intelligence" },

@@ -19,6 +19,7 @@ Given one occupational level's headcount, sectoral targets and EAP comparisons, 
 Base figures strictly on the data given; do not invent numbers. Keep it under 450 words. Note that this is guidance, not legal advice.`;
 
 export const Route = createFileRoute("/api/eea-insights")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {
