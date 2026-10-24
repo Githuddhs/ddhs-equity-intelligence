@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { CAPABILITIES, type Capability } from "./capability-explainer";
+import { CAPABILITIES, capabilityCta, type Capability } from "./capability-explainer";
+
 
 const LIFECYCLE = ["Data", "Analyse", "Plan", "Implement", "Monitor", "Report", "Evidence"];
 
