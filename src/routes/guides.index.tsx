@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { GUIDES_LAST_REVIEWED } from "@/lib/guides";
+import { GUIDES_LAST_REVIEWED, PRACTITIONER_APPROVED_GUIDES } from "@/lib/guides";
 import { releasedGuides } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
@@ -33,7 +33,7 @@ function GuidesIndex() {
           <li key={g.slug}>
             <Link to="/guides/$slug" params={{ slug: g.slug }} className="block h-full rounded-2xl border border-border p-5 hover:border-teal">
               <h2 className="font-display text-lg font-semibold text-primary">{g.title}</h2>
-              {g.needsPractitionerReview && (
+              {g.needsPractitionerReview && !PRACTITIONER_APPROVED_GUIDES.includes(g.slug) && (
                 <span className="mt-2 inline-block rounded-full border border-teal/40 px-2 py-0.5 text-[11px] font-semibold text-teal">Needs practitioner review</span>
               )}
               <p className="mt-2 text-sm text-muted-foreground">{g.summary}</p>
