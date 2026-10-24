@@ -357,13 +357,12 @@ function Index() {
                 </div>
                 <h3 className="card-title mt-5 text-primary">{card.title}</h3>
                 <p className="mt-2 text-muted-foreground">{card.body}</p>
-                <Link
-                  to={card.href}
+                <CapabilityLink
+                  href={card.href}
+                  prefix="Solved with"
+                  capability={card.capability}
                   className="group mt-5 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
-                >
-                  Solved with {card.capability}{"\u00A0"}
-                  <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                />
               </div>
             ))}
           </div>
@@ -558,13 +557,12 @@ function Index() {
                 <div className="min-w-0">
                   <h3 className="card-title text-primary">{c.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
-                  <Link
-                    to={c.href}
+                  <CapabilityLink
+                    href={c.href}
+                    prefix="Delivered by"
+                    capability={c.capability}
                     className="group mt-3 inline-block text-sm font-semibold text-teal transition-colors hover:text-primary"
-                  >
-                    Delivered by {c.capability}{"\u00A0"}
-                    <ArrowRight className="inline h-4 w-4 -mb-0.5 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
+                  />
                 </div>
               </div>
             ))}
