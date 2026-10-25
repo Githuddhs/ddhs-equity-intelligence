@@ -11,7 +11,7 @@ import { EMPLOYEE_FIELDS, blankFoundation, fieldLabel, foundationSnapshot, type 
 
 // Reuse the real save_workforce_foundation SQL from the handoff integration test.
 const src = readFileSync(new URL("./recruitment-handoff.integration.test.ts", import.meta.url), "utf8");
-const SCHEMA = src.slice(src.indexOf("const SCHEMA = `") + 16, src.indexOf("\n`;")).replace(/\$\{UID\}/g, "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa");
+const SCHEMA = src.slice(src.indexOf("const SCHEMA = `") + 16, src.indexOf("\n`;")).replace(/\$\{UID\}/g, "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa").replace(/\$\{CAND\}/g, "cccccccc-cccc-4ccc-8ccc-cccccccccccc");
 const LATEST = `select * from workforce_snapshots where user_id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' order by snapshot_date desc limit 1`;
 
 const row: Employee = {
