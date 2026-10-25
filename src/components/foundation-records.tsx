@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LEVELS } from "@/lib/workforce";
 import { PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { blankFoundation, foundationSchema, employeeSchema, paySchema, movementSchema, validateFoundation, foundationSnapshot, downloadFoundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, fieldLabel, organisationSchema, ORG_LABELS, DESIGNATED_STATUSES, EMPLOYMENT_STATUSES, CONTRACT_TYPES, WORK_PATTERNS, type Foundation } from "@/lib/foundation";
-import { FOUNDATION_ACCEPT, importFoundationFile } from "@/lib/foundation-import";
+import { FOUNDATION_ACCEPT, importFoundationFile, importSnapshotRecords } from "@/lib/foundation-import";
 import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
 
@@ -48,16 +48,15 @@ export function FoundationRecords() {
   const [importSection, setImportSection] = useState<"employees" | "remuneration" | "movements">("employees");
   const save = useServerFn(saveFoundation), remove = useServerFn(deleteFoundation);
   useEffect(() => { if (!initialised && records[0]) { setForm(records[0]); setInitialised(true); } }, [records, initialised]);
-  // A snapshot file that lists individual employees also fills the employee records, for review before saving.
+  // A snapshot file also fills whatever employee, pay, movement and organisation records it contains, for review before saving.
   useEffect(() => {
     const onSnapshot = async (e: Event) => {
       const f = (e as CustomEvent<File>).detail;
       try {
-        const fresh = await importFoundationFile(f, { ...form, employees: [] }, "employees");
-        if (!fresh.employees.length) return;
-        const next = { ...form, employees: fresh.employees };
-        update(next);
-        toast.success(`${next.employees.length} employee records filled from ${f.name}. Review them, then save the reporting period.`);
+        const { foundation, filled } = await importSnapshotRecords(f, form);
+        if (!filled.length) return;
+        update(foundation);
+        toast.success(`Filled ${filled.join(", ")} from ${f.name}. Review them, then save the reporting period.`);
       } catch { /* headcount-only file: no individual records to copy */ }
     };
     window.addEventListener(SNAPSHOT_FILE_EVENT, onSnapshot);

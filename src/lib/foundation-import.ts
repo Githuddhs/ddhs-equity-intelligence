@@ -1,4 +1,4 @@
-import { EMPLOYEE_LABELS, ORG_LABELS, foundationSchema, foundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, organisationSchema, type Foundation } from "@/lib/foundation";
+import { EMPLOYEE_LABELS, ORG_LABELS, blankFoundation, foundationSchema, foundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, organisationSchema, type Foundation } from "@/lib/foundation";
 import { extractPdfText } from "@/lib/workforce.functions";
 
 export const FOUNDATION_ACCEPT = ".xlsx,.xls,.xlsm,.xlsb,.ods,.docx,.pdf,.csv,.tsv,.txt,.md,.json,.html,.htm";
@@ -100,4 +100,26 @@ function applyTables(tables: Rows[], current: Foundation, section: "employees" |
   }
   if (!matched) throw new Error("No recognised workforce records found. Tables need an Employee ID column and named fields. Scanned PDFs and narrative-only documents cannot populate employee records.");
   return foundationSchema.parse(next);
+}
+export type SnapshotFill = { foundation: Foundation; filled: string[] };
+/**
+ * Snapshot uploads fill only what the file actually contains: record lists the file supplies replace those on screen,
+ * organisation fields and period dates are copied only when non-blank, and everything else is left untouched.
+ */
+export function mergeSnapshotRecords(current: Foundation, fromFile: Foundation): SnapshotFill {
+  const next: Foundation = { ...current, organisation: { ...current.organisation } };
+  const filled: string[] = [];
+  if (fromFile.employees.length) { next.employees = fromFile.employees; filled.push(`${fromFile.employees.length} employee records`); }
+  if (fromFile.remuneration.length) { next.remuneration = fromFile.remuneration; filled.push(`${fromFile.remuneration.length} pay records`); }
+  if (fromFile.movements.length) { next.movements = fromFile.movements; filled.push(`${fromFile.movements.length} movement records`); }
+  const org = Object.entries(fromFile.organisation).filter(([, v]) => v.trim());
+  for (const [k, v] of org) (next.organisation as Record<string, string>)[k] = v;
+  if (org.length) filled.push(`${org.length} organisation details`);
+  for (const k of ["period_start", "period_end", "snapshot_date"] as const) if (fromFile[k]) next[k] = fromFile[k];
+  return { foundation: next, filled };
+}
+
+export async function importSnapshotRecords(file: File, current: Foundation): Promise<SnapshotFill> {
+  const fromFile = await importFoundationFile(file, blankFoundation(), "employees");
+  return mergeSnapshotRecords(current, fromFile);
 }
