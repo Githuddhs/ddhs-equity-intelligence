@@ -7,19 +7,20 @@ import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it } from "vitest";
 import { PGlite } from "@electric-sql/pglite";
 import { importFoundationFile } from "./foundation-import";
-import { EMPLOYEE_FIELDS, blankFoundation, fieldLabel, foundationSnapshot, type Employee } from "./foundation";
+import { EMPLOYEE_FIELDS, employeeSchema, blankFoundation, fieldLabel, foundationSnapshot, type Employee } from "./foundation";
 
 // Reuse the real save_workforce_foundation SQL from the handoff integration test.
 const src = readFileSync(new URL("./recruitment-handoff.integration.test.ts", import.meta.url), "utf8");
 const SCHEMA = src.slice(src.indexOf("const SCHEMA = `") + 16, src.indexOf("\n`;")).replace(/\$\{UID\}/g, "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa").replace(/\$\{CAND\}/g, "cccccccc-cccc-4ccc-8ccc-cccccccccccc");
 const LATEST = `select * from workforce_snapshots where user_id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' order by snapshot_date desc limit 1`;
 
-const row: Employee = {
+const row: Employee = employeeSchema.parse({
+  firstName: "Thandi", surname: "Mokoena", initials: "TM", foreignNational: "No", positionNumber: "POS-00421", occupationalCategory: "Professionals", jobFamily: "Human Resources", appointmentType: "External appointment", previousPosition: "HR Officer",
   employeeId: "E001", populationGroup: "African", gender: "Female", nationality: "South African", disability: "Yes",
   employmentStatus: "Active", employmentType: "Permanent", workPattern: "Full-time", startDate: "2020-02-01", positionDate: "2023-04-01",
   location: "Cape Town", endDate: "2027-12-31", level: "Professionally Qualified", jobTitle: "HR Manager", gradingSystem: "Paterson",
   jobGrade: "D1", organisation: "DDHS", faculty: "Corporate", division: "People", department: "HR", section: "EE", salaryBand: "Band 5", reportsTo: "E002",
-};
+});
 const second: Employee = { ...row, employeeId: "E002", gender: "Male", populationGroup: "White", disability: "No", level: "Senior Management", reportsTo: "" };
 const csv = (headers: string[]) => [headers.join(","), ...[row, second].map((e) => EMPLOYEE_FIELDS.map((k) => e[k]).join(","))].join("\n");
 const fill = async (headers: string[]) =>

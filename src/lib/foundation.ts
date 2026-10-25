@@ -85,7 +85,7 @@ export function validateFoundation(f: Foundation) {
     ids.add(e.employeeId);
     if (!LEVELS.includes(e.level)) errors.push(`${label}: select a recognised occupational category.`);
     if (!employeeGroup(e)) errors.push(`${label}: valid gender, nationality and population group are required for reporting.`);
-    for (const k of ["jobTitle", "gradingSystem", "jobGrade", "employmentStatus", "employmentType", "workPattern", "startDate", "positionDate", "location", "disability"] as const) if (!e[k]) warnings.push(`${label}: ${fieldLabel(k).toLowerCase()} is missing.`);
+    for (const k of ["firstName", "surname", "jobTitle", "gradingSystem", "jobGrade", "employmentStatus", "employmentType", "workPattern", "startDate", "positionDate", "location", "disability"] as const) if (!e[k]) warnings.push(`${label}: ${fieldLabel(k).toLowerCase()} is missing.`);
     if (!e.department) warnings.push(`${label}: department/business unit is missing.`);
     if (e.employmentStatus && !EMPLOYMENT_STATUSES.includes(e.employmentStatus)) errors.push(`${label}: employment status must be ${EMPLOYMENT_STATUSES.join(", ")}.`);
     if (e.employmentType === "Part-time") warnings.push(`${label}: move "Part-time" to the full-time/part-time column and record permanent or fixed-term status.`);
