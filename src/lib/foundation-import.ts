@@ -1,4 +1,4 @@
-import { foundationSchema, foundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, organisationSchema, type Foundation } from "@/lib/foundation";
+import { EMPLOYEE_LABELS, ORG_LABELS, foundationSchema, foundationWorkbook, EMPLOYEE_FIELDS, PAY_FIELDS, MOVEMENT_FIELDS, organisationSchema, type Foundation } from "@/lib/foundation";
 import { extractPdfText } from "@/lib/workforce.functions";
 
 export const FOUNDATION_ACCEPT = ".xlsx,.xls,.xlsm,.xlsb,.ods,.docx,.pdf,.csv,.tsv,.txt,.md,.json,.html,.htm";
@@ -12,8 +12,10 @@ const aliases: Record<string, string[]> = {
   eeSeniorManager: ["senior manager responsible for EE", "EE senior manager"], eeManager: ["EE manager", "EE function"], eeCommittee: ["EE committee", "consultative forum"],
   totalEmployees: ["total employees", "number of employees"], businessActivity: ["main business activity"], designatedStatus: ["designated employer status"],
 };
+// Headings may be field names, aliases, or the labels shown on screen and in templates.
+const names = (key: string) => [key, ...(aliases[key] ?? []), EMPLOYEE_LABELS[key], ORG_LABELS[key]].filter((v): v is string => !!v);
 const normalise = (row: Record<string, unknown>, keys: readonly string[]) => Object.fromEntries(keys.map((key) => {
-  const header = Object.keys(row).find((h) => [key, ...(aliases[key] ?? [])].some((v) => keyOf(v) === keyOf(h)));
+  const header = Object.keys(row).find((h) => names(key).some((v) => keyOf(v) === keyOf(h)));
   return [key, String(header ? row[header] ?? "" : "").trim()];
 }));
 type Rows = Record<string, unknown>[];
@@ -80,7 +82,7 @@ function applyTables(tables: Rows[], current: Foundation, section: "employees" |
   for (const rows of tables) {
     const first = rows[0];
     if (!first) continue;
-    const has = (key: string) => Object.keys(first).some((h) => [key, ...(aliases[key] ?? [])].some((v) => keyOf(v) === keyOf(h)));
+    const has = (key: string) => Object.keys(first).some((h) => names(key).some((v) => keyOf(v) === keyOf(h)));
     const target = has("basicPay") || has("variablePay") ? "remuneration" : has("type") && has("date") ? "movements" : has("level") || has("gender") ? "employees" : section;
     if (has("employeeId")) {
       const keys = target === "employees" ? EMPLOYEE_FIELDS : target === "remuneration" ? PAY_FIELDS : MOVEMENT_FIELDS;
