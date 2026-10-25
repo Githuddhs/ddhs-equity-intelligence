@@ -94,7 +94,7 @@ function WorkforcePage() {
   // Start the form from the most recent snapshot so an update is an edit, not a retype.
   useEffect(() => {
     if (seeded || !snapshots.length) return;
-    const latest = snapshots.find((x) => x.source === "employee_profile");
+    const latest = snapshots[0];
     if (!latest) return;
     setCounts(normaliseWorkforce(latest.counts));
     setDisability(normaliseDisability(latest.disability));
