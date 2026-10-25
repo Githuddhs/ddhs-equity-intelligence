@@ -12,7 +12,7 @@ export function useLatestOrgUnits(enabled = true) {
       if (!u.user) return null;
       const { data, error } = await supabase
         .from("workforce_snapshots")
-        .select("id,snapshot_date,counts,disability,units").eq("source", "employee_profile")
+        .select("id,snapshot_date,counts,disability,units")
         .eq("user_id", u.user.id)
         .order("created_at", { ascending: false })
         .limit(1);
