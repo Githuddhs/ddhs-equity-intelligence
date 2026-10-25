@@ -51,8 +51,8 @@ describe("snapshot upload fills Employee Profiles", () => {
     expect(saved.employees).toEqual([row, second]);
     const latest = (await db.query<{ source: string; total_headcount: number; counts: Record<string, Record<string, number>>; disability: Record<string, number> }>(LATEST)).rows[0]!;
     expect(latest).toMatchObject({ source: "employee_profile", total_headcount: 2 });
-    expect(latest.counts["Professionally Qualified"]?.FA).toBe(1);
-    expect(latest.counts["Senior Management"]?.MW).toBe(1);
+    expect(latest.counts["Professionally Qualified"]?.["FA"]).toBe(1);
+    expect(latest.counts["Senior Management"]?.["MW"]).toBe(1);
     expect(latest.disability["Professionally Qualified"]).toBe(1);
   });
 });
