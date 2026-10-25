@@ -9,7 +9,7 @@ import { AppHeader } from "@/components/app-header";
 import { extractPdfText } from "@/lib/workforce.functions";
 import { ExistingPlanGap } from "@/components/existing-plan-gap";
 import { OrgUnitPicker } from "@/components/org-unit-picker";
-import { FoundationRecords } from "@/components/foundation-records";
+import { FoundationRecords, SNAPSHOT_FILE_EVENT } from "@/components/foundation-records";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
 import { offerReport } from "@/lib/report-download";
 import { ALL_UNITS, aggregate, breakdown, describeFilter, normaliseUnits, type OrgUnit, type UnitFilter } from "@/lib/org-units";
@@ -215,6 +215,7 @@ function WorkforcePage() {
         parsed = parseWorkforceFile(await f.text(), f.name);
       }
       setPending({ ...parsed, fileName: f.name });
+      window.dispatchEvent(new CustomEvent(SNAPSHOT_FILE_EVENT, { detail: f }));
       if (parsed.total <= 0) toast.error("No headcount figures could be read from that file.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "That file could not be read.");
