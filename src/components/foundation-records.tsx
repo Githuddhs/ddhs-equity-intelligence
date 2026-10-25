@@ -24,7 +24,7 @@ export const foundationQuery = () => ({ queryKey: ["foundation-periods"], queryF
 
 const choices: Record<string, string[]> = {
   populationGroup: ["African", "Coloured", "Indian", "White", "Foreign national"], gender: ["Male", "Female"],
-  disability: ["Yes", "No", "Not disclosed"], employmentType: CONTRACT_TYPES, employmentStatus: EMPLOYMENT_STATUSES, workPattern: WORK_PATTERNS,
+  disability: ["Yes", "No", "Not disclosed"], foreignNational: ["Yes", "No"], salaryFrequency: ["Annual", "Monthly", "Weekly", "Hourly"], appointmentType: ["External appointment", "Internal appointment", "Promotion", "Transfer", "Re-employment"], employmentType: CONTRACT_TYPES, employmentStatus: EMPLOYMENT_STATUSES, workPattern: WORK_PATTERNS,
   level: LEVELS, previousLevel: LEVELS, newLevel: LEVELS, gradingSystem: ["Paterson", "Peromnes", "Hay", "Equate", "Other"],
   type: ["Recruitment", "Promotion", "Transfer", "Termination"], province: Object.keys(PROVINCE_EAP).filter((p) => p !== "National"), sector: SECTORS.map((s) => s.name), designatedStatus: DESIGNATED_STATUSES,
 };
@@ -33,7 +33,7 @@ function Field({ name, value, onChange, label }: { name: string; value: string; 
   const options = choices[name];
   if (options) return <select aria-label={label} className={input} value={value} onChange={(e) => onChange(e.target.value)}><option value="">Not supplied</option>{options.map((v) => <option key={v} value={v}>{v}</option>)}</select>;
   const date = /date|periodstart|periodend/i.test(name);
-  const number = ["basicPay", "variablePay", "benefits", "hours", "fte"].includes(name);
+  const number = ["basicPay", "totalRemuneration", "fixedPay", "allowances", "variablePay", "benefits", "hours", "fte"].includes(name);
   return <input aria-label={label} className={input} value={value} type={date ? "date" : number ? "number" : "text"} min={number ? 0 : undefined} step={number ? "any" : undefined} max={name === "fte" ? 1 : undefined} onChange={(e) => onChange(e.target.value)} />;
 }
 
