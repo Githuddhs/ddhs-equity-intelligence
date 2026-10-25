@@ -13,6 +13,7 @@ import { FOUNDATION_ACCEPT, importFoundationFile } from "@/lib/foundation-import
 import { saveFoundation, deleteFoundation } from "@/lib/foundation.functions";
 import { OccupationalGrades } from "@/components/eea-crosswalk";
 
+export const SNAPSHOT_FILE_EVENT = "ddhs-snapshot-file";
 export const foundationQuery = () => ({ queryKey: ["foundation-periods"], queryFn: async () => {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return [];
@@ -47,6 +48,20 @@ export function FoundationRecords() {
   const [importSection, setImportSection] = useState<"employees" | "remuneration" | "movements">("employees");
   const save = useServerFn(saveFoundation), remove = useServerFn(deleteFoundation);
   useEffect(() => { if (!initialised && records[0]) { setForm(records[0]); setInitialised(true); } }, [records, initialised]);
+  // A snapshot file that lists individual employees also fills the employee records, for review before saving.
+  useEffect(() => {
+    const onSnapshot = async (e: Event) => {
+      const f = (e as CustomEvent<File>).detail;
+      try {
+        const next = await importFoundationFile(f, form, "employees");
+        if (!next.employees.length) return;
+        update(next);
+        toast.success(`${next.employees.length} employee records filled from ${f.name}. Review them, then save the reporting period.`);
+      } catch { /* headcount-only file: no individual records to copy */ }
+    };
+    window.addEventListener(SNAPSHOT_FILE_EVENT, onSnapshot);
+    return () => window.removeEventListener(SNAPSHOT_FILE_EVENT, onSnapshot);
+  }, [form]);
   const update = (next: Foundation) => { setForm(next); setDirty(true); setInitialised(true); };
   const check = validateFoundation(form);
   const snapshot = foundationSnapshot(form);
