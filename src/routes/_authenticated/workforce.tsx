@@ -94,7 +94,7 @@ function WorkforcePage() {
   // Start the form from the most recent snapshot so an update is an edit, not a retype.
   useEffect(() => {
     if (seeded || !snapshots.length) return;
-    const latest = snapshots.find((x) => x.source === "employee_profile");
+    const latest = snapshots[0];
     if (!latest) return;
     setCounts(normaliseWorkforce(latest.counts));
     setDisability(normaliseDisability(latest.disability));
@@ -278,7 +278,24 @@ function WorkforcePage() {
           <Stat label="Levels captured" value={`${levelsFilled} of ${LEVELS.length}`} />
         </div>
 
-        <p className="mt-6 rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground"><strong className="text-primary">Capture once, use everywhere.</strong> Every headcount, report and analysis on this platform is calculated from the Employee Profiles above. To change a figure, update the employee's profile or record a movement, then save the reporting period; separately typed or uploaded totals are no longer accepted.</p>
+        <section className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm" aria-label="Load a workforce snapshot">
+          <h2 className="section-title text-primary">Load a workforce snapshot</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Upload a headcount table (Excel, CSV, Word .docx or text PDF). Reports use your most recent snapshot by date — whether uploaded here or calculated from Employee Profiles.</p>
+          <div className="mt-4 flex flex-wrap items-end gap-3">
+            <label className="text-sm font-medium">Snapshot date<input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 block h-9 rounded-md border border-input bg-background px-2 text-sm" /></label>
+            <label className="inline-flex h-9 cursor-pointer items-center rounded-lg border border-teal px-4 text-sm font-semibold text-teal">Choose file<input ref={file} type="file" className="sr-only" accept=".xlsx,.xls,.csv,.tsv,.txt,.docx,.pdf" onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }} /></label>
+            <button type="button" onClick={downloadTemplate} className="h-9 rounded-lg border border-input px-4 text-sm font-semibold text-primary">Template</button>
+          </div>
+          {pending && (
+            <div className="mt-4 rounded-lg border border-border bg-muted/40 p-4 text-sm">
+              <p><strong className="text-primary">{pending.fileName}</strong> · {pending.total.toLocaleString("en-ZA")} employees read{pending.units?.length ? ` · ${pending.units.length} units` : ""}</p>
+              <div className="mt-3 flex gap-2">
+                <button type="button" disabled={saving || pending.total <= 0} onClick={() => void save({ source: "upload", fileName: pending.fileName, from: pending })} className="rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-50">{saving ? "Saving…" : "Save snapshot"}</button>
+                <button type="button" onClick={() => setPending(null)} className="rounded-lg border border-input px-4 py-2 font-semibold">Cancel</button>
+              </div>
+            </div>
+          )}
+        </section>
 
         <ExistingPlanGap workforce={counts} />
 
@@ -364,11 +381,11 @@ function WorkforcePage() {
                   <div>
                     <p className="font-semibold text-primary">{fmtDate(s.snapshot_date)} · {s.total_headcount.toLocaleString("en-ZA")} employees</p>
                     <p className="text-sm text-muted-foreground">
-                      {s.source === "employee_profile" ? "Calculated from Employee Profiles" : <span className="font-semibold text-destructive">Legacy {s.source === "upload" ? `upload (${s.file_name ?? "a file"})` : "typed-in totals"} — not used in any report</span>} · saved {fmtDate(s.created_at)}
+                      {s.source === "employee_profile" ? "Calculated from Employee Profiles" : s.source === "upload" ? `Uploaded (${s.file_name ?? "a file"})` : "Typed-in totals"} · saved {fmtDate(s.created_at)}
                     </p>
                   </div>
                   <div className="flex gap-3 text-sm font-semibold">
-                    {s.source === "employee_profile" && <button onClick={() => loadIntoForm(s)} className="text-teal hover:underline">Show</button>}
+                    <button onClick={() => loadIntoForm(s)} className="text-teal hover:underline">Show</button>
                     {s.source !== "employee_profile" && <button onClick={() => void removeSnapshot(s)} className="text-destructive hover:underline">Delete</button>}
                   </div>
                 </li>

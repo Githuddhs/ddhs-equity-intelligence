@@ -12,7 +12,7 @@ export type WorkforceSnap = { id?: string; date: string; counts: Workforce; disa
 export async function latestWorkforce(): Promise<WorkforceSnap | null> {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return null;
-  const { data } = await supabase.from("workforce_snapshots").select("id,snapshot_date,counts,disability,units").eq("source", "employee_profile").eq("user_id", auth.user.id).order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle();
+  const { data } = await supabase.from("workforce_snapshots").select("id,snapshot_date,counts,disability,units").eq("user_id", auth.user.id).order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle();
   if (!data) return null;
   return { id: data.id, date: data.snapshot_date, counts: normaliseWorkforce(data.counts), disability: normaliseDisability(data.disability), units: normaliseUnits(data.units) };
 }

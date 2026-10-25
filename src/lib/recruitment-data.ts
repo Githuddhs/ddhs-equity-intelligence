@@ -10,7 +10,7 @@ export type Baseline = { workforce: Workforce | null; units: ReturnType<typeof n
 export async function loadBaseline(): Promise<Baseline> {
   const { data: auth } = await supabase.auth.getUser();
   const meta = auth.user?.user_metadata ?? {};
-  const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,units").eq("source", "employee_profile")
+  const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,units")
     .eq("user_id", auth.user?.id ?? "").order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle();
   return {
     workforce: data ? normaliseWorkforce(data.counts) : null,

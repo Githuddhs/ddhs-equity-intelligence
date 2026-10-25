@@ -33,7 +33,7 @@ function Lifecycle() {
     queryFn: async () => {
       const [f, w, a, b, p, d, r] = await Promise.all([
         supabase.from("workforce_foundation_periods").select("organisation,employees").order("period_end", { ascending: false }).limit(1),
-        supabase.from("workforce_snapshots").select("total_headcount").eq("source", "employee_profile").order("snapshot_date", { ascending: false }).limit(1),
+        supabase.from("workforce_snapshots").select("total_headcount").order("snapshot_date", { ascending: false }).limit(1),
         supabase.from("eea12_analyses").select("sector,results"),
         supabase.from("barrier_responses").select("id", { count: "exact", head: true }),
         supabase.from("ee_plans").select("content,start_date,end_date").order("updated_at", { ascending: false }).limit(1),
