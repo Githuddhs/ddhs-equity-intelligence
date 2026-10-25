@@ -24,9 +24,26 @@ export const missingOrgFields = (o: Partial<Record<string, string>>) => REQUIRED
 export const EMPLOYMENT_STATUSES = ["Active", "Suspended", "On leave", "Terminated"];
 export const CONTRACT_TYPES = ["Permanent", "Fixed-term", "Temporary"];
 export const WORK_PATTERNS = ["Full-time", "Part-time"];
-export const EMPLOYEE_LABELS: Record<string, string> = { salaryBand: "Salary grade / band", reportsTo: "Reports to (manager employee ID)", newDepartment: "New department / business unit (transfers)", employeeId: "Employee/staff number", populationGroup: "Race/designated group", nationality: "Citizenship/nationality", disability: "Disability (lawfully disclosed)", employmentStatus: "Employment status", employmentType: "Permanent/fixed-term", workPattern: "Full-time/part-time", startDate: "Date appointed", positionDate: "Current position appointment date", endDate: "Termination date", level: "Occupational level", department: "Department/business unit", faculty: "Faculty", division: "Division", location: "Workplace/location" };
-export const employeeSchema = z.object({ employeeId: text, populationGroup: text, gender: text, nationality: text, disability: text, employmentStatus: text, employmentType: text, workPattern: text, startDate: text, positionDate: text, location: text, endDate: text, level: text, jobTitle: text, gradingSystem: text, jobGrade: text, organisation: text, faculty: text, division: text, department: text, section: text, salaryBand: text, reportsTo: text });
-export const paySchema = z.object({ employeeId: text, periodStart: text, periodEnd: text, basicPay: text, variablePay: text, benefits: text, hours: text, fte: text });
+export const EMPLOYEE_LABELS: Record<string, string> = {
+  employeeId: "Employee number", firstName: "First name", surname: "Surname", initials: "Initials", idNumber: "ID / passport number (protected)",
+  gender: "Gender", populationGroup: "Population group", nationality: "Citizenship / nationality", foreignNational: "Foreign national indicator", disability: "Disability status", disabilityDate: "Disability disclosure date",
+  employmentStatus: "Employment status", jobTitle: "Job title", positionNumber: "Position number", department: "Department / business unit", division: "Division / faculty", faculty: "Faculty", section: "Section",
+  location: "Work location", employmentType: "Employment / contract type", workPattern: "Full-time / part-time", startDate: "Appointment date", positionDate: "Current position appointment date",
+  contractEndDate: "Contract end date", endDate: "Termination date", terminationReason: "Termination reason", reportsTo: "Manager / supervisor (employee number)",
+  level: "Occupational level", occupationalCategory: "Occupational category", gradingSystem: "Job grading system", jobGrade: "Job grade", jobFamily: "Job family", salaryBand: "Salary grade / band",
+  appointmentType: "Appointment type", previousPosition: "Previous position",
+  basicPay: "Basic salary", salaryFrequency: "Salary frequency", totalRemuneration: "Total remuneration / CTC", fixedPay: "Fixed remuneration", variablePay: "Variable remuneration", allowances: "Allowances", fte: "Working hours / FTE",
+  newDepartment: "New department / business unit (transfers)",
+};
+// Field order follows the DDHS Workforce Foundation basic-information template.
+export const employeeSchema = z.object({
+  employeeId: text, firstName: text, surname: text, initials: text, idNumber: text, employmentStatus: text,
+  gender: text, populationGroup: text, nationality: text, foreignNational: text, disability: text, disabilityDate: text,
+  jobTitle: text, positionNumber: text, organisation: text, faculty: text, division: text, department: text, section: text, location: text,
+  employmentType: text, workPattern: text, startDate: text, positionDate: text, contractEndDate: text, endDate: text, terminationReason: text, reportsTo: text,
+  level: text, occupationalCategory: text, gradingSystem: text, jobGrade: text, jobFamily: text, salaryBand: text, appointmentType: text, previousPosition: text,
+});
+export const paySchema = z.object({ employeeId: text, periodStart: text, periodEnd: text, basicPay: text, salaryFrequency: text, totalRemuneration: text, fixedPay: text, variablePay: text, allowances: text, benefits: text, hours: text, fte: text });
 export const movementSchema = z.object({ employeeId: text, type: text, date: text, previousLevel: text, newLevel: text, reason: text, newDepartment: text });
 export const foundationSchema = z.object({ id: z.string().uuid().optional(), period_start: text, period_end: text, snapshot_date: text, organisation: organisationSchema, employees: z.array(employeeSchema).max(20000), remuneration: z.array(paySchema).max(40000), movements: z.array(movementSchema).max(40000) });
 export type Foundation = z.infer<typeof foundationSchema>;
