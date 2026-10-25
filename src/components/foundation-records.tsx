@@ -53,8 +53,9 @@ export function FoundationRecords() {
     const onSnapshot = async (e: Event) => {
       const f = (e as CustomEvent<File>).detail;
       try {
-        const next = await importFoundationFile(f, form, "employees");
-        if (!next.employees.length) return;
+        const fresh = await importFoundationFile(f, { ...form, employees: [] }, "employees");
+        if (!fresh.employees.length) return;
+        const next = { ...form, employees: fresh.employees };
         update(next);
         toast.success(`${next.employees.length} employee records filled from ${f.name}. Review them, then save the reporting period.`);
       } catch { /* headcount-only file: no individual records to copy */ }
