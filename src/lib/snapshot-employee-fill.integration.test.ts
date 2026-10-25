@@ -57,3 +57,51 @@ describe("snapshot upload fills Employee Profiles", () => {
     expect(latest.disability["Professionally Qualified"]).toBe(1);
   });
 });
+
+import { importSnapshotRecords } from "./foundation-import";
+import { PAY_FIELDS, MOVEMENT_FIELDS } from "./foundation";
+
+const file = (text: string) => new File([text], "snapshot.csv", { type: "text/csv" });
+const savedOrg = (): Foundation => ({ ...blankFoundation(), organisation: { ...blankFoundation().organisation, name: "DDHS Saved", registration: "2020/000001/07", province: "Western Cape", contact: "073 551 7885" } });
+type Foundation = ReturnType<typeof blankFoundation>;
+
+describe("snapshot upload fills pay, movement and organisation records", () => {
+  it("fills pay records and leaves missing pay values blank", async () => {
+    const { foundation: f, filled } = await importSnapshotRecords(file(`${PAY_FIELDS.join(",")}\nE001,2026-01-01,2026-12-31,45000,Monthly,,,,,,,\nE002,2026-01-01,2026-12-31,,,,,,,,,`), blankFoundation());
+    expect(f.remuneration).toHaveLength(2);
+    expect(f.remuneration[0]).toMatchObject({ employeeId: "E001", basicPay: "45000", totalRemuneration: "", variablePay: "", fte: "" });
+    expect(f.remuneration[1]).toMatchObject({ employeeId: "E002", basicPay: "", salaryFrequency: "" });
+    expect(f.employees).toEqual([]);
+    expect(filled).toEqual(["2 pay records"]);
+  });
+
+  it("fills movement records and leaves missing movement values blank", async () => {
+    const { foundation: f, filled } = await importSnapshotRecords(file(`${MOVEMENT_FIELDS.join(",")}\nE001,Promotion,2026-05-01,Skilled,Professionally Qualified,,\nE002,Termination,2026-06-30,,,,`), blankFoundation());
+    expect(f.movements).toEqual([
+      { employeeId: "E001", type: "Promotion", date: "2026-05-01", previousLevel: "Skilled", newLevel: "Professionally Qualified", reason: "", newDepartment: "" },
+      { employeeId: "E002", type: "Termination", date: "2026-06-30", previousLevel: "", newLevel: "", reason: "", newDepartment: "" },
+    ]);
+    expect(filled).toEqual(["2 movement records"]);
+  });
+
+  it("blank organisation fields in the file never overwrite saved details", async () => {
+    const { foundation: f } = await importSnapshotRecords(file(`name,registration,province,contact,sector\nDDHS New,,Gauteng,,`), savedOrg());
+    expect(f.organisation).toMatchObject({ name: "DDHS New", registration: "2020/000001/07", province: "Gauteng", contact: "073 551 7885", sector: "" });
+  });
+
+  it("pay and movement uploads keep saved organisation details and persist unchanged", async () => {
+    const start = { ...savedOrg(), employees: [row, second], period_start: "2026-01-01", period_end: "2026-12-31", snapshot_date: "2026-09-30" };
+    const pay = await importSnapshotRecords(file(`${PAY_FIELDS.join(",")}\nE001,2026-01-01,2026-12-31,45000,Monthly,,,,,,,`), start);
+    const both = await importSnapshotRecords(file(`${MOVEMENT_FIELDS.join(",")}\nE002,Termination,2026-06-30,,,,`), pay.foundation);
+    const f = both.foundation;
+    expect(f.organisation).toEqual(start.organisation);
+    expect(f.employees).toEqual([row, second]);
+    expect(f.remuneration).toHaveLength(1);
+    const record = { ...f, warnings: [] };
+    await db.query(`select save_workforce_foundation($1::jsonb,$2::jsonb)`, [JSON.stringify(record), JSON.stringify(foundationSnapshot(record))]);
+    const saved = (await db.query<Foundation>(`select organisation, remuneration, movements from workforce_foundation_periods`)).rows[0]!;
+    expect(saved.organisation).toMatchObject({ name: "DDHS Saved", registration: "2020/000001/07", sector: "" });
+    expect(saved.remuneration[0]).toMatchObject({ basicPay: "45000", totalRemuneration: "" });
+    expect(saved.movements[0]).toMatchObject({ type: "Termination", reason: "", newLevel: "" });
+  });
+});
