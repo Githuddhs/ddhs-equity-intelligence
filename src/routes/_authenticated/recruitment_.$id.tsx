@@ -317,6 +317,15 @@ function Handover({ c, save, reload }: { c: Candidate; save: (h: HandoverData) =
   const [sending, setSending] = useState(false);
   const initial = ((c as unknown as { handover?: HandoverData }).handover ?? {}) as HandoverData;
   const [h, setH] = useState<HandoverData>({ done: [], ...initial });
+  // After "Send to Employee Profile" the server adds the send record; pull it in so later edits never erase it.
+  useEffect(() => {
+    const sentAt = initial.profile_sent_at;
+    if (!sentAt) return;
+    setH((cur) => cur.profile_sent_at ? cur : {
+      ...cur, profile_sent_at: sentAt, employee_id: initial.employee_id ?? "", profile_period: initial.profile_period ?? "",
+      done: Array.from(new Set([...(cur.done ?? []), ...(initial.done ?? [])])),
+    });
+  }, [initial.profile_sent_at, initial.employee_id, initial.profile_period]);
   const done = h.done ?? [];
   const all = HANDOVER_ITEMS.every((i) => done.includes(i));
   const box = "mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm";
