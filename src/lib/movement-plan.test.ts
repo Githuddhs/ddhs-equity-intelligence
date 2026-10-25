@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { blankMove, demographicImpact, moveMissing } from "@/lib/movement-plan";
 import { employeeSchema, type Employee } from "@/lib/foundation";
 
-const emp = (id: string, populationGroup: string, gender: string, level: string): Employee => employeeSchema.parse({ employeeId: id, salaryBand: "", reportsTo: "", populationGroup, gender, nationality: "South African", disability: "", employmentStatus: "Active", employmentType: "", workPattern: "", startDate: "2020-01-01", positionDate: "", location: "", endDate: "", level, jobTitle: "", gradingSystem: "", jobGrade: "", organisation: "", faculty: "", division: "", department: "HR", section: "" }));
+const emp = (id: string, populationGroup: string, gender: string, level: string): Employee => employeeSchema.parse({ employeeId: id, salaryBand: "", reportsTo: "", populationGroup, gender, nationality: "South African", disability: "", employmentStatus: "Active", employmentType: "", workPattern: "", startDate: "2020-01-01", positionDate: "", location: "", endDate: "", level, jobTitle: "", gradingSystem: "", jobGrade: "", organisation: "", faculty: "", division: "", department: "HR", section: "" });
 const L = "Professionally Qualified";
 const staff = [emp("1", "White", "Male", L), emp("2", "African", "Female", L)];
 
