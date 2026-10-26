@@ -109,20 +109,26 @@ function CapabilityLink({
 }
 
 const lifecycle = [
+  { icon: CheckCircle2, title: "Prepare", body: "Readiness check, employer details and EE committee set-up." },
+  { icon: Database, title: "Data", body: "One Employee Profile per person, captured once and used everywhere." },
   { icon: BarChart3, title: "Analyse", body: "EEA12 workforce analysis and representation insights." },
   { icon: Target, title: "Plan", body: "EEA13 planning with targets, actions and owners." },
   { icon: ClipboardCheck, title: "Implement", body: "Assign responsibilities and track progress." },
+  { icon: Users, title: "Recruit", body: "Vacancies, candidates and reviewed appointments aligned to EE goals." },
   { icon: LineChart, title: "Monitor", body: "Measure implementation performance and risks." },
   { icon: FileCheck2, title: "Evidence", body: "Maintain auditable records and approvals." },
   { icon: Layers, title: "Report", body: "Generate leadership-ready reporting and dashboards." },
 ];
 
 const lifecycleSteps = [
+  { label: "Prepare", icon: CheckCircle2 },
   { label: "Data", icon: Database },
   { label: "Analyse", icon: BarChart3 },
   { label: "Plan", icon: Target },
   { label: "Implement", icon: ClipboardCheck },
+  { label: "Recruit", icon: Users },
   { label: "Monitor", icon: LineChart },
+  { label: "Evidence", icon: FileCheck2 },
   { label: "Report", icon: Layers },
 ];
 

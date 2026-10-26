@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CAPABILITIES, capabilityCta, type Capability } from "./capability-explainer";
 
 
-const LIFECYCLE = ["Data", "Analyse", "Plan", "Implement", "Monitor", "Report", "Evidence"];
+const LIFECYCLE = ["Data", "Analyse", "Plan", "Implement", "Recruit", "Monitor", "Report", "Evidence"];
 
 describe("Employment Equity Lifecycle capability explanations", () => {
   it("gives every lifecycle icon a short explanation", () => {
@@ -32,12 +32,13 @@ describe("Employment Equity Lifecycle capability explanations", () => {
   it("links every explanation to the tool it opens", () => {
     for (const label of LIFECYCLE) {
       const cap = CAPABILITIES[label] as Capability | undefined;
-      expect(cap!.href, `missing tool link for ${label}`).toMatch(/^\/[a-z0-9-]+$/);
+      expect(cap!.href, `missing tool link for ${label}`).toMatch(/^\/[a-z0-9-]+(\/[a-z0-9-]+)?$/);
     }
   });
   it("names the button after what the destination actually offers", () => {
     // EEA12 runs the analysis itself, so the button opens it.
     expect(capabilityCta(CAPABILITIES["Analyse"]!)).toBe("Open analysis");
+    expect(capabilityCta(CAPABILITIES["Prepare"]!)).toBe("Start the readiness check");
     // The other pages describe tools that work in the client portal.
     for (const label of LIFECYCLE.filter((l) => l !== "Analyse")) {
       expect(capabilityCta(CAPABILITIES[label]!), `${label} should invite exploring`).toBe("Explore capability");
