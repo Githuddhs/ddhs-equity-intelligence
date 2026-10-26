@@ -9,7 +9,7 @@ describe("EEA2 skills development from training register", () => {
     const rows = trainingRows([{ "Employee No": "E1", Course: "Excel" }, { "Employee No": "E1", Course: "Safety" }, { "Employee No": "E2", Course: "Excel" }]);
     const r = skillsGrid(rows, [emp("E1"), emp("E2")]);
     expect(r.trained).toBe(2);
-    expect(r.grid["Skilled technical"]!.AF).toBe(2);
+    expect(r.grid["Skilled technical"]!["AF"]).toBe(2);
   });
 
   it("reports unknown employee numbers instead of counting them", () => {
