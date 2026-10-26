@@ -70,11 +70,11 @@ export const gridTotal = (g: Grid | undefined) => DOEL_LEVELS.reduce((t, l) => t
 
 export type DoelStatusRow = { form: "EEA2" | "EEA4"; filled: number; tables: number; status: string; reference: string };
 /** Per-form readiness: how many tables carry figures, and the latest logged submission status. */
-export function doelStatus(f: DoelForms | null, subs: { form_type: string; status: string; reference: string; updated_at?: string }[]): DoelStatusRow[] {
+export function doelStatus(f: DoelForms | null, subs: { form_type: string; status: string; reference: string; created_at?: string }[]): DoelStatusRow[] {
   return (["EEA2", "EEA4"] as const).map((form) => {
     const tables = form === "EEA2" ? EEA2_TABLES : EEA4_TABLES;
     const src = (form === "EEA2" ? f?.eea2 : f?.eea4) as Record<string, Grid> | undefined;
-    const latest = subs.filter((s) => s.form_type === form).sort((a, b) => (b.updated_at ?? "").localeCompare(a.updated_at ?? ""))[0];
+    const latest = subs.filter((s) => s.form_type === form).sort((a, b) => (b.created_at ?? "").localeCompare(a.created_at ?? ""))[0];
     return { form, filled: tables.filter((t) => gridTotal(src?.[t.key]) > 0).length, tables: tables.length, status: latest?.status ?? "not started", reference: latest?.reference ?? "" };
   });
 }

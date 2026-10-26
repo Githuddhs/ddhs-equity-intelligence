@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAiStream } from "@/components/use-ai-stream";
 import { fileText, gatherAppData, withoutAppData } from "@/lib/evidence";
-import { saveDoelSubmission } from "@/lib/doel.functions";
+import { listMyDoelSubmissions, saveDoelSubmission } from "@/lib/doel.functions";
+import { buildFormDrafts } from "@/lib/form-drafts";
 import {
   COL_LABELS, DOEL_COLS, DOEL_DOCS, DOEL_LEVELS, EEA2_TABLES, EEA4_TABLES, EMPLOYER_FIELDS,
-  exportDoelPdf, parseDoel, rowTotal, type DoelForms, type Grid,
+  doelStatus, exportDoelPdf, parseDoel, rowTotal, type DoelForms, type Grid,
 } from "@/lib/doel-forms";
+
+const STATUS_LABEL: Record<string, string> = { "not started": "Not started", draft: "Draft", ready: "Ready to submit", submitted: "Submitted to DoEL", acknowledged: "Acknowledged by DoEL" };
+const DEADLINE = "2027-01-15";
 
 type Doc = { id: string; file_name: string; storage_path: string; category: string };
 const KEY = "ddhs-doel-forms";
@@ -57,6 +61,21 @@ export function DoelAutofill() {
     await supabase.storage.from("client-documents").remove([d.storage_path]);
     await supabase.from("portal_documents").delete().eq("id", d.id);
     void load();
+  };
+
+  const { data: subs = [] } = useQuery({ queryKey: ["doel-submissions"], queryFn: () => listMyDoelSubmissions() });
+  const status = doelStatus(forms, subs);
+  const daysLeft = Math.ceil((Date.parse(`${DEADLINE}T23:59:59+02:00`) - Date.now()) / 86400000);
+
+  const fillFromProfiles = async () => {
+    setBusy("Reading your Employee Profiles…");
+    try {
+      const f = await buildFormDrafts();
+      if (!f) { toast.error("No saved Employee Profiles yet. Save a reporting period on the Workforce page first."); return; }
+      setForms(f);
+      toast.success("EEA2 and EEA4 filled from your Employee Profiles. Check the list of missing information.");
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Could not read Employee Profiles."); }
+    finally { setBusy(""); }
   };
 
   const analyse = async () => {
