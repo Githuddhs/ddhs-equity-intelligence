@@ -12,6 +12,7 @@ import {
   Lock,
   type LucideIcon,
   Target,
+  Users,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -30,6 +31,8 @@ export type Capability = {
   access: string;
   /** "open" when the tool itself runs publicly, "portal" when the working tool needs a client login. */
   accessMode: "open" | "portal";
+  /** Optional button wording when the default does not describe the destination. */
+  cta?: string;
 };
 
 /**
@@ -37,11 +40,28 @@ export type Capability = {
  * directly, while public pages that describe client-only tools are explored.
  */
 export function capabilityCta(capability: Capability): string {
+  if (capability.cta) return capability.cta;
   return capability.accessMode === "open" ? "Open analysis" : "Explore capability";
 }
 
 
 export const CAPABILITIES: Record<string, Capability> = {
+  Prepare: {
+    title: "Prepare",
+    icon: CheckCircle2,
+    href: "/readiness-check",
+    tool: "EE Readiness Check",
+    access: "Free to use without signing in — your full readiness tracker runs in the client portal after sign-in.",
+    accessMode: "open",
+    cta: "Start the readiness check",
+    summary:
+      "Start by checking how ready your organisation is: employer details, designated-employer status, the EE committee, senior manager appointment and the workforce records each later step depends on.",
+    points: [
+      "Employer, plan dates and responsible people captured once",
+      "A readiness score across the six onboarding steps",
+      "The gaps to close first, before analysis begins",
+    ],
+  },
   Data: {
     title: "Data",
     icon: Database,
@@ -115,6 +135,21 @@ export const CAPABILITIES: Record<string, Capability> = {
       "Goal variance from the latest workforce period",
       "Corrective actions with owners, deadlines and evidence",
       "Risk flags that need a human acknowledgement",
+    ],
+  },
+  Recruit: {
+    title: "Recruit",
+    icon: Users,
+    href: "/services/recruitment-suite",
+    tool: "Recruitment Suite",
+    access: "Open to view — vacancies, candidates and appointments are managed in your client portal after sign-in.",
+    accessMode: "portal",
+    summary:
+      "The Recruitment Suite turns plan targets into appointments: vacancies are planned against your EE goals, candidates are tracked and scored, and every appointment needs a named human review before it goes ahead.",
+    points: [
+      "Vacancy planning and approval linked to EE targets",
+      "Candidate pipeline, scorecards and risk flags",
+      "Appointments flow into the Employee Profile without double counting",
     ],
   },
   Report: {
