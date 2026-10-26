@@ -77,7 +77,8 @@ export function DoelAutofill() {
       const r = skillsGrid(await readTrainingRegister(file), foundation.employees);
       setForms((p) => {
         const f = structuredClone(p ?? {}) as DoelForms;
-        f.eea2 = { ...f.eea2, skills: r.grid };
+        const eea2 = (f.eea2 ??= {} as NonNullable<DoelForms["eea2"]>) as Record<string, Grid>;
+        eea2["skills"] = r.grid;
         f.missing = [...(f.missing ?? []).filter((m) => m !== TRAINING_MISSING && !m.startsWith("Training register:")), ...r.missing];
         f.sources = [...(f.sources ?? []).filter((s) => !s.startsWith("Training register")), `Training register: ${file.name}`];
         return f;
