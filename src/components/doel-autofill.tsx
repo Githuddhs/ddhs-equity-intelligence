@@ -76,7 +76,7 @@ export function DoelAutofill() {
       const { data: prof } = await supabase.auth.getUser();
       setBusy(`Analysing ${read.length} document(s) and filling the forms…`);
       const raw = await ai.run({ task: "doel_forms", context: { documents: read, savedData: appData, plan, account: prof.user?.user_metadata ?? {} } }, () => {});
-      const f = parseDoel(raw);
+      const f = parseDoel(withoutAppData(raw));
       if (!f) { toast.error("The AI response couldn't be read — please try again."); return; }
       setForms(f);
       toast.success(`Forms filled from ${read.length} document(s)${skipped.length ? ` — ${skipped.length} couldn't be read` : ""}. Check every figure.`);
