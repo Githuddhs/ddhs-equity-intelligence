@@ -66,6 +66,18 @@ export function parseDoel(raw: string): DoelForms | null {
 }
 
 export const rowTotal = (g: Grid | undefined, lvl: string) => DOEL_COLS.reduce((t, c) => t + (Number(g?.[lvl]?.[c]) || 0), 0);
+export const gridTotal = (g: Grid | undefined) => DOEL_LEVELS.reduce((t, l) => t + rowTotal(g, l), 0);
+
+export type DoelStatusRow = { form: "EEA2" | "EEA4"; filled: number; tables: number; status: string; reference: string };
+/** Per-form readiness: how many tables carry figures, and the latest logged submission status. */
+export function doelStatus(f: DoelForms | null, subs: { form_type: string; status: string; reference: string; updated_at?: string }[]): DoelStatusRow[] {
+  return (["EEA2", "EEA4"] as const).map((form) => {
+    const tables = form === "EEA2" ? EEA2_TABLES : EEA4_TABLES;
+    const src = (form === "EEA2" ? f?.eea2 : f?.eea4) as Record<string, Grid> | undefined;
+    const latest = subs.filter((s) => s.form_type === form).sort((a, b) => (b.updated_at ?? "").localeCompare(a.updated_at ?? ""))[0];
+    return { form, filled: tables.filter((t) => gridTotal(src?.[t.key]) > 0).length, tables: tables.length, status: latest?.status ?? "not started", reference: latest?.reference ?? "" };
+  });
+}
 
 export async function exportDoelPdf(form: "EEA2" | "EEA4", f: DoelForms) {
   const { jsPDF } = await import("jspdf");

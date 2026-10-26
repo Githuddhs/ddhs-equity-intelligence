@@ -98,7 +98,11 @@ export async function buildFormDrafts(): Promise<DoelForms | null> {
       narrative: foundation ? `Recorded remuneration totals in ZAR for ${foundation.period_start} to ${foundation.period_end}. Only complete basic pay, variable pay and benefits records are included. Missing pay remains missing, not zero. Review annualisation and statutory EEA4 requirements before submitting.` : "Remuneration records have not been supplied for this snapshot.",
       measures: dgText,
     },
-    missing: ["Skills development register not supplied.", ...(foundation ? validateFoundation(foundation).warnings : ["Workforce movements, remuneration and disability demographic splits not supplied."])],
+    missing: [
+      "Skills development register not supplied.",
+      ...(foundation?.employees.some((e) => e.employmentType === "Temporary") ? ["Temporary employees are counted within their occupational levels; move them to the EEA2 'Temporary employees' row before submitting."] : []),
+      ...(foundation ? validateFoundation(foundation).warnings : ["Workforce movements, remuneration and disability demographic splits not supplied."]),
+    ],
     sources: [`Employee Profile snapshot ${w.date}`, foundation ? `Workforce Foundation ${foundation.period_start} to ${foundation.period_end}` : "", plan ? `EE plan: ${plan.company} (${plan.sector})` : "EE plan", dg ? `DG review analysis ${dg.date}` : ""].filter(Boolean) as string[],
   };
 }
