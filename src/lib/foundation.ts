@@ -156,7 +156,8 @@ export function foundationSnapshot(f: Foundation) {
 export function foundationReportGrids(f: Foundation) {
   const remuneration = emptyWorkforce(), paidHeadcount = emptyWorkforce(), disabled = emptyWorkforce();
   const movementGrids = { recruitment: emptyWorkforce(), promotion: emptyWorkforce(), termination: emptyWorkforce() };
-  for (const e of f.employees) {
+  // One employee → one profile: missing or repeated IDs never add to EEA2/EEA4 figures.
+  for (const e of uniqueProfiles(f.employees)) {
     const k = employeeGroup(e);
     if (!k) continue;
     const disabledRow = disabled[e.level];
