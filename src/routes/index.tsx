@@ -418,7 +418,7 @@ function Index() {
                   <step.icon className="h-4 w-4 shrink-0" />
                   {step.label}
                 </button>
-                {i < arr.length - 1 && <ArrowRight className="h-4 w-4 text-teal/50" />}
+                {i < arr.length - 1 && <ArrowRight className="hidden h-4 w-4 text-teal/50 sm:block" />}
               </span>
             ))}
           </div>
