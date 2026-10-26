@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
-import { fileText, gatherAppData } from "@/lib/evidence";
+import { fileText, gatherAppData, withoutAppData } from "@/lib/evidence";
 import { reportText } from "@/lib/report-download";
 import { Button } from "@/components/ui/button";
 
@@ -75,9 +75,9 @@ export function DgOutcome() {
       setBusy("Collecting your saved EE data…");
       const appData = await gatherAppData();
       setBusy("Analysing the DG review and drafting corrective actions…"); setCurrent("");
-      const out = await ai.run({ task: "dg_outcome", context: { documents: read, savedData: appData } }, setCurrent);
+      const out = await ai.run({ task: "dg_outcome", context: { documents: read, savedData: appData } }, (c) => setCurrent(withoutAppData(c)));
       if (!out.trim()) { toast.error("No analysis was returned — please try again."); return; }
-      await supabase.from("dg_outcome_analyses").insert({ file_names: read.map((r) => r.name), result: out });
+      await supabase.from("dg_outcome_analyses").insert({ file_names: read.map((r) => r.name), result: withoutAppData(out) });
       void load();
       toast.success(`Analysis saved${skipped.length ? ` — ${skipped.length} file(s) couldn't be read` : ""}.`);
     } catch (e) { toast.error(e instanceof Error ? e.message : "Analysis failed"); }

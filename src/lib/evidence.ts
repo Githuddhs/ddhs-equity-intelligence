@@ -70,8 +70,13 @@ export async function gatherAppData() {
   };
 }
 
+/** Rewrites the old "(appData)" source label to "saved EE records" without touching findings or figures. */
+export function withoutAppData(raw: string): string {
+  return raw.replace(/\(app\s?data\)/gi, "(saved EE records)").replace(/\bappData\b/g, "saved EE records");
+}
+
 export function parseEvidence(raw: string): Evidence | null {
-  const s = raw.replace(/^```(?:json)?/m, "").replace(/```\s*$/m, "");
+  const s = withoutAppData(raw.replace(/^```(?:json)?/m, "").replace(/```\s*$/m, ""));
   const a = s.indexOf("{"), b = s.lastIndexOf("}");
   if (a < 0 || b <= a) return null;
   try { return JSON.parse(s.slice(a, b + 1)) as Evidence; } catch { return null; }

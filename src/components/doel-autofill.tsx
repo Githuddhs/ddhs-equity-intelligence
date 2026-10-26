@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAiStream } from "@/components/use-ai-stream";
-import { fileText, gatherAppData } from "@/lib/evidence";
+import { fileText, gatherAppData, withoutAppData } from "@/lib/evidence";
 import { saveDoelSubmission } from "@/lib/doel.functions";
 import {
   COL_LABELS, DOEL_COLS, DOEL_DOCS, DOEL_LEVELS, EEA2_TABLES, EEA4_TABLES, EMPLOYER_FIELDS,
@@ -76,7 +76,7 @@ export function DoelAutofill() {
       const { data: prof } = await supabase.auth.getUser();
       setBusy(`Analysing ${read.length} document(s) and filling the forms…`);
       const raw = await ai.run({ task: "doel_forms", context: { documents: read, savedData: appData, plan, account: prof.user?.user_metadata ?? {} } }, () => {});
-      const f = parseDoel(raw);
+      const f = parseDoel(withoutAppData(raw));
       if (!f) { toast.error("The AI response couldn't be read — please try again."); return; }
       setForms(f);
       toast.success(`Forms filled from ${read.length} document(s)${skipped.length ? ` — ${skipped.length} couldn't be read` : ""}. Check every figure.`);
