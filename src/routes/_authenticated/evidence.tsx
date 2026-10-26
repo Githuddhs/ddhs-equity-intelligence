@@ -50,11 +50,11 @@ function EvidencePage() {
     setBusy(true);
     try {
       const { docs, skipped } = await gatherDocuments(setProgress);
-      setProgress("Collecting saved app data…");
-      const appData = await gatherAppData();
-      if (!docs.length && !appData.workforce.length) { toast.error("No readable documents or saved data yet — upload documents in My portal first."); return; }
+      setProgress("Collecting saved EE data…");
+      const savedData = await gatherAppData();
+      if (!docs.length && !savedData.workforce.length) { toast.error("No readable documents or saved data yet — upload documents in My portal first."); return; }
       setProgress(`Analysing ${docs.length} document(s)…`);
-      const raw = await ai.run({ task: "evidence_extract", context: { documents: docs, appData } }, () => {});
+      const raw = await ai.run({ task: "evidence_extract", context: { documents: docs, savedData } }, () => {});
       const ev = parseEvidence(raw);
       if (!ev) { toast.error("The AI response couldn't be read — please try again."); return; }
       const { data, error } = await supabase.from("evidence_extractions").insert({ file_names: docs.map((d) => d.name), data: ev as unknown as Json, summary: ev.summary_markdown ?? "" }).select("id,created_at,file_names,data,summary").single();
@@ -87,7 +87,7 @@ function EvidencePage() {
 
         {ev ? (
           <div className="mt-8 space-y-6">
-            <p className="text-xs text-muted-foreground">Run on {new Date(current!.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })} · {current!.file_names.length} document(s): {current!.file_names.join(", ") || "saved app data only"}</p>
+            <p className="text-xs text-muted-foreground">Run on {new Date(current!.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })} · {current!.file_names.length} document(s): {current!.file_names.join(", ") || "saved EE records only"}</p>
             <section className={card}><h2 className="section-title text-primary">Evidence summary</h2><div className="mt-3 whitespace-pre-wrap text-sm">{ev.summary_markdown}</div></section>
             <div className="grid gap-6 md:grid-cols-2">
               <section className={card}><h2 className="section-title text-primary">EE workforce analysis</h2><List title="Findings" items={ev.workforce?.findings} />{ev.workforce?.headcount_notes && <p className="mt-3 text-sm">{ev.workforce.headcount_notes}</p>}</section>
