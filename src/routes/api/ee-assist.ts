@@ -9,7 +9,7 @@ const Body = z.object({
   context: z.unknown(),
 });
 
-const BASE = `You are an expert South African Employment Equity advisor (Employment Equity Act 55 of 1998 as amended by Act 4 of 2022, EE Regulations 2025, 5-year sectoral numerical targets, Codes of Good Practice). Write in professional South African English using Markdown. Base all figures strictly on the data provided; never invent numbers. Be practical and specific.`;
+const BASE = `You are an expert South African Employment Equity advisor (Employment Equity Act 55 of 1998 as amended by Act 4 of 2022, EE Regulations 2025, 5-year sectoral numerical targets, Codes of Good Practice). Write in professional South African English using Markdown. Base all figures strictly on the data provided; never invent numbers. Be practical and specific. When attributing findings, name the uploaded document; refer to saved platform data only as "saved EE records" — never mention "appData", "app data" or "savedData".`;
 
 const PLAN = `${BASE}
 You are drafting ONE section of an employer's Employment Equity Plan (EEA13, section 20 of the Act). Write only the requested section's content (no title heading), ready for the practitioner to edit. Keep it under 350 words. Use the employer's sector, dates, EEA12 analyses and numerical goals where relevant.`;
@@ -94,8 +94,8 @@ export const Route = createFileRoute("/api/ee-assist")({
         }
         if (parsed.data.task === "dg_outcome") return streamResponses(DG_OUTCOME, `DG review documents and EE data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "barrier_doc") return streamResponses(BARRIER_DOC, `Document and questionnaire structure (JSON):\n${ctx}`, request.signal);
-        if (parsed.data.task === "doel_forms") return streamResponses(DOEL, `Documents and app data (JSON):\n${ctx}`, request.signal);
-        if (parsed.data.task === "evidence_extract") return streamResponses(EVIDENCE, `Documents and app data (JSON):\n${ctx}`, request.signal);
+        if (parsed.data.task === "doel_forms") return streamResponses(DOEL, `Documents and saved EE data (JSON):\n${ctx}`, request.signal);
+        if (parsed.data.task === "evidence_extract") return streamResponses(EVIDENCE, `Documents and saved EE data (JSON):\n${ctx}`, request.signal);
         if (parsed.data.task === "plan_gap") return streamResponses(GAP, `Existing plan and workforce data (JSON):\n${ctx}`, request.signal);
         return streamResponses(DG, `Review data (JSON):\n${ctx}`, request.signal);
       },

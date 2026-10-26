@@ -75,7 +75,7 @@ export function DgOutcome() {
       setBusy("Collecting your saved EE data…");
       const appData = await gatherAppData();
       setBusy("Analysing the DG review and drafting corrective actions…"); setCurrent("");
-      const out = await ai.run({ task: "dg_outcome", context: { documents: read, appData } }, setCurrent);
+      const out = await ai.run({ task: "dg_outcome", context: { documents: read, savedData: appData } }, setCurrent);
       if (!out.trim()) { toast.error("No analysis was returned — please try again."); return; }
       await supabase.from("dg_outcome_analyses").insert({ file_names: read.map((r) => r.name), result: out });
       void load();
