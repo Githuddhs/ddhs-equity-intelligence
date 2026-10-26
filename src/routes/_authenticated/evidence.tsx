@@ -87,7 +87,7 @@ function EvidencePage() {
 
         {ev ? (
           <div className="mt-8 space-y-6">
-            <p className="text-xs text-muted-foreground">Run on {new Date(current!.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })} · {current!.file_names.length} document(s): {current!.file_names.join(", ") || "saved app data only"}</p>
+            <p className="text-xs text-muted-foreground">Run on {new Date(current!.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })} · {current!.file_names.length} document(s): {current!.file_names.join(", ") || "saved EE records only"}</p>
             <section className={card}><h2 className="section-title text-primary">Evidence summary</h2><div className="mt-3 whitespace-pre-wrap text-sm">{ev.summary_markdown}</div></section>
             <div className="grid gap-6 md:grid-cols-2">
               <section className={card}><h2 className="section-title text-primary">EE workforce analysis</h2><List title="Findings" items={ev.workforce?.findings} />{ev.workforce?.headcount_notes && <p className="mt-3 text-sm">{ev.workforce.headcount_notes}</p>}</section>

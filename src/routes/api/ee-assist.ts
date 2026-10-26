@@ -41,7 +41,7 @@ DG item ids: consult, analysis, plan, manager, reports, income, display, records
 Use "" or [] where the documents give no evidence. Never invent figures; cite document names in evidence strings. Plan fields are Markdown text ready to paste into the plan.`;
 
 const DOEL = `${BASE}
-You are completing the South African EEA2 (Employment Equity Report) and EEA4 (Income Differential Statement) from the client's uploaded documents and saved app data. Return ONLY a JSON object (no prose, no code fences):
+You are completing the South African EEA2 (Employment Equity Report) and EEA4 (Income Differential Statement) from the client's uploaded documents and saved EE records. Return ONLY a JSON object (no prose, no code fences):
 {"employer": {"name","registration","doelRef","sector","sic","address","ceo","seniorManager","contact","period"} (strings),
  "eea2": {"profile": GRID, "disabled": GRID, "recruitment": GRID, "promotion": GRID, "termination": GRID, "skills": GRID, "notes": string},
  "eea4": {"remuneration": GRID, "headcount": GRID, "narrative": string (Markdown analysis of income differentials by level, race and gender, s27), "measures": string (measures to reduce disproportionate differentials)},
