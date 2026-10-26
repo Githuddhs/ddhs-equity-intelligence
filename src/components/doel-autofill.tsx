@@ -125,9 +125,34 @@ export function DoelAutofill() {
   const src = forms ? ((tab === "EEA2" ? forms.eea2 : forms.eea4) as Record<string, Grid> | undefined) : undefined;
 
   return (
+    <>
+    <section className="mt-6 rounded-xl border border-border bg-card p-5" aria-label="EEA2 and EEA4 reporting dashboard">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="font-display text-lg font-semibold text-navy">EEA2 &amp; EEA4 reporting dashboard</h2>
+        <p className="text-sm font-semibold text-navy">Closing date: 15 January 2027{daysLeft >= 0 ? ` · ${daysLeft} day${daysLeft === 1 ? "" : "s"} left` : " · closed"}</p>
+      </div>
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {status.map((s) => (
+          <div key={s.form} className="rounded-lg border border-border p-3">
+            <p className="text-sm font-semibold text-navy">{s.form} — {s.form === "EEA2" ? "workforce report" : "income differentials"}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{forms ? `${s.filled} of ${s.tables} tables have figures` : "Not filled yet"}</p>
+            <p className="mt-1 text-xs">Status: <span className="font-semibold text-teal">{STATUS_LABEL[s.status] ?? s.status}</span>{s.reference ? ` · Ref ${s.reference}` : ""}</p>
+          </div>
+        ))}
+        <div className="rounded-lg border border-border p-3">
+          <p className="text-sm font-semibold text-navy">Missing information</p>
+          <p className="mt-1 text-xs text-muted-foreground">{forms ? `${forms.missing?.length ?? 0} item(s) to resolve — listed below the forms` : "Fill the forms to see what is missing"}</p>
+          {!!forms?.sources?.length && <p className="mt-1 text-xs text-muted-foreground">From: {forms.sources[0]}</p>}
+        </div>
+      </div>
+      <button type="button" disabled={!!busy} onClick={() => void fillFromProfiles()} className="mt-4 rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-navy-foreground hover:opacity-90 disabled:opacity-50">
+        Fill EEA2 &amp; EEA4 from Employee Profiles
+      </button>
+      <p className="mt-1 text-xs text-muted-foreground">Uses your latest saved reporting period: headcounts, disability, recruitment, promotions, terminations and pay. Nothing is guessed; gaps are listed as missing.</p>
+    </section>
     <section className="mt-6 rounded-xl border border-border bg-card p-5">
       <h2 className="font-display text-lg font-semibold text-navy">Documents for EEA2 &amp; EEA4 — auto-fill</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Upload the documents below (PDF, Word, Excel, CSV). The platform reads them with your saved Workforce Data and EE plan, then fills in draft EEA2 and EEA4 forms you can check, edit and download. Scanned PDFs and old .doc files can't be read.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Alternatively, upload documents (PDF, Word, Excel, CSV). The platform reads them with your saved Workforce Data and EE plan, then fills in draft EEA2 and EEA4 forms you can check, edit and download. Scanned PDFs and old .doc files can't be read.</p>
       <input ref={input} type="file" multiple className="hidden" aria-label="Upload DoEL documents" accept=".pdf,.docx,.xlsx,.xls,.csv,.tsv,.txt" onChange={(e) => e.target.files && void upload(e.target.files)} />
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {DOEL_DOCS.map((d) => {
