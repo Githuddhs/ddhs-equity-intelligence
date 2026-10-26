@@ -10,10 +10,10 @@ import type { Eea13PdfInput, Eea13Row } from "@/lib/eea13-report";
 import { latestFoundation } from "@/lib/foundation-source";
 import { foundationReportGrids, validateFoundation } from "@/lib/foundation";
 
-const KEY_TO_DOEL: Record<Key, string> = {
+export const KEY_TO_DOEL: Record<Key, string> = {
   MA: "AM", MC: "CM", MI: "IM", MW: "WM", FA: "AF", FC: "CF", FI: "IF", FW: "WF", FNM: "FNM", FNF: "FNF",
 };
-const LEVEL_TO_DOEL: Record<string, string> = {
+export const LEVEL_TO_DOEL: Record<string, string> = {
   "Top Management": "Top management",
   "Senior Management": "Senior management",
   "Professionally Qualified": "Professionally qualified",

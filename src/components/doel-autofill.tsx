@@ -67,6 +67,28 @@ export function DoelAutofill() {
   const status = doelStatus(forms, subs);
   const daysLeft = Math.ceil((Date.parse(`${DEADLINE}T23:59:59+02:00`) - Date.now()) / 86400000);
 
+  const trainInput = useRef<HTMLInputElement>(null);
+  const loadTraining = async (file: File) => {
+    setBusy("Reading training register…");
+    try {
+      const [{ readTrainingRegister, skillsGrid, TRAINING_MISSING }, { latestFoundation }] = await Promise.all([import("@/lib/training-register"), import("@/lib/foundation-source")]);
+      const foundation = await latestFoundation();
+      if (!foundation) { toast.error("Save Employee Profiles on the Workforce page first, so training can be matched to people."); return; }
+      const r = skillsGrid(await readTrainingRegister(file), foundation.employees);
+      setForms((p) => {
+        const f = structuredClone(p ?? {}) as DoelForms;
+        const eea2 = (f.eea2 ??= {} as NonNullable<DoelForms["eea2"]>) as Record<string, Grid>;
+        eea2["skills"] = r.grid;
+        f.missing = [...(f.missing ?? []).filter((m) => m !== TRAINING_MISSING && !m.startsWith("Training register:")), ...r.missing];
+        f.sources = [...(f.sources ?? []).filter((s) => !s.startsWith("Training register")), `Training register: ${file.name}`];
+        return f;
+      });
+      setTab("EEA2");
+      toast.success(`${r.trained} trained employee(s) added to the skills development table.${r.missing.length ? " Some rows need attention — see missing information." : ""}`);
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Could not read the training register."); }
+    finally { setBusy(""); }
+  };
+
   const fillFromProfiles = async () => {
     setBusy("Reading your Employee Profiles…");
     try {
@@ -201,6 +223,13 @@ export function DoelAutofill() {
           {tables.map((t) => (
             <div key={t.key} className="mt-5 overflow-x-auto">
               <h3 className="text-sm font-semibold">{t.title}</h3>
+              {t.key === "skills" && (
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <input ref={trainInput} type="file" className="hidden" aria-label="Upload training register" accept=".xlsx,.xls,.csv,.ods" onChange={(e) => { const file = e.target.files?.[0]; if (file) void loadTraining(file); e.target.value = ""; }} />
+                  <button type="button" disabled={!!busy} onClick={() => trainInput.current?.click()} className="rounded-md border border-teal px-2 py-1 font-semibold text-teal hover:bg-teal/10 disabled:opacity-50">Upload training register</button>
+                  <span>Excel or CSV with columns Employee number, Course and Date. Each person trained is counted once, using their Employee Profile.</span>
+                </div>
+              )}
               <table className="mt-2 text-xs">
                 <thead><tr><th className="pr-2 text-left">Level</th>{DOEL_COLS.map((c) => <th key={c} className="px-1">{COL_LABELS[c]}</th>)}<th className="px-1">Total</th></tr></thead>
                 <tbody>
