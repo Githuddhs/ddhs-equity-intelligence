@@ -23,7 +23,7 @@ export const Route = createFileRoute("/blog/$slug")({
       type: "article",
       crumbs: [{ name: "Blog", path: "/blog" }, { name: loaderData.title, path }],
       jsonLd: ahead
-        ? undefined
+        ? []
         : [{
             "@context": "https://schema.org",
             "@type": "BlogPosting",
