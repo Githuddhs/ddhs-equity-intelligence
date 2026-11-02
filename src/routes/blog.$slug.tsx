@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight, Compass } from "lucide-react";
 import { getPost } from "@/lib/blog";
-import { formatReleaseDate, isReleased, releaseDate, releasedPosts } from "@/lib/publishing-schedule";
+import { allPosts, formatReleaseDate, isScheduledAhead, releaseDate } from "@/lib/publishing-schedule";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -9,29 +9,34 @@ export const Route = createFileRoute("/blog/$slug")({
   staticData: { sitemap: false },
   loader: ({ params }) => {
     const post = getPost(params.slug);
-    if (!post || !isReleased("blog", post.slug)) throw notFound();
+    if (!post) throw notFound();
     return post;
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Article unavailable | DDHS" }, NOINDEX] };
     const path = `/blog/${loaderData.slug}`;
-    return pageHead({
+    const ahead = isScheduledAhead("blog", loaderData.slug);
+    const head = pageHead({
       path,
       title: `${loaderData.title} | DDHS`,
       description: loaderData.description,
       type: "article",
       crumbs: [{ name: "Blog", path: "/blog" }, { name: loaderData.title, path }],
-      jsonLd: [{
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        headline: loaderData.title,
-        description: loaderData.description,
-        mainEntityOfPage: `${SITE_URL}${path}`,
-        datePublished: releaseDate("blog", loaderData.slug).toISOString(),
-        dateModified: releaseDate("blog", loaderData.slug).toISOString(),
-        publisher: { "@type": "Organization", name: "DDHS Equity Intelligence" },
-      }],
+      jsonLd: ahead
+        ? undefined
+        : [{
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: loaderData.title,
+            description: loaderData.description,
+            mainEntityOfPage: `${SITE_URL}${path}`,
+            datePublished: releaseDate("blog", loaderData.slug).toISOString(),
+            dateModified: releaseDate("blog", loaderData.slug).toISOString(),
+            publisher: { "@type": "Organization", name: "DDHS Equity Intelligence" },
+          }],
     });
+    if (ahead) head.meta.push(NOINDEX);
+    return head;
   },
   notFoundComponent: () => (
     <GuideShell>
@@ -44,12 +49,15 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPostPage() {
   const p = Route.useLoaderData();
-  const others = releasedPosts().filter((x) => x.slug !== p.slug).slice(0, 3);
+  const others = allPosts().filter((x) => x.slug !== p.slug).slice(0, 3);
   return (
     <GuideShell>
       <Link to="/blog" className="text-sm font-semibold text-teal">← All articles</Link>
       <h1 className="display-title mt-3 text-balance text-primary">{p.title}</h1>
-      <p className="mt-2 text-xs text-muted-foreground">Published {formatReleaseDate(releaseDate("blog", p.slug))}</p>
+      <p className="mt-2 text-xs text-muted-foreground">
+        {isScheduledAhead("blog", p.slug) ? "Scheduled for release " : "Published "}
+        {formatReleaseDate(releaseDate("blog", p.slug))}
+      </p>
       <p className="page-lead mt-4 text-muted-foreground">{p.intro}</p>
       {p.sections.map((s) => (
         <section key={s.heading || "opening"} className="mt-8">
