@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SCHEDULE, isReleased, releasedGuides, releasedPosts } from "./publishing-schedule";
+import { SCHEDULE, allPosts, isReleased, isScheduledAhead, releasedGuides, releasedPosts } from "./publishing-schedule";
 
 const sast = (y: number, m: number, d: number, h: number) => Date.UTC(y, m - 1, d, h - 2);
 
@@ -32,5 +32,13 @@ describe("weekly release schedule", () => {
     expect(releasedPosts(sast(2026, 12, 28, 6)).at(-1)!.slug).toBe("employment-equity-leadership-responsibility-not-hr-project");
     expect(releasedPosts(sast(2027, 4, 26, 5))).toHaveLength(27);
     expect(releasedPosts(sast(2027, 4, 26, 6))).toHaveLength(28);
+  });
+
+  it("every written article is listed before its release date", () => {
+    const now = sast(2026, 11, 2, 12);
+    expect(allPosts()).toHaveLength(28);
+    expect(allPosts().length).toBeGreaterThan(releasedPosts(now).length);
+    expect(isScheduledAhead("blog", "ee-data-quality-checklist", now)).toBe(true);
+    expect(isScheduledAhead("blog", "employment-equity-software-south-africa", now)).toBe(false);
   });
 });
