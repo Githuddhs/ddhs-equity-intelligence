@@ -52,8 +52,8 @@ function BlogPostPage() {
       <p className="mt-2 text-xs text-muted-foreground">Published {formatReleaseDate(releaseDate("blog", p.slug))}</p>
       <p className="page-lead mt-4 text-muted-foreground">{p.intro}</p>
       {p.sections.map((s) => (
-        <section key={s.heading} className="mt-8">
-          <h2 className="font-display text-xl font-semibold text-primary">{s.heading}</h2>
+        <section key={s.heading || "opening"} className="mt-8">
+          {s.heading && <h2 className="font-display text-xl font-semibold text-primary">{s.heading}</h2>}
           {s.body.map((t, i) => <p key={i} className="mt-3 leading-relaxed">{t}</p>)}
         </section>
       ))}
