@@ -42,3 +42,14 @@ describe("weekly release schedule", () => {
     expect(isScheduledAhead("blog", "employment-equity-software-south-africa", now)).toBe(false);
   });
 });
+
+import { releaseDate as rd, BLOG_CYCLE_MS as CYCLE } from "./publishing-schedule";
+import { describe as d2, it as i2, expect as e2 } from "vitest";
+d2("article re-runs", () => {
+  i2("first article re-runs the week after the full set ends", () => {
+    const first = rd("blog", "employment-equity-software-south-africa", 0).getTime();
+    e2(CYCLE).toBe(28 * 7 * 24 * 3600 * 1000);
+    e2(rd("blog", "employment-equity-software-south-africa", first + CYCLE + 1000).getTime()).toBe(first + CYCLE);
+    e2(rd("blog", "employment-equity-software-south-africa", first + CYCLE - 1000).getTime()).toBe(first);
+  });
+});

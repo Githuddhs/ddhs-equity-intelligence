@@ -40,7 +40,20 @@ export const isReleased = (kind: "blog" | "guide", slug: string, now = Date.now(
   }
   return releaseOf(kind, slug) <= now;
 };
-export const releaseDate = (kind: "blog" | "guide", slug: string) => new Date(releaseOf(kind, slug));
+/** Blog articles repeat: once the full set has run, the cycle restarts in the same weekly order. */
+export const BLOG_CYCLE_MS = BLOG_POSTS.length * WEEK;
+
+/** Most recent run date (first release until the set has finished, then each repeat). */
+export const releaseDate = (kind: "blog" | "guide", slug: string, now = Date.now()) => {
+  const first = releaseOf(kind, slug);
+  if (kind !== "blog" || !Number.isFinite(first) || now < first) return new Date(first);
+  const runs = Math.floor((now - first) / BLOG_CYCLE_MS);
+  return new Date(first + runs * BLOG_CYCLE_MS);
+};
+
+/** Blog articles ordered newest run first, so re-runs rise to the top of the list. */
+export const postsByLatestRun = (now = Date.now()): BlogPost[] =>
+  [...BLOG_POSTS].sort((a, b) => releaseDate("blog", b.slug, now).getTime() - releaseDate("blog", a.slug, now).getTime());
 
 export const releasedPosts = (now = Date.now()): BlogPost[] => BLOG_POSTS.filter((p) => isReleased("blog", p.slug, now));
 export const releasedGuides = (now = Date.now()): Guide[] => GUIDES.filter((g) => isReleased("guide", g.slug, now));
