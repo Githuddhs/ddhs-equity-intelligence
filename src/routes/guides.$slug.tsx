@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { getGuide, GUIDES_LAST_REVIEWED, PRACTITIONER_APPROVED_GUIDES } from "@/lib/guides";
-import { guidesByLatestRun } from "@/lib/publishing-schedule";
+import { guidesByLatestRun, isReleased } from "@/lib/publishing-schedule";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/guides/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Guide not found | DDHS" }, NOINDEX] };
     const path = `/guides/${loaderData.slug}`;
-    return pageHead({
+    const head = pageHead({
       path,
       title: `${loaderData.title} | DDHS Guides`,
       description: loaderData.description,
@@ -31,6 +31,8 @@ export const Route = createFileRoute("/guides/$slug")({
         publisher: { "@type": "Organization", name: "DDHS Equity Intelligence" },
       }],
     });
+    if (!isReleased("guide", loaderData.slug)) head.meta.push(NOINDEX);
+    return head;
   },
   notFoundComponent: () => (
     <GuideShell>
