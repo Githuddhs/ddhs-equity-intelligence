@@ -53,3 +53,13 @@ d2("article re-runs", () => {
     e2(rd("blog", "employment-equity-software-south-africa", first + CYCLE - 1000).getTime()).toBe(first);
   });
 });
+
+d2("guide re-runs", () => {
+  i2("first guide re-runs after the full set of guides", async () => {
+    const { GUIDE_CYCLE_MS: G } = await import("./publishing-schedule");
+    const slug = (await import("./guides")).GUIDES[0]!.slug;
+    const first = rd("guide", slug, 0).getTime();
+    e2(G).toBe(10 * 7 * 24 * 3600 * 1000);
+    e2(rd("guide", slug, first + G + 1000).getTime()).toBe(first + G);
+  });
+});

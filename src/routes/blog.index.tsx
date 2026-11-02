@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { postsByLatestRun, formatReleaseDate, isScheduledAhead, releaseDate } from "@/lib/publishing-schedule";
+import { guidesByLatestRun, isReleased, postsByLatestRun, formatReleaseDate, isScheduledAhead, releaseDate } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell } from "@/components/guide-shell";
 
@@ -39,6 +39,21 @@ function BlogIndex() {
             </li>
           );
         })}
+      </ul>
+      <h2 className="mt-12 font-display text-2xl font-semibold text-primary">Guides</h2>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+        {guidesByLatestRun().map((g) => (
+          <li key={g.slug}>
+            <Link to="/guides/$slug" params={{ slug: g.slug }} className="block h-full rounded-2xl border border-border p-5 hover:border-teal">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Guide · {isReleased("guide", g.slug) ? "Published" : "Scheduled"} · {formatReleaseDate(releaseDate("guide", g.slug))}
+              </p>
+              <h3 className="mt-1 font-display text-lg font-semibold text-primary">{g.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{g.summary}</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-teal">Read guide <ArrowRight className="h-4 w-4" /></span>
+            </Link>
+          </li>
+        ))}
       </ul>
       <GuideCta />
     </GuideShell>
