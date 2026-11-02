@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { allPosts, formatReleaseDate, isScheduledAhead, releaseDate } from "@/lib/publishing-schedule";
+import { postsByLatestRun, formatReleaseDate, isScheduledAhead, releaseDate } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell } from "@/components/guide-shell";
 
@@ -23,7 +23,7 @@ function BlogIndex() {
       <h1 className="display-title mt-2 text-balance text-primary">Employment Equity insights</h1>
       <p className="page-lead mt-4 text-muted-foreground">Practical thinking on Employment Equity compliance, planning and workforce intelligence.</p>
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-        {allPosts().map((p) => {
+        {postsByLatestRun().map((p) => {
           const ahead = isScheduledAhead("blog", p.slug);
           const date = formatReleaseDate(releaseDate("blog", p.slug));
           return (
