@@ -53,7 +53,13 @@ export const releaseDate = (kind: "blog" | "guide", slug: string, now = Date.now
 
 /** Blog articles ordered newest run first, so re-runs rise to the top of the list. */
 export const postsByLatestRun = (now = Date.now()): BlogPost[] =>
-  [...BLOG_POSTS].sort((a, b) => releaseDate("blog", b.slug, now).getTime() - releaseDate("blog", a.slug, now).getTime());
+  [...BLOG_POSTS].sort((a, b) => {
+    const ta = releaseDate("blog", a.slug, now).getTime();
+    const tb = releaseDate("blog", b.slug, now).getTime();
+    const fa = ta > now, fb = tb > now;
+    if (fa !== fb) return fa ? 1 : -1; // published first, scheduled after
+    return fa ? ta - tb : tb - ta; // newest published first; next scheduled first
+  });
 
 export const releasedPosts = (now = Date.now()): BlogPost[] => BLOG_POSTS.filter((p) => isReleased("blog", p.slug, now));
 export const releasedGuides = (now = Date.now()): Guide[] => GUIDES.filter((g) => isReleased("guide", g.slug, now));
