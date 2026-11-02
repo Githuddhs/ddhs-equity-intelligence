@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { GUIDES_LAST_REVIEWED, PRACTITIONER_APPROVED_GUIDES } from "@/lib/guides";
-import { releasedGuides } from "@/lib/publishing-schedule";
+import { formatReleaseDate, guidesByLatestRun, isReleased, releaseDate } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -23,16 +23,19 @@ function GuidesIndex() {
       <p className="text-sm font-semibold uppercase tracking-wider text-teal">Guides</p>
       <h1 className="display-title mt-2 text-balance text-primary">Employment Equity guides</h1>
       <p className="page-lead mt-4 text-muted-foreground">Plain-language answers to the questions employers ask most about Employment Equity compliance.</p>
-      {releasedGuides().length === 0 && (
+      {guidesByLatestRun().length === 0 && (
         <p className="mt-8 rounded-2xl border border-border p-5 text-sm text-muted-foreground">
           New guides are on the way. In the meantime, read our <Link to="/blog" className="font-semibold text-teal">blog</Link>.
         </p>
       )}
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-        {releasedGuides().map((g) => (
+        {guidesByLatestRun().map((g) => (
           <li key={g.slug}>
             <Link to="/guides/$slug" params={{ slug: g.slug }} className="block h-full rounded-2xl border border-border p-5 hover:border-teal">
-              <h2 className="font-display text-lg font-semibold text-primary">{g.title}</h2>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isReleased("guide", g.slug) ? "Published" : "Scheduled"} · {formatReleaseDate(releaseDate("guide", g.slug))}
+              </p>
+              <h2 className="mt-1 font-display text-lg font-semibold text-primary">{g.title}</h2>
               {g.needsPractitionerReview && !PRACTITIONER_APPROVED_GUIDES.includes(g.slug) && (
                 <span className="mt-2 inline-block rounded-full border border-teal/40 px-2 py-0.5 text-[11px] font-semibold text-teal">Needs practitioner review</span>
               )}

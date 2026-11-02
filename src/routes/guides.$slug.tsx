@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { getGuide, GUIDES_LAST_REVIEWED, PRACTITIONER_APPROVED_GUIDES } from "@/lib/guides";
-import { isReleased, releasedGuides } from "@/lib/publishing-schedule";
+import { guidesByLatestRun } from "@/lib/publishing-schedule";
 import { NOINDEX, pageHead, SITE_URL } from "@/lib/seo";
 import { GuideCta, GuideShell, GUIDE_DISCLAIMER } from "@/components/guide-shell";
 
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/guides/$slug")({
   staticData: { sitemap: false },
   loader: ({ params }) => {
     const guide = getGuide(params.slug);
-    if (!guide || !isReleased("guide", guide.slug)) throw notFound();
+    if (!guide || !guidesByLatestRun().some((x) => x.slug === guide.slug)) throw notFound();
     return guide;
   },
   head: ({ loaderData }) => {
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/guides/$slug")({
 
 function GuidePage() {
   const g = Route.useLoaderData();
-  const others = releasedGuides().filter((x) => x.slug !== g.slug).slice(0, 3);
+  const others = guidesByLatestRun().filter((x) => x.slug !== g.slug).slice(0, 3);
   return (
     <GuideShell>
       <Link to="/guides" className="text-sm font-semibold text-teal">← All guides</Link>

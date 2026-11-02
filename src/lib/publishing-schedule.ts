@@ -42,13 +42,16 @@ export const isReleased = (kind: "blog" | "guide", slug: string, now = Date.now(
 };
 /** Blog articles repeat: once the full set has run, the cycle restarts in the same weekly order. */
 export const BLOG_CYCLE_MS = BLOG_POSTS.length * WEEK;
+/** Guides repeat the same way once the full set of guides has run. */
+export const GUIDE_CYCLE_MS = GUIDES.length * WEEK;
 
 /** Most recent run date (first release until the set has finished, then each repeat). */
 export const releaseDate = (kind: "blog" | "guide", slug: string, now = Date.now()) => {
   const first = releaseOf(kind, slug);
-  if (kind !== "blog" || !Number.isFinite(first) || now < first) return new Date(first);
-  const runs = Math.floor((now - first) / BLOG_CYCLE_MS);
-  return new Date(first + runs * BLOG_CYCLE_MS);
+  if (!Number.isFinite(first) || now < first) return new Date(first);
+  const cycle = kind === "blog" ? BLOG_CYCLE_MS : GUIDE_CYCLE_MS;
+  const runs = Math.floor((now - first) / cycle);
+  return new Date(first + runs * cycle);
 };
 
 /** Blog articles ordered newest run first, so re-runs rise to the top of the list. */
@@ -72,3 +75,13 @@ export const isScheduledAhead = (kind: "blog" | "guide", slug: string, now = Dat
 
 export const formatReleaseDate = (d: Date) =>
   d.toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Johannesburg" });
+
+/** Approved guides (released or scheduled), published first newest-first, then upcoming in order. */
+export const guidesByLatestRun = (now = Date.now()): Guide[] =>
+  GUIDES.filter(isGuideApproved).sort((a, b) => {
+    const ta = releaseDate("guide", a.slug, now).getTime();
+    const tb = releaseDate("guide", b.slug, now).getTime();
+    const fa = ta > now, fb = tb > now;
+    if (fa !== fb) return fa ? 1 : -1;
+    return fa ? ta - tb : tb - ta;
+  });
