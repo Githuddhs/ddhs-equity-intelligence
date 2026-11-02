@@ -45,5 +45,11 @@ export const releaseDate = (kind: "blog" | "guide", slug: string) => new Date(re
 export const releasedPosts = (now = Date.now()): BlogPost[] => BLOG_POSTS.filter((p) => isReleased("blog", p.slug, now));
 export const releasedGuides = (now = Date.now()): Guide[] => GUIDES.filter((g) => isReleased("guide", g.slug, now));
 
+/** Every article already written, released or not — the blog lists them all. */
+export const allPosts = (): BlogPost[] => [...BLOG_POSTS];
+
+/** True while an item's weekly release date is still ahead. */
+export const isScheduledAhead = (kind: "blog" | "guide", slug: string, now = Date.now()) => !isReleased(kind, slug, now);
+
 export const formatReleaseDate = (d: Date) =>
   d.toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Johannesburg" });

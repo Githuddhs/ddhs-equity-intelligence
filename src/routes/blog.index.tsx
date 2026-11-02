@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { releasedPosts } from "@/lib/publishing-schedule";
+import { allPosts, formatReleaseDate, isScheduledAhead, releaseDate } from "@/lib/publishing-schedule";
 import { pageHead } from "@/lib/seo";
 import { GuideCta, GuideShell } from "@/components/guide-shell";
 
