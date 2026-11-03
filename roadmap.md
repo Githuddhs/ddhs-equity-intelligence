@@ -91,4 +91,4 @@
 - [x] Same front-page logo on every page
 - [x] Aptos font on every page; standardise branding and colours
 - [x] Brand logo, navy/teal and Aptos in all four export formats
-- [ ] Combine founder profile into homepage Why DDHS section
+- [x] Combine founder profile into homepage Why DDHS section
