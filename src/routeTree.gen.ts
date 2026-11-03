@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AccountabilityManagementRouteImport } from './routes/accountability-management'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClientViewRouteImport } from './routes/client-view'
@@ -86,6 +87,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcademyRoute = AcademyRouteImport.update({
+  id: '/academy',
+  path: '/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountabilityManagementRoute =
@@ -439,6 +445,7 @@ const LovableEmailTransactionalPreviewRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/academy': typeof AcademyRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
@@ -509,6 +516,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/academy': typeof AcademyRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
@@ -581,6 +589,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/academy': typeof AcademyRoute
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
@@ -653,6 +662,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/academy'
     | '/accountability-management'
     | '/auth'
     | '/client-view'
@@ -723,6 +733,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/academy'
     | '/accountability-management'
     | '/auth'
     | '/client-view'
@@ -794,6 +805,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/academy'
     | '/accountability-management'
     | '/auth'
     | '/client-view'
@@ -866,6 +878,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AcademyRoute: typeof AcademyRoute
   AccountabilityManagementRoute: typeof AccountabilityManagementRoute
   AuthRoute: typeof AuthRoute
   ClientViewRoute: typeof ClientViewRoute
@@ -921,6 +934,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/academy': {
+      id: '/academy'
+      path: '/academy'
+      fullPath: '/academy'
+      preLoaderRoute: typeof AcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accountability-management': {
@@ -1464,6 +1484,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AcademyRoute: AcademyRoute,
   AccountabilityManagementRoute: AccountabilityManagementRoute,
   AuthRoute: AuthRoute,
   ClientViewRoute: ClientViewRoute,

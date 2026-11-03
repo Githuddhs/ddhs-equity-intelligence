@@ -32,6 +32,7 @@ const GROUPS = [
       { to: "/pricing", label: "Pricing" },
       { to: "/tour", label: "Site Tour" },
       { to: "/guides", label: "Employment Equity guides" },
+      { to: "/academy", label: "Academy" },
       { to: "/blog", label: "Blog" },
       { to: "/plan-architecture", label: "How your plan is built" },
     ],
