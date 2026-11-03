@@ -328,6 +328,18 @@ function Index() {
             ))}
 
           </div>
+
+          <div id="founder" className="mt-8 scroll-mt-28 rounded-2xl border bg-card p-6 shadow-sm md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-wider text-teal">Founder profile</p>
+            <h3 className="card-title mt-2 text-primary">Mr Sello Molapo — Founder and Managing Director</h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              DDHS was built by someone who understands the Employment Equity challenge from the inside. Mr Sello Molapo brings more than 15 years of senior Employment Equity leadership experience in higher education. His experience covers the full Employment Equity lifecycle, from planning and workforce analysis to recruitment oversight, governance, statutory reporting, target monitoring and executive accountability.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              DDHS transforms that practical experience into an intelligent solution for universities, corporates and other organisations seeking to turn Employment Equity plans into measurable action.
+            </p>
+            <p className="mt-4 font-semibold text-primary">Higher Education Experience. Corporate Application. Intelligent Employment Equity.</p>
+          </div>
         </div>
       </section>
 
@@ -827,7 +839,7 @@ function Index() {
               <h4 className="label-title mt-8 text-primary">Company</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["About DDHS Equity Intelligence", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
-                  <li key={l}><a href="#contact" className="transition-colors hover:text-primary">{l}</a></li>
+                  <li key={l}><a href={l === "Founder" ? "#founder" : "#contact"} className="transition-colors hover:text-primary">{l}</a></li>
                 ))}
               </ul>
             </div>
