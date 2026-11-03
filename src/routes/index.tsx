@@ -329,7 +329,7 @@ function Index() {
 
           </div>
 
-          <div id="founder" className="mt-8 scroll-mt-28 rounded-2xl border bg-card p-6 shadow-sm md:p-8">
+          <div id="founder" className="mt-8 scroll-mt-40 rounded-2xl border bg-card p-6 shadow-sm sm:scroll-mt-28 md:p-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-teal">Founder profile</p>
             <h3 className="card-title mt-2 text-primary">Mr Sello Molapo — Founder and Managing Director</h3>
             <p className="mt-3 text-sm text-muted-foreground">
