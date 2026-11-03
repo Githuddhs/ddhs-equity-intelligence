@@ -839,7 +839,7 @@ function Index() {
               <h4 className="label-title mt-8 text-primary">Company</h4>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {["About DDHS Equity Intelligence", "Founder", "Founding Customer Programme", "Contact"].map((l) => (
-                  <li key={l}><a href="#contact" className="transition-colors hover:text-primary">{l}</a></li>
+                  <li key={l}><a href={l === "Founder" ? "#founder" : "#contact"} className="transition-colors hover:text-primary">{l}</a></li>
                 ))}
               </ul>
             </div>
