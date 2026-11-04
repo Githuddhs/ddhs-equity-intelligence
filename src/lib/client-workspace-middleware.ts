@@ -15,7 +15,7 @@ export const requireClientWorkspace = createMiddleware({ type: "function" })
   .server(async ({ context, next }) => {
     const request = getRequest();
     const id = request.headers.get("x-ddhs-client");
-    if (!id) return next({ context });
+    if (!id) return next({ context: { ...context, staffId: context.userId } });
     const { data: allowed, error } = await context.supabase.rpc("can_manage_client", { p_client: id, p_sensitive: false });
     if (error || !allowed) throw new Error("An active client subscription and staff access are required.");
     const url = process.env["SUPABASE_URL"];

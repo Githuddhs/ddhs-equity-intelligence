@@ -41,7 +41,7 @@ export function AppHeader() {
   }, [isFetched, isAdmin, onStaffPage, navigate]);
   const qc = useQueryClient();
   const managingClient = !!workspaceForPage();
-  const signOut = async () => { await qc.cancelQueries(); qc.clear(); setClientWorkspace(null); await sessionClient.auth.signOut(); navigate({ to: "/auth", replace: true }); };
+  const signOut = async () => { await qc.cancelQueries(); qc.clear(); setClientWorkspace(null); await sessionClient.auth.signOut(); navigate({ to: "/auth", search: { next: "/portal" }, replace: true }); };
   const link = "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary";
   const active = { className: "rounded-md px-3 py-2 text-sm font-semibold text-primary bg-muted" };
   return (

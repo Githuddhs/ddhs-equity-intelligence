@@ -6,8 +6,8 @@ import { workspaceForPage } from "./client-workspace-state";
 let scoped: ReturnType<typeof createClient<Database>> | undefined;
 function scopedClient() {
   if (scoped) return scoped;
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const url = import.meta.env["VITE_SUPABASE_URL"];
+  const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
   scoped = createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
     global: { fetch: async (input, init) => {

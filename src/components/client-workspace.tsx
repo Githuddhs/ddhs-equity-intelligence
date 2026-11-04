@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Building2, LogOut, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { sessionClient } from "@/lib/workspace-client";
 export function OpenClientWorkspace({ id }: { id: string }) {
   const open = useServerFn(openClientWorkspace);
   const qc = useQueryClient();
+  const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   return <Button disabled={busy} onClick={async () => {
     setBusy(true);
@@ -20,11 +21,10 @@ export function OpenClientWorkspace({ id }: { id: string }) {
       await qc.cancelQueries(); qc.clear();
       localStorage.removeItem("ddhs-unit-filter");
       setClientWorkspace(workspace);
-      // Full client-side navigation is unnecessary; the link preserves the in-memory staff scope.
-      document.getElementById("open-client-portal")?.click();
+      await navigate({ to: "/portal" });
     } catch (error) { toast.error(error instanceof Error ? error.message : "Could not open this client."); }
     finally { setBusy(false); }
-  }}><Building2 />{busy ? "Opening…" : "Open client workspace"}<Link id="open-client-portal" to="/portal" className="hidden" aria-hidden tabIndex={-1} /></Button>;
+  }}><Building2 />{busy ? "Opening…" : "Open client workspace"}</Button>;
 }
 
 export function ClientWorkspaceBanner() {
@@ -38,7 +38,7 @@ export function ClientWorkspaceBanner() {
   if (!workspace) return null;
   return <aside className="border-b border-teal bg-accent print:hidden">
     <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-3">
-      <div><p className="font-semibold text-primary">Managing {workspace.profile.company || workspace.email}</p>
+      <div><p className="font-semibold text-primary">Managing {workspace.profile["company"] || workspace.email}</p>
         <p className="text-sm text-muted-foreground">DDHS staff · {workspace.sensitiveAccess ? "Client permission granted for employee records" : "Salary, disability and private files require client permission"}</p></div>
       <Button variant="outline" asChild><Link to="/clients" onClick={async (event) => {
         event.preventDefault(); await qc.cancelQueries(); qc.clear(); setClientWorkspace(null);
