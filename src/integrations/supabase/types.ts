@@ -864,6 +864,27 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_demo_companies: {
+        Row: {
+          company: string
+          created_at: string
+          id: string
+          profile: Json
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          id: string
+          profile?: Json
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          id?: string
+          profile?: Json
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           amount: number

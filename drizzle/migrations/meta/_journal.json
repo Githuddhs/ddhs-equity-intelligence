@@ -260,6 +260,13 @@
       "when": 1793766186781,
       "tag": "0036_subscribed_client_team_members",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1793766313952,
+      "tag": "0037_staff_demo_company_registry",
+      "breakpoints": true
     }
   ]
 }

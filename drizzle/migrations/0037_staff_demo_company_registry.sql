@@ -1,0 +1,7 @@
+CREATE TABLE public.staff_demo_companies (id uuid PRIMARY KEY, company text NOT NULL, profile jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT ON public.staff_demo_companies TO authenticated;
+GRANT ALL ON public.staff_demo_companies TO service_role;
+ALTER TABLE public.staff_demo_companies ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Staff only demonstration companies" ON public.staff_demo_companies FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin'));
+CREATE OR REPLACE FUNCTION public.can_manage_client(p_client uuid,p_sensitive boolean DEFAULT false) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT auth.uid() IS NOT NULL AND ((public.has_role(auth.uid(),'admin') AND EXISTS (SELECT 1 FROM public.staff_demo_companies d WHERE d.id=p_client)) OR ((public.has_role(auth.uid(),'admin') OR EXISTS (SELECT 1 FROM public.client_team_members m WHERE m.client_id=p_client AND m.user_id=auth.uid() AND m.active)) AND EXISTS (SELECT 1 FROM public.subscriptions s WHERE s.user_id=p_client AND s.status='active' AND s.plan<>'dg_review') AND (NOT p_sensitive OR (public.has_role(auth.uid(),'admin') AND EXISTS (SELECT 1 FROM public.client_staff_permissions p WHERE p.user_id=p_client AND p.sensitive_access))))) $$;
+COMMENT ON TABLE public.staff_demo_companies IS 'Fictional staff-only demonstration workspaces, never paid subscriptions or client accounts.';
