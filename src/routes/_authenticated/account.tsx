@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { ProfileForm } from "@/components/profile-form";
+import { SensitiveClientPermission } from "@/components/client-workspace";
 import { pickProfile, profileSchema, type Profile } from "@/lib/account.functions";
 
 export const Route = createFileRoute("/_authenticated/account")({
@@ -66,6 +67,7 @@ function Account() {
         <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
         <h1 className="page-title mt-2 text-primary">My account</h1>
         <p className="page-lead text-muted-foreground">Signed in as {data?.email}</p>
+        <SensitiveClientPermission />
         <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
           {data && <ProfileForm initial={data.profile} busy={busy} onSave={save} />}
         </section>
