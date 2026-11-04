@@ -182,6 +182,39 @@ export type Database = {
         }
         Relationships: []
       }
+      client_team_members: {
+        Row: {
+          active: boolean
+          client_id: string
+          created_at: string
+          created_by: string
+          email: string
+          full_name: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          client_id: string
+          created_at?: string
+          created_by: string
+          email: string
+          full_name?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          client_id?: string
+          created_at?: string
+          created_by?: string
+          email?: string
+          full_name?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_enquiries: {
         Row: {
           company: string

@@ -253,6 +253,13 @@
       "when": 1793766062710,
       "tag": "0035_subscribed_staff_client_workspaces",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1793766186781,
+      "tag": "0036_subscribed_client_team_members",
+      "breakpoints": true
     }
   ]
 }
