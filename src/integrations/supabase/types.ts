@@ -140,6 +140,48 @@ export type Database = {
         }
         Relationships: []
       }
+      client_staff_audit: {
+        Row: {
+          action: string
+          client_id: string
+          created_at: string
+          id: string
+          staff_id: string
+        }
+        Insert: {
+          action: string
+          client_id: string
+          created_at?: string
+          id?: string
+          staff_id: string
+        }
+        Update: {
+          action?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          staff_id?: string
+        }
+        Relationships: []
+      }
+      client_staff_permissions: {
+        Row: {
+          sensitive_access: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          sensitive_access?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          sensitive_access?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_enquiries: {
         Row: {
           company: string
@@ -977,6 +1019,10 @@ export type Database = {
         Args: { _application: Json; _token: string }
         Returns: boolean
       }
+      can_manage_client: {
+        Args: { p_client: string; p_sensitive?: boolean }
+        Returns: boolean
+      }
       delete_workforce_foundation: {
         Args: { p_id: string }
         Returns: undefined
@@ -989,6 +1035,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      platform_owner: { Args: { p_sensitive?: boolean }; Returns: string }
+      requested_client: { Args: never; Returns: string }
       review_clients: {
         Args: never
         Returns: {
