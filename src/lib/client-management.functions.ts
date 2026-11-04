@@ -36,6 +36,26 @@ export const setSensitivePermission = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export const changeClientHandover = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { action: "request" | "accept" | "support"; clientId?: string; notes?: string; allow?: boolean }) => z.object({
+    action: z.enum(["request", "accept", "support"]), clientId: z.string().uuid().optional(), notes: z.string().max(2000).optional(), allow: z.boolean().optional(),
+  }).parse(input))
+  .handler(async ({ data, context }) => {
+    let result;
+    if (data.action === "request") {
+      if (!data.clientId) throw new Error("Choose a client.");
+      result = await context.supabase.rpc("request_client_handover", { p_client: data.clientId, p_notes: data.notes ?? "" });
+    } else if (data.action === "accept") {
+      result = await context.supabase.rpc("accept_client_handover");
+    } else {
+      if (data.allow === undefined) throw new Error("Choose your support permission.");
+      result = await context.supabase.rpc("set_client_support", { p_allow: data.allow });
+    }
+    if (result.error) throw new Error("Could not update handover. Check your access and subscription.");
+    return { ok: true };
+  });
+
 export const inviteClientTeamMember = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { clientId: string; fullName: string; email: string }) => z.object({

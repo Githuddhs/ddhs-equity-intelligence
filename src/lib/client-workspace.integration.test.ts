@@ -8,7 +8,7 @@ const CLIENT = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
 const OTHER = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
 const DEMO = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const TEAM = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
-const migrations = ["0035_subscribed_staff_client_workspaces", "0036_subscribed_client_team_members", "0037_staff_demo_company_registry"].map((name) => readFileSync(new URL(`../../drizzle/migrations/${name}.sql`, import.meta.url), "utf8")).join("\n");
+const migrations = ["0035_subscribed_staff_client_workspaces", "0036_subscribed_client_team_members", "0037_staff_demo_company_registry", "0038_client_administration_handover"].map((name) => readFileSync(new URL(`../../drizzle/migrations/${name}.sql`, import.meta.url), "utf8")).join("\n");
 let db: PGlite;
 const tables = ["eea12_analyses", "barrier_responses", "barrier_survey_links", "client_share_links", "ee_plans", "dg_reviews", "dg_outcome_analyses", "evidence_extractions", "plan_gap_analyses", "portal_documents", "recruitment_vacancies", "recruitment_candidates", "doel_submissions", "reminder_settings", "invoices"];
 
@@ -102,5 +102,22 @@ describe("subscribed client workspaces — isolated database", () => {
     await db.exec("INSERT INTO ee_plans(label) VALUES('demo plan')");
     await actor(TEAM,DEMO); expect(await permission(DEMO)).toBe(false);
     expect((await db.query("SELECT * FROM ee_plans")).rows).toHaveLength(0);
+  });
+  it("only the client owner can accept handover", async () => {
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')", [CLIENT]);
+    await expect(db.exec("select accept_client_handover()")).rejects.toThrow();
+    await actor(TEAM); await expect(db.exec("select accept_client_handover()")).rejects.toThrow();
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    expect((await db.query<{ notes: string }>("select notes from client_handovers")).rows[0]?.notes).toBe("Ready");
+  });
+  it("acceptance ends delegated staff access and consent without deleting client data or team access", async () => {
+    await actor(CLIENT); await db.exec(`INSERT INTO client_staff_permissions VALUES('${CLIENT}',true,now()); INSERT INTO ee_plans(label) VALUES('Retain me')`);
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')", [CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    expect((await db.query("select * from ee_plans")).rows).toHaveLength(1);
+    await actor(STAFF,CLIENT); expect(await permission(CLIENT)).toBe(false); expect(await permission(CLIENT,true)).toBe(false);
+    await actor(TEAM,CLIENT); expect(await permission(CLIENT)).toBe(true);
+    await actor(CLIENT); await db.exec("select set_client_support(true)");
+    await actor(STAFF,CLIENT); expect(await permission(CLIENT)).toBe(true); expect(await permission(CLIENT,true)).toBe(false);
   });
 });
