@@ -1,7 +1,7 @@
 import { reportHtml } from "@/lib/report-download";
 // Barrier Analysis response document (Word): questionnaire results combined with the
 // latest Workforce Foundation snapshot (headcount by level, disability, division/department).
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { LIKERT_SECTIONS, OPEN_QUESTIONS, QUESTIONNAIRE_VERSION, barrierFrequency } from "@/lib/barrier";
 import type { ExportableResponse } from "@/lib/barrier-export";
 import { GROUPS, LEVELS, levelTotal, normaliseDisability, normaliseWorkforce, type Workforce } from "@/lib/workforce";

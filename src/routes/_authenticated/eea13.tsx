@@ -3,7 +3,7 @@ import { ExistingFormUpload } from "@/components/existing-form-upload";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { useLatestOrgUnits } from "@/components/org-unit-picker";

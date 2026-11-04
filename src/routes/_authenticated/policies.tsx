@@ -1,7 +1,7 @@
 import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { normaliseContent } from "@/lib/ee-plan";
 import { POLICIES, downloadPolicy, downloadSeniorManagerLetter, type PolicyKey } from "@/lib/policy-docs";

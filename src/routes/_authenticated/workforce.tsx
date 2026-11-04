@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { RefreshCw } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { extractPdfText } from "@/lib/workforce.functions";
 import { ExistingPlanGap } from "@/components/existing-plan-gap";

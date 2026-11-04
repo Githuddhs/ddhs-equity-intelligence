@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { foundationSchema } from "@/lib/foundation";
 
 export async function latestFoundation(snapshotId?: string) {

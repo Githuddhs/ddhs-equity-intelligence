@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { useAiStream } from "@/components/use-ai-stream";
 import { fileText, gatherAppData, withoutAppData } from "@/lib/evidence";
 import { listMyDoelSubmissions, saveDoelSubmission } from "@/lib/doel.functions";

@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { latestEvidence, type SavedEvidence } from "@/lib/evidence";
 import { buildDeadlines, daysUntil, emptyContent, goalsFromAnalyses, normaliseContent, PLAN_LEVELS, TEXT_SECTIONS, type SavedAnalysis } from "@/lib/ee-plan";

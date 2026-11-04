@@ -2,7 +2,7 @@ import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { PriorityBadge, PriorityCard } from "@/components/priority-card";

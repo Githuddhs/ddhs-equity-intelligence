@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 import { AppHeader } from "@/components/app-header";
 import { DoelAutofill } from "@/components/doel-autofill";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import {
   deleteDoelSubmission,
   listMyDoelSubmissions,

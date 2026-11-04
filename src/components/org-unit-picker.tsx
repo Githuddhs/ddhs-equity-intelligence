@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { unitOptions, normaliseUnits, hasLevel, type OrgUnit, type UnitFilter } from "@/lib/org-units";
 
 /** Latest saved workforce snapshot with its organisation/faculty/division/department/section breakdown. */

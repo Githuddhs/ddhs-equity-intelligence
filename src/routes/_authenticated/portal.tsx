@@ -2,7 +2,7 @@ import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { ShareLinks } from "@/components/share-links";
 import { TourInvite } from "@/components/tour-invite";

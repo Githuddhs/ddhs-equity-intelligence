@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { FileUp } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 
 export type EeaForm = "eea12" | "eea13" | "eea2" | "eea4";
 const NAMES: Record<EeaForm, string> = { eea12: "EEA12", eea13: "EEA13", eea2: "EEA2", eea4: "EEA4" };

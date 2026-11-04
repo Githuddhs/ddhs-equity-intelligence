@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { uniqueProfiles, type Employee } from "@/lib/foundation";
 import { LEVELS } from "@/lib/workforce";
 import { EAP_SOURCE_LABEL, SECTOR_TARGET_PERIOD_LABEL, SECTOR_TARGET_SOURCE_LABEL } from "@/lib/sectors";

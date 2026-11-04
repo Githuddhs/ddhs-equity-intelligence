@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { PLAN_LEVELS } from "@/lib/ee-plan";
 import { BARRIER_AREAS, BARRIER_STATUSES, DESIGNATED_GROUPS, barrierProblems, blankBarrier, effectiveStatus, registerText, type BarrierEntry } from "@/lib/barrier-register";
 

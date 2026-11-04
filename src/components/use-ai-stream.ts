@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { workspaceForPage } from "@/lib/client-workspace-state";
 
 export function useAiStream() {

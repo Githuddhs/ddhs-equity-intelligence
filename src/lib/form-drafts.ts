@@ -1,6 +1,6 @@
 // Builds draft EEA2 / EEA4 forms from the same shared sources every form uses:
 // the latest Employee Profile snapshot, the latest EE plan and the account profile.
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { latestWorkforce } from "@/lib/barrier-response-doc";
 import { GROUPS, LEVELS, levelTotal, type Key } from "@/lib/workforce";
 import { DOEL_LEVELS, type DoelForms, type Grid } from "@/lib/doel-forms";

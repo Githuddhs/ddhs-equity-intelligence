@@ -5,7 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { AppHeader } from "@/components/app-header";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { workspaceForPage } from "@/lib/client-workspace-state";
 import { createInvoice, listAllInvoices, listMyInvoices, setInvoiceStatus, type InvoiceItem } from "@/lib/invoice.functions";
 import { exportInvoicePdf, type InvoiceForPdf } from "@/lib/invoice-pdf";

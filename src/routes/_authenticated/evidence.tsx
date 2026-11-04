@@ -2,7 +2,7 @@ import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { useAiStream } from "@/components/use-ai-stream";

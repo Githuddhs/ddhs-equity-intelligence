@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import type { Json } from "@/integrations/supabase/types";
 import { useAiStream } from "@/components/use-ai-stream";
 import { fileText } from "@/lib/evidence";

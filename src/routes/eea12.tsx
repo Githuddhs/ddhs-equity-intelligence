@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AiInsights } from "@/components/ai-insights";
 import { AuthCta } from "@/components/auth-cta";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
 import { ALL_UNITS, aggregate, describeFilter, type UnitFilter } from "@/lib/org-units";
 import { normaliseWorkforce } from "@/lib/workforce";
