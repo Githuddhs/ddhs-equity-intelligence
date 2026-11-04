@@ -110,6 +110,33 @@ export type Database = {
         }
         Relationships: []
       }
+      client_handovers: {
+        Row: {
+          accepted_at: string | null
+          client_id: string
+          notes: string
+          requested_at: string
+          requested_by: string
+          staff_support_enabled: boolean
+        }
+        Insert: {
+          accepted_at?: string | null
+          client_id: string
+          notes?: string
+          requested_at?: string
+          requested_by: string
+          staff_support_enabled?: boolean
+        }
+        Update: {
+          accepted_at?: string | null
+          client_id?: string
+          notes?: string
+          requested_at?: string
+          requested_by?: string
+          staff_support_enabled?: boolean
+        }
+        Relationships: []
+      }
       client_share_links: {
         Row: {
           created_at: string
@@ -1048,6 +1075,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_client_handover: { Args: never; Returns: undefined }
       admin_clients: {
         Args: never
         Returns: {
@@ -1090,6 +1118,10 @@ export type Database = {
         Returns: boolean
       }
       platform_owner: { Args: { p_sensitive?: boolean }; Returns: string }
+      request_client_handover: {
+        Args: { p_client: string; p_notes?: string }
+        Returns: undefined
+      }
       requested_client: { Args: never; Returns: string }
       review_clients: {
         Args: never
@@ -1104,6 +1136,7 @@ export type Database = {
         Args: { p_record: Json; p_snapshot: Json }
         Returns: string
       }
+      set_client_support: { Args: { p_allow: boolean }; Returns: undefined }
       set_manager_role: {
         Args: { _make: boolean; _user_id: string }
         Returns: undefined
