@@ -164,4 +164,29 @@ describe("subscribed client workspaces — isolated database", () => {
     await actor(STAFF,CLIENT); expect((await db.query("select * from ee_plans")).rows).toHaveLength(0);
     await expect(db.exec("INSERT INTO ee_plans(label) VALUES('forbidden')")).rejects.toThrow();
   });
+  it("owner can revoke and restore team access after handover but staff cannot", async () => {
+    const member=(await db.query<{id:string}>("select id from client_team_members where user_id=$1",[TEAM])).rows[0];
+    if(!member) throw new Error('Missing fixture member');
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')",[CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    await actor(STAFF); await expect(db.query("select change_client_team_access($1,false)",[member.id])).rejects.toThrow();
+    await actor(CLIENT); await db.query("select change_client_team_access($1,false)",[member.id]);
+    await actor(TEAM,CLIENT); expect(await permission(CLIENT)).toBe(false);
+    await actor(CLIENT); await db.query("select change_client_team_access($1,true)",[member.id]);
+    await actor(TEAM,CLIENT); expect(await permission(CLIENT)).toBe(true);
+  });
+  it("owner can revoke when subscription expires; team and other clients cannot administer membership", async () => {
+    const member=(await db.query<{id:string}>("select id from client_team_members where user_id=$1",[TEAM])).rows[0];
+    if(!member) throw new Error('Missing fixture member');
+    for(const who of [TEAM,OTHER]) { await actor(who); await expect(db.query("select change_client_team_access($1,false)",[member.id])).rejects.toThrow(); }
+    await db.exec("RESET ROLE"); await db.exec(`UPDATE subscriptions SET status='cancelled' WHERE user_id='${CLIENT}'`);
+    await actor(CLIENT); await db.query("select change_client_team_access($1,false)",[member.id]);
+    await expect(db.query("select change_client_team_access($1,true)",[member.id])).rejects.toThrow();
+  });
+  it("staff membership cannot bypass ended staff support", async () => {
+    await db.exec(`INSERT INTO client_team_members(client_id,user_id,email,created_by) VALUES('${CLIENT}','${STAFF}','staff@example.invalid','${STAFF}')`);
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')",[CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    await actor(STAFF,CLIENT); expect(await permission(CLIENT)).toBe(false);
+  });
 });
