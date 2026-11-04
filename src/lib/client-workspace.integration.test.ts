@@ -127,4 +127,41 @@ describe("subscribed client workspaces — isolated database", () => {
     await actor(STAFF); expect((await db.query("select * from ee_plans")).rows).toHaveLength(0);
     await actor(TEAM,CLIENT); await expect(db.exec("insert into recruitment_candidates(label) values('private')")).rejects.toThrow();
   });
+  it("retains two team users and their saved records through a full handover", async () => {
+    await db.exec(`INSERT INTO client_team_members(client_id,user_id,email,created_by) VALUES('${CLIENT}','${OTHER}','second@example.invalid','${STAFF}'); INSERT INTO ee_plans(user_id,label) VALUES('${OTHER}','Other company private plan')`);
+    await actor(STAFF,CLIENT); await db.exec("INSERT INTO ee_plans(label) VALUES('Fictional handover plan')");
+    await actor(STAFF); await db.query("select request_client_handover($1,'All setup complete')",[CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    for (const member of [TEAM,OTHER]) {
+      await actor(member,CLIENT);
+      expect(await permission(CLIENT)).toBe(true);
+      expect((await db.query<{ label: string }>("select label from ee_plans")).rows).toEqual([{label:'Fictional handover plan'}]);
+      await db.exec("UPDATE ee_plans SET label='Fictional handover plan'");
+    }
+    await actor(CLIENT);
+    expect((await db.query("select * from client_team_members where active")).rows).toHaveLength(2);
+  });
+  it("blocks cross-client read, insert, update and delete after acceptance", async () => {
+    await db.exec(`INSERT INTO ee_plans(user_id,label) VALUES('${OTHER}','Other company private plan')`);
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')",[CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    for (const who of [CLIENT,TEAM,STAFF]) {
+      await actor(who,who===TEAM ? CLIENT : undefined);
+      expect((await db.query("select * from ee_plans where user_id=$1",[OTHER])).rows).toHaveLength(0);
+      expect((await db.query("update ee_plans set label='tamper' where user_id=$1 returning id",[OTHER])).rows).toHaveLength(0);
+      expect((await db.query("delete from ee_plans where user_id=$1 returning id",[OTHER])).rows).toHaveLength(0);
+      await expect(db.query("insert into ee_plans(user_id,label) values($1,'tamper')",[OTHER])).rejects.toThrow();
+    }
+    await db.exec("RESET ROLE");
+    expect((await db.query<{label:string}>("select label from ee_plans where user_id=$1",[OTHER])).rows[0]?.label).toBe('Other company private plan');
+  });
+  it("revoking renewed support immediately blocks staff reads and writes", async () => {
+    await actor(STAFF,CLIENT); await db.exec("INSERT INTO ee_plans(label) VALUES('Retained plan')");
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')",[CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover(); select set_client_support(true)");
+    await actor(STAFF,CLIENT); expect((await db.query("select * from ee_plans")).rows).toHaveLength(1);
+    await actor(CLIENT); await db.exec("select set_client_support(false)");
+    await actor(STAFF,CLIENT); expect((await db.query("select * from ee_plans")).rows).toHaveLength(0);
+    await expect(db.exec("INSERT INTO ee_plans(label) VALUES('forbidden')")).rejects.toThrow();
+  });
 });
