@@ -65,6 +65,8 @@ export const inviteClientTeamMember = createServerFn({ method: "POST" })
     const { data: staff } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
     const { data: allowed } = await context.supabase.rpc("can_manage_client", { p_client: data.clientId, p_sensitive: false });
     if (!staff || !allowed) throw new Error("Only DDHS staff can add users to an actively subscribed client.");
+    const { data: demo } = await context.supabase.from("staff_demo_companies").select("id").eq("id", data.clientId).maybeSingle();
+    if (demo) throw new Error("Demonstration companies cannot invite real users.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: existing } = await supabaseAdmin.from("client_team_members").select("id").eq("client_id", data.clientId).eq("email", data.email).maybeSingle();
     if (existing) throw new Error("This user is already listed. Restore their access instead.");

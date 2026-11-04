@@ -13,6 +13,8 @@
 - Staff access is the 'admin' row in user_roles, granted automatically by a trigger when the owner's email confirms, because roles must never come from user-editable data.
 - EEA12 and Workforce Foundation job-grade displays share OccupationalGrades and one crosswalk reference list, so occupational alignment remains consistent across entry and analysis.
 - Individual Workforce Foundation records live in reporting periods, never shared snapshots; delegated staff access requires explicit owner consent and an active subscription, never blanket admin access.
+- Client administration handovers retain owner IDs and records; owner acceptance ends delegated staff workspace access until owner reauthorisation, avoiding identity or record transfers.
+- Client data screens import the workspace client explicitly; authentication and staff administration use the generated session client so client scoping cannot alter staff sign-in privileges.
 - Workforce Foundation validation is shared by import/UI/server save; an invoker SQL transaction persists period records and non-identifying snapshot aggregates together so reports cannot diverge on partial saves.
 - Foundation document imports use deterministic named-column extraction, never AI, to avoid sending individual pay and disability records to an external model; imports remain unsaved until reviewed.
 - Generated reports use the root-mounted four-format download chooser; existing PDFs remain the canonical layout, native workbooks retain all rows, and conversion runs only in the browser to preserve data access and privacy.

@@ -24,7 +24,7 @@ export function ClientHandover({ clientId }: { clientId?: string }) {
     if (action === "accept" && !confirm("Accept responsibility for this client account? DDHS delegated workspace access and sensitive-record permission will end; your records and team users remain unchanged.")) return;
     setBusy(true);
     try {
-      await change({ data: { action, clientId, notes, allow } });
+      await change({ data: { action, notes, ...(clientId ? { clientId } : {}), ...(allow === undefined ? {} : { allow }) } });
       await qc.invalidateQueries({ queryKey: key });
       await qc.invalidateQueries({ queryKey: ["my-staff-consent"] });
       toast.success(action === "request" ? "Handover ready for client acceptance in My account." : action === "accept" ? "Client administration accepted." : "DDHS support permission updated.");
