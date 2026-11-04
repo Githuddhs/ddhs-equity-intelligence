@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireClientWorkspace } from "@/lib/client-workspace-middleware";
 
 export type InvoiceItem = { description: string; amount: number };
 
@@ -53,7 +54,7 @@ export const createInvoice = createServerFn({ method: "POST" })
   });
 
 export const listMyInvoices = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("invoices")
