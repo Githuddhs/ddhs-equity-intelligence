@@ -1,7 +1,7 @@
 # DDHS roadmap
 
 ## Open
-- [ ] Hosted fictional-account handover: create confirmed test identities, exercise staff request/owner acceptance/team retention/support boundaries/cross-client denial; no real client data access.
+- [ ] Hosted fictional-account handover blocked: the existing demo is staff-only and explicitly rejects handover; supported test-account creation is unavailable for this project. Needs dedicated confirmed fictional owner/team/staff accounts before hosted acceptance, team controls and cross-client checks can run. Re-ran all 17 isolated permission tests successfully; no live client data read or changed.
 - [x] Handover verified with 17 isolated database tests and a network-intercepted fictional owner preview: acceptance, retained team records, owner revoke/restore, support on/off, cross-client CRUD denial. Fixed unauthorised staff team revocation and exposed owner team controls; hosted demo cannot accept as an owner because it is staff-only, so no hosted handover submitted. No live client records read or changed.
 - [x] Staff subscribed-client workspaces implemented; demo Employee Profiles, refresh and recruitment verified; subscription and consent boundaries covered by isolated tests.
 - [x] Multiple client users: invitation, revoke/restore and shared workspaces implemented; membership permissions tested in isolation. Real invitation delivery not exercised.
