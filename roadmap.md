@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Verify full staff-to-client handover with fictional owner/team accounts in an isolated demo; retain records/team access and block cross-client access without live-client reads or writes.
 - [x] Staff subscribed-client workspaces implemented; demo Employee Profiles, refresh and recruitment verified; subscription and consent boundaries covered by isolated tests.
 - [x] Multiple client users: invitation, revoke/restore and shared workspaces implemented; membership permissions tested in isolation. Real invitation delivery not exercised.
 - [x] Separate labelled fictional demo company available to staff; 60 profiles and demo vacancy verified in preview.
