@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [x] Handover verified with 17 isolated database tests and a network-intercepted fictional owner preview: acceptance, retained team records, owner revoke/restore, support on/off, cross-client CRUD denial. Fixed unauthorised staff team revocation and exposed owner team controls; hosted demo cannot accept as an owner because it is staff-only, so no hosted handover submitted. No live client records read or changed.
 - [x] Staff subscribed-client workspaces implemented; demo Employee Profiles, refresh and recruitment verified; subscription and consent boundaries covered by isolated tests.
 - [x] Multiple client users: invitation, revoke/restore and shared workspaces implemented; membership permissions tested in isolation. Real invitation delivery not exercised.
 - [x] Separate labelled fictional demo company available to staff; 60 profiles and demo vacancy verified in preview.

@@ -27,6 +27,7 @@ export function ClientHandover({ clientId }: { clientId?: string }) {
       await change({ data: { action, notes, ...(clientId ? { clientId } : {}), ...(allow === undefined ? {} : { allow }) } });
       await qc.invalidateQueries({ queryKey: key });
       await qc.invalidateQueries({ queryKey: ["my-staff-consent"] });
+      await qc.invalidateQueries({ queryKey: ["client-team"] });
       toast.success(action === "request" ? "Handover ready for client acceptance in My account." : action === "accept" ? "Client administration accepted." : "DDHS support permission updated.");
     } catch (e) { toast.error(e instanceof Error ? e.message : "Could not update handover."); }
     finally { setBusy(false); }

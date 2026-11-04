@@ -14,6 +14,7 @@
 - EEA12 and Workforce Foundation job-grade displays share OccupationalGrades and one crosswalk reference list, so occupational alignment remains consistent across entry and analysis.
 - Individual Workforce Foundation records live in reporting periods, never shared snapshots; delegated staff access requires explicit owner consent and an active subscription, never blanket admin access.
 - Client administration handovers retain owner IDs and records; owner acceptance ends delegated staff workspace access until owner reauthorisation, avoiding identity or record transfers.
+- Team access changes use an atomic authorised RPC with audit; owners may revoke after subscription expiry, while staff require delegated support for both revoke and restore, preventing post-handover interference.
 - Client data screens import the workspace client explicitly; authentication and staff administration use the generated session client so client scoping cannot alter staff sign-in privileges.
 - Workforce Foundation validation is shared by import/UI/server save; an invoker SQL transaction persists period records and non-identifying snapshot aggregates together so reports cannot diverge on partial saves.
 - Foundation document imports use deterministic named-column extraction, never AI, to avoid sending individual pay and disability records to an external model; imports remain unsaved until reviewed.

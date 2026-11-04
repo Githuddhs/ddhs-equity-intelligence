@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { ProfileForm } from "@/components/profile-form";
 import { SensitiveClientPermission } from "@/components/client-workspace";
+import { ClientTeam } from "@/components/client-team";
 import { ClientHandover } from "@/components/client-handover";
 import { pickProfile, profileSchema, type Profile } from "@/lib/account.functions";
 
@@ -34,7 +35,7 @@ function Account() {
     queryKey: ["my-account"],
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
-      return { email: u.user?.email ?? "", profile: pickProfile(u.user?.user_metadata) };
+      return { id: u.user?.id, email: u.user?.email ?? "", profile: pickProfile(u.user?.user_metadata) };
     },
   });
   const [busy, setBusy] = useState(false);
@@ -70,6 +71,7 @@ function Account() {
         <p className="page-lead text-muted-foreground">Signed in as {data?.email}</p>
         <SensitiveClientPermission />
         <ClientHandover />
+        {data?.id && <ClientTeam clientId={data.id} owner />}
         <section className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
           {data && <ProfileForm initial={data.profile} busy={busy} onSave={save} />}
         </section>

@@ -91,17 +91,7 @@ export const setClientTeamAccess = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { id: string; active: boolean }) => z.object({ id: z.string().uuid(), active: z.boolean() }).parse(input))
   .handler(async ({ data, context }) => {
-    const { data: staff } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
-    if (!staff) throw new Error("Staff access required.");
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: member } = await supabaseAdmin.from("client_team_members").select("client_id").eq("id", data.id).single();
-    if (!member) throw new Error("Team member not found.");
-    if (data.active) {
-      const { data: allowed } = await context.supabase.rpc("can_manage_client", { p_client: member.client_id, p_sensitive: false });
-      if (!allowed) throw new Error("An active client subscription is required to restore access.");
-    }
-    const { error } = await supabaseAdmin.from("client_team_members").update({ active: data.active }).eq("id", data.id);
-    if (error) throw new Error("Could not change team access.");
-    await supabaseAdmin.from("client_staff_audit").insert({ staff_id: context.userId, client_id: member.client_id, action: data.active ? "RESTORE_TEAM_USER" : "REVOKE_TEAM_USER" });
+    const { error } = await context.supabase.rpc("change_client_team_access", { p_id: data.id, p_active: data.active });
+    if (error) throw new Error("Team administration is not authorised, or an active subscription is required to restore access.");
     return { ok: true };
   });
