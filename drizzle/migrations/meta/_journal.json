@@ -274,6 +274,13 @@
       "when": 1793766772638,
       "tag": "0038_client_administration_handover",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1793766873470,
+      "tag": "0039_enforce_delegated_client_boundaries",
+      "breakpoints": true
     }
   ]
 }
