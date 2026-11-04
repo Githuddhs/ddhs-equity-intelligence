@@ -8,7 +8,7 @@ const CLIENT = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
 const OTHER = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
 const DEMO = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const TEAM = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
-const migrations = ["0035_subscribed_staff_client_workspaces", "0036_subscribed_client_team_members", "0037_staff_demo_company_registry", "0038_client_administration_handover", "0039_enforce_delegated_client_boundaries"].map((name) => readFileSync(new URL(`../../drizzle/migrations/${name}.sql`, import.meta.url), "utf8")).join("\n");
+const migrations = ["0035_subscribed_staff_client_workspaces", "0036_subscribed_client_team_members", "0037_staff_demo_company_registry", "0038_client_administration_handover", "0039_enforce_delegated_client_boundaries", "0040_client_owner_team_administration"].map((name) => readFileSync(new URL(`../../drizzle/migrations/${name}.sql`, import.meta.url), "utf8")).join("\n");
 let db: PGlite;
 const tables = ["eea12_analyses", "barrier_responses", "barrier_survey_links", "client_share_links", "ee_plans", "dg_reviews", "dg_outcome_analyses", "evidence_extractions", "plan_gap_analyses", "portal_documents", "recruitment_vacancies", "recruitment_candidates", "doel_submissions", "reminder_settings", "invoices"];
 
