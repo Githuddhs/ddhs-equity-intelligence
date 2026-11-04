@@ -1101,9 +1101,17 @@ export type Database = {
         Args: { _application: Json; _token: string }
         Returns: boolean
       }
+      can_administer_client_team: {
+        Args: { p_client: string; p_revoke?: boolean }
+        Returns: boolean
+      }
       can_manage_client: {
         Args: { p_client: string; p_sensitive?: boolean }
         Returns: boolean
+      }
+      change_client_team_access: {
+        Args: { p_active: boolean; p_id: string }
+        Returns: undefined
       }
       delete_workforce_foundation: {
         Args: { p_id: string }

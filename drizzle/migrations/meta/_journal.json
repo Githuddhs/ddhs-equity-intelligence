@@ -281,6 +281,13 @@
       "when": 1793766873470,
       "tag": "0039_enforce_delegated_client_boundaries",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1793767355746,
+      "tag": "0040_client_owner_team_administration",
+      "breakpoints": true
     }
   ]
 }
