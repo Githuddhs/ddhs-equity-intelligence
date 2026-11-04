@@ -310,8 +310,11 @@ function Index() {
           <SectionHeading
             eyebrow="Why DDHS"
             title="Built in South Africa, for South African Employment Equity"
-            body="We combine Employment Equity expertise with a platform designed around the Employment Equity Act, DoEL forms and Director-General review requirements."
           />
+          <div className="mt-5 max-w-4xl space-y-4 text-muted-foreground">
+            <p>DDHS was built by someone who understands the Employment Equity challenge from the inside. Mr Sello Molapo brings more than 15 years of senior Employment Equity leadership experience in higher education. His experience covers the full Employment Equity lifecycle, from planning and workforce analysis to recruitment oversight, governance, statutory reporting, target monitoring and executive accountability.</p>
+            <p>DDHS transforms that practical experience into an intelligent solution for universities, corporates and other organisations seeking to turn Employment Equity plans into measurable action.</p>
+          </div>
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
               { icon: ShieldCheck, title: "Compliance-first", capability: "EEA13 Planning", href: "/eea13-planning", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
@@ -332,12 +335,6 @@ function Index() {
           <div id="founder" className="mt-8 scroll-mt-40 rounded-2xl border bg-card p-6 shadow-sm sm:scroll-mt-28 md:p-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-teal">Founder profile</p>
             <h3 className="card-title mt-2 text-primary">Mr Sello Molapo — Founder and Managing Director</h3>
-            <p className="mt-3 text-sm text-muted-foreground">
-              DDHS was built by someone who understands the Employment Equity challenge from the inside. Mr Sello Molapo brings more than 15 years of senior Employment Equity leadership experience in higher education. His experience covers the full Employment Equity lifecycle, from planning and workforce analysis to recruitment oversight, governance, statutory reporting, target monitoring and executive accountability.
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              DDHS transforms that practical experience into an intelligent solution for universities, corporates and other organisations seeking to turn Employment Equity plans into measurable action.
-            </p>
             <p className="mt-4 font-semibold text-primary">Higher Education Experience. Corporate Application. Intelligent Employment Equity.</p>
           </div>
         </div>

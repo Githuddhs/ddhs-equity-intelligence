@@ -11,6 +11,6 @@ export function setClientWorkspace(value: ClientWorkspace | null) {
 }
 export function workspaceForPage() {
   if (typeof window === "undefined") return null;
-  const ownPages = ["/staff", "/clients", "/review", "/account", "/auth", "/staff-login", "/set-password", "/reset-password"];
+  const ownPages = ["/account", "/auth", "/staff-login", "/set-password", "/reset-password"];
   return ownPages.some((p) => window.location.pathname === p || window.location.pathname.startsWith(p + "/")) ? null : workspace;
 }
