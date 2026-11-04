@@ -1,5 +1,5 @@
 // Pulls text from the client's uploaded portal documents and saved app data, for AI evidence extraction.
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { extractPdfText } from "@/lib/workforce.functions";
 import { latestWorkforce, workforceLines } from "@/lib/barrier-response-doc";
 import { barrierFrequency } from "@/lib/barrier";

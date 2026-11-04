@@ -3,7 +3,7 @@ import { OrgUnitPicker, useLatestOrgUnits } from "@/components/org-unit-picker";
 import { ALL_UNITS, type UnitFilter } from "@/lib/org-units";
 import { useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { unitsForPlan } from "@/lib/plan-units";
 
 const KEY = "ddhs-unit-filter";

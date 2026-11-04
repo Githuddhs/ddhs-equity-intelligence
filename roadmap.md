@@ -1,7 +1,11 @@
 # DDHS roadmap
 
 ## Open
-- [ ] Staff subscribed-client management: create/manage client profiles and delegated platform workspace, enforce active subscriptions and protect individual pay/disability records.
+- [x] Staff subscribed-client workspaces implemented; demo Employee Profiles, refresh and recruitment verified; subscription and consent boundaries covered by isolated tests.
+- [x] Multiple client users: invitation, revoke/restore and shared workspaces implemented; membership permissions tested in isolation. Real invitation delivery not exercised.
+- [x] Separate labelled fictional demo company available to staff; 60 profiles and demo vacancy verified in preview.
+- [x] Supplied opening statement added at the beginning of Why DDHS.
+- [x] Client administration handover: staff request and owner acceptance implemented; record retention, team access, consent revocation and support reauthorisation pass isolated tests. Acceptance controls checked with fictional responses; no real handover submitted.
 - [x] Recruitment handoff tests: successful handoff, duplicate staff numbers, missing reporting periods, repeat submissions.
 - [x] Show missing provincial EAP as “Not available” in charts and printed/downloaded tables; leave gaps uncalculated and preserve genuine zero benchmarks. Screen/print charts and tables plus missing-EAP files checked; partial-benchmark and genuine-zero regression tests pass.
 - [x] Include shared percentage-point EAP explanations in all four EEA12 download formats, retaining selected unit, occupational-level and job-grade filters. Signed-in saved-fixture verification passed for grade, unit and summary reports in four formats with available and missing provincial EAP (24 files); 14 regression tests pass, no browser errors, temporary records removed. Summary PowerPoint retains canonical PDF pages as images.

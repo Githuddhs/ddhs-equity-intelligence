@@ -246,6 +246,41 @@
       "when": 1792864979874,
       "tag": "0034_allow_page_document_area",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1793766062710,
+      "tag": "0035_subscribed_staff_client_workspaces",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1793766186781,
+      "tag": "0036_subscribed_client_team_members",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1793766313952,
+      "tag": "0037_staff_demo_company_registry",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1793766772638,
+      "tag": "0038_client_administration_handover",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1793766873470,
+      "tag": "0039_enforce_delegated_client_boundaries",
+      "breakpoints": true
     }
   ]
 }

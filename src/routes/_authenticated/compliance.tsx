@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 import { sendTestReminder } from "@/lib/reminders.functions";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { GoalVariancePanel } from "@/components/goal-variance-panel";
 import { buildDeadlines, daysUntil, DG_ITEMS, type Deadline, type DgAnswer } from "@/lib/ee-plan";

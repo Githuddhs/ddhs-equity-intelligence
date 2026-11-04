@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 
 export type SiteEvent = "visit" | "tour_complete" | "assessment_download" | "demo_request" | "app_install" | "readiness_check";
 

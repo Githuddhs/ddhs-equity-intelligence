@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import type { Json } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { useAiStream } from "@/components/use-ai-stream";

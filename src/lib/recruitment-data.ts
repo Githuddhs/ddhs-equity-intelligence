@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { normaliseWorkforce, type Workforce } from "@/lib/workforce";
 import { aggregate, normaliseUnits, type UnitFilter } from "@/lib/org-units";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";

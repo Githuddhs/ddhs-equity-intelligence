@@ -3,7 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { buildEea12Draft, buildEea13Draft, buildFormDrafts } from "@/lib/form-drafts";
 import { exportDoelPdf, DOEL_PORTAL_URL } from "@/lib/doel-forms";

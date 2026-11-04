@@ -5,6 +5,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageExport } from "@/components/page-export";
 import { InstallApp } from "@/components/install-app";
 import { BrandMark } from "@/components/brand-mark";
+import { ClientWorkspaceBanner } from "@/components/client-workspace";
+import { workspaceForPage, setClientWorkspace } from "@/lib/client-workspace-state";
+import { sessionClient } from "@/lib/workspace-client";
+import { useQueryClient } from "@tanstack/react-query";
 
 const STAFF_PATHS = ["/staff", "/clients", "/review"];
 
@@ -12,7 +16,7 @@ export function AppHeader() {
   const { data: isAdmin, isFetched } = useQuery({
     queryKey: ["is-admin"],
     queryFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
+      const { data: u } = await sessionClient.auth.getUser();
       if (!u.user) return false;
       const { data } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
       return !!data;
@@ -21,7 +25,7 @@ export function AppHeader() {
   const { data: isManager } = useQuery({
     queryKey: ["is-manager"],
     queryFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
+      const { data: u } = await sessionClient.auth.getUser();
       if (!u.user) return false;
       const { data } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "manager" as "admin" });
       return !!data;
@@ -35,19 +39,22 @@ export function AppHeader() {
     if (!isFetched) return;
     if (!isAdmin && onStaffPage) navigate({ to: "/portal", replace: true });
   }, [isFetched, isAdmin, onStaffPage, navigate]);
-  const signOut = async () => { await supabase.auth.signOut(); window.location.href = isAdmin ? "/staff-login" : "/"; };
+  const qc = useQueryClient();
+  const managingClient = !!workspaceForPage();
+  const signOut = async () => { await qc.cancelQueries(); qc.clear(); setClientWorkspace(null); await sessionClient.auth.signOut(); navigate({ to: "/auth", search: { next: "/portal" }, replace: true }); };
   const link = "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary";
   const active = { className: "rounded-md px-3 py-2 text-sm font-semibold text-primary bg-muted" };
   return (
     <>
     <PageExport />
+    <ClientWorkspaceBanner />
     <header className={`border-b border-border print:hidden ${isAdmin ? "bg-secondary" : ""}`}>
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4">
         <BrandMark to={isAdmin ? "/staff" : "/"}>
           {isAdmin && <span className="ml-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">Staff portal</span>}
         </BrandMark>
         <nav className="flex flex-wrap items-center gap-1">
-          {isAdmin ? (
+          {isAdmin && !managingClient ? (
             <>
               <Link to="/staff" className={link} activeProps={active}>Dashboard</Link>
               <Link to="/clients" className={link} activeProps={active}>Clients, invites &amp; deadlines</Link>

@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireClientWorkspace } from "@/lib/client-workspace-middleware";
 
 export type DoelSubmission = {
   id: string;
@@ -29,7 +29,7 @@ const submissionSchema = z.object({
 });
 
 export const listMyDoelSubmissions = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("doel_submissions")
@@ -41,7 +41,7 @@ export const listMyDoelSubmissions = createServerFn({ method: "GET" })
   });
 
 export const saveDoelSubmission = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .inputValidator((input: { id?: string } & z.infer<typeof submissionSchema>) =>
     submissionSchema.extend({ id: z.string().uuid().optional() }).parse(input),
   )
@@ -76,7 +76,7 @@ export const saveDoelSubmission = createServerFn({ method: "POST" })
   });
 
 export const deleteDoelSubmission = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .inputValidator((input: { id: string }) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase

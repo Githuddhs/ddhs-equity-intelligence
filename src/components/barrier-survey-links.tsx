@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 
 type Link = { id: string; token: string; label: string; org_name: string; expires_at: string; revoked: boolean; created_at: string };
 

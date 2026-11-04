@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 
 type LinkRow = { id: string; token: string; label: string; expires_at: string; revoked: boolean };
 const db = supabase as unknown as { from: (t: string) => any };

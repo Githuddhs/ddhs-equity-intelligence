@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { ProfileForm } from "@/components/profile-form";
 import { adminGetClientProfile, adminUpdateClientProfile, type Profile } from "@/lib/account.functions";
 

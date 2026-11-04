@@ -1,7 +1,7 @@
 import { withPageTools } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
 import { offerReport } from "@/lib/report-download";
 import { STATUS_LABEL, type VacancyStatus } from "@/lib/recruitment";

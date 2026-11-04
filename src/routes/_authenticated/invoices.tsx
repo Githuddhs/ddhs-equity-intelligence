@@ -5,7 +5,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { AppHeader } from "@/components/app-header";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
+import { workspaceForPage } from "@/lib/client-workspace-state";
 import { createInvoice, listAllInvoices, listMyInvoices, setInvoiceStatus, type InvoiceItem } from "@/lib/invoice.functions";
 import { exportInvoicePdf, type InvoiceForPdf } from "@/lib/invoice-pdf";
 import { PAYFAST_PLANS, DG_REVIEW_FEE } from "@/lib/payfast.functions";
@@ -46,7 +47,7 @@ type Client = { id: string; email: string; full_name: string | null; company: st
 
 function InvoicesPage() {
   const qc = useQueryClient();
-  const { data: isAdmin } = useQuery({
+  const { data: staff } = useQuery({
     queryKey: ["is-admin"],
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
@@ -55,6 +56,7 @@ function InvoicesPage() {
       return Boolean(data);
     },
   });
+  const isAdmin = staff && !workspaceForPage();
 
   const { data: mine } = useQuery({ queryKey: ["my-invoices"], queryFn: () => listMyInvoices() });
   const { data: all } = useQuery({ queryKey: ["all-invoices"], queryFn: () => listAllInvoices(), enabled: Boolean(isAdmin) });

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { sendAppointmentToProfile } from "@/lib/foundation.functions";
 import { CONTRACT_TYPES, WORK_PATTERNS } from "@/lib/foundation";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import type { Json, Tables } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
 import { PriorityCard } from "@/components/priority-card";

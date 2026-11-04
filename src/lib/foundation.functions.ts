@@ -1,11 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireClientWorkspace } from "@/lib/client-workspace-middleware";
 import { applyMovements, foundationSchema, foundationSnapshot, validateFoundation } from "@/lib/foundation";
 import type { Json } from "@/integrations/supabase/types";
 import { z } from "zod";
 
 export const saveFoundation = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .inputValidator((d: unknown) => foundationSchema.parse(d))
   .handler(async ({ data: input, context }) => {
     const data = applyMovements(input).foundation;
@@ -21,7 +21,7 @@ export const saveFoundation = createServerFn({ method: "POST" })
   });
 
 export const deleteFoundation = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.rpc("delete_workforce_foundation", { p_id: data.id });
@@ -30,7 +30,7 @@ export const deleteFoundation = createServerFn({ method: "POST" })
   });
 /** Recruitment handoff: adds an appointed candidate to the owner's Employee Profiles through the normal save path. */
 export const sendAppointmentToProfile = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireClientWorkspace])
   .inputValidator((d: unknown) => z.object({
     candidateId: z.string().uuid(), employeeId: z.string().trim().min(1).max(60), startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     contractType: z.string().max(40), workPattern: z.string().max(40), manager: z.string().max(150),

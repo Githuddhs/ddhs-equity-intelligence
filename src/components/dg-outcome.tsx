@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { renderMd } from "@/components/ai-insights";
 import { useAiStream } from "@/components/use-ai-stream";
 import { fileText, gatherAppData, withoutAppData } from "@/lib/evidence";

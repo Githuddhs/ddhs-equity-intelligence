@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { LEVELS, GROUPS, normaliseWorkforce, levelTotal, grandTotal, normaliseDisability, disabilityTotal } from "@/lib/workforce";
 import { SECTORS, LEVEL_TO_TARGET_KEY, eapTargets } from "@/lib/sectors";
 import { latestFoundation } from "@/lib/foundation-source";

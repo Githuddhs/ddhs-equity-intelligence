@@ -1,0 +1,7 @@
+CREATE TABLE public.client_team_members (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), client_id uuid NOT NULL, user_id uuid NOT NULL, full_name text NOT NULL DEFAULT '', email text NOT NULL, active boolean NOT NULL DEFAULT true, created_by uuid NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), UNIQUE(client_id,user_id));
+GRANT SELECT ON public.client_team_members TO authenticated;
+GRANT ALL ON public.client_team_members TO service_role;
+ALTER TABLE public.client_team_members ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Client team reads" ON public.client_team_members FOR SELECT TO authenticated USING (client_id=auth.uid() OR user_id=auth.uid() OR public.has_role(auth.uid(),'admin'));
+CREATE OR REPLACE FUNCTION public.can_manage_client(p_client uuid,p_sensitive boolean DEFAULT false) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT auth.uid() IS NOT NULL AND (public.has_role(auth.uid(),'admin') OR EXISTS (SELECT 1 FROM public.client_team_members m WHERE m.client_id=p_client AND m.user_id=auth.uid() AND m.active)) AND EXISTS (SELECT 1 FROM public.subscriptions s WHERE s.user_id=p_client AND s.status='active' AND s.plan<>'dg_review') AND (NOT p_sensitive OR (public.has_role(auth.uid(),'admin') AND EXISTS (SELECT 1 FROM public.client_staff_permissions p WHERE p.user_id=p_client AND p.sensitive_access))) $$;
+COMMENT ON TABLE public.client_team_members IS 'Staff-invited users share one subscribed client workspace. Membership never grants admin roles or individual salary/disability access.';
