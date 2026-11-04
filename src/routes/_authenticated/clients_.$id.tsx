@@ -8,6 +8,7 @@ import { AppHeader } from "@/components/app-header";
 import { ClientProfileAdmin, ClientPortalData } from "@/components/client-portal-admin";
 import { TourInvite } from "@/components/tour-invite";
 import { OpenClientWorkspace } from "@/components/client-workspace";
+import { ClientTeam } from "@/components/client-team";
 
 export const Route = createFileRoute("/_authenticated/clients_/$id")({
   staticData: { sitemap: false },
@@ -65,6 +66,7 @@ function ManageClient() {
       <h1 className="page-title text-primary">{cl.company || cl.full_name || cl.email}</h1>
       <p className="page-lead text-muted-foreground">{cl.full_name ? `${cl.full_name} · ` : ""}{cl.email} · {cl.confirmed ? "Active" : "Invite pending"}</p>
       <div className="mt-5"><OpenClientWorkspace id={id} /></div>
+      <ClientTeam clientId={id} />
 
       <section className="mt-6">
         <h2 className="section-title text-primary">Profile & organisation details</h2>

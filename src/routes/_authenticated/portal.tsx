@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { ShareLinks } from "@/components/share-links";
 import { TourInvite } from "@/components/tour-invite";
+import { MyClientWorkspaces } from "@/components/client-team";
 
 export const Route = createFileRoute("/_authenticated/portal")({
   staticData: { sitemap: false },
@@ -68,6 +69,7 @@ function Portal() {
       <main className="mx-auto max-w-6xl px-6 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Customer portal</p>
         <h1 className="page-title text-primary">Welcome{name ? `, ${name}` : ""}</h1>
+        <MyClientWorkspaces />
         <p className="page-lead mt-1 text-muted-foreground">{meta["company"] ? `${meta["company"]} · ` : ""}Your saved records and authorised DDHS support.</p>
 
         <Link to="/dashboard" className="mt-6 flex items-center justify-between rounded-xl border border-teal/50 bg-muted/40 p-5 shadow-sm">
