@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -38,14 +38,44 @@ export function ClientWorkspaceBanner() {
   if (!workspace) return null;
   return <aside className="border-b border-teal bg-accent print:hidden">
     <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-3">
-      <div><p className="font-semibold text-primary">Managing {workspace.profile["company"] || workspace.email}</p>
-        <p className="text-sm text-muted-foreground">DDHS staff · {workspace.sensitiveAccess ? "Client permission granted for employee records" : "Salary, disability and private files require client permission"}</p></div>
+      <div><p className="font-semibold text-primary">{workspace.demo ? "DEMONSTRATION — " : "Managing "}{workspace.profile["company"] || workspace.email}</p>
+        <p className="text-sm text-muted-foreground">{workspace.demo ? "Fictional records only · separate from real clients" : `${workspace.staff ? "DDHS staff" : "Client team"} · ${workspace.sensitiveAccess ? "Client permission granted for employee records" : "Salary, disability and private files require client permission"}`}</p></div>
       <Button variant="outline" asChild><Link to="/clients" onClick={async (event) => {
         event.preventDefault(); await qc.cancelQueries(); qc.clear(); setClientWorkspace(null);
-        localStorage.removeItem("ddhs-unit-filter"); window.location.assign("/clients");
+        localStorage.removeItem("ddhs-unit-filter"); window.location.assign(workspace.staff ? "/clients" : "/portal");
       }}><LogOut />End client session</Link></Button>
     </div>
   </aside>;
+}
+
+/** Revalidate the saved workspace ID before any page queries run after a refresh. */
+export function ClientWorkspaceRestore({ children }: { children: ReactNode }) {
+  const open = useServerFn(openClientWorkspace);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    const id = sessionStorage.getItem("ddhs-workspace-id");
+    if (!id) { setReady(true); return; }
+    void open({ data: { id } }).then((value) => { if (!cancelled) setClientWorkspace(value); }).catch(() => {
+      if (!cancelled) { setClientWorkspace(null); toast.error("Client workspace access has ended."); }
+    }).finally(() => { if (!cancelled) setReady(true); });
+    return () => { cancelled = true; };
+  }, [open]);
+  return ready ? children : <p className="p-6 text-muted-foreground">Opening your workspace…</p>;
+}
+
+export function StaffDemoCompany() {
+  const { data, error } = useQuery({ queryKey: ["staff-demo-companies"], queryFn: async () => {
+    const { data, error } = await sessionClient.from("staff_demo_companies").select("id,company");
+    if (error) throw error;
+    return data ?? [];
+  } });
+  return <section className="mt-8 border-y border-border py-5">
+    <h2 className="section-title text-primary">Demonstration company</h2>
+    <p className="mt-2 text-sm text-muted-foreground">Fictional company records for client engagements. Changes remain in the demonstration workspace.</p>
+    {error && <p className="mt-3 text-destructive">Could not load demonstration company.</p>}
+    <div className="mt-4 flex flex-wrap items-center gap-3">{data?.map((company) => <div key={company.id}><p className="mb-2 font-semibold">{company.company}</p><OpenClientWorkspace id={company.id} /></div>)}</div>
+  </section>;
 }
 
 export function SensitiveClientPermission() {

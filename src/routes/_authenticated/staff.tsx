@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { TourInvite } from "@/components/tour-invite";
 import { Button } from "@/components/ui/button";
+import { StaffDemoCompany } from "@/components/client-workspace";
 
 export const Route = createFileRoute("/_authenticated/staff")({
   staticData: { sitemap: false },
@@ -100,6 +101,7 @@ function StaffDashboard() {
       <main className="mx-auto max-w-6xl px-6 py-10">
         <h1 className="page-title text-primary">Staff dashboard</h1>
         <Button asChild className="mt-4"><Link to="/clients">Create & manage client profiles</Link></Button>
+        {data && <StaffDemoCompany />}
         <p className="page-lead mt-2 text-muted-foreground">Everything that needs your attention across clients. Click a box to see the details, and a client to expand them.</p>
         {isLoading && <p className="mt-8 text-muted-foreground">Loading…</p>}
         {error && <p className="mt-8 text-destructive">Could not load the dashboard.</p>}

@@ -1,9 +1,13 @@
-export type ClientWorkspace = { id: string; email: string; profile: Record<string, string>; sensitiveAccess: boolean };
+export type ClientWorkspace = { id: string; email: string; profile: Record<string, string>; sensitiveAccess: boolean; demo?: boolean; staff?: boolean };
 let workspace: ClientWorkspace | null = null;
 export function getClientWorkspace() { return workspace; }
 export function setClientWorkspace(value: ClientWorkspace | null) {
   workspace = value;
-  if (typeof window !== "undefined") window.dispatchEvent(new Event("ddhs-client-workspace"));
+  if (typeof window !== "undefined") {
+    if (value) sessionStorage.setItem("ddhs-workspace-id", value.id);
+    else sessionStorage.removeItem("ddhs-workspace-id");
+    window.dispatchEvent(new Event("ddhs-client-workspace"));
+  }
 }
 export function workspaceForPage() {
   if (typeof window === "undefined") return null;

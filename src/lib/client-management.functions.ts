@@ -10,14 +10,20 @@ export const openClientWorkspace = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: allowed, error } = await context.supabase.rpc("can_manage_client", { p_client: data.id, p_sensitive: false });
     if (error || !allowed) throw new Error("This client needs an active platform subscription before staff can open their workspace.");
+    const { data: staff } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    const { data: demo } = await context.supabase.from("staff_demo_companies").select("id,profile").eq("id", data.id).maybeSingle();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (staff && demo) {
+      await supabaseAdmin.from("client_staff_audit").insert({ staff_id: context.userId, client_id: data.id, action: "OPEN_DEMO" });
+      return { id: demo.id, email: "", profile: pickProfile(demo.profile as Record<string, unknown>), sensitiveAccess: true, demo: true, staff: true };
+    }
     const { data: account, error: accountError } = await supabaseAdmin.auth.admin.getUserById(data.id);
     if (accountError || !account.user) throw new Error("Client not found.");
     const { data: permission, error: permissionError } = await context.supabase.rpc("can_manage_client", { p_client: data.id, p_sensitive: true });
     if (permissionError) throw new Error("Could not check client permission.");
     const { error: auditError } = await supabaseAdmin.from("client_staff_audit").insert({ staff_id: context.userId, client_id: data.id, action: "OPEN_WORKSPACE" });
     if (auditError) throw new Error("Could not record client workspace access.");
-    return { id: data.id, email: account.user.email ?? "", profile: pickProfile(account.user.user_metadata), sensitiveAccess: permission === true };
+    return { id: data.id, email: account.user.email ?? "", profile: pickProfile(account.user.user_metadata), sensitiveAccess: permission === true, demo: false, staff: staff === true };
   });
 
 export const setSensitivePermission = createServerFn({ method: "POST" })

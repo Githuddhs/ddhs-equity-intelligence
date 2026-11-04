@@ -17,6 +17,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { ReportDownloadDialog } from "@/components/report-download-dialog";
 import { SOCIAL_SAMEAS } from "@/lib/social";
+import { ClientWorkspaceRestore } from "@/components/client-workspace";
 
 function NotFoundComponent() {
   return (
@@ -178,7 +179,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ClientWorkspaceRestore><Outlet /></ClientWorkspaceRestore>
       <Toaster position="top-center" richColors />
       <ReportDownloadDialog />
     </QueryClientProvider>
