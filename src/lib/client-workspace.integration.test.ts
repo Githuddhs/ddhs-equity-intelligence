@@ -8,7 +8,7 @@ const CLIENT = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
 const OTHER = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
 const DEMO = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const TEAM = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
-const migrations = ["0035_subscribed_staff_client_workspaces", "0036_subscribed_client_team_members", "0037_staff_demo_company_registry", "0038_client_administration_handover"].map((name) => readFileSync(new URL(`../../drizzle/migrations/${name}.sql`, import.meta.url), "utf8")).join("\n");
+const migrations = ["0035_subscribed_staff_client_workspaces", "0036_subscribed_client_team_members", "0037_staff_demo_company_registry", "0038_client_administration_handover", "0039_enforce_delegated_client_boundaries"].map((name) => readFileSync(new URL(`../../drizzle/migrations/${name}.sql`, import.meta.url), "utf8")).join("\n");
 let db: PGlite;
 const tables = ["eea12_analyses", "barrier_responses", "barrier_survey_links", "client_share_links", "ee_plans", "dg_reviews", "dg_outcome_analyses", "evidence_extractions", "plan_gap_analyses", "portal_documents", "recruitment_vacancies", "recruitment_candidates", "doel_submissions", "reminder_settings", "invoices"];
 
@@ -119,5 +119,12 @@ describe("subscribed client workspaces — isolated database", () => {
     await actor(TEAM,CLIENT); expect(await permission(CLIENT)).toBe(true);
     await actor(CLIENT); await db.exec("select set_client_support(true)");
     await actor(STAFF,CLIENT); expect(await permission(CLIENT)).toBe(true); expect(await permission(CLIENT,true)).toBe(false);
+  });
+  it("blocks staff header omission and team access to individual candidate information", async () => {
+    await db.exec(`CREATE POLICY blanket_staff ON ee_plans FOR ALL TO authenticated USING(has_role(auth.uid(),'admin')) WITH CHECK(has_role(auth.uid(),'admin')); INSERT INTO ee_plans(user_id,label) VALUES('${CLIENT}','client')`);
+    await actor(STAFF); await db.query("select request_client_handover($1,'Ready')", [CLIENT]);
+    await actor(CLIENT); await db.exec("select accept_client_handover()");
+    await actor(STAFF); expect((await db.query("select * from ee_plans")).rows).toHaveLength(0);
+    await actor(TEAM,CLIENT); await expect(db.exec("insert into recruitment_candidates(label) values('private')")).rejects.toThrow();
   });
 });
