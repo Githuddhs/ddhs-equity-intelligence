@@ -44,6 +44,7 @@ export const startPayfastCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { plan: PayfastPlan }) => checkoutInput.parse(input))
   .handler(async ({ data, context }) => {
+    if (getRequest().headers.get("x-ddhs-client")) throw new Error("Payments must be made by the client from their own account, not a staff or demonstration workspace.");
     // Merchant ID and key are not secret (PayFast sends them in the browser checkout form).
     const merchantId = PAYFAST_MERCHANT.id;
     const merchantKey = PAYFAST_MERCHANT.key;
@@ -101,6 +102,7 @@ export const startDgReviewPayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { reviewId: string }) => z.object({ reviewId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
+    if (getRequest().headers.get("x-ddhs-client")) throw new Error("Payments are unavailable in managed client and demonstration workspaces.");
     const { data: review } = await context.supabase.from("dg_reviews").select("id").eq("id", data.reviewId).eq("user_id", context.userId).maybeSingle();
     if (!review) throw new Error("Review not found.");
     const passphrase = process.env["PAYFAST_LIVE_PASSPHRASE"] ?? "";

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { workspaceForPage } from "@/lib/client-workspace-state";
 
 export function useAiStream() {
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ export function useAiStream() {
       const { data } = await supabase.auth.getSession();
       const res = await fetch("/api/ee-assist", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}`, ...(workspaceForPage() ? { "x-ddhs-client": workspaceForPage()?.id ?? "" } : {}) },
         body: JSON.stringify(body), signal: ac.signal,
       });
       if (!res.ok || !res.body) {
