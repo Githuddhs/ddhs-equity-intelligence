@@ -284,7 +284,7 @@ function PlanBuilder() {
                 </button>
               ))}
             </div>
-            <textarea rows={8} className={`${field} mt-3 font-mono text-xs leading-relaxed`} value={content[s.key]} onChange={(e) => upContent({ [s.key]: e.target.value, sources: { ...(content.sources ?? {}), [s.key]: EDITED } } as Partial<PlanContent>)} />
+            <textarea rows={8} className={`${field} mt-3 text-xs leading-relaxed`} value={content[s.key]} onChange={(e) => upContent({ [s.key]: e.target.value, sources: { ...(content.sources ?? {}), [s.key]: EDITED } } as Partial<PlanContent>)} />
             <Src k={s.key} />
             {drafting === s.key && ai.error && <p className="mt-2 text-sm text-destructive">{ai.error}</p>}
           </section>
