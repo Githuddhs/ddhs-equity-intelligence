@@ -100,3 +100,4 @@
 - [x] Brand logo, navy/teal and Aptos in all four export formats
 - [x] Combine founder profile into homepage Why DDHS section
 - [x] Why DDHS: centre/spread the narrative across the page
+- [ ] Re-check staff opening/switching demo client workspaces (no flash, cross-client blocked)
