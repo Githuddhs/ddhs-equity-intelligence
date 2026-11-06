@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useMatches } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Building2, LogOut, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,9 @@ export function ClientWorkspaceRestore({ children }: { children: ReactNode }) {
     }).finally(() => { if (!cancelled) setReady(true); });
     return () => { cancelled = true; };
   }, [open]);
-  return ready ? children : <p className="p-6 text-muted-foreground">Opening your workspace…</p>;
+  // Public pages never use a client workspace, so render them immediately (including on the server).
+  const isPrivate = useMatches().some((m) => m.routeId.startsWith("/_authenticated"));
+  return ready || !isPrivate ? children : <p className="p-6 text-muted-foreground">Opening your workspace…</p>;
 }
 
 export function StaffDemoCompany() {
