@@ -213,16 +213,16 @@ function Eea12Page() {
         <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <h2 className="section-title text-primary">Progress</h2>
-            <label className="flex items-center gap-1.5 text-sm">
+            <label className="flex min-w-0 max-w-full items-center gap-1.5 text-sm">
               <span className="font-medium">Sector</span>
               <select value={sector}
                 onChange={(e) => { const v = e.target.value; setSector(v); applySectorTargets(v, level); }}
-                className="max-w-[340px] rounded border border-border bg-background px-2 py-1 text-sm">
+                className="min-w-0 max-w-full sm:max-w-[340px] rounded border border-border bg-background px-2 py-1 text-sm">
                 <option value="">Select your economic sector…</option>
                 {SECTORS.map((s) => <option key={s.name} value={s.name}>{s.name}</option>)}
               </select>
             </label>
-            <label className="flex items-center gap-1.5 text-sm">
+            <label className="flex min-w-0 max-w-full items-center gap-1.5 text-sm">
               <span className="font-medium">Occupational level</span>
               <select value={level}
                 onChange={(e) => { const v = e.target.value; setLevel(v); applySectorTargets(sector, v); }}
@@ -350,7 +350,7 @@ function Eea12Page() {
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <h2 className="section-title mb-4 text-primary">Sectoral targets</h2>
-            <table className="w-full border-collapse">
+            <div className="overflow-x-auto"><table className="w-full border-collapse">
               <thead>
                 <tr className="bg-muted">
                   <th className={`${th} text-left`}>Group</th><th className={th}>Target</th><th className={th}>Current</th><th className={th}>Variance</th><th className={th}>Status</th>
@@ -375,7 +375,7 @@ function Eea12Page() {
                   );
                 })}
               </tbody>
-            </table>
+            </table></div>
             <p className="mt-2 text-xs text-muted-foreground">
               {sector
                 ? LEVEL_TO_TARGET_KEY[level]
