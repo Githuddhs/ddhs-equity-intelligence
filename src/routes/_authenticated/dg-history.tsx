@@ -68,11 +68,11 @@ function DgHistory() {
             return (
               <div key={r.id} className="rounded-xl border border-border bg-card p-5 shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
+                  <div className="min-w-0 break-words">
                     <p className="font-semibold">{r.ee_plans?.title ?? "No plan linked"}{r.ee_plans?.company ? ` — ${r.ee_plans.company}` : ""}</p>
                     <p className="text-xs text-muted-foreground">Saved {new Date(r.updated_at).toLocaleString("en-ZA")} · Yes {count("yes")} · Partial {count("partial")} · No {count("no")} · {r.ai_assessment ? "AI assessment included" : "No AI assessment"}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
                     <span className={`font-display text-2xl font-bold ${tone}`}>{r.score}%</span>
                     {r.ai_assessment && <button onClick={() => setOpen(open === r.id ? null : r.id)} className="rounded-lg border border-border px-3 py-1.5 font-semibold">{open === r.id ? "Hide" : "View"} assessment</button>}
                     <button onClick={async () => { try { await exportDgReviewPdf({ score: r.score, answers: r.answers, ai_assessment: r.ai_assessment, updated_at: r.updated_at, planTitle: r.ee_plans?.title ?? undefined, company: r.ee_plans?.company ?? undefined }); } catch { toast.error("Could not build the report."); } }} className="rounded-lg border border-border px-3 py-1.5 font-semibold">Download PDF</button>

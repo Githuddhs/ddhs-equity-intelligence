@@ -238,9 +238,9 @@ function Eea12Page() {
           {wf && (
             <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-teal/40 bg-muted/40 p-3">
               {plans.length > 0 && (
-                <label className="text-xs font-semibold text-primary">
+                <label className="min-w-0 max-w-full text-xs font-semibold text-primary">
                   EE plan responsibility centre
-                  <select aria-label="EE plan responsibility centre" className="mt-1 block min-w-52 rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                  <select aria-label="EE plan responsibility centre" className="mt-1 block w-full max-w-full truncate sm:w-auto sm:max-w-md sm:min-w-52 rounded-lg border border-border bg-background px-3 py-2 text-sm"
                     value={planId}
                     onChange={(e) => {
                       const v = e.target.value; setPlanId(v);
