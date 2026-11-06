@@ -43,7 +43,7 @@ const GROUPS = [
 export function RelatedLinks({ current }: { current?: string }) {
   return (
     <nav aria-label="Explore DDHS Equity Intelligence" className="border-t border-border bg-secondary/40">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 sm:grid-cols-3">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 grid max-w-7xl gap-8 py-10 sm:grid-cols-3">
         {GROUPS.map((g) => (
           <div key={g.title}>
             <p className="label-title text-primary">{g.title}</p>

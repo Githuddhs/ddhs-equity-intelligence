@@ -49,7 +49,7 @@ export function AppHeader() {
     <PageExport />
     <ClientWorkspaceBanner />
     <header className={`border-b border-border print:hidden ${isAdmin ? "bg-secondary" : ""}`}>
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-3 py-4">
         <BrandMark to={isAdmin ? "/staff" : "/"}>
           {isAdmin && <span className="ml-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">Staff portal</span>}
         </BrandMark>

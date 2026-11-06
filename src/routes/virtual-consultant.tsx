@@ -81,7 +81,7 @@ function ConsultantPage() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
+    <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
       <BrandMark className="mb-6" />
       <Link to="/pricing" search={{ paid: false, cancelled: false }} className="text-sm font-semibold text-teal">← Back to pricing</Link>
       <h1 className="section-title mt-3 text-primary">Virtual Employment Equity Consultant</h1>

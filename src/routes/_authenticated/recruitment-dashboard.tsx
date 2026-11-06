@@ -37,7 +37,7 @@ function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">Step 9 · Report to leadership</p>

@@ -98,7 +98,7 @@ function StaffDashboard() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
         <h1 className="page-title text-primary">Staff dashboard</h1>
         <Button asChild className="mt-4"><Link to="/clients">Create & manage client profiles</Link></Button>
         {data && <StaffDemoCompany />}

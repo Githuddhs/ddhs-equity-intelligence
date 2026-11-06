@@ -114,7 +114,7 @@ function PricingPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center justify-between py-4">
           <BrandMark />
           <div className="flex items-center gap-4">
             <AuthCta />
@@ -122,7 +122,7 @@ function PricingPage() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
         <h1 className="page-title text-center text-primary">Employment Equity software pricing and subscription plans</h1>
         <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a subscription package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
         <h2 className="section-title mt-8 text-primary">Subscription packages</h2>

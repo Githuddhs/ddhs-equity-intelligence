@@ -155,7 +155,7 @@ function DoelSubmissionsPage() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-4 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-8">
         <h1 className="font-display text-2xl font-bold text-navy">DoEL submissions — EEA2 &amp; EEA4</h1>
         <div className="mt-4"><ExistingFormUpload forms={["eea2", "eea4"]} /></div>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">

@@ -35,7 +35,7 @@ export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-6 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-5xl flex-wrap items-center justify-between gap-2 py-4">
           <BrandMark />
           <div className="flex items-center gap-3">
             <button onClick={() => void copyInvite()} className="rounded-lg border border-teal px-3 py-1.5 text-xs font-semibold text-teal hover:bg-teal/10">Copy invite link</button>

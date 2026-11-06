@@ -10,7 +10,7 @@ export function GuideShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center justify-between py-4">
           <BrandMark />
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/guides" className="hidden text-teal hover:text-primary sm:inline">Guides</Link>
@@ -25,7 +25,7 @@ export function GuideShell({ children }: { children: ReactNode }) {
       <main className="mx-auto max-w-4xl px-6 py-10">{children}</main>
       <RelatedLinks />
       <footer className="border-t bg-background py-10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <BrandMark />
           <p className="text-sm text-muted-foreground">
             Data. Accountability. Transformation. ·{" "}

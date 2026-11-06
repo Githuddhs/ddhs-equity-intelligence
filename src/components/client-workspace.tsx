@@ -37,7 +37,7 @@ export function ClientWorkspaceBanner() {
   }, []);
   if (!workspace) return null;
   return <aside className="border-b border-teal bg-accent print:hidden">
-    <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-3">
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-3 py-3">
       <div><p className="font-semibold text-primary">{workspace.demo ? "DEMONSTRATION — " : "Managing "}{workspace.profile["company"] || workspace.email}</p>
         <p className="text-sm text-muted-foreground">{workspace.demo ? "Fictional records only · separate from real clients" : `${workspace.staff ? "DDHS staff" : "Client team"} · ${workspace.sensitiveAccess ? "Client permission granted for employee records" : "Salary, disability and private files require client permission"}`}</p></div>
       <Button variant="outline" asChild><Link to="/clients" onClick={async (event) => {

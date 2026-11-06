@@ -50,7 +50,7 @@ function DgHistory() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-teal">Sections 42–45</p>

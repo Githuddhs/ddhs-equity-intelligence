@@ -121,7 +121,7 @@ function BarrierAnalysisPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">EEA13 · Consultation</p>
         <h1 className="page-title text-primary">{isQ ? "Consultation and barrier analysis questionnaire" : "Barrier analysis"}</h1>
         <p className="page-lead mt-1 max-w-3xl text-muted-foreground">

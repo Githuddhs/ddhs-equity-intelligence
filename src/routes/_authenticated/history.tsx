@@ -47,7 +47,7 @@ function HistoryPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
         <h1 className="page-title text-primary">Analysis history</h1>
         <p className="page-lead mt-2 text-muted-foreground">Every saved EEA12 run, newest first.</p>
         {isLoading && <p className="mt-6 text-sm text-muted-foreground">Loading…</p>}

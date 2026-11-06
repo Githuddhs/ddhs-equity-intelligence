@@ -124,7 +124,7 @@ function PlanReport() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
         <Link to="/plans" className="text-sm font-semibold text-teal">← EE plans</Link>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
           <div>
