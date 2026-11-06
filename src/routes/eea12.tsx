@@ -350,7 +350,7 @@ function Eea12Page() {
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <h2 className="section-title mb-4 text-primary">Sectoral targets</h2>
-            <table className="w-full border-collapse">
+            <div className="overflow-x-auto"><table className="w-full border-collapse">
               <thead>
                 <tr className="bg-muted">
                   <th className={`${th} text-left`}>Group</th><th className={th}>Target</th><th className={th}>Current</th><th className={th}>Variance</th><th className={th}>Status</th>
@@ -375,7 +375,7 @@ function Eea12Page() {
                   );
                 })}
               </tbody>
-            </table>
+            </table></div>
             <p className="mt-2 text-xs text-muted-foreground">
               {sector
                 ? LEVEL_TO_TARGET_KEY[level]
