@@ -166,15 +166,15 @@ function Eea13Page() {
           <>
             <div className="mt-6 flex flex-wrap items-end gap-4">
               {companies.length > 1 && (
-                <label className="text-sm">Company<br />
-                  <select aria-label="Company" value={company} onChange={(e) => { setCompany(e.target.value); const first = (e.target.value ? plans.filter((p) => p.company === e.target.value) : plans)[0]; if (first) setPlanId(first.id); }} className="mt-1 rounded border border-input bg-background px-2 py-1">
+                <label className="min-w-0 max-w-full text-sm">Company<br />
+                  <select aria-label="Company" value={company} onChange={(e) => { setCompany(e.target.value); const first = (e.target.value ? plans.filter((p) => p.company === e.target.value) : plans)[0]; if (first) setPlanId(first.id); }} className="mt-1 w-full max-w-full truncate rounded border border-input bg-background px-2 py-1 sm:max-w-md">
                     <option value="">All companies</option>
                     {companies.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </label>
               )}
-              <label className="text-sm">Plan<br />
-                <select value={plan?.id ?? ""} onChange={(e) => setPlanId(e.target.value)} className="mt-1 rounded border border-input bg-background px-2 py-1">{scopedPlans.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}</select>
+              <label className="min-w-0 max-w-full text-sm">Plan<br />
+                <select value={plan?.id ?? ""} onChange={(e) => setPlanId(e.target.value)} className="mt-1 w-full max-w-full truncate rounded border border-input bg-background px-2 py-1 sm:max-w-md">{scopedPlans.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}</select>
               </label>
             </div>
             {!wf && <p className="mt-4 text-sm text-destructive">No Workforce Data yet — <Link to="/workforce" className="underline">upload it</Link> so headcount fills in.</p>}

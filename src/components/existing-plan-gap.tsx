@@ -82,8 +82,8 @@ export function ExistingPlanGap({ workforce }: { workforce: unknown }) {
           {history.map((h) => (
             <li key={h.id} className="p-3 text-sm">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span><strong>{h.file_name}</strong> · {new Date(h.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })}</span>
-                <span className="flex gap-3">
+                <span className="min-w-0 break-words"><strong>{h.file_name}</strong> · {new Date(h.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })}</span>
+                <span className="flex flex-wrap gap-x-3 gap-y-1">
                   <button onClick={() => setOpen(open === h.id ? null : h.id)} className="text-teal">{open === h.id ? "Hide" : "View"}</button>
                   <Button variant="link" onClick={() => dl(`gap-analysis-${h.created_at.slice(0, 10)}.md`, h.result)}>Download analysis</Button>
                   <Button variant="link" onClick={() => dl(`plan-text-${h.file_name.replace(/\.[^.]+$/, "")}.txt`, h.plan_text)}>Download plan text</Button>
