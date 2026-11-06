@@ -57,12 +57,12 @@ function SharedView() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-5xl items-center justify-between py-4">
           <BrandMark />
           <span className="text-sm text-muted-foreground">Read-only shared view</span>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
         {isLoading ? <p>Loading…</p> : !data ? (
           <div className="rounded-lg border border-border p-8 text-center">
             <h1 className="font-display text-3xl font-bold text-primary">This link isn't active</h1>

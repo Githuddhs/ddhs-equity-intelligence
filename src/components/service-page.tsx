@@ -53,7 +53,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center justify-between gap-3 py-4">
           <BrandMark className="min-w-0" />
           <div className="flex shrink-0 items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
@@ -67,7 +67,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
 
       {c.platformModule && (
         <div className="border-b border-border bg-background">
-          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 text-xs font-semibold sm:px-6">
+          <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center gap-2 py-2 text-xs font-semibold">
             <Link to="/" hash="platform" className="text-teal hover:text-primary">Platform</Link>
             <span aria-hidden className="text-muted-foreground">›</span>
             <span className="text-primary">{c.title}</span>
@@ -76,7 +76,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
       )}
 
       <nav className="border-b border-border bg-secondary/40">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm sm:flex-wrap sm:px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl gap-2 overflow-x-auto py-3 text-sm sm:flex-wrap">
           {SERVICES.map((s) => (
             <Link key={s.to} to={s.to} className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1 font-semibold ${s.to === c.current ? "bg-primary text-primary-foreground" : "text-teal hover:bg-accent"}`}>
               {s.label}
@@ -85,7 +85,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </div>
       </nav>
 
-      <main className="mx-auto max-w-7xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">{c.eyebrow}</p>
@@ -160,7 +160,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
 
       <RelatedLinks current={c.current} />
       <footer className="border-t bg-background py-10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <BrandMark />
           <p className="text-sm text-muted-foreground">
             Data. Accountability. Transformation. ·{" "}

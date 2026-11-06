@@ -54,7 +54,7 @@ export function OrgFilterBar() {
   if (!units.length) return null;
   return (
     <div className="border-b border-border bg-card">
-      <div className="mx-auto max-w-6xl px-6 py-3">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-3">
         <OrgUnitPicker units={units} value={filter} onChange={setFilter} />
       </div>
     </div>

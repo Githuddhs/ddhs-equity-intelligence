@@ -61,7 +61,7 @@ function ExecutiveIntelligencePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center justify-between py-4">
           <BrandMark />
           <div className="flex items-center gap-4 text-sm font-semibold">
             <Link to="/pricing" search={{ paid: false, cancelled: false }} className="hidden whitespace-nowrap text-teal hover:text-primary sm:inline">Pricing</Link>
@@ -73,7 +73,7 @@ function ExecutiveIntelligencePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 8 of 11</p>
@@ -186,7 +186,7 @@ function ExecutiveIntelligencePage() {
 
       <RelatedLinks current="/executive-intelligence" />
       <footer className="border-t bg-background py-10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <BrandMark />
           <p className="text-sm text-muted-foreground">
             Data. Accountability. Transformation. ·{" "}

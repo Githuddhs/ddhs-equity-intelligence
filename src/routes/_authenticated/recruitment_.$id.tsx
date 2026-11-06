@@ -70,7 +70,7 @@ function VacancyPage() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
         <Link to="/recruitment" className="text-sm font-semibold text-teal">← All vacancies</Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h1 className="section-title text-primary">{v.title}</h1>

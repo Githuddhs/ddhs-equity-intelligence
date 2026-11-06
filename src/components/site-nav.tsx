@@ -22,7 +22,7 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="mx-auto max-w-7xl px-6 pb-2">
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-2">
       <nav className="hidden flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold text-teal md:flex">
         {LINKS.map((l) => (
           <a key={l.href} href={l.href} className={desk}>

@@ -82,7 +82,7 @@ function Dashboard() {
   });
 
   const shell = (body: React.ReactNode) => (
-    <div className="min-h-screen bg-background text-foreground"><AppHeader /><main className="mx-auto max-w-6xl px-6 py-10">{body}</main></div>
+    <div className="min-h-screen bg-background text-foreground"><AppHeader /><main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">{body}</main></div>
   );
   if (isLoading) return shell(<p className="text-sm text-muted-foreground">Loading your dashboard…</p>);
   if (error || !data) return shell(<p className="text-sm text-destructive">Could not load your dashboard. Please refresh.</p>);

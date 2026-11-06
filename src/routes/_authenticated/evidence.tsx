@@ -70,7 +70,7 @@ function EvidencePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
         <Link to="/portal" className="text-sm text-teal">← My portal</Link>
         <h1 className="mt-2 font-display text-3xl font-bold text-primary">Document evidence</h1>
         <p className="mt-2 text-sm text-muted-foreground">

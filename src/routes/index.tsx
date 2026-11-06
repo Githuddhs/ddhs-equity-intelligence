@@ -235,7 +235,7 @@ function Index() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 pt-3">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 pt-3">
           <BrandMark />
           <div className="flex items-center gap-5">
             <a href="/pricing" className="hidden whitespace-nowrap text-sm font-semibold text-teal transition-colors hover:text-primary sm:inline">Pricing</a>
@@ -254,7 +254,7 @@ function Index() {
 
 
       {/* Section 1: Hero */}
-      <section className="mx-auto max-w-7xl px-6 pt-5 pb-10 sm:pt-8">
+      <section className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-5 pb-10 sm:pt-8">
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-balance text-primary sm:text-[1.75rem]">
             From Workforce Data to Defensible Employment Equity Decisions
@@ -306,7 +306,7 @@ function Index() {
 
       {/* Why DDHS */}
       <section id="why-ddhs" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             eyebrow="Why DDHS"
             title="Built in South Africa, for South African Employment Equity"
@@ -342,7 +342,7 @@ function Index() {
 
       {/* Six integrated capabilities */}
       <section id="six-capabilities" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             eyebrow="Six Integrated Capabilities"
             title="Everything Employment Equity Needs, in One Platform"
@@ -383,7 +383,7 @@ function Index() {
 
       {/* Problems We Solve */}
       <section id="problems" className="scroll-mt-28 bg-secondary/40 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <p className="text-center text-sm font-semibold uppercase tracking-widest text-teal">Problems We Solve</p>
           <SectionHeading
             title="Employment Equity Shouldn't Be Managed Across Spreadsheets, Emails and Shared Drives"
@@ -410,7 +410,7 @@ function Index() {
 
       {/* Section 3: The Solution */}
       <section id="platform" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             eyebrow="The Platform"
             title="One Platform for the Employment Equity Lifecycle"
@@ -511,7 +511,7 @@ function Index() {
 
       {/* Section 4: Capability Stack */}
       <section id="capabilities" className="scroll-mt-28 bg-secondary/40 py-8">
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <SectionHeading
             eyebrow="Capability Stack"
             title="Built for the Complete Employment Equity Lifecycle"
@@ -550,7 +550,7 @@ function Index() {
 
       {/* Section 5: Trust & Credibility */}
       <section id="governance" className="scroll-mt-28 bg-primary py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading dark title="Built for Compliance You Can Explain and Defend" />
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {trustCards.map((card) => (
@@ -576,7 +576,7 @@ function Index() {
 
       {/* Client Outcomes */}
       <section id="outcomes" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             eyebrow="Client Outcomes"
             title="What Clients Gain"
@@ -610,7 +610,7 @@ function Index() {
 
       {/* B-BBEE Verified Supplier */}
       <section id="bbbee" className="scroll-mt-28 bg-secondary/40 py-8">
-        <div className="mx-auto grid max-w-5xl items-center gap-8 px-6 md:grid-cols-[auto_1fr]">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 grid max-w-5xl items-center gap-8 md:grid-cols-[auto_1fr]">
           <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border-4 border-teal bg-card">
             <ShieldCheck className="h-12 w-12 text-teal" />
           </div>
@@ -631,7 +631,7 @@ function Index() {
 
       {/* Guided Tour */}
       <section id="guided-tour" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-5xl px-6 text-center">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
           <SectionHeading
             eyebrow="Guided Tour"
             title="See Every Capability in Five Minutes"
@@ -650,7 +650,7 @@ function Index() {
 
       {/* Platform walkthrough (empty screens, no client or example data) */}
       <section id="walkthrough" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             eyebrow="Platform walkthrough"
             title="See the Platform at Work"
@@ -677,7 +677,7 @@ function Index() {
 
       {/* Section 6: Who It Is For */}
       <section className="bg-secondary/40 py-8">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             title="Designed for Complex Employment Environments"
             body="Ideal for organisations with formal Employment Equity obligations, multiple workforce-data sources and recurring governance reporting requirements."
@@ -700,7 +700,7 @@ function Index() {
 
       {/* Section 7: Compliance Readiness */}
       <section className="bg-secondary/40 py-8">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 grid max-w-7xl items-center gap-12 lg:grid-cols-2">
           <div className="rounded-2xl border bg-card p-8 shadow-sm">
             <div className="space-y-4">
               {readinessPoints.map((point) => (
@@ -731,7 +731,7 @@ function Index() {
 
       {/* Section 8: Founding Customer Programme */}
       <section id="pilots" className="scroll-mt-28 py-8">
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="rounded-3xl bg-gradient-to-br from-primary via-primary to-teal/80 px-8 py-10 text-center shadow-xl sm:px-16">
             <h2 className="display-title text-balance text-navy-foreground">
               Help Shape the Enterprise Standard for EE Intelligence
@@ -786,7 +786,7 @@ function Index() {
 
       {/* Section 10: Footer */}
       <footer className="border-t bg-background py-10">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="grid gap-10 md:grid-cols-4">
             <div>
               <BrandMark to={null} />

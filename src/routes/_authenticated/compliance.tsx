@@ -61,7 +61,7 @@ function Compliance() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Employment Equity Act</p>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>

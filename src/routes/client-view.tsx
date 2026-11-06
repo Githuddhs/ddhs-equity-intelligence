@@ -32,7 +32,7 @@ function ClientView() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-5xl items-center justify-between py-4">
           <BrandMark />
           <AuthCta />
         </div>

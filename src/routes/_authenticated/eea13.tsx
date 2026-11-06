@@ -156,7 +156,7 @@ function Eea13Page() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
         <div className="flex gap-4 text-sm"><Link to="/portal" className="text-teal">← My portal</Link><Link to="/evidence" className="text-teal">Document evidence</Link></div>
         <h1 className="mt-2 font-display text-3xl font-bold text-primary">EEA13 planning</h1>
         <p className="mt-2 text-sm text-muted-foreground">Numerical goals, targets and a yearly timeline for each occupational level. Headcount comes from your Employee Profiles{wf ? ` (snapshot ${wf.date})` : ""} and updates whenever the profiles are saved.</p>

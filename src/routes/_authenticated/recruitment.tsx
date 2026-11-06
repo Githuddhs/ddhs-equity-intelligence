@@ -64,7 +64,7 @@ function RecruitmentPage() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
         <p className="text-sm font-semibold uppercase tracking-wider text-teal">Recruitment Suite</p>
         <div className="flex flex-wrap items-center justify-between gap-3"><h1 className="section-title mt-1 text-primary">Vacancies</h1><Link to="/recruitment-dashboard" className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-teal">Leadership dashboard</Link></div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Step 1 plans each vacancy against your saved workforce, sector targets and provincial EAP. Open a vacancy to approve and advertise it (step 2) and track candidates (step 3).</p>
