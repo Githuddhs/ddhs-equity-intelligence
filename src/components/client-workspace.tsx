@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useMatches } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Building2, LogOut, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
