@@ -99,3 +99,4 @@
 - [x] Aptos font on every page; standardise branding and colours
 - [x] Brand logo, navy/teal and Aptos in all four export formats
 - [x] Combine founder profile into homepage Why DDHS section
+- [ ] Why DDHS: centre/spread the narrative across the page
