@@ -311,7 +311,7 @@ function Index() {
             eyebrow="Why DDHS"
             title="Built in South Africa, for South African Employment Equity"
           />
-          <div className="mt-5 max-w-4xl space-y-4 text-muted-foreground">
+          <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted-foreground">
             <p>DDHS was built by someone who understands the Employment Equity challenge from the inside. Mr Sello Molapo brings more than 15 years of senior Employment Equity leadership experience in higher education. His experience covers the full Employment Equity lifecycle, from planning and workforce analysis to recruitment oversight, governance, statutory reporting, target monitoring and executive accountability.</p>
             <p>DDHS transforms that practical experience into an intelligent solution for universities, corporates and other organisations seeking to turn Employment Equity plans into measurable action.</p>
           </div>

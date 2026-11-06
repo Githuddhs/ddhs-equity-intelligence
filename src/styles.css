@@ -181,3 +181,8 @@ meter.accent-teal::-moz-meter-bar { background: var(--teal); }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+
+/* Grid items may shrink below their content width, preventing sideways scrolling on phones. */
+@layer base {
+  .grid > * { min-width: 0; }
+}
