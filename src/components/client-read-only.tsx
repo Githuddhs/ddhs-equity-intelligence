@@ -44,14 +44,14 @@ export function ClientReadOnly() {
   }, [readOnly]);
   useEffect(() => {
     if (!readOnly) return;
-    const hide = () => document.querySelectorAll<HTMLElement>("main button, main input[type=submit], main [role=button], main a, main label:has(input[type=file])").forEach((el) => {
+    const hide = () => { document.querySelectorAll<HTMLElement>("main button, main input[type=submit], main [role=button], main a, main label:has(input[type=file])").forEach((el) => {
       if (el.closest("[data-allow-client]") || el.dataset["ro"] === "1") return;
       const label = (el.getAttribute("aria-label") || el.textContent || "").trim();
       if (CAPTURE.test(label)) { el.dataset["ro"] = "1"; el.style.display = "none"; }
     });
     document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("main textarea, main input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=search])").forEach((el) => {
       if (!el.closest("[data-allow-client]") && !el.readOnly) el.readOnly = true;
-    });
+    }); };
     hide();
     const obs = new MutationObserver(hide);
     obs.observe(document.body, { childList: true, subtree: true });
