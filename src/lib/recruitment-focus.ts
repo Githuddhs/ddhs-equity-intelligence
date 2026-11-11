@@ -20,9 +20,10 @@ export function recruitmentFocus(p: Priority | null | undefined, s: Sourcing | n
   cands: { race: string; gender: string; foreign_national: boolean; stage: string }[]): Focus {
   const src = s ?? {};
   if (!p || p.band === "Not available") {
-    return { available: false, guidance: [p?.reasons[0] ?? "Calculate the vacancy priority from Workforce Data first."], focusGroups: [], sourcing: [], selection: [] };
+    return { available: false, guidance: [p?.reasons?.[0] ?? "Calculate the vacancy priority from Workforce Data first."], focusGroups: [], sourcing: [], selection: [] };
   }
-  const focusGroups = p.underRepresented.slice(0, 3).map((g) => ({ label: g.label, gap: Math.abs(g.gap) }));
+  const under = p.underRepresented ?? [];
+  const focusGroups = under.slice(0, 3).map((g) => ({ label: g.label, gap: Math.abs(g.gap) }));
   const guidance: string[] = [`Transformation priority: ${p.band}${p.score !== null ? ` (${p.score}/100)` : ""}.`];
   p.sectoral?.filter((x) => x.gap < 0).forEach((x) => guidance.push(`Focus on ${x.group.toLowerCase()}: ${Math.abs(x.gap)} pp below the sector target at this level.`));
   if (focusGroups.length) guidance.push(`Widest provincial EAP gaps: ${focusGroups.map((g) => `${g.label} (${g.gap} pp)`).join(", ")}.`);
@@ -30,14 +31,14 @@ export function recruitmentFocus(p: Priority | null | undefined, s: Sourcing | n
 
   const ch = src.channels ?? [];
   const targeted = new Set((src.targetGroups ?? []) as string[]);
-  const disabilityGap = p.underRepresented.length > 0;
+  const disabilityGap = under.length > 0;
   const sourcing: FocusAction[] = [
     { text: "Record target designated groups for this vacancy", done: targeted.size > 0 },
     { text: "Use at least two outreach channels", done: ch.length >= 2 },
     { text: "Include a channel reaching under-represented communities (community/regional media, universities/TVET or EE-briefed agency)",
       done: ch.some((c) => /Community|Universities|agency/i.test(c)) },
     ...(disabilityGap ? [{ text: "Advertise through disability organisations", done: ch.includes("Disability organisations") }] : []),
-    { text: "Cover every focus group in the target groups", done: focusGroups.length === 0 || p.underRepresented.slice(0, 3).every((g) => targeted.has(g.key)) },
+    { text: "Cover every focus group in the target groups", done: focusGroups.length === 0 || under.slice(0, 3).every((g) => targeted.has(g.key)) },
   ];
 
   const pool = cands.filter((c) => c.stage !== "withdrawn");

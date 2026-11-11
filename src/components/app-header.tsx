@@ -1,3 +1,4 @@
+import type React from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -9,6 +10,19 @@ import { ClientWorkspaceBanner } from "@/components/client-workspace";
 import { workspaceForPage, setClientWorkspace } from "@/lib/client-workspace-state";
 import { sessionClient } from "@/lib/workspace-client";
 import { useQueryClient } from "@tanstack/react-query";
+
+const item = "block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-primary";
+const activeItem = { className: "block rounded-md px-3 py-2 text-sm font-semibold text-primary bg-muted" };
+const closeMenu = (e: React.MouseEvent<HTMLElement>) => e.currentTarget.closest("details")?.removeAttribute("open");
+
+function NavGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <details className="relative">
+      <summary className="cursor-pointer list-none rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary">{label} ▾</summary>
+      <div className="absolute left-0 z-50 mt-1 w-64 rounded-lg border border-border bg-popover p-1 shadow-lg">{children}</div>
+    </details>
+  );
+}
 
 const STAFF_PATHS = ["/staff", "/clients", "/review"];
 
@@ -65,13 +79,29 @@ export function AppHeader() {
             <>
               <Link to="/portal" className={link} activeProps={active}>My portal</Link>
               <Link to="/dashboard" className={link} activeProps={active}>Dashboard</Link>
-              <Link to="/workforce" className={link} activeProps={active}>Workforce Data</Link>
-              <Link to="/barrier-analysis" search={{}} className={link} activeProps={active} activeOptions={{ includeSearch: true }}>Barriers</Link>
-              <Link to="/barrier-analysis" search={{ mode: "questionnaire" }} className={link} activeProps={active} activeOptions={{ includeSearch: true }}>Questionnaire</Link>
-              <Link to="/recruitment" className={link} activeProps={active}>Recruitment</Link>
-              <Link to="/compliance" className={link} activeProps={active}>Compliance</Link>
-              <Link to="/history" className={link} activeProps={active}>History</Link>
-              <Link to="/dg-history" className={link} activeProps={active}>DG History</Link>
+              <NavGroup label="A · Workforce">
+                <Link to="/workforce" className={item} activeProps={activeItem} onClick={closeMenu}>Workforce Data</Link>
+                <Link to="/workforce-foundation" className={item} activeProps={activeItem} onClick={closeMenu}>Employee Profiles</Link>
+                <Link to="/readiness" className={item} activeProps={activeItem} onClick={closeMenu}>Data readiness</Link>
+              </NavGroup>
+              <NavGroup label="B · EEA12 Analytics">
+                <Link to="/eea12" className={item} activeProps={activeItem} onClick={closeMenu}>EEA12 analysis</Link>
+                <Link to="/barrier-analysis" search={{}} className={item} activeProps={activeItem} activeOptions={{ includeSearch: true }} onClick={closeMenu}>Barriers</Link>
+                <Link to="/barrier-analysis" search={{ mode: "questionnaire" }} className={item} activeProps={activeItem} activeOptions={{ includeSearch: true }} onClick={closeMenu}>Questionnaire</Link>
+              </NavGroup>
+              <NavGroup label="C–E · Recruitment">
+                <Link to="/recruitment" className={item} activeProps={activeItem} onClick={closeMenu}>C · Recruitment focus (vacancies)</Link>
+                <Link to="/recruitment" className={item} onClick={closeMenu}>D · Governance (per vacancy)</Link>
+                <Link to="/recruitment" className={item} onClick={closeMenu}>E · Selection (candidates)</Link>
+                <Link to="/recruitment-dashboard" className={item} activeProps={activeItem} onClick={closeMenu}>Recruitment dashboard</Link>
+              </NavGroup>
+              <NavGroup label="F · Evidence & Reporting">
+                <Link to="/compliance" className={item} activeProps={activeItem} onClick={closeMenu}>Compliance</Link>
+                <Link to="/evidence" className={item} activeProps={activeItem} onClick={closeMenu}>Evidence</Link>
+                <Link to="/doel-submissions" className={item} activeProps={activeItem} onClick={closeMenu}>EEA2 / EEA4 reporting</Link>
+                <Link to="/history" className={item} activeProps={activeItem} onClick={closeMenu}>History</Link>
+                <Link to="/dg-history" className={item} activeProps={activeItem} onClick={closeMenu}>DG review evidence</Link>
+              </NavGroup>
               {isManager && <Link to="/manager" className={link} activeProps={active}>Review portal</Link>}
               <Link to="/account" className={link} activeProps={active}>My account</Link>
             </>

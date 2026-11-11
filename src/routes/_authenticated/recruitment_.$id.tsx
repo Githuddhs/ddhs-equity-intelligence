@@ -81,7 +81,7 @@ function VacancyPage() {
 
         <PlanStep v={v} save={save} busy={busy} />
         <ApproveStep v={v} save={save} busy={busy} />
-        <FocusStep v={v} cands={cands} />
+        <FocusStep v={v} cands={cands} save={save} busy={busy} />
         <CandidateStep v={v} cands={cands} reload={load} />
         <FlowStep cands={cands} />
         <GovernanceStep key={`g-${v.id}`} v={v} save={save} busy={busy} />
@@ -175,7 +175,8 @@ function ApproveStep({ v, save, busy }: { v: Vacancy; save: Save; busy: boolean 
             <button disabled={busy} onClick={() => void save({ status: "draft" }, "Returned to draft.")} className={`${btn} border border-border`}>Return to draft</button>
           </>
         )}
-        {v.status === "approved" && <button disabled={busy} onClick={() => void save({ status: "advertised" }, "Vacancy is now advertised.")} className={`${btn} bg-primary text-primary-foreground`}>Publish advert</button>}
+        {v.status === "approved" && !(v.governance as { focusAck?: unknown } | null)?.focusAck && <p className="text-sm text-muted-foreground">The selection committee must acknowledge the Recruitment Focus guidance before the advert is published.</p>}
+        {v.status === "approved" && <button disabled={busy || !(v.governance as { focusAck?: unknown } | null)?.focusAck} onClick={() => void save({ status: "advertised" }, "Vacancy is now advertised.")} className={`${btn} bg-primary text-primary-foreground`}>Publish advert</button>}
         {v.status === "advertised" && <button disabled={busy} onClick={() => void save({ status: "closed" }, "Applications closed.")} className={`${btn} border border-border`}>Close applications</button>}
       </div>
       {v.approved_at && <p className="mt-3 text-sm text-muted-foreground">Approved by <b>{v.approver_name}</b> on {new Date(v.approved_at).toLocaleDateString("en-ZA")}{v.approval_note && ` — ${v.approval_note}`}</p>}

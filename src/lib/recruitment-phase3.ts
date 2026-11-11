@@ -1,3 +1,4 @@
+import { recruitmentFocus } from "@/lib/recruitment-focus";
 // DDHS Recruitment Equity Intelligence steps 7–9: risk flags, evidence pack, leadership dashboard.
 // Flags and dashboards inform people; they never approve, decline or appoint anyone.
 import { GROUPS } from "@/lib/workforce";
@@ -27,6 +28,7 @@ export function riskFlags(v: V, cands: C[], impact?: Impact | null): Risk[] {
   const pool = cands.filter((c) => reachedIndex(c) >= SHORTLIST_IDX);
   const des = (xs: C[]) => xs.filter((c) => isDesignated(candidateGroup(c))).length;
   const live = v.status === "advertised" || v.status === "closed";
+  if (live && !g.focusAck) out.push({ severity: "Medium", area: "Recruitment focus", text: "The vacancy went live without a recorded committee acknowledgement of the Recruitment Focus guidance." });
 
   if (live && cands.length >= 3 && des(cands) === 0) out.push({ severity: "High", area: "Applicant pool", text: "No designated-group applicants in the pool." });
   if (pool.length > 0 && des(pool) === 0) out.push({ severity: "High", area: "Shortlist", text: "Shortlist contains no designated-group candidates." });
@@ -62,6 +64,7 @@ export function evidencePack(v: V, cands: C[], risks: Risk[]): ReportData {
   const p = (v.priority ?? {}) as Partial<Priority>;
   const card = governanceScorecard(g);
   const flow = candidateFlow(cands);
+  const focus = recruitmentFocus(p.band ? (p as Priority) : null, s, cands);
   const blocks: ReportBlock[] = [
     { kind: "h", text: "1. Vacancy and transformation priority" },
     { kind: "table", title: "Vacancy", head: ["Field", "Value"], body: [
@@ -71,6 +74,15 @@ export function evidencePack(v: V, cands: C[], risks: Risk[]): ReportData {
       ["Priority", p.band ? `${p.band}${p.score != null ? ` (${p.score}/100)` : ""}` : "Not available"],
     ] },
     ...(p.reasons?.length ? [{ kind: "p" as const, text: p.reasons.join(" ") }] : []),
+    { kind: "h", text: "1a. Recruitment Focus Intelligence" },
+    ...focus.guidance.map((t) => ({ kind: "p" as const, text: t })),
+    ...(focus.available ? [{ kind: "table" as const, title: "Focus actions", head: ["Area", "Action", "Done"], body: [
+      ...focus.sourcing.map((a) => ["Sourcing", a.text, a.done ? "Yes" : "No"]),
+      ...focus.selection.map((a) => ["Selection", a.text, a.done ? "Yes" : "No"]),
+    ] }] : []),
+    { kind: "table", title: "Committee acknowledgement of focus", head: ["Field", "Value"], body: [
+      ["Acknowledged by", g.focusAck?.by || "Not acknowledged"], ["Acknowledged on", fmt(g.focusAck?.at)], ["Note", g.focusAck?.note || "—"],
+    ] },
     { kind: "h", text: "2. Approval and advertising" },
     { kind: "table", title: "Approval", head: ["Field", "Value"], body: [
       ["Motivation", v.reason || "—"], ["Approved by", v.approver_name || "—"], ["Approved on", fmt(v.approved_at)], ["Approval note", v.approval_note || "—"],

@@ -15,6 +15,35 @@ const JOURNEY: { title: string; intro: string; items: string[]; output: string; 
   { title: "Report to Leadership and Governance Structures", intro: "Real-time dashboards provide authorised stakeholders with visibility into:", items: ["Vacancy and appointment activity", "Time-to-fill and recruitment bottlenecks", "Candidate-pipeline representation", "Candidate conversion by recruitment stage", "Appointment contributions to EE priorities", "Governance compliance", "Direct recruitment patterns", "Business-unit performance", "Recruitment risks requiring intervention"], output: "DDHS Recruitment Equity Intelligence Dashboard" },
 ];
 
+const ARCHITECTURE = [
+  { k: "A", title: "Workforce Intelligence", body: "Current workforce, occupational levels, demographics and disability from Employee Profiles." },
+  { k: "B", title: "EEA12 Analytics Engine", body: "Representation, under-representation, sector targets and provincial EAP benchmarks." },
+  { k: "C", title: "Recruitment Focus Engine", body: "Identifies the recruitment priorities and focus groups for each vacancy." },
+  { k: "D", title: "Recruitment Governance", body: "Approval, committee acknowledgement of focus guidance and recorded variance." },
+  { k: "E", title: "Selection Intelligence", body: "Applicant → shortlist → interview → recommendation → appointment." },
+  { k: "F", title: "Evidence & Reporting", body: "Audit trail, dashboards, EEA reporting and DG review evidence." },
+];
+
+function Architecture() {
+  return (
+    <section className="mt-16">
+      <h2 className="section-title text-primary">How the system connects</h2>
+      <p className="mt-2 max-w-3xl text-muted-foreground">Six connected components: each one feeds the next, so workforce data captured once flows through to recruitment decisions and audit evidence.</p>
+      <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {ARCHITECTURE.map((a) => (
+          <li key={a.k} className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal font-display font-bold text-teal-foreground">{a.k}</span>
+              <p className="card-title text-primary">{a.title}</p>
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">{a.body}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 function Journey() {
   return (
     <section className="mt-16">
@@ -72,7 +101,7 @@ export const Route = createFileRoute("/services/recruitment-suite")({
         { title: "Movement and job-grade insight", body: "Appointments, promotions and terminations tracked against your EE plan, by unit and Paterson, Peromnes, Hay or Equate grade." },
         { title: "Manager sign-off", body: "Recorded approvals and justifications for appointments that move away from targets." },
       ],
-      extra: <><Journey /><div id="governance"><RecruitmentPractice /></div><RecruitmentPricing /></>,
+      extra: <><Architecture /><Journey /><div id="governance"><RecruitmentPractice /></div><RecruitmentPricing /></>,
       steps: [
         { title: "Plan", body: "Set the vacancy's transformation priority." },
         { title: "Recruit", body: "Approve, advertise and track candidates." },
@@ -83,7 +112,7 @@ export const Route = createFileRoute("/services/recruitment-suite")({
         "Recruitment decisions linked to EE priorities",
         "Visibility of where designated-group candidates are lost",
         "Consistent, defensible selection processes",
-        "Real-time DDHS Recruitment Equity Intelligence intelligence for leadership",
+        "Real-time DDHS Recruitment Equity Intelligence insight for leadership",
       ],
       ctaTitle: "See the DDHS Recruitment Equity Intelligence in action",
       ctaBody: "We will show how one integrated recruitment journey connects your vacancies to your transformation goals.",

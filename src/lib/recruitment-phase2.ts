@@ -38,6 +38,7 @@ export type Member = { name: string; role: string; eeRep: boolean; trained: bool
 export type Governance = {
   members?: Member[]; criteriaConsistent?: boolean; assessmentMethod?: string; standardisedAssessment?: boolean;
   decisionRecorded?: boolean; decisionNote?: string; motivation?: string; deviation?: boolean; deviationReason?: string; deviationApprovedBy?: string;
+  focusAck?: { by: string; at: string; note?: string };
   evidence?: { minutes?: boolean; scoresheets?: boolean; references?: boolean; qualifications?: boolean };
 };
 
