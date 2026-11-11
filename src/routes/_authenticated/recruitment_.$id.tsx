@@ -17,6 +17,7 @@ import {
 import { loadBaseline, priorityFor } from "@/lib/recruitment-data";
 import { FlowStep, GovernanceStep, ImpactStep } from "@/components/recruitment-phase2";
 import { EvidenceStep, RiskStep } from "@/components/recruitment-phase3";
+import { FocusStep } from "@/components/recruitment-focus";
 import { riskFlags, type C as RC, type V as RV } from "@/lib/recruitment-phase3";
 
 export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
@@ -80,6 +81,7 @@ function VacancyPage() {
 
         <PlanStep v={v} save={save} busy={busy} />
         <ApproveStep v={v} save={save} busy={busy} />
+        <FocusStep v={v} cands={cands} />
         <CandidateStep v={v} cands={cands} reload={load} />
         <FlowStep cands={cands} />
         <GovernanceStep key={`g-${v.id}`} v={v} save={save} busy={busy} />

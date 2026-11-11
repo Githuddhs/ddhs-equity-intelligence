@@ -63,6 +63,7 @@ export const Route = createFileRoute("/services/recruitment-suite")({
       offerings: [
         { title: "Applicant tracking", body: "Applications, CVs, shortlisting, interviews, assessments, offers and onboarding handover." },
         { title: "EE intelligence", body: "Every vacancy and appointment connected to representation gaps and EE targets." },
+        { title: "Recruitment Focus Intelligence", body: "Converts EEA12 workforce analysis into vacancy-level recruitment guidance, targeted sourcing actions, selection governance, appointment-impact analysis and a complete EE recruitment audit trail." },
         { title: "Selection governance", body: "Committee composition, declarations, consistent criteria and recorded decisions." },
         { title: "Predictive analytics", body: "Candidate-flow conversion and appointment impact before final approval." },
         { title: "Risk dashboards", body: "Early flags on pools, missing evidence, deviations and slow-moving units." },
