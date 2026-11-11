@@ -63,7 +63,7 @@ function Lifecycle() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-4xl px-6 py-10">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">EE plan lifecycle</p>
         <h1 className="page-title text-primary">From employer profile to signed EEA13 plan</h1>
         <p className="page-lead mt-1 text-muted-foreground">Enter your information once. Each step feeds the next, so your plan is assembled from your own analysis.</p>

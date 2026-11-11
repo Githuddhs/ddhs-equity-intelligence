@@ -43,7 +43,7 @@ export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label 
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex gap-1.5">
           {STEPS.map((x, n) => (
             <button key={x.title} aria-label={`Go to ${x.title}`} onClick={() => setI(n)} className={`h-1.5 flex-1 rounded-full ${n <= i ? "bg-teal" : "bg-muted"}`} />

@@ -65,7 +65,7 @@ function Account() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-3xl px-6 py-8">
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-8">
         <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
         <h1 className="page-title mt-2 text-primary">My account</h1>
         <p className="page-lead text-muted-foreground">Signed in as {data?.email}</p>

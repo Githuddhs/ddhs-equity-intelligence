@@ -60,7 +60,7 @@ function Readiness() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-4xl px-6 py-10">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">Client onboarding</p>
         <h1 className="page-title text-primary">EE data readiness</h1>
         <p className="page-lead mt-1 text-muted-foreground">Six stages, worked out from what you have already saved. Each item says whether it is required, conditional, calculated by DDHS, an evidence upload or optional.</p>

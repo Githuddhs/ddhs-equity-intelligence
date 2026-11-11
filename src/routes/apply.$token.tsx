@@ -64,7 +64,7 @@ function ApplyPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border"><div className="mx-auto flex max-w-3xl items-center gap-2 px-6 py-4"><BrandMark to={null} /><span className="font-display font-bold text-primary">· Careers</span></div></header>
-      <main className="mx-auto max-w-3xl px-6 py-8">
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-8">
         {info === undefined && <p className="text-sm text-muted-foreground">Loading…</p>}
         {info === null && <p className="text-sm">This vacancy is not open for applications.</p>}
         {info && done && <div className="rounded-xl border border-teal/40 bg-teal/10 p-6"><p className="card-title text-primary">Application received</p><p className="mt-2 text-sm text-muted-foreground">Thank you for applying for {info.title}. The employer will contact you about the next steps.</p></div>}

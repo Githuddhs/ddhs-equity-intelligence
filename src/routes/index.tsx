@@ -760,7 +760,7 @@ function Index() {
 
       {/* Book a Demonstration */}
       <section id="contact" className="scroll-mt-28 bg-primary py-10">
-        <div className="mx-auto max-w-4xl px-6 text-center">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-sm font-semibold uppercase tracking-widest text-teal">Book a Demonstration</p>
           <h2 className="display-title mt-2 text-balance text-navy-foreground">
             Your Next Review Should Confirm Progress, Not Expose Missing Evidence

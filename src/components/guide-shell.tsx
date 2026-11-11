@@ -22,7 +22,7 @@ export function GuideShell({ children }: { children: ReactNode }) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl px-6 py-10">{children}</main>
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">{children}</main>
       <RelatedLinks />
       <footer className="border-t bg-background py-10">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-4">

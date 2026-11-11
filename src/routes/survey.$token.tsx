@@ -68,7 +68,7 @@ function SurveyPage() {
       <header className="border-b border-border bg-card px-6 py-4">
         <BrandMark to={null} />
       </header>
-      <main className="mx-auto max-w-4xl px-6 py-8">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
         {info === undefined && <p className="text-muted-foreground">Loading…</p>}
         {info === null && <p className="text-destructive">This survey link is invalid, has expired or has been closed.</p>}
         {info && done && (

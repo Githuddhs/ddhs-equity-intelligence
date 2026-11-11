@@ -117,7 +117,7 @@ function ReviewPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto max-w-4xl px-6 py-10">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">DDHS staff</p>
         <h1 className="page-title text-primary">Platform review</h1>
         <p className="page-lead mt-1 text-muted-foreground">Everything you'd want to look at before publishing, in one list. Open a page, read it, tick it. Your ticks are kept on this device.</p>

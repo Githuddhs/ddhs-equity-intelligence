@@ -186,3 +186,17 @@ meter.accent-teal::-moz-meter-bar { background: var(--teal); }
 @layer base {
   .grid > * { min-width: 0; }
 }
+
+/* ---- Professional finish: one font, one rhythm on every page ---- */
+@layer base {
+  html { scroll-behavior: smooth; }
+  button, input, select, textarea, optgroup { font-family: inherit; font-size: inherit; }
+  h1, h2, h3, h4, h5, h6 { color: var(--color-navy); font-weight: 700; line-height: 1.2; text-wrap: balance; }
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color: inherit; }
+  p { text-wrap: pretty; }
+  table { font-variant-numeric: tabular-nums; }
+  th { font-weight: 600; }
+  a, button { transition: color .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease; }
+  :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+  img { max-width: 100%; }
+}
