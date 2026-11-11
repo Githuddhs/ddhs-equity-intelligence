@@ -61,11 +61,11 @@ export function ClientReadOnly() {
   return createPortal(<div data-allow-client className="mb-6 print:hidden">
     <div role="note" className="flex flex-wrap items-start gap-3 rounded-xl border border-teal bg-card p-4 shadow-sm">
       <Lock className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 basis-56">
         <p className="font-semibold text-primary">View only — DDHS staff capture these records</p>
         <p className="text-sm text-muted-foreground">For audit purposes, all workforce and compliance records are captured by DDHS staff. You can view and download everything here. To add or change information, send your files to DDHS.</p>
       </div>
-      <Link to="/workforce" hash="send-to-ddhs" className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Send workforce files to DDHS</Link>
+      <Link to="/workforce" hash="send-to-ddhs" className="w-full text-center sm:w-auto rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Send workforce files to DDHS</Link>
     </div>
   </div>, slot);
 }
