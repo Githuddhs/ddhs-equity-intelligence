@@ -48,7 +48,8 @@ export function ClientReadOnly() {
       if (el.closest("[data-allow-client]") || el.dataset["ro"] === "1") return;
       const label = (el.getAttribute("aria-label") || el.textContent || "").trim();
       if (CAPTURE.test(label)) { el.dataset["ro"] = "1"; el.style.display = "none"; }
-    }) || document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("main textarea, main input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=search])").forEach((el) => {
+    });
+    document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("main textarea, main input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=search])").forEach((el) => {
       if (!el.closest("[data-allow-client]") && !el.readOnly) el.readOnly = true;
     });
     hide();
