@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
@@ -7,7 +8,7 @@ import { supabase } from "@/lib/workspace-client";
 /** Pages whose records only DDHS staff capture (enforced in the database). Recruitment Suite pages are deliberately excluded. */
 const STAFF_ONLY = [/^\/workforce$/, /^\/eea12$/, /^\/plans(\/|$)/, /^\/dg-review$/, /^\/doel-submissions$/, /^\/eea13$/, /^\/eea13-planning$/, /^\/compliance$/, /^\/evidence$/, /^\/workforce-foundation$/, /^\/plan-lifecycle$/];
 /** Button labels that capture, edit or delete records. */
-const CAPTURE = /^\s*(save|edit|delete|remove|add|new|create|submit|import|assemble|sign[ -]off|record|update|run|upload)\b|\b(save|delete)\b/i;
+const CAPTURE = /^\s*(\+|save|saved|edit|delete|remove|add|new|create|submit|import|assemble|sign[ -]off|record|update|run|upload|auto-fill|fill|pull|write|draft|build|generate|reopen|approve)|\b(save|delete)\b/i;
 
 export function isStaffOnlyPage(path: string) { return STAFF_ONLY.some((r) => r.test(path)); }
 
@@ -26,20 +27,37 @@ export function useClientReadOnly() {
 /** Hides capture controls on staff-only pages for client users; the database refuses client writes regardless. */
 export function ClientReadOnly() {
   const readOnly = useClientReadOnly();
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
   useEffect(() => {
     if (!readOnly) return;
-    const hide = () => document.querySelectorAll<HTMLElement>("main button, main input[type=submit], main [role=button]").forEach((el) => {
+    // Place the notice at the top of the page content, below the site header.
+    const place = () => {
+      const main = document.querySelector("main");
+      if (!main || main.firstElementChild?.hasAttribute("data-ro-slot")) return;
+      const el = document.createElement("div"); el.setAttribute("data-ro-slot", ""); el.setAttribute("data-allow-client", "");
+      main.prepend(el); setSlot(el);
+    };
+    place();
+    const obs = new MutationObserver(place);
+    obs.observe(document.body, { childList: true, subtree: true });
+    return () => { obs.disconnect(); document.querySelectorAll("[data-ro-slot]").forEach((n) => n.remove()); };
+  }, [readOnly]);
+  useEffect(() => {
+    if (!readOnly) return;
+    const hide = () => document.querySelectorAll<HTMLElement>("main button, main input[type=submit], main [role=button], main a, main label:has(input[type=file])").forEach((el) => {
       if (el.closest("[data-allow-client]") || el.dataset["ro"] === "1") return;
       const label = (el.getAttribute("aria-label") || el.textContent || "").trim();
       if (CAPTURE.test(label)) { el.dataset["ro"] = "1"; el.style.display = "none"; }
+    }) || document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("main textarea, main input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=search])").forEach((el) => {
+      if (!el.closest("[data-allow-client]") && !el.readOnly) el.readOnly = true;
     });
     hide();
     const obs = new MutationObserver(hide);
     obs.observe(document.body, { childList: true, subtree: true });
     return () => obs.disconnect();
   }, [readOnly]);
-  if (!readOnly) return null;
-  return <div data-allow-client className="mx-auto mt-4 max-w-7xl px-4 sm:px-6 lg:px-8 print:hidden">
+  if (!readOnly || !slot) return null;
+  return createPortal(<div data-allow-client className="mb-6 print:hidden">
     <div role="note" className="flex flex-wrap items-start gap-3 rounded-xl border border-teal bg-card p-4 shadow-sm">
       <Lock className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
       <div className="min-w-0 flex-1">
@@ -48,5 +66,5 @@ export function ClientReadOnly() {
       </div>
       <Link to="/workforce" hash="send-to-ddhs" className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Send workforce files to DDHS</Link>
     </div>
-  </div>;
+  </div>, slot);
 }
