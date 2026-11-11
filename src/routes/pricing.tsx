@@ -16,17 +16,78 @@ export const Route = createFileRoute("/pricing")({
     cancelled: search["cancelled"] === "1",
   }),
   staticData: { sitemap: true },
-  head: () => pageHead({ path: "/pricing", title: "Employment Equity Software Pricing | DDHS Equity Intelligence", description: "Compare DDHS Equity Intelligence subscription plans and onboarding for small, medium and large South African employers managing Employment Equity compliance." }),
+  head: () => pageHead({ path: "/pricing", title: "Employment Equity Services & Pricing | DDHS Equity Intelligence", description: "DDHS Equity Intelligence pricing: Comply, Plan, Manage and Transform services, software-only subscriptions and specialist support for South African employers." }),
   component: PricingPage,
 });
 
-type Pkg = { name: string; market: string; price: string; annual: string; setup: string; featured?: boolean };
+type Pathway = { step: string; name: string; price: string; unit: string; suited: string; includes: string[]; featured?: boolean };
 
-const PACKAGES: Pkg[] = [
-  { name: "Essential 1", market: "Small employers (50–149 employees)", price: "R4,500–R12,500", annual: "R54,000–R150,000 per year", setup: "R12,500 once-off" },
-  { name: "Essential 2", market: "Employers (50–249 employees)", price: "R12,500–R25,500", annual: "R150,000–R300,000 per year", setup: "R20,000 once-off", featured: true },
-  { name: "Professional", market: "Medium-sized employers (150–999 employees)", price: "R12,500–R25,000", annual: "R150,000–R300,000 per year", setup: "R25,000 once-off" },
-  { name: "Enterprise", market: "Large employers and public entities (1,000+ employees)", price: "R25,000–R75,000", annual: "R270,000–R810,000 per year", setup: "R30,000 once-off" },
+const PATHWAY: Pathway[] = [
+  {
+    step: "1 · Comply",
+    name: "DDHS Compliance",
+    price: "from R15,000",
+    unit: "once-off",
+    suited: "Designated employers needing accurate annual reporting and lower compliance risk.",
+    includes: [
+      "Workforce data validation",
+      "EEA9 occupational-level review",
+      "Review of your existing EEA12 workforce analysis and EEA13 plan",
+      "EEA2 and EEA4 preparation",
+      "Statutory submission support",
+      "A compliance gap report",
+    ],
+  },
+  {
+    step: "2 · Plan",
+    name: "DDHS EE Plan & Compliance",
+    price: "from R35,000",
+    unit: "per project",
+    suited: "Employers building a defensible Employment Equity Plan on workforce evidence.",
+    includes: [
+      "Barrier analysis",
+      "Affirmative-action measures",
+      "Numerical goals and annual targets",
+      "Sector-target modelling",
+      "Committee and management consultation",
+      "An implementation roadmap",
+    ],
+  },
+  {
+    step: "3 · Manage",
+    name: "DDHS Managed Employment Equity",
+    price: "from R6,500",
+    unit: "per month",
+    suited: "Continuous EE management without a full-time internal specialist.",
+    featured: true,
+    includes: [
+      "Quarterly committee support and reporting packs",
+      "Workforce monitoring and target tracking",
+      "Compliance dashboards",
+      "Monthly specialist advisory time",
+      "Access to the DDHS Equity Intelligence platform",
+    ],
+  },
+  {
+    step: "4 · Transform",
+    name: "DDHS Strategic / Enterprise EE",
+    price: "from R20,000",
+    unit: "per month",
+    suited: "Universities, municipalities, state-owned entities, large corporates and multi-site employers.",
+    includes: [
+      "Divisional analytics",
+      "Executive reporting",
+      "Recruitment governance",
+      "Transformation forecasting",
+      "Compliance audits",
+      "Director-General Review readiness",
+    ],
+  },
+];
+
+const OPTIONAL_SERVICES = [
+  { title: "Specialist advisory", body: "EE consulting, DG Review support, executive advisory, custom analytics and tailored training." },
+  { title: "Enterprise add-ons", body: "Extra business units or committees, executive dashboards, barrier-analysis projects, recruitment governance modules, historical data clean-up and custom Power BI dashboards." },
 ];
 
 const IMPLEMENTATION = [
@@ -123,34 +184,38 @@ function PricingPage() {
         </div>
       </header>
       <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
-        <h1 className="page-title text-center text-primary">Employment Equity software pricing and subscription plans</h1>
-        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Choose a subscription package, a software-only subscription, or once-off specialist support. All prices exclude VAT.</p>
-        <h2 className="section-title mt-8 text-primary">Subscription packages</h2>
-        <p className="mt-1 text-muted-foreground">Every package includes the full implementation and onboarding service below, priced to your organisation. Speak to us for an exact quote within the range for your size.</p>
+        <h1 className="page-title text-center text-primary">Employment Equity services and pricing</h1>
+        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Scalable compliance, workforce intelligence and governance support for South African employers. Our fees scale with your headcount and organisational complexity, so a 75-person employer and a 7,500-person university each pay a fair price for the support they need.</p>
+        <h2 className="section-title mt-8 text-primary">Our service pathway: Comply, Plan, Manage, Transform</h2>
+        <p className="mt-1 text-muted-foreground">Start where you are and add support as your Employment Equity programme matures. Every step builds on reliable workforce data.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {PACKAGES.map((p) => (
+          {PATHWAY.map((p) => (
             <div key={p.name} className={`flex flex-col rounded-xl border bg-card p-6 shadow-sm ${p.featured ? "border-teal ring-2 ring-teal" : "border-border"}`}>
               {p.featured && <span className="mb-3 w-fit rounded-full bg-teal px-3 py-1 text-xs font-semibold text-primary-foreground">Most popular</span>}
-              <h3 className="card-title text-primary">{p.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{p.market}</p>
-              <dl className="mt-5 space-y-3 text-sm">
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Monthly price</dt>
-                  <dd className="font-display text-xl font-bold text-primary">{p.price}<span className="text-sm font-medium text-muted-foreground">/month</span></dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Annual option</dt>
-                  <dd className="font-semibold text-primary">{p.annual}</dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Implementation and data configuration</dt>
-                  <dd className="font-semibold text-primary">{p.setup}</dd>
-                </div>
-              </dl>
+              <p className="text-xs font-semibold uppercase tracking-wide text-teal">{p.step}</p>
+              <h3 className="card-title mt-1 text-primary">{p.name}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{p.suited}</p>
+              <p className="mt-4 font-display text-xl font-bold text-primary">{p.price} <span className="text-sm font-medium text-muted-foreground">{p.unit}</span></p>
+              <ul className="mt-4 space-y-2 text-sm">
+                {p.includes.map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
+              </ul>
               <a href="#quote" className="mt-auto pt-6"><span className="block rounded-lg border border-primary px-4 py-2 text-center text-sm font-semibold text-primary">Request a proposal</span></a>
             </div>
           ))}
         </div>
+
+        <section className="mt-12 rounded-xl border border-border bg-card p-8">
+          <h2 className="section-title text-primary">Specialist and optional services</h2>
+          <div className="mt-4 grid gap-6 md:grid-cols-2">
+            {OPTIONAL_SERVICES.map((s) => (
+              <div key={s.title}>
+                <h3 className="card-title text-primary">{s.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-sm text-muted-foreground">All fees are indicative guideline prices, exclude VAT and are subject to scope and complexity. Quotations are valid for 30 days. DDHS provides specialist advisory and does not guarantee a particular regulatory outcome or certificate.</p>
+        </section>
 
         <section className="mt-12 rounded-xl border border-border bg-card p-8">
           <h2 className="section-title text-primary">Implementation and onboarding service</h2>

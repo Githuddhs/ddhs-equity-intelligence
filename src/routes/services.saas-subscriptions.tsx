@@ -25,7 +25,7 @@ export const Route = createFileRoute("/services/saas-subscriptions")({
         { title: "Evidence repository", body: "Policies, consultation records and DG review evidence kept audit-ready." },
       ],
       steps: [
-        { title: "Choose a package", body: "Essential 1, Essential 2, Professional or Enterprise, based on workforce size." },
+        { title: "Choose your service", body: "Comply, Plan, Manage or Transform — or a software-only subscription — sized to your workforce." },
         { title: "Load your data", body: "Upload your HR file; the platform checks it and flags gaps." },
         { title: "Analyse and plan", body: "Run EEA12, set EEA13 targets and draft your EE plan." },
         { title: "Report and submit", body: "Download reports and prepare DoEL submissions." },
