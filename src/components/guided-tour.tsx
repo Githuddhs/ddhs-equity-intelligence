@@ -12,7 +12,7 @@ export type TourStep = { kicker: string; title: string; body: string; points: st
 /** Icon for the step's access note: open/globe when the tool is free without signing in, padlock when it needs a client login. */
 export const tourAccessOpen = (access: string | undefined) => !!access && /free|no sign-in needed|open to use/i.test(access);
 
-/** Shared step-by-step tour layout used by the platform tour and the Recruitment Suite tour. */
+/** Shared step-by-step tour layout used by the platform tour and the DDHS Recruitment Equity Intelligence tour. */
 export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label = "site tour", exitTo = "/" }: { steps: TourStep[]; path: string; invitedFor?: string | undefined; invitedFrom?: string | undefined; label?: string; exitTo?: string }) {
   const [i, setI] = useState(0);
   const s = STEPS[i]!;

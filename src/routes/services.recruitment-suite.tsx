@@ -12,7 +12,7 @@ const JOURNEY: { title: string; intro: string; items: string[]; output: string; 
   { title: "Assess Appointment Impact", intro: "Before final approval, authorised decision-makers can evaluate how a proposed appointment may affect:", items: ["Workforce representation", "Organisational and unit-level EE targets", "Progress at the relevant occupational level", "Annual and longer-term transformation priorities", "Areas of persistent under-representation"], output: "Appointment Transformation Impact Assessment", note: "The assessment supports informed decision-making but does not replace selection based on lawful, job-related criteria and the organisation's approved policies." },
   { title: "Flag Governance and Transformation Risks", intro: "The platform identifies potential concerns such as:", items: ["Insufficiently diverse applicant or shortlist pools", "Missing declarations or governance evidence", "Appointments that do not advance identified representation gaps", "Repeated loss of designated-group candidates at a particular stage", "Unexplained deviations from the approved recruitment strategy", "Recurring reliance on direct recruitment", "Incomplete appointment motivations", "Business units making limited progress against EE priorities"], output: "Recruitment Risk and Intervention Dashboard" },
   { title: "Maintain an Audit-Ready Evidence Trail", intro: "Every recruitment process retains a secure and traceable record of:", items: ["Approvals", "Advertisements", "Candidate-stage decisions", "Assessment results", "Committee records", "Declarations", "Appointment motivations", "Deviations", "Supporting evidence"], output: "Defensible Recruitment Evidence Pack" },
-  { title: "Report to Leadership and Governance Structures", intro: "Real-time dashboards provide authorised stakeholders with visibility into:", items: ["Vacancy and appointment activity", "Time-to-fill and recruitment bottlenecks", "Candidate-pipeline representation", "Candidate conversion by recruitment stage", "Appointment contributions to EE priorities", "Governance compliance", "Direct recruitment patterns", "Business-unit performance", "Recruitment risks requiring intervention"], output: "Recruitment Suite Dashboard" },
+  { title: "Report to Leadership and Governance Structures", intro: "Real-time dashboards provide authorised stakeholders with visibility into:", items: ["Vacancy and appointment activity", "Time-to-fill and recruitment bottlenecks", "Candidate-pipeline representation", "Candidate conversion by recruitment stage", "Appointment contributions to EE priorities", "Governance compliance", "Direct recruitment patterns", "Business-unit performance", "Recruitment risks requiring intervention"], output: "DDHS Recruitment Equity Intelligence Dashboard" },
 ];
 
 function Journey() {
@@ -20,7 +20,7 @@ function Journey() {
     <section className="mt-16">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="section-title text-primary">One integrated recruitment journey</h2>
-        <Link to="/recruitment-tour" className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Take the Recruitment Suite tour</Link>
+        <Link to="/recruitment-tour" className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Take the DDHS Recruitment Equity Intelligence tour</Link>
       </div>
       <ol className="mt-6 grid gap-6 lg:grid-cols-3">
         {JOURNEY.map((s, i) => (
@@ -44,13 +44,13 @@ function Journey() {
 
 export const Route = createFileRoute("/services/recruitment-suite")({
   staticData: { sitemap: true },
-  head: () => serviceHead("/services/recruitment-suite", "Recruitment Suite", "Recruitment Suite, including governance intelligence: an integrated applicant tracking system for South African employers linking every appointment to EE targets, selection governance and audit-ready evidence."),
+  head: () => serviceHead("/services/recruitment-suite", "DDHS Recruitment Equity Intelligence", "DDHS Recruitment Equity Intelligence, including governance intelligence: an integrated applicant tracking system for South African employers linking every appointment to EE targets, selection governance and audit-ready evidence."),
   component: () => (
     <ServicePage c={{
       current: "/services/recruitment-suite",
       platformModule: true,
       eyebrow: "An Integrated Transformation Applicant Tracking System",
-      title: "Recruitment Suite",
+      title: "DDHS Recruitment Equity Intelligence",
       tagline: "Recruit it. Govern it. Transform it.",
       lead: "An integrated Applicant Tracking System designed for South African employers. It manages the complete recruitment lifecycle while connecting every vacancy and appointment to Employment Equity priorities, governance requirements, workforce targets and measurable transformation outcomes.",
       forWho: [
@@ -82,9 +82,9 @@ export const Route = createFileRoute("/services/recruitment-suite")({
         "Recruitment decisions linked to EE priorities",
         "Visibility of where designated-group candidates are lost",
         "Consistent, defensible selection processes",
-        "Real-time Recruitment Suite intelligence for leadership",
+        "Real-time DDHS Recruitment Equity Intelligence intelligence for leadership",
       ],
-      ctaTitle: "See the Recruitment Suite in action",
+      ctaTitle: "See the DDHS Recruitment Equity Intelligence in action",
       ctaBody: "We will show how one integrated recruitment journey connects your vacancies to your transformation goals.",
     }} />
   ),

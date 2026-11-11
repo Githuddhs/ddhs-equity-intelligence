@@ -191,7 +191,7 @@ export const BLOG_POSTS: BlogPost[] = [
         "Tools can flag risks, but appointments remain human decisions with recorded reasons.",
       ] },
     ],
-    capability: { to: "/services/recruitment-suite", label: "See the Recruitment Suite", why: "The DDHS Recruitment Suite covers nine steps from vacancy planning to onboarding handover, with a human review before every appointment." },
+    capability: { to: "/services/recruitment-suite", label: "See the DDHS Recruitment Equity Intelligence", why: "The DDHS Recruitment Equity Intelligence covers nine steps from vacancy planning to onboarding handover, with a human review before every appointment." },
   },
   {
     slug: "from-compliance-to-workforce-intelligence",
@@ -241,7 +241,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description: "Why recruitment governance deserves executive attention. Part 4 of the DDHS leadership and transformation series.",
     intro: "An organisation may have a sophisticated Employment Equity strategy, but recruitment decisions are among the places where its intentions are tested most directly.",
     sections: [{"heading": "", "body": ["Every vacancy creates a governance moment.", "How the position is defined, advertised, shortlisted, assessed and ultimately filled can influence both immediate workforce representation and longer-term organisational capability.", "Recruitment should therefore be understood as an important component of Employment Equity implementation."]}, {"heading": "Consistency matters", "body": ["Fair recruitment requires more than good intentions.", "Organisations need defensible decision-making.", "Problems can arise when criteria are interpreted differently during a selection process, decision reasons are inadequately recorded, or expectations change between candidates.", "The leadership principle should be straightforward:", "Comparable decisions should be based on clear, relevant and consistently applied criteria.", "Employment Equity should therefore be integrated into recruitment governance rather than added at the end of the appointment process."]}, {"heading": "Ask better questions", "body": ["For each important appointment, organisations should be capable of examining questions such as:", "Were the relevant criteria clear?", "Were they applied consistently?", "Were potential barriers considered?", "Is the rationale for the decision adequately documented?", "Does the process support the organisation's Employment Equity strategy?", "Can the organisation identify patterns across multiple recruitment decisions?", "The final question is particularly important.", "Individual decisions may appear reasonable when viewed separately.", "Patterns become visible when decisions are analysed collectively.", "This is where workforce analytics can add significant value."]}, {"heading": "Recruitment as organisational intelligence", "body": ["Imagine moving beyond isolated appointment records and being able to examine recruitment patterns by occupational level, business area, stage of the process and subsequent appointment outcome.", "The goal is not simply greater oversight.", "It is organisational learning.", "Evidence should help leaders identify where systems are working and where closer examination may be required.", "That changes recruitment governance from retrospective administration into an opportunity for continuous improvement.", "DDHS Equity Intelligence: From compliance to intelligence. From reporting to action. From Employment Equity plans to accountable transformation."]}],
-    capability: { to: "/services/recruitment-suite", label: "See the Recruitment Suite", why: "The DDHS Recruitment Suite keeps selection consistent and requires a named human review before any appointment." },
+    capability: { to: "/services/recruitment-suite", label: "See the DDHS Recruitment Equity Intelligence", why: "The DDHS Recruitment Equity Intelligence keeps selection consistent and requires a named human review before any appointment." },
   },
   {
     slug: "future-of-ee-leadership-human-and-digital",
@@ -377,7 +377,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { heading: 'Use structured interviews', body: ['Ask every candidate the same questions and score independently.'] },
       { heading: 'Review before appointing', body: ['Have a named person check the shortlist and decision against the EE plan before an offer.'] },
     ],
-    capability: { to: '/services/recruitment-suite', label: 'See the Recruitment Suite', why: 'The DDHS Recruitment Suite requires a named human review before any appointment.' },
+    capability: { to: '/services/recruitment-suite', label: 'See the DDHS Recruitment Equity Intelligence', why: 'The DDHS Recruitment Equity Intelligence requires a named human review before any appointment.' },
   },
   {
     slug: 'quarterly-ee-monitoring-routine',

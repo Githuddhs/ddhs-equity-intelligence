@@ -155,7 +155,7 @@ const capabilityLayers: { name: string; href?: string }[] = [
   { name: "Executive Intelligence", href: "/executive-intelligence" },
   { name: "Leadership Dashboard", href: "/leadership-dashboard" },
   { name: "Leadership Report", href: "/leadership-report" },
-  { name: "Recruitment Suite", href: "/services/recruitment-suite" },
+  { name: "DDHS Recruitment Equity Intelligence", href: "/services/recruitment-suite" },
   { name: "Responsible AI Assistant", href: "/responsible-ai" },
 ];
 
@@ -455,7 +455,7 @@ function Index() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-teal">Platform Module</p>
                 <h3 className="mt-3 font-display text-xl font-extrabold leading-tight text-balance text-navy-foreground sm:text-2xl">
-                  Recruitment Suite
+                  DDHS Recruitment Equity Intelligence
                 </h3>
                 <p className="mt-2 font-display text-base font-semibold text-teal">
                   Recruit it. Govern it. Transform it.
@@ -470,7 +470,7 @@ function Index() {
                     to="/services/recruitment-suite"
                     className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground transition-colors hover:bg-teal/90"
                   >
-                    Explore the Recruitment Suite <ArrowRight className="h-4 w-4" />
+                    Explore the DDHS Recruitment Equity Intelligence <ArrowRight className="h-4 w-4" />
                   </Link>
                   <a
                     href="#contact"
@@ -818,7 +818,7 @@ function Index() {
                   { l: "Executive Reporting", h: "/executive-intelligence" },
                   { l: "Leadership Dashboard", h: "/leadership-dashboard" },
                   { l: "Leadership Report", h: "/leadership-report" },
-                  { l: "Recruitment Suite", h: "/services/recruitment-suite" },
+                  { l: "DDHS Recruitment Equity Intelligence", h: "/services/recruitment-suite" },
                   { l: "Client view", h: "/client-view" },
                   { l: "Download the app", h: "#platform" },
                 ].map((l) => (

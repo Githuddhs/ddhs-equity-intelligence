@@ -1,4 +1,4 @@
-// Recruitment Suite steps 7–9: risk flags, evidence pack, leadership dashboard.
+// DDHS Recruitment Equity Intelligence steps 7–9: risk flags, evidence pack, leadership dashboard.
 // Flags and dashboards inform people; they never approve, decline or appoint anyone.
 import { GROUPS } from "@/lib/workforce";
 import { candidateGroup, isDesignated, reachedIndex, STAGE_LABEL, STATUS_LABEL, type Sourcing, type Stage, type VacancyStatus, type Priority } from "@/lib/recruitment";
@@ -113,7 +113,7 @@ const appointedAt = (c: C) => (Array.isArray(c.history) ? (c.history as { stage?
 
 export type Dashboard = ReturnType<typeof recruitmentDashboard>;
 
-/** Recruitment Suite Dashboard across every vacancy. */
+/** DDHS Recruitment Equity Intelligence Dashboard across every vacancy. */
 export function recruitmentDashboard(vs: V[], cs: C[]) {
   const byV = (id: string) => cs.filter((c) => c.vacancy_id === id);
   const status = Object.fromEntries(Object.keys(STATUS_LABEL).map((k) => [k, vs.filter((v) => v.status === k).length])) as Record<VacancyStatus, number>;
@@ -145,7 +145,7 @@ export function recruitmentDashboard(vs: V[], cs: C[]) {
 }
 
 export function dashboardReport(d: Dashboard): ReportData {
-  return { title: "Recruitment Suite Dashboard", fields: [["Generated", new Date().toLocaleString("en-ZA")]], blocks: [
+  return { title: "DDHS Recruitment Equity Intelligence Dashboard", fields: [["Generated", new Date().toLocaleString("en-ZA")]], blocks: [
     { kind: "table", title: "Activity", head: ["Measure", "Value"], body: [
       ["Vacancies", String(d.vacancies)], ...Object.entries(d.status).map(([k, n]) => [STATUS_LABEL[k as VacancyStatus], String(n)]),
       ["Candidates", String(d.candidates)], ["Appointments", String(d.appointed)], ["Designated-group appointments", String(d.designatedAppointments)],

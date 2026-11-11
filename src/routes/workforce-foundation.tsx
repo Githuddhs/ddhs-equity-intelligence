@@ -188,7 +188,7 @@ function WorkforceFoundationPage() {
         <section className="mt-16 rounded-xl border border-primary/40 bg-card p-8 shadow-sm">
           <h2 className="section-title text-primary">Load a workforce snapshot</h2>
           <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
-            Upload your HR headcount or employee list (Excel, CSV, Word or a text-based PDF). The figures feed every part of the platform: the dashboard, EEA12 analysis, EEA13 plans, DoEL forms and Recruitment Suite. Files that list each employee also fill in Employee Profiles, ready for you to review and save.
+            Upload your HR headcount or employee list (Excel, CSV, Word or a text-based PDF). The figures feed every part of the platform: the dashboard, EEA12 analysis, EEA13 plans, DoEL forms and DDHS Recruitment Equity Intelligence. Files that list each employee also fill in Employee Profiles, ready for you to review and save.
           </p>
           <Link to="/workforce" className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Load workforce snapshot →</Link>
         </section>

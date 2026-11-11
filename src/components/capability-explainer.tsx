@@ -141,11 +141,11 @@ export const CAPABILITIES: Record<string, Capability> = {
     title: "Recruit",
     icon: Users,
     href: "/services/recruitment-suite",
-    tool: "Recruitment Suite",
+    tool: "DDHS Recruitment Equity Intelligence",
     access: "Open to view — vacancies, candidates and appointments are managed in your client portal after sign-in.",
     accessMode: "portal",
     summary:
-      "The Recruitment Suite turns plan targets into appointments: vacancies are planned against your EE goals, candidates are tracked and scored, and every appointment needs a named human review before it goes ahead.",
+      "The DDHS Recruitment Equity Intelligence turns plan targets into appointments: vacancies are planned against your EE goals, candidates are tracked and scored, and every appointment needs a named human review before it goes ahead.",
     points: [
       "Vacancy planning and approval linked to EE targets",
       "Candidate pipeline, scorecards and risk flags",

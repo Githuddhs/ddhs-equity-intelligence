@@ -11,7 +11,7 @@ const LINKS = [
   { label: "Book a Demonstration", href: "#contact" },
   { label: "Site Tour", href: "/tour" },
   { label: "Virtual Consultant", href: "/virtual-consultant" },
-  { label: "Recruitment Suite", href: "/services/recruitment-suite" },
+  { label: "DDHS Recruitment Equity Intelligence", href: "/services/recruitment-suite" },
   { label: "Academy", href: "/academy" },
   { label: "Blog", href: "/blog" },
 ];
