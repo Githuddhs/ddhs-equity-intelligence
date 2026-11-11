@@ -31,7 +31,7 @@ export function WorkforceSubmission() {
     } catch (e) { toast.error(e instanceof Error ? e.message : "Upload failed"); }
     finally { setBusy(false); if (input.current) input.current.value = ""; }
   }
-  return <section className="mt-6 rounded-xl border border-teal bg-card p-5 shadow-sm">
+  return <section id="send-to-ddhs" data-allow-client className="mt-6 scroll-mt-24 rounded-xl border border-teal bg-card p-5 shadow-sm">
     <h2 className="section-title text-primary">Send workforce data to DDHS</h2>
     <p className="mt-1 text-sm text-muted-foreground">For audit purposes, DDHS staff capture all workforce and compliance records. Upload your HR, payroll or headcount files (Excel, Word, PDF or CSV) and we will capture them for you.</p>
     <input ref={input} type="file" className="hidden" aria-label="Workforce file" accept=".xlsx,.xls,.csv,.ods,.docx,.doc,.pdf,.txt" onChange={(e) => { const f = e.target.files?.[0]; if (f) void send(f); }} />

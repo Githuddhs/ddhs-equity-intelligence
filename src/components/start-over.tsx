@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { exportCurrentPage } from "@/components/page-export";
+import { ClientReadOnly, useClientReadOnly } from "@/components/client-read-only";
 
 export const PAGE_FILE_ACCEPT = ".pdf,.doc,.docx,.odt,.rtf,.txt,.xls,.xlsx,.xlsm,.ods,.csv,.ppt,.pptx,.odp,.png,.jpg,.jpeg";
 const MAX = 20 * 1024 * 1024;
@@ -101,6 +102,7 @@ function PageFiles() {
 export function withPageTools<P extends object>(Page: ComponentType<P>, opts: { startOver?: boolean; storageKeys?: string[] } = {}) {
   function PageWithTools(props: P) {
     const [n, setN] = useState(0);
+    const readOnly = useClientReadOnly();
     const reset = () => {
       for (const k of opts.storageKeys ?? []) { try { localStorage.removeItem(k); } catch { /* ignore */ } }
       setN((x) => x + 1);
@@ -109,9 +111,10 @@ export function withPageTools<P extends object>(Page: ComponentType<P>, opts: { 
     };
     return (
       <>
+        <ClientReadOnly />
         <Page key={n} {...props} />
         <div data-no-export className="fixed bottom-4 right-4 z-40 flex flex-wrap justify-end gap-2 print:hidden">
-          {opts.startOver && (
+          {opts.startOver && !readOnly && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="outline" size="sm" className="bg-background shadow-md"><RotateCcw /> Clear &amp; start over</Button>
