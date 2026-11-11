@@ -1,3 +1,4 @@
+import { WorkforceSubmission } from "@/components/workforce-submission";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -255,6 +256,7 @@ function WorkforcePage() {
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
       <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
+        <WorkforceSubmission />
         <div className="flex items-center justify-between gap-4">
           <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>
           <button

@@ -101,3 +101,4 @@
 - [x] Combine founder profile into homepage Why DDHS section
 - [x] Why DDHS: centre/spread the narrative across the page
 - [x] Re-check staff opening/switching demo client workspaces (no flash, cross-client blocked)
+- [x] Staff onboard subscribed clients; multiple users per client; staff-only capturing; clients upload workforce files for staff capture

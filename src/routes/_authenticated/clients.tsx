@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/app-header";
 import { buildDeadlines, daysUntil } from "@/lib/ee-plan";
 import { InviteClientForm } from "@/components/invite-client-form";
+import { WorkforceInbox } from "@/components/workforce-submission";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/clients")({
@@ -84,6 +85,7 @@ function ClientsDashboard() {
               <p className="mt-1 text-muted-foreground">{data?.length ?? 0} client account(s).</p>
               <StaffAlerts clients={data ?? []} />
               <InviteClientForm />
+              <WorkforceInbox clients={data ?? []} />
               <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
                 <table className="w-full text-sm">
                   <thead className="bg-muted text-left text-muted-foreground">

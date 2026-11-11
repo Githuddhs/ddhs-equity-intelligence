@@ -288,6 +288,13 @@
       "when": 1793767355746,
       "tag": "0040_client_owner_team_administration",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1794357887131,
+      "tag": "0041_staff_only_capture",
+      "breakpoints": true
     }
   ]
 }
