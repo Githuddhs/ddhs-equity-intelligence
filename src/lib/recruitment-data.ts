@@ -4,17 +4,18 @@ import { aggregate, normaliseUnits, type UnitFilter } from "@/lib/org-units";
 import { LEVEL_TO_TARGET_KEY, PROVINCE_EAP, SECTORS } from "@/lib/sectors";
 import { transformationPriority, type Priority } from "@/lib/recruitment";
 
-export type Baseline = { workforce: Workforce | null; units: ReturnType<typeof normaliseUnits>; date: string | null; province: string; sector: string };
+export type Baseline = { workforce: Workforce | null; disability: Record<string, number>; units: ReturnType<typeof normaliseUnits>; date: string | null; province: string; sector: string };
 
 /** Latest saved workforce snapshot plus the client's configured province/sector (if any). */
 export async function loadBaseline(): Promise<Baseline> {
   const { data: auth } = await supabase.auth.getUser();
   const meta = auth.user?.user_metadata ?? {};
-  const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,units")
+  const { data } = await supabase.from("workforce_snapshots").select("snapshot_date,counts,units,disability")
     .eq("user_id", auth.user?.id ?? "").order("snapshot_date", { ascending: false }).order("created_at", { ascending: false }).limit(1).maybeSingle();
   return {
     workforce: data ? normaliseWorkforce(data.counts) : null,
     units: data ? normaliseUnits(data.units) : [],
+    disability: data && data.disability && typeof data.disability === "object" && !Array.isArray(data.disability) ? Object.fromEntries(Object.entries(data.disability as Record<string, unknown>).map(([k, n]) => [k, Number(n) || 0])) : {},
     date: data?.snapshot_date ?? null,
     province: typeof meta["province"] === "string" ? meta["province"] : "",
     sector: typeof meta["sector"] === "string" ? meta["sector"] : "",

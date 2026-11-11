@@ -1,7 +1,10 @@
 import { useState } from "react";
 import type { Json, Tables } from "@/integrations/supabase/types";
 import type { Priority, Sourcing } from "@/lib/recruitment";
-import { recruitmentFocus, type FocusAction } from "@/lib/recruitment-focus";
+import { recruitmentFocus, focusSummary, type FocusAction } from "@/lib/recruitment-focus";
+import { baselineCounts, loadBaseline, priorityFor } from "@/lib/recruitment-data";
+import { PROVINCE_EAP } from "@/lib/sectors";
+import { offerReport } from "@/lib/report-download";
 
 function Checklist({ title, items }: { title: string; items: FocusAction[] }) {
   return (
@@ -22,12 +25,19 @@ export function FocusStep({ v, cands, save, busy }: { v: Vacancy; cands: Tables<
   const ack = gov["focusAck"] as Ack | undefined;
   const [by, setBy] = useState(""); const [note, setNote] = useState("");
   const acknowledge = () => void save({ governance: { ...gov, focusAck: { by: by.trim(), at: new Date().toISOString(), note: note.trim() } } as unknown as Json }, "Committee acknowledgement recorded.");
+  const downloadSummary = async () => {
+    const b = await loadBaseline(); const scoped = baselineCounts(b, v);
+    const { ref, data } = focusSummary({ vacancy: v, counts: scoped.workforce?.[v.occupational_level], disabled: b.disability[v.occupational_level],
+      scope: scoped.scope, priority: priorityFor(b, v), eap: v.province ? PROVINCE_EAP[v.province] ?? null : null, snapshotDate: b.date });
+    offerReport({ name: `Recruitment-Focus-Summary-${ref}`, data });
+  };
   const withdraw = () => { const { focusAck: _, ...rest } = gov; void save({ governance: rest as unknown as Json }, "Acknowledgement withdrawn."); };
   const f = recruitmentFocus(v.priority as unknown as Priority | null, v.sourcing as unknown as Sourcing | null, cands);
   return (
     <section className="mt-10 rounded-xl border border-border bg-card p-5">
       <h2 className="card-title text-primary">Recruitment Focus Intelligence</h2>
       <p className="mt-1 text-sm text-muted-foreground">Guidance from your EEA12 workforce analysis for this vacancy. It informs sourcing and governance — it never selects or excludes a candidate.</p>
+      <button onClick={() => void downloadSummary()} className="mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal" data-allow-client>Download Recruitment Focus Summary</button>
       <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">{f.guidance.map((g) => <li key={g}>{g}</li>)}</ul>
       {f.available && (
         <div className="mt-4 grid gap-5 md:grid-cols-2">
