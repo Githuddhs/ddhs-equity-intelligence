@@ -32,7 +32,7 @@ export const PRACTICE: { title: string; status: "live" | "partial" | "proposed";
   {
     title: "Leadership and evidence are updated",
     status: "live",
-    body: "The vacancy evidence pack and DDHS Recruitment Equity Intelligence Dashboard update automatically from the saved vacancy and candidate records. In the onboarding handover, HR enters the staff number and clicks Send to Employee Profile: the new employee's profile and recruitment movement are created from the vacancy and the candidate's own declaration, so the appointment feeds job-grade progress, EEA reports and DG-review evidence without retyping.",
+    body: "The vacancy evidence pack and DDHS Recruitment Intelligence Dashboard update automatically from the saved vacancy and candidate records. In the onboarding handover, HR enters the staff number and clicks Send to Employee Profile: the new employee's profile and recruitment movement are created from the vacancy and the candidate's own declaration, so the appointment feeds job-grade progress, EEA reports and DG-review evidence without retyping.",
     shows: "Leadership dashboard and evidence pack in Word, Excel, PDF and PowerPoint, plus an automatic Employee Profile update",
   },
 ];
@@ -50,7 +50,7 @@ export function RecruitmentPractice() {
     status === "proposed" ? "Planned:" : status === "partial" ? "Today and planned:" : "Platform shows:";
   return (
     <section className="mt-16">
-      <h2 className="section-title text-primary">DDHS Recruitment Equity Intelligence governance intelligence in practice</h2>
+      <h2 className="section-title text-primary">DDHS Recruitment Intelligence governance intelligence in practice</h2>
       <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
         A worked example: a department asks to fill one vacancy, and every step leaves a record that stands up to a DG review. Each step is labelled with what runs in the platform today.
       </p>

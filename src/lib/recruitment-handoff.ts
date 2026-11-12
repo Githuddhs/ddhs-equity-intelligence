@@ -26,7 +26,7 @@ export function appointmentRecords(c: HandoffCandidate, v: HandoffVacancy, h: Ha
     section: v.section,
     reportsTo: h.manager.trim(),
   });
-  const movement = movementSchema.parse({ employeeId: employee.employeeId, type: "Recruitment", date: h.startDate, newLevel: v.occupational_level, reason: `Appointed via DDHS Recruitment Equity Intelligence: ${v.title}` });
+  const movement = movementSchema.parse({ employeeId: employee.employeeId, type: "Recruitment", date: h.startDate, newLevel: v.occupational_level, reason: `Appointed via DDHS Recruitment Intelligence: ${v.title}` });
   return { employee, movement };
 }
 

@@ -24,9 +24,9 @@ export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
   staticData: { sitemap: false },
   head: () => ({
     meta: [
-      { title: "Vacancy — DDHS Recruitment Equity Intelligence — DDHS Equity Intelligence" },
+      { title: "Vacancy — DDHS Recruitment Intelligence — DDHS Equity Intelligence" },
       { name: "description", content: "Plan, approve, advertise and track candidates for one vacancy." },
-      { property: "og:title", content: "Vacancy — DDHS Recruitment Equity Intelligence" },
+      { property: "og:title", content: "Vacancy — DDHS Recruitment Intelligence" },
       { property: "og:description", content: "Vacancy planning, approval, advertising and candidate tracking." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

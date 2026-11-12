@@ -6,7 +6,7 @@ describe("staff-only capture pages", () => {
     expect(isStaffOnlyPage("/workforce")).toBe(true);
     expect(isStaffOnlyPage("/plans/abc")).toBe(true);
   });
-  it("keeps DDHS Recruitment Equity Intelligence pages editable for clients", () => {
+  it("keeps DDHS Recruitment Intelligence pages editable for clients", () => {
     expect(isStaffOnlyPage("/recruitment")).toBe(false);
     expect(isStaffOnlyPage("/recruitment/abc")).toBe(false);
     expect(isStaffOnlyPage("/recruitment-dashboard")).toBe(false);

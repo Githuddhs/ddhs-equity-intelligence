@@ -15,9 +15,9 @@ export const Route = createFileRoute("/_authenticated/recruitment")({
   staticData: { sitemap: false },
   head: () => ({
     meta: [
-      { title: "DDHS Recruitment Equity Intelligence — vacancies — DDHS Equity Intelligence" },
+      { title: "DDHS Recruitment Intelligence — vacancies — DDHS Equity Intelligence" },
       { name: "description", content: "Plan vacancies against EE priorities, manage approval and advertising, and track candidates." },
-      { property: "og:title", content: "DDHS Recruitment Equity Intelligence — DDHS Equity Intelligence" },
+      { property: "og:title", content: "DDHS Recruitment Intelligence — DDHS Equity Intelligence" },
       { property: "og:description", content: "Plan, approve, advertise and track vacancies linked to Employment Equity priorities." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -65,7 +65,7 @@ function RecruitmentPage() {
     <div className="min-h-screen bg-background">
       <AppHeader />
       <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
-        <p className="text-sm font-semibold uppercase tracking-wider text-teal">DDHS Recruitment Equity Intelligence</p>
+        <p className="text-sm font-semibold uppercase tracking-wider text-teal">DDHS Recruitment Intelligence</p>
         <div className="flex flex-wrap items-center justify-between gap-3"><h1 className="section-title mt-1 text-primary">Vacancies</h1><Link to="/recruitment-dashboard" className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-teal">Leadership dashboard</Link></div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Step 1 plans each vacancy against your saved workforce, sector targets and provincial EAP. Open a vacancy to approve and advertise it (step 2) and track candidates (step 3).</p>
         {base && !base.date && <p className="mt-3 rounded-lg border border-dashed border-border bg-secondary/50 p-3 text-sm">No workforce data saved yet — priorities will show as not available. <Link to="/workforce" className="font-semibold text-teal underline">Load Workforce Data</Link></p>}

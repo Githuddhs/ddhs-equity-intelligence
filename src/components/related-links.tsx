@@ -13,7 +13,7 @@ const GROUPS = [
       { to: "/leadership-dashboard", label: "Leadership dashboard" },
       { to: "/leadership-report", label: "Leadership report" },
       { to: "/responsible-ai", label: "Responsible AI" },
-      { to: "/services/recruitment-suite", label: "DDHS Recruitment Equity Intelligence" },
+      { to: "/services/recruitment-suite", label: "DDHS Recruitment Intelligence" },
     ],
   },
   {
@@ -22,7 +22,7 @@ const GROUPS = [
       { to: "/services/saas-subscriptions", label: "SaaS subscriptions" },
       { to: "/services/implementation", label: "Implementation services" },
       { to: "/services/ee-advisory", label: "Specialist EE advisory" },
-      { to: "/services/recruitment-suite", label: "DDHS Recruitment Equity Intelligence" },
+      { to: "/services/recruitment-suite", label: "DDHS Recruitment Intelligence" },
       { to: "/virtual-consultant", label: "Virtual EE Consultant" },
     ],
   },

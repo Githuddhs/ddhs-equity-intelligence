@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-// Merged into the DDHS Recruitment Equity Intelligence page; kept as a permanent redirect for old links.
+// Merged into the DDHS Recruitment Intelligence page; kept as a permanent redirect for old links.
 export const Route = createFileRoute("/services/recruitment-governance")({
   staticData: { sitemap: false },
   beforeLoad: () => {

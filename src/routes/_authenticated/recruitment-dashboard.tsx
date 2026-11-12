@@ -11,9 +11,9 @@ export const Route = createFileRoute("/_authenticated/recruitment-dashboard")({
   staticData: { sitemap: false },
   head: () => ({
     meta: [
-      { title: "DDHS Recruitment Equity Intelligence Dashboard — DDHS Equity Intelligence" },
+      { title: "DDHS Recruitment Intelligence Dashboard — DDHS Equity Intelligence" },
       { name: "description", content: "Vacancy activity, time to fill, pipeline representation, governance compliance and recruitment risks." },
-      { property: "og:title", content: "DDHS Recruitment Equity Intelligence Dashboard — DDHS" },
+      { property: "og:title", content: "DDHS Recruitment Intelligence Dashboard — DDHS" },
       { property: "og:description", content: "Executive view of recruitment activity, EE contribution, governance and risks." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -41,7 +41,7 @@ function DashboardPage() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">Step 9 · Report to leadership</p>
-            <h1 className="section-title mt-1 text-primary">DDHS Recruitment Equity Intelligence Dashboard</h1>
+            <h1 className="section-title mt-1 text-primary">DDHS Recruitment Intelligence Dashboard</h1>
           </div>
           <div className="flex gap-2">
             <Link to="/recruitment" className="rounded-lg border border-border px-4 py-2 text-sm font-semibold">Vacancies</Link>

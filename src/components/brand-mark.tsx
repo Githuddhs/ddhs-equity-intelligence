@@ -37,7 +37,7 @@ export function BrandMark({
         className={`shrink-0 rounded-lg ${s.icon}`}
       />
       <span className={`font-display font-bold leading-tight text-primary ${s.text}`}>
-        DDHS <span className="text-teal">Equity Intelligence</span>
+        DDHS <span className="text-teal">Equity Intelligence Platform</span>
       </span>
       {children}
     </>

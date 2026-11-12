@@ -1,4 +1,4 @@
-// DDHS Recruitment Equity Intelligence steps 4–6: candidate flow, selection governance scorecard, appointment impact.
+// DDHS Recruitment Intelligence steps 4–6: candidate flow, selection governance scorecard, appointment impact.
 import { GROUPS, type Counts, type Key } from "@/lib/workforce";
 import type { Targets } from "@/lib/sectors";
 import { candidateGroup, isDesignated, PIPELINE, reachedIndex } from "@/lib/recruitment";

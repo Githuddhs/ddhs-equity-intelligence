@@ -126,13 +126,13 @@ export function GoalForecast({ forecast, onChange, sector, start, end, moves = [
       </table></div>
       {!(period?.movements as unknown[] | undefined)?.length && <p className="mt-2 text-xs font-semibold text-destructive">No movements saved for this period.</p>}
 
-      <h3 className="mt-8 text-sm font-semibold">Recruitment pipeline (DDHS Recruitment Equity Intelligence)</h3>
+      <h3 className="mt-8 text-sm font-semibold">Recruitment pipeline (DDHS Recruitment Intelligence)</h3>
       <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[700px] text-sm">
         <thead className="text-left text-xs text-muted-foreground"><tr><th className="py-2">Level</th>{funnel[0]!.stages.map((s) => <th key={s.label}>{s.label}</th>)}</tr></thead>
         <tbody>{funnel.map((f) => (
           <tr key={f.level} className="border-t border-border"><td className="py-2 font-medium">{f.level}</td>{f.stages.map((s) => <td key={s.label}>{fc(s)}</td>)}</tr>))}</tbody>
       </table></div>
-      {data && !data.cands.length && <p className="mt-2 text-xs font-semibold text-destructive">No candidates recorded in the DDHS Recruitment Equity Intelligence yet.</p>}
+      {data && !data.cands.length && <p className="mt-2 text-xs font-semibold text-destructive">No candidates recorded in the DDHS Recruitment Intelligence yet.</p>}
     </section>
   );
 }

@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             {
               "@type": "Organization",
               "@id": "https://ddhs-equity-intelligence.lovable.app/#org",
-              name: "DDHS Equity Intelligence",
+              name: "DDHS Equity Intelligence Platform",
               legalName: "DDHS Equity Intelligence (Pty) Ltd",
               url: "https://ddhs-equity-intelligence.lovable.app",
               logo: "https://ddhs-equity-intelligence.lovable.app/icons/icon-512.png",
@@ -110,7 +110,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             },
             {
               "@type": "WebSite",
-              name: "DDHS Equity Intelligence",
+              name: "DDHS Equity Intelligence Platform",
               url: "https://ddhs-equity-intelligence.lovable.app",
               inLanguage: "en-ZA",
               publisher: { "@id": "https://ddhs-equity-intelligence.lovable.app/#org" },
@@ -122,7 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "DDHS Equity Intelligence" },
+      { title: "DDHS Equity Intelligence Platform" },
       {
         name: "description",
         content:
