@@ -12,7 +12,7 @@ const LINKS = [
   { label: "Site Tour", href: "/tour" },
   { label: "Virtual Consultant", href: "/virtual-consultant" },
   { label: "DDHS Recruitment Intelligence", href: "/services/recruitment-suite" },
-  { label: "Academy", href: "/academy" },
+  { label: "DDHS Equity Intelligence Academy", href: "/academy" },
   { label: "Blog", href: "/blog" },
 ];
 
