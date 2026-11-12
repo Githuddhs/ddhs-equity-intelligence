@@ -307,22 +307,27 @@ function Index() {
       {/* Why DDHS */}
       <section id="why-ddhs" className="scroll-mt-28 py-8">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <SectionHeading
-            eyebrow="Why DDHS"
-            title="Built in South Africa, for South African Employment Equity"
-          />
-          <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted-foreground">
+          <div className="mx-auto max-w-3xl text-left">
+            <p className="text-sm font-semibold text-teal">Why DDHS</p>
+            <h2 className="display-title mt-3 text-primary tracking-normal">Built in South Africa, for South African Employment Equity</h2>
+          <div className="mt-6 space-y-5 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
             <p>DDHS was built by someone who understands the Employment Equity challenge from the inside. Mr Sello Molapo brings more than 15 years of senior Employment Equity leadership experience in higher education. His experience covers the full Employment Equity lifecycle, from planning and workforce analysis to recruitment oversight, governance, statutory reporting, target monitoring and executive accountability.</p>
             <p>DDHS transforms that practical experience into an intelligent solution for universities, corporates and other organisations seeking to turn Employment Equity plans into measurable action.</p>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div id="founder" className="mt-6 scroll-mt-40 border-l-2 border-teal pl-5 sm:scroll-mt-28">
+            <p className="text-xs font-semibold text-teal">Founder profile</p>
+            <h3 className="mt-2 text-base font-semibold text-primary">Mr Sello Molapo — Founder and Managing Director</h3>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">Higher Education Experience. Corporate Application. Intelligent Employment Equity.</p>
+          </div>
+          </div>
+          <div className="mt-10 grid gap-6 border-t pt-8 md:grid-cols-2 lg:grid-cols-4">
             {[
               { icon: ShieldCheck, title: "Compliance-first", capability: "EEA13 Planning", href: "/eea13-planning", body: "EEA2, EEA4, EEA12 and EEA13 drafted from the same verified workforce data." },
               { icon: Layers, title: "One source of truth", capability: "Workforce Data", href: "/workforce-foundation", body: "Upload once; analysis, plans, monitoring and reports all read the same figures." },
               { icon: FolderLock, title: "Privacy by design", capability: "Evidence & Governance", href: "/evidence-governance", body: "Salary and disability records stay private to your organisation; reports use aggregates." },
               { icon: Users, title: "Expert support", capability: "Virtual Consultant", href: "/virtual-consultant", body: "A Virtual EE Consultant and DDHS staff are on hand when you need guidance." },
             ].map((c) => (
-              <div key={c.title} className="flex flex-col rounded-2xl border bg-card p-6 shadow-sm">
+              <div key={c.title} className="flex flex-col rounded-lg border bg-card p-6 shadow-sm">
                 <c.icon className="h-6 w-6 text-teal" />
                 <h3 className="card-title mt-4 text-primary">{c.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{c.body}</p>
@@ -332,11 +337,6 @@ function Index() {
 
           </div>
 
-          <div id="founder" className="mt-8 scroll-mt-40 rounded-2xl border bg-card p-6 shadow-sm sm:scroll-mt-28 md:p-8">
-            <p className="text-xs font-semibold uppercase tracking-wider text-teal">Founder profile</p>
-            <h3 className="card-title mt-2 text-primary">Mr Sello Molapo — Founder and Managing Director</h3>
-            <p className="mt-4 font-semibold text-primary">Higher Education Experience. Corporate Application. Intelligent Employment Equity.</p>
-          </div>
         </div>
       </section>
 
