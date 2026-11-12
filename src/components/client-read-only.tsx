@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
-import { supabase } from "@/lib/workspace-client";
+import { sessionClient } from "@/lib/workspace-client";
 
 /** Pages whose records only DDHS staff capture (enforced in the database). DDHS Recruitment Equity Intelligence pages are deliberately excluded. */
 const STAFF_ONLY = [/^\/workforce$/, /^\/eea12$/, /^\/plans(\/|$)/, /^\/dg-review$/, /^\/doel-submissions$/, /^\/eea13$/, /^\/eea13-planning$/, /^\/compliance$/, /^\/evidence$/, /^\/workforce-foundation$/, /^\/plan-lifecycle$/];
@@ -16,9 +16,10 @@ export function useClientReadOnly() {
   const path = useLocation({ select: (l) => l.pathname });
   const applies = isStaffOnlyPage(path);
   const { data } = useQuery({ queryKey: ["is-staff"], enabled: applies, staleTime: 300_000, queryFn: async () => {
-    const { data: u } = await supabase.auth.getUser();
+    // Real signed-in session: inside a client workspace the scoped client reports the client's id.
+    const { data: u } = await sessionClient.auth.getUser();
     if (!u.user) return true; // signed-out visitors on public pages are not client users
-    const { data } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
+    const { data } = await sessionClient.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
     return data === true;
   } });
   return applies && data === false;

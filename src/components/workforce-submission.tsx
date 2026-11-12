@@ -2,15 +2,16 @@ import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Upload } from "lucide-react";
-import { supabase } from "@/lib/workspace-client";
+import { supabase, sessionClient } from "@/lib/workspace-client";
 
 /** Clients send workforce files here; DDHS staff capture them (staff-only capturing for audit). */
 export function WorkforceSubmission() {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const { data, refetch } = useQuery({ queryKey: ["workforce-submission"], queryFn: async () => {
+    const { data: me } = await sessionClient.auth.getUser();
+    const { data: staff } = await sessionClient.rpc("has_role", { _user_id: me.user!.id, _role: "admin" });
     const { data: u } = await supabase.auth.getUser();
-    const { data: staff } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
     if (staff) return null;
     const { data: files } = await supabase.from("portal_documents").select("id,file_name,created_at").eq("area", "eea12").eq("category", "workforce").order("created_at", { ascending: false }).limit(10);
     return { userId: u.user!.id, files: files ?? [] };
