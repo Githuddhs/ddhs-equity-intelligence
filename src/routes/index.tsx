@@ -307,14 +307,14 @@ function Index() {
       {/* Why DDHS */}
       <section id="why-ddhs" className="scroll-mt-28 py-8">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="mx-auto max-w-3xl text-left">
+          <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold text-teal">Why DDHS</p>
-            <h2 className="display-title mt-3 text-primary tracking-normal">Built in South Africa, for South African Employment Equity</h2>
+            <h2 className="display-title mt-3 text-balance text-primary tracking-normal">Built in South Africa, for South African Employment Equity</h2>
           <div className="mt-6 space-y-5 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
             <p>DDHS was built by someone who understands the Employment Equity challenge from the inside. Mr Sello Molapo brings more than 15 years of senior Employment Equity leadership experience in higher education. His experience covers the full Employment Equity lifecycle, from planning and workforce analysis to recruitment oversight, governance, statutory reporting, target monitoring and executive accountability.</p>
             <p>DDHS transforms that practical experience into an intelligent solution for universities, corporates and other organisations seeking to turn Employment Equity plans into measurable action.</p>
           </div>
-          <div id="founder" className="mt-6 scroll-mt-40 border-l-2 border-teal pl-5 sm:scroll-mt-28">
+          <div id="founder" className="mx-auto mt-6 max-w-2xl scroll-mt-40 border-t border-teal pt-5 sm:scroll-mt-28">
             <p className="text-xs font-semibold text-teal">Founder profile</p>
             <h3 className="mt-2 text-base font-semibold text-primary">Mr Sello Molapo — Founder and Managing Director</h3>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">Higher Education Experience. Corporate Application. Intelligent Employment Equity.</p>
