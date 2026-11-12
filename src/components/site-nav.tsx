@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 const LINKS = [
   { label: "Why DDHS", href: "#why-ddhs" },
   { label: "Problems We Solve", href: "#problems" },
-  { label: "Platform", href: "#platform" },
+  { label: "DDHS Equity Intelligence Platform", href: "#platform" },
   { label: "Client Outcomes", href: "#outcomes" },
   { label: "B-BBEE", href: "#bbbee" },
   { label: "Book a Demonstration", href: "#contact" },
