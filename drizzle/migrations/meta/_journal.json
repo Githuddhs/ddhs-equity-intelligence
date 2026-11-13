@@ -295,6 +295,13 @@
       "when": 1794357887131,
       "tag": "0041_staff_only_capture",
       "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1794556089112,
+      "tag": "0042_restrict_selected_logging_inserts",
+      "breakpoints": true
     }
   ]
 }
