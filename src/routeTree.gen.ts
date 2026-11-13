@@ -15,6 +15,7 @@ import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AccountabilityManagementRouteImport } from './routes/accountability-management'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClientViewRouteImport } from './routes/client-view'
+import { Route as DeliveryMethodologyRouteImport } from './routes/delivery-methodology'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
@@ -108,6 +109,11 @@ const AuthRoute = AuthRouteImport.update({
 const ClientViewRoute = ClientViewRouteImport.update({
   id: '/client-view',
   path: '/client-view',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeliveryMethodologyRoute = DeliveryMethodologyRouteImport.update({
+  id: '/delivery-methodology',
+  path: '/delivery-methodology',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Eea12Route = Eea12RouteImport.update({
@@ -449,6 +455,7 @@ export interface FileRoutesByFullPath {
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
+  '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -520,6 +527,7 @@ export interface FileRoutesByTo {
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
+  '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -593,6 +601,7 @@ export interface FileRoutesById {
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
+  '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -666,6 +675,7 @@ export interface FileRouteTypes {
     | '/accountability-management'
     | '/auth'
     | '/client-view'
+    | '/delivery-methodology'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -737,6 +747,7 @@ export interface FileRouteTypes {
     | '/accountability-management'
     | '/auth'
     | '/client-view'
+    | '/delivery-methodology'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -809,6 +820,7 @@ export interface FileRouteTypes {
     | '/accountability-management'
     | '/auth'
     | '/client-view'
+    | '/delivery-methodology'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -882,6 +894,7 @@ export interface RootRouteChildren {
   AccountabilityManagementRoute: typeof AccountabilityManagementRoute
   AuthRoute: typeof AuthRoute
   ClientViewRoute: typeof ClientViewRoute
+  DeliveryMethodologyRoute: typeof DeliveryMethodologyRoute
   Eea12Route: typeof Eea12Route
   Eea13PlanningRoute: typeof Eea13PlanningRoute
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
@@ -962,6 +975,13 @@ declare module '@tanstack/react-router' {
       path: '/client-view'
       fullPath: '/client-view'
       preLoaderRoute: typeof ClientViewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delivery-methodology': {
+      id: '/delivery-methodology'
+      path: '/delivery-methodology'
+      fullPath: '/delivery-methodology'
+      preLoaderRoute: typeof DeliveryMethodologyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eea12': {
@@ -1488,6 +1508,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountabilityManagementRoute: AccountabilityManagementRoute,
   AuthRoute: AuthRoute,
   ClientViewRoute: ClientViewRoute,
+  DeliveryMethodologyRoute: DeliveryMethodologyRoute,
   Eea12Route: Eea12Route,
   Eea13PlanningRoute: Eea13PlanningRoute,
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,

@@ -38,3 +38,4 @@
 - Recruitment appointments reach Workforce Data only through executeHandoff (src/lib/recruitment-handoff.ts) behind sendAppointmentToProfile, saving to an existing owner period via save_workforce_foundation and refusing duplicates/repeats; its integration test runs the same code against in-memory PGlite so tests never touch live data.
 - Committee acknowledgement of Recruitment Focus guidance is stored with the vacancy's selection-governance record and required before an advert can be published, so the audit trail shows that focus guidance was considered.
 - AI usage inserts are service-role-only; anonymous site-event inserts allow only known events and bounded paths/details with server-generated IDs/timestamps, preserving public analytics without unrestricted log writes.
+- The public delivery methodology is a standalone static route linked from SiteNav; keep it separate from client workflow status so delivery guidance does not imply saved progress.
