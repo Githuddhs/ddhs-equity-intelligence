@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/lib/workspace-client";
+import { useClientReadOnly } from "@/components/client-read-only";
+import { Button } from "@/components/ui/button";
 import {
   openQuestion, ratingLabel, ratingQuestion, type ExitInterviewAnswers,
 } from "@/lib/exit-interview";
 
-type Link = { id: string; token: string; employee_label: string; org_name: string; expires_at: string; revoked: boolean; created_at: string };
+type Link = { id: string; token: string; employee_label: string; org_name: string; expires_at: string; revoked: boolean; submitted_at?: string | null; created_at: string };
 type Response = { id: string; link_id: string | null; employee_label: string; answers: ExitInterviewAnswers; created_at: string };
 
 const newToken = () => Array.from(crypto.getRandomValues(new Uint8Array(24)), (b) => b.toString(16).padStart(2, "0")).join("");
@@ -14,6 +16,7 @@ const shareOrigin = () => (/localhost|127\.0\.0\.1/.test(window.location.origin)
 
 /** Create one-time exit interview links for departing employees and read their confidential responses. */
 export function ExitInterviewLinks() {
+  const readOnly = useClientReadOnly();
   const [links, setLinks] = useState<Link[]>([]);
   const [responses, setResponses] = useState<Response[]>([]);
   const [employee, setEmployee] = useState("");
@@ -43,10 +46,18 @@ export function ExitInterviewLinks() {
   };
   const url = (t: string) => `${shareOrigin()}/exit-interview/${t}`;
   const copy = async (t: string) => { await navigator.clipboard.writeText(url(t)); toast.success("Link copied."); };
-  const revoke = async (l: Link) => { await supabase.from("exit_interview_links").update({ revoked: !l.revoked }).eq("id", l.id); void load(); };
+  const revoke = async (l: Link) => {
+    if (readOnly) return;
+    const { error } = await supabase.from("exit_interview_links").update({ revoked: !l.revoked }).eq("id", l.id);
+    if (error) { toast.error("Could not change the link."); return; }
+    void load();
+  };
   const remove = async (r: Response) => {
     if (!confirm("Delete this exit interview response? This cannot be undone.")) return;
-    await supabase.from("exit_interview_responses").delete().eq("id", r.id); void load();
+    if (readOnly) return;
+    const { error } = await supabase.from("exit_interview_responses").delete().eq("id", r.id);
+    if (error) { toast.error("Could not delete the response."); return; }
+    void load();
   };
 
   const input = "rounded border border-border bg-background px-2 py-1.5 text-sm";
@@ -56,26 +67,26 @@ export function ExitInterviewLinks() {
       <p className="mt-1 text-sm text-muted-foreground">
         Create a private one-time link for each departing employee. They complete the confidential questionnaire online without signing in — no sign-in, and the link stops working once submitted. Responses come back here and feed your understanding of workforce movements and employment equity barriers.
       </p>
-      <div className="mt-4 flex flex-wrap items-end gap-2">
+      {!readOnly && <div className="mt-4 flex flex-wrap items-end gap-2">
         <label className="text-xs">Organisation name shown<input className={`${input} mt-0.5 block`} value={org} onChange={(e) => setOrg(e.target.value)} placeholder="e.g. Acme (Pty) Ltd" /></label>
         <label className="text-xs">Employee reference (optional)<input className={`${input} mt-0.5 block`} value={employee} onChange={(e) => setEmployee(e.target.value)} placeholder="e.g. Staff no. 1042" /></label>
         <label className="text-xs">Open for<select className={`${input} mt-0.5 block`} value={days} onChange={(e) => setDays(Number(e.target.value))}>{[7, 14, 30, 60].map((d) => <option key={d} value={d}>{d} days</option>)}</select></label>
-        <button type="button" onClick={() => void create()} className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-teal-foreground hover:opacity-90">Create exit interview link</button>
-      </div>
+        <Button type="button" onClick={() => void create()}>Create exit interview link</Button>
+      </div>}
 
       {links.length > 0 && (
         <div className="mt-4 space-y-2">
           {links.map((l) => {
-            const used = responses.some((r) => r.link_id === l.id);
-            const live = !l.revoked && new Date(l.expires_at) > new Date();
+            const used = Boolean(l.submitted_at) || responses.some((r) => r.link_id === l.id);
+            const live = !used && !l.revoked && new Date(l.expires_at) > new Date();
             return (
               <div key={l.id} className="flex flex-wrap items-center gap-3 rounded-lg border border-border p-3 text-sm">
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{l.employee_label || l.org_name || "Exit interview"} <span className={live ? "text-teal" : "text-muted-foreground"}>· {used ? "completed" : live ? "open" : l.revoked ? "closed" : "expired"}</span></p>
                   <p className="truncate text-xs text-muted-foreground">{url(l.token)} · until {new Date(l.expires_at).toLocaleDateString("en-ZA")}</p>
                 </div>
-                {live && <button onClick={() => void copy(l.token)} className="rounded-md border border-teal px-2 py-1 text-xs font-semibold text-teal">Copy link</button>}
-                {!used && <button onClick={() => void revoke(l)} className="text-xs text-destructive hover:underline">{l.revoked ? "Reopen" : "Close"}</button>}
+                {live && <Button variant="outline" size="sm" onClick={() => void copy(l.token)}>Copy link</Button>}
+                {!used && !readOnly && <Button variant="ghost" size="sm" onClick={() => void revoke(l)}>{l.revoked ? "Reopen" : "Close"}</Button>}
               </div>
             );
           })}
@@ -99,8 +110,8 @@ export function ExitInterviewLinks() {
                         {a.reasons?.length ? ` · Leaving: ${a.reasons.join(", ")}` : ""}
                       </p>
                     </div>
-                    <button onClick={() => setOpenId(open ? null : r.id)} className="rounded-md border border-teal px-2 py-1 text-xs font-semibold text-teal">{open ? "Hide" : "View"}</button>
-                    <button onClick={() => void remove(r)} className="text-xs text-destructive hover:underline">Delete</button>
+                    <Button variant="outline" size="sm" onClick={() => setOpenId(open ? null : r.id)}>{open ? "Hide" : "View"}</Button>
+                    {!readOnly && <Button variant="ghost" size="sm" onClick={() => void remove(r)}>Delete</Button>}
                   </div>
                   {open && (
                     <div className="mt-3 space-y-3 border-t border-border pt-3">

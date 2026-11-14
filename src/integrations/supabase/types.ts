@@ -519,6 +519,7 @@ export type Database = {
           id: string
           org_name: string
           revoked: boolean
+          submitted_at: string | null
           token: string
           user_id: string
         }
@@ -529,6 +530,7 @@ export type Database = {
           id?: string
           org_name?: string
           revoked?: boolean
+          submitted_at?: string | null
           token: string
           user_id?: string
         }
@@ -539,6 +541,7 @@ export type Database = {
           id?: string
           org_name?: string
           revoked?: boolean
+          submitted_at?: string | null
           token?: string
           user_id?: string
         }

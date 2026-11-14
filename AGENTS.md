@@ -39,3 +39,4 @@
 - Committee acknowledgement of Recruitment Focus guidance is stored with the vacancy's selection-governance record and required before an advert can be published, so the audit trail shows that focus guidance was considered.
 - AI usage inserts are service-role-only; anonymous site-event inserts allow only known events and bounded paths/details with server-generated IDs/timestamps, preserving public analytics without unrestricted log writes.
 - The public delivery methodology is a standalone static route linked from SiteNav; keep it separate from client workflow status so delivery guidance does not imply saved progress.
+- Exit interview management uses owner/scoped sensitive-consent reads and staff-only mutations; public token submission uses the unscoped client, a row lock and a permanent consumption timestamp to prevent cross-workspace leakage and repeated submissions even after feedback deletion.

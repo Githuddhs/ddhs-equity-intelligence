@@ -49,9 +49,67 @@ describe("subscribed client workspaces — isolated database", () => {
       ${tables.map((table) => `CREATE TABLE public.${table}(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),user_id uuid NOT NULL DEFAULT auth.uid(),label text DEFAULT '');`).join("\n")}
       ${[...tables,"workforce_snapshots","workforce_foundation_periods"].map((table) => `GRANT SELECT,INSERT,UPDATE,DELETE ON public.${table} TO authenticated; ALTER TABLE public.${table} ENABLE ROW LEVEL SECURITY; CREATE POLICY owner_policy ON public.${table} FOR ALL TO authenticated USING(user_id=auth.uid()) WITH CHECK(user_id=auth.uid());`).join("\n")}`);
     await db.exec(migrations);
+    await db.exec(readFileSync(new URL('../../drizzle/migrations/0043_exit_interview_links.sql', import.meta.url), 'utf8'));
+    await db.exec(readFileSync(new URL('../../drizzle/migrations/0044_exit_interview_workspace_security.sql', import.meta.url), 'utf8'));
     await db.exec(`INSERT INTO staff_demo_companies(id,company) VALUES('${DEMO}','Fictional demo'); INSERT INTO client_team_members(client_id,user_id,email,created_by) VALUES('${CLIENT}','${TEAM}','team@example.invalid','${STAFF}');`);
   });
   afterEach(async () => { await db.close(); });
+
+  it("staff creates an exit link under the selected fictional client", async () => {
+    await actor(STAFF,DEMO);
+    await db.exec(`INSERT INTO exit_interview_links(user_id,token,expires_at) VALUES('${DEMO}','${'a'.repeat(48)}',now()+interval '14 days')`);
+    expect((await db.query<{user_id:string}>('SELECT user_id FROM exit_interview_links')).rows).toEqual([{user_id:DEMO}]);
+  });
+  it("switching workspaces hides other clients' exit responses", async () => {
+    await db.exec(`INSERT INTO exit_interview_responses(user_id,employee_label) VALUES('${CLIENT}','Fictional A'),('${DEMO}','Fictional B')`);
+    await actor(STAFF,DEMO);
+    expect((await db.query<{employee_label:string}>('SELECT employee_label FROM exit_interview_responses')).rows).toEqual([{employee_label:'Fictional B'}]);
+  });
+  it("clients cannot create exit links", async () => {
+    await actor(CLIENT);
+    await expect(db.exec(`INSERT INTO exit_interview_links(token,expires_at) VALUES('${'b'.repeat(48)}',now()+interval '14 days')`)).rejects.toThrow();
+  });
+  it("owner reads exit feedback but cannot delete it or close links", async () => {
+    await db.exec(`INSERT INTO exit_interview_links(user_id,token,expires_at) VALUES('${CLIENT}','${'c'.repeat(48)}',now()+interval '14 days'); INSERT INTO exit_interview_responses(user_id,employee_label) VALUES('${CLIENT}','Fictional feedback')`);
+    await actor(CLIENT);
+    expect((await db.query('SELECT * FROM exit_interview_responses')).rows).toHaveLength(1);
+    expect((await db.query('DELETE FROM exit_interview_responses RETURNING id')).rows).toHaveLength(0);
+    expect((await db.query('UPDATE exit_interview_links SET revoked=true RETURNING id')).rows).toHaveLength(0);
+  });
+  it("staff cannot read private exit feedback without client consent or outside a workspace", async () => {
+    await db.exec(`INSERT INTO exit_interview_responses(user_id) VALUES('${CLIENT}')`);
+    await actor(STAFF,CLIENT);
+    expect((await db.query('SELECT * FROM exit_interview_responses')).rows).toHaveLength(0);
+    await db.exec('RESET ROLE'); await db.exec(`INSERT INTO client_staff_permissions(user_id,sensitive_access) VALUES('${CLIENT}',true)`);
+    await actor(STAFF,CLIENT); expect((await db.query('SELECT * FROM exit_interview_responses')).rows).toHaveLength(1);
+    await actor(STAFF); expect((await db.query('SELECT * FROM exit_interview_responses')).rows).toHaveLength(0);
+  });
+  it("clients cannot read another workspace's exit feedback", async () => {
+    await db.exec(`INSERT INTO exit_interview_responses(user_id) VALUES('${DEMO}')`);
+    await actor(CLIENT,DEMO);
+    expect((await db.query('SELECT * FROM exit_interview_responses')).rows).toHaveLength(0);
+  });
+  it("expired and revoked exit links reject both lookup and submission", async () => {
+    for (const [token,expiry,revoked] of [['d'.repeat(48),'-1 day',false],['e'.repeat(48),'14 days',true]] as const) {
+      await db.query(`INSERT INTO exit_interview_links(user_id,token,expires_at,revoked) VALUES($1,$2,now()+$3::interval,$4)`,[DEMO,token,expiry,revoked]);
+      await db.exec('SET ROLE anon');
+      expect((await db.query<{info:unknown}>('SELECT exit_interview_link_info($1) info',[token])).rows[0]?.info).toBeNull();
+      expect((await db.query<{done:boolean}>('SELECT submit_exit_interview($1,$2::jsonb) done',[token,'{}'])).rows[0]?.done).toBe(false);
+      await db.exec('RESET ROLE');
+    }
+  });
+  it("anonymous submission remains consumed after staff deletes feedback and reopens its link", async () => {
+    const token='f'.repeat(48);
+    await actor(STAFF,DEMO); await db.query('INSERT INTO exit_interview_links(token,expires_at) VALUES($1,now()+interval \'14 days\')',[token]);
+    await actor('',undefined); await db.exec('SET ROLE anon');
+    expect((await db.query<{done:boolean}>('SELECT submit_exit_interview($1,$2::jsonb) done',[token,'{"reasons":["Retirement"]}'])).rows[0]?.done).toBe(true);
+    await actor(STAFF,DEMO);
+    expect((await db.query<{user_id:string}>('SELECT user_id FROM exit_interview_responses')).rows).toEqual([{user_id:DEMO}]);
+    await db.exec('DELETE FROM exit_interview_responses; UPDATE exit_interview_links SET revoked=false');
+    await actor('',undefined); await db.exec('SET ROLE anon');
+    expect((await db.query<{done:boolean}>('SELECT submit_exit_interview($1,$2::jsonb) done',[token,'{}'])).rows[0]?.done).toBe(false);
+    expect((await db.query<{info:unknown}>('SELECT exit_interview_link_info($1) info',[token])).rows[0]?.info).toBeNull();
+  });
 
   it("requires an active platform subscription, not a pending or DG-only payment", async () => {
     await actor(STAFF);
