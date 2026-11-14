@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import { notifyExitInterviewSubmitted } from "@/lib/exit-interview.functions";
 import { BrandMark } from "@/components/brand-mark";
 import {
   BARRIERS_EXPERIENCED, EXIT_INTERVIEW_VERSION, EXIT_REASONS, OPEN_QUESTIONS,
@@ -60,6 +61,7 @@ function ExitInterviewPage() {
     });
     setBusy(false);
     if (error || !data) { toast.error("Your response couldn't be submitted — the link may have expired or already been used."); return; }
+    void notifyExitInterviewSubmitted({ data: { token } }).catch(() => {});
     setDone(true); window.scrollTo(0, 0);
   };
 

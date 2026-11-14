@@ -514,9 +514,11 @@ export type Database = {
       exit_interview_links: {
         Row: {
           created_at: string
+          created_by: string | null
           employee_label: string
           expires_at: string
           id: string
+          notified_at: string | null
           org_name: string
           revoked: boolean
           submitted_at: string | null
@@ -525,9 +527,11 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
           employee_label?: string
           expires_at: string
           id?: string
+          notified_at?: string | null
           org_name?: string
           revoked?: boolean
           submitted_at?: string | null
@@ -536,9 +540,11 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          created_by?: string | null
           employee_label?: string
           expires_at?: string
           id?: string
+          notified_at?: string | null
           org_name?: string
           revoked?: boolean
           submitted_at?: string | null
