@@ -20,6 +20,7 @@ import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
 import { Route as ExecutiveIntelligenceRouteImport } from './routes/executive-intelligence'
+import { Route as ExitInterviewsRouteImport } from './routes/exit-interviews'
 import { Route as LeadershipDashboardRouteImport } from './routes/leadership-dashboard'
 import { Route as LeadershipReportRouteImport } from './routes/leadership-report'
 import { Route as PlanArchitectureRouteImport } from './routes/plan-architecture'
@@ -135,6 +136,11 @@ const EvidenceGovernanceRoute = EvidenceGovernanceRouteImport.update({
 const ExecutiveIntelligenceRoute = ExecutiveIntelligenceRouteImport.update({
   id: '/executive-intelligence',
   path: '/executive-intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExitInterviewsRoute = ExitInterviewsRouteImport.update({
+  id: '/exit-interviews',
+  path: '/exit-interviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeadershipDashboardRoute = LeadershipDashboardRouteImport.update({
@@ -466,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
+  '/exit-interviews': typeof ExitInterviewsRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
   '/plan-architecture': typeof PlanArchitectureRoute
@@ -539,6 +546,7 @@ export interface FileRoutesByTo {
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
+  '/exit-interviews': typeof ExitInterviewsRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
   '/plan-architecture': typeof PlanArchitectureRoute
@@ -614,6 +622,7 @@ export interface FileRoutesById {
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
   '/executive-intelligence': typeof ExecutiveIntelligenceRoute
+  '/exit-interviews': typeof ExitInterviewsRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
   '/plan-architecture': typeof PlanArchitectureRoute
@@ -689,6 +698,7 @@ export interface FileRouteTypes {
     | '/eea13-planning'
     | '/evidence-governance'
     | '/executive-intelligence'
+    | '/exit-interviews'
     | '/leadership-dashboard'
     | '/leadership-report'
     | '/plan-architecture'
@@ -762,6 +772,7 @@ export interface FileRouteTypes {
     | '/eea13-planning'
     | '/evidence-governance'
     | '/executive-intelligence'
+    | '/exit-interviews'
     | '/leadership-dashboard'
     | '/leadership-report'
     | '/plan-architecture'
@@ -836,6 +847,7 @@ export interface FileRouteTypes {
     | '/eea13-planning'
     | '/evidence-governance'
     | '/executive-intelligence'
+    | '/exit-interviews'
     | '/leadership-dashboard'
     | '/leadership-report'
     | '/plan-architecture'
@@ -911,6 +923,7 @@ export interface RootRouteChildren {
   Eea13PlanningRoute: typeof Eea13PlanningRoute
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
   ExecutiveIntelligenceRoute: typeof ExecutiveIntelligenceRoute
+  ExitInterviewsRoute: typeof ExitInterviewsRoute
   LeadershipDashboardRoute: typeof LeadershipDashboardRoute
   LeadershipReportRoute: typeof LeadershipReportRoute
   PlanArchitectureRoute: typeof PlanArchitectureRoute
@@ -1023,6 +1036,13 @@ declare module '@tanstack/react-router' {
       path: '/executive-intelligence'
       fullPath: '/executive-intelligence'
       preLoaderRoute: typeof ExecutiveIntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exit-interviews': {
+      id: '/exit-interviews'
+      path: '/exit-interviews'
+      fullPath: '/exit-interviews'
+      preLoaderRoute: typeof ExitInterviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leadership-dashboard': {
@@ -1533,6 +1553,7 @@ const rootRouteChildren: RootRouteChildren = {
   Eea13PlanningRoute: Eea13PlanningRoute,
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,
   ExecutiveIntelligenceRoute: ExecutiveIntelligenceRoute,
+  ExitInterviewsRoute: ExitInterviewsRoute,
   LeadershipDashboardRoute: LeadershipDashboardRoute,
   LeadershipReportRoute: LeadershipReportRoute,
   PlanArchitectureRoute: PlanArchitectureRoute,
