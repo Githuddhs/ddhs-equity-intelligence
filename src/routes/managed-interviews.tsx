@@ -4,7 +4,7 @@ import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
 import { FooterSocial } from "@/components/footer-social";
 import { pageHead } from "@/lib/seo";
-import { MANAGED_INTERVIEW_PRICING } from "@/lib/managed-interview-pricing";
+import { MANAGED_INTERVIEW_PRICING, monthlyEquivalent } from "@/lib/managed-interview-pricing";
 
 export const Route = createFileRoute("/managed-interviews")({
   staticData: { sitemap: true },
@@ -97,7 +97,7 @@ function ManagedInterviewService() {
         <section aria-labelledby="interview-pricing" className="border-b border-border">
           <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
             <h2 id="interview-pricing" className="text-2xl font-bold text-primary">Proposed pricing</h2>
-            <p className="mt-3 text-muted-foreground">Annual subscriptions in South African rand (ZAR).</p>
+            <p className="mt-3 text-muted-foreground">Annual subscriptions in South African rand (ZAR). Monthly equivalents are for comparison only; billing remains annual.</p>
             <table className="mt-6 w-full text-left text-sm sm:text-base">
               <caption className="sr-only">Proposed annual subscription fees in South African rand by employee count</caption>
               <thead className="bg-secondary text-primary">
@@ -110,6 +110,8 @@ function ManagedInterviewService() {
                     <td className="px-3 py-4 text-right sm:px-5">
                       <span className="block font-semibold tabular-nums text-primary">R{tier.annualFee.toLocaleString("en-US")}</span>
                       <span className="mt-1 block text-xs text-muted-foreground">Annual subscription · ZAR</span>
+                      <span className="mt-2 block text-sm tabular-nums text-muted-foreground">R{monthlyEquivalent(tier.annualFee).toLocaleString("en-US")}/month equivalent</span>
+                      <span className="mt-1 block text-xs text-muted-foreground">For comparison · Billed annually</span>
                     </td>
                   </tr>
                 ))}

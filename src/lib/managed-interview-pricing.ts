@@ -5,3 +5,5 @@ export const MANAGED_INTERVIEW_PRICING = [
   { minEmployees: 1001, maxEmployees: 3000, annualFee: 165000, label: "1,001–3,000" },
   { minEmployees: 3001, maxEmployees: 5000, annualFee: 247500, label: "3,001–5,000" },
 ] as const;
+
+export const monthlyEquivalent = (annualFee: number) => annualFee / 12;

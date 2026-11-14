@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MANAGED_INTERVIEW_PRICING } from "./managed-interview-pricing";
+import { MANAGED_INTERVIEW_PRICING, monthlyEquivalent } from "./managed-interview-pricing";
 
 describe("proposed managed interview annual fees", () => {
   it("charges R60,000 for up to 250 employees", () => {
@@ -13,5 +13,16 @@ describe("proposed managed interview annual fees", () => {
   });
   it("charges R247,500 for 3,001–5,000 employees", () => {
     expect(MANAGED_INTERVIEW_PRICING[3]).toMatchObject({ minEmployees: 3001, maxEmployees: 5000, annualFee: 247500 });
+  });
+});
+
+describe("monthly equivalents for comparison", () => {
+  it.each([
+    [60000, 5000],
+    [105000, 8750],
+    [165000, 13750],
+    [247500, 20625],
+  ])("converts annual R%s to monthly R%s", (annual, monthly) => {
+    expect(monthlyEquivalent(annual)).toBe(monthly);
   });
 });
