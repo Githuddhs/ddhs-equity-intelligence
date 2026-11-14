@@ -4,6 +4,7 @@ import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
 import { FooterSocial } from "@/components/footer-social";
 import { pageHead } from "@/lib/seo";
+import { MANAGED_INTERVIEW_PRICING } from "@/lib/managed-interview-pricing";
 
 export const Route = createFileRoute("/managed-interviews")({
   staticData: { sitemap: true },
@@ -91,6 +92,25 @@ function ManagedInterviewService() {
               <p><strong className="text-primary">Available now:</strong> staff-issued questionnaires, confidential one-time responses, separate stay and exit summaries, experience ratings, reported barriers and downloadable management reports.</p>
               <p className="mt-3"><strong className="text-primary">Planned subscription capabilities:</strong> scheduled surveys, retention-risk and intention-to-stay indicators, turnover-theme analysis, stay-versus-exit comparisons, department/faculty and occupational-level breakdowns, and year-on-year trend dashboards.</p>
             </div>
+          </div>
+        </section>
+        <section aria-labelledby="interview-pricing" className="border-b border-border">
+          <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+            <h2 id="interview-pricing" className="text-2xl font-bold text-primary">Proposed pricing</h2>
+            <table className="mt-6 w-full text-left text-sm sm:text-base">
+              <caption className="sr-only">Proposed annual subscription fees in South African rand by employee count</caption>
+              <thead className="bg-secondary text-primary">
+                <tr><th scope="col" className="px-3 py-4 sm:px-5">Employees</th><th scope="col" className="px-3 py-4 text-right sm:px-5">Annual subscription</th></tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {MANAGED_INTERVIEW_PRICING.map((tier) => (
+                  <tr key={tier.maxEmployees}>
+                    <th scope="row" className="px-3 py-4 font-medium text-foreground sm:px-5">{tier.label}</th>
+                    <td className="px-3 py-4 text-right font-semibold tabular-nums text-primary sm:px-5">R{tier.annualFee.toLocaleString("en-US")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
         <section className="border-y border-border bg-secondary/40">
