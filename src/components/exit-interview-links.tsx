@@ -63,7 +63,7 @@ export function ExitInterviewLinks() {
 
   const input = "rounded border border-border bg-background px-2 py-1.5 text-sm";
   return (
-    <section className="mt-6 rounded-xl border border-teal/40 bg-card p-6 shadow-sm">
+    <section id="exit-interviews" className="mt-6 scroll-mt-24 rounded-xl border border-teal/40 bg-card p-6 shadow-sm">
       <h2 className="section-title text-primary">Exit interviews</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Create a private one-time link for each departing employee. They complete the confidential questionnaire online without signing in — no sign-in, and the link stops working once submitted. Responses come back here and feed your understanding of workforce movements and employment equity barriers.
