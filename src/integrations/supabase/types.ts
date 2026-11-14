@@ -511,6 +511,74 @@ export type Database = {
         }
         Relationships: []
       }
+      exit_interview_links: {
+        Row: {
+          created_at: string
+          employee_label: string
+          expires_at: string
+          id: string
+          org_name: string
+          revoked: boolean
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          employee_label?: string
+          expires_at: string
+          id?: string
+          org_name?: string
+          revoked?: boolean
+          token: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          employee_label?: string
+          expires_at?: string
+          id?: string
+          org_name?: string
+          revoked?: boolean
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exit_interview_responses: {
+        Row: {
+          answers: Json
+          created_at: string
+          employee_label: string
+          id: string
+          link_id: string | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          employee_label?: string
+          id?: string
+          link_id?: string | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          employee_label?: string
+          id?: string
+          link_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exit_interview_responses_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "exit_interview_links"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       internal_tokens: {
         Row: {
           name: string
@@ -1118,6 +1186,7 @@ export type Database = {
         Returns: undefined
       }
       enquiry_throttled: { Args: { p_email: string }; Returns: boolean }
+      exit_interview_link_info: { Args: { _token: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1159,6 +1228,10 @@ export type Database = {
           _profile: Json
           _token: string
         }
+        Returns: boolean
+      }
+      submit_exit_interview: {
+        Args: { _answers: Json; _token: string }
         Returns: boolean
       }
       survey_link_info: { Args: { _token: string }; Returns: Json }

@@ -63,6 +63,7 @@ import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
 import { Route as ApplyTokenRouteImport } from './routes/apply.$token'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ExitInterviewTokenRouteImport } from './routes/exit-interview.$token'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as ServicesEeAdvisoryRouteImport } from './routes/services.ee-advisory'
@@ -356,6 +357,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExitInterviewTokenRoute = ExitInterviewTokenRouteImport.update({
+  id: '/exit-interview/$token',
+  path: '/exit-interview/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/guides/',
   path: '/guides/',
@@ -502,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/apply/$token': typeof ApplyTokenRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/exit-interview/$token': typeof ExitInterviewTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
@@ -574,6 +581,7 @@ export interface FileRoutesByTo {
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/apply/$token': typeof ApplyTokenRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/exit-interview/$token': typeof ExitInterviewTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
@@ -648,6 +656,7 @@ export interface FileRoutesById {
   '/api/eea-insights': typeof ApiEeaInsightsRoute
   '/apply/$token': typeof ApplyTokenRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/exit-interview/$token': typeof ExitInterviewTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
@@ -722,6 +731,7 @@ export interface FileRouteTypes {
     | '/api/eea-insights'
     | '/apply/$token'
     | '/blog/$slug'
+    | '/exit-interview/$token'
     | '/guides/$slug'
     | '/services/ee-advisory'
     | '/services/implementation'
@@ -794,6 +804,7 @@ export interface FileRouteTypes {
     | '/api/eea-insights'
     | '/apply/$token'
     | '/blog/$slug'
+    | '/exit-interview/$token'
     | '/guides/$slug'
     | '/services/ee-advisory'
     | '/services/implementation'
@@ -867,6 +878,7 @@ export interface FileRouteTypes {
     | '/api/eea-insights'
     | '/apply/$token'
     | '/blog/$slug'
+    | '/exit-interview/$token'
     | '/guides/$slug'
     | '/services/ee-advisory'
     | '/services/implementation'
@@ -918,6 +930,7 @@ export interface RootRouteChildren {
   ApiEeaInsightsRoute: typeof ApiEeaInsightsRoute
   ApplyTokenRoute: typeof ApplyTokenRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  ExitInterviewTokenRoute: typeof ExitInterviewTokenRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
   ServicesEeAdvisoryRoute: typeof ServicesEeAdvisoryRoute
   ServicesImplementationRoute: typeof ServicesImplementationRoute
@@ -1313,6 +1326,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/exit-interview/$token': {
+      id: '/exit-interview/$token'
+      path: '/exit-interview/$token'
+      fullPath: '/exit-interview/$token'
+      preLoaderRoute: typeof ExitInterviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/': {
       id: '/guides/'
       path: '/guides'
@@ -1532,6 +1552,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiEeaInsightsRoute: ApiEeaInsightsRoute,
   ApplyTokenRoute: ApplyTokenRoute,
   BlogSlugRoute: BlogSlugRoute,
+  ExitInterviewTokenRoute: ExitInterviewTokenRoute,
   GuidesSlugRoute: GuidesSlugRoute,
   ServicesEeAdvisoryRoute: ServicesEeAdvisoryRoute,
   ServicesImplementationRoute: ServicesImplementationRoute,
