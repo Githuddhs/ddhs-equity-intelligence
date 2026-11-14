@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/workspace-client";
 import { useClientReadOnly } from "@/components/client-read-only";
 import { Button } from "@/components/ui/button";
+import { ExitInterviewDashboard } from "@/components/exit-interview-dashboard";
 import {
   openQuestion, ratingLabel, ratingQuestion, type ExitInterviewAnswers,
 } from "@/lib/exit-interview";
@@ -92,6 +93,8 @@ export function ExitInterviewLinks() {
           })}
         </div>
       )}
+
+      {(responses.length > 0 || links.length > 0) && <ExitInterviewDashboard answers={responses.map((r) => r.answers ?? {})} links={links} org={links[0]?.org_name ?? ""} />}
 
       {responses.length > 0 && (
         <div className="mt-6">
