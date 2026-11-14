@@ -97,6 +97,7 @@ function ManagedInterviewService() {
         <section aria-labelledby="interview-pricing" className="border-b border-border">
           <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
             <h2 id="interview-pricing" className="text-2xl font-bold text-primary">Proposed pricing</h2>
+            <p className="mt-3 text-muted-foreground">Annual subscriptions in South African rand (ZAR).</p>
             <table className="mt-6 w-full text-left text-sm sm:text-base">
               <caption className="sr-only">Proposed annual subscription fees in South African rand by employee count</caption>
               <thead className="bg-secondary text-primary">
@@ -106,7 +107,10 @@ function ManagedInterviewService() {
                 {MANAGED_INTERVIEW_PRICING.map((tier) => (
                   <tr key={tier.maxEmployees}>
                     <th scope="row" className="px-3 py-4 font-medium text-foreground sm:px-5">{tier.label}</th>
-                    <td className="px-3 py-4 text-right font-semibold tabular-nums text-primary sm:px-5">R{tier.annualFee.toLocaleString("en-US")}</td>
+                    <td className="px-3 py-4 text-right sm:px-5">
+                      <span className="block font-semibold tabular-nums text-primary">R{tier.annualFee.toLocaleString("en-US")}</span>
+                      <span className="mt-1 block text-xs text-muted-foreground">Annual subscription · ZAR</span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
