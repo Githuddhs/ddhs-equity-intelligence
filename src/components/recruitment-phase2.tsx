@@ -101,7 +101,7 @@ export function GovernanceStep({ v, save, busy }: { v: Vacancy; save: Save; busy
       <ul className="mt-4 grid gap-1 text-sm sm:grid-cols-2">{card.items.map((i) => (
         <li key={i.label} className={i.met ? "text-teal" : i.critical ? "text-destructive" : "text-muted-foreground"}>{i.met ? "✓" : "✗"} {i.label}{!i.met && i.critical && " (critical)"}</li>
       ))}</ul>
-      {!locked && <button disabled={busy} onClick={() => void save({ governance: { ...g, members: (g.members ?? []).map((m) => ({ ...m, name: m.name.slice(0, 120), role: m.role.slice(0, 120) })) } as unknown as Json }, "Governance record saved.")} className={`${btn} mt-4 bg-primary text-primary-foreground`}>Save governance record</button>}
+      {!locked && <button disabled={busy} onClick={() => void save({ governance: { ...g, focusAck: (v.governance as Governance | null)?.focusAck, members: (g.members ?? []).map((m) => ({ ...m, name: m.name.slice(0, 120), role: m.role.slice(0, 120) })) } as unknown as Json }, "Governance record saved.")} className={`${btn} mt-4 bg-primary text-primary-foreground`}>Save governance record</button>}
     </section>
   );
 }
