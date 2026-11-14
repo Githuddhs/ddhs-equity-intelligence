@@ -23,6 +23,7 @@ import { Route as ExecutiveIntelligenceRouteImport } from './routes/executive-in
 import { Route as ExitInterviewsRouteImport } from './routes/exit-interviews'
 import { Route as LeadershipDashboardRouteImport } from './routes/leadership-dashboard'
 import { Route as LeadershipReportRouteImport } from './routes/leadership-report'
+import { Route as ManagedInterviewsRouteImport } from './routes/managed-interviews'
 import { Route as PlanArchitectureRouteImport } from './routes/plan-architecture'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ReadinessCheckRouteImport } from './routes/readiness-check'
@@ -153,6 +154,11 @@ const LeadershipDashboardRoute = LeadershipDashboardRouteImport.update({
 const LeadershipReportRoute = LeadershipReportRouteImport.update({
   id: '/leadership-report',
   path: '/leadership-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagedInterviewsRoute = ManagedInterviewsRouteImport.update({
+  id: '/managed-interviews',
+  path: '/managed-interviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlanArchitectureRoute = PlanArchitectureRouteImport.update({
@@ -487,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/exit-interviews': typeof ExitInterviewsRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
+  '/managed-interviews': typeof ManagedInterviewsRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/readiness-check': typeof ReadinessCheckRoute
@@ -563,6 +570,7 @@ export interface FileRoutesByTo {
   '/exit-interviews': typeof ExitInterviewsRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
+  '/managed-interviews': typeof ManagedInterviewsRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/readiness-check': typeof ReadinessCheckRoute
@@ -641,6 +649,7 @@ export interface FileRoutesById {
   '/exit-interviews': typeof ExitInterviewsRoute
   '/leadership-dashboard': typeof LeadershipDashboardRoute
   '/leadership-report': typeof LeadershipReportRoute
+  '/managed-interviews': typeof ManagedInterviewsRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
   '/readiness-check': typeof ReadinessCheckRoute
@@ -719,6 +728,7 @@ export interface FileRouteTypes {
     | '/exit-interviews'
     | '/leadership-dashboard'
     | '/leadership-report'
+    | '/managed-interviews'
     | '/plan-architecture'
     | '/pricing'
     | '/readiness-check'
@@ -795,6 +805,7 @@ export interface FileRouteTypes {
     | '/exit-interviews'
     | '/leadership-dashboard'
     | '/leadership-report'
+    | '/managed-interviews'
     | '/plan-architecture'
     | '/pricing'
     | '/readiness-check'
@@ -872,6 +883,7 @@ export interface FileRouteTypes {
     | '/exit-interviews'
     | '/leadership-dashboard'
     | '/leadership-report'
+    | '/managed-interviews'
     | '/plan-architecture'
     | '/pricing'
     | '/readiness-check'
@@ -950,6 +962,7 @@ export interface RootRouteChildren {
   ExitInterviewsRoute: typeof ExitInterviewsRoute
   LeadershipDashboardRoute: typeof LeadershipDashboardRoute
   LeadershipReportRoute: typeof LeadershipReportRoute
+  ManagedInterviewsRoute: typeof ManagedInterviewsRoute
   PlanArchitectureRoute: typeof PlanArchitectureRoute
   PricingRoute: typeof PricingRoute
   ReadinessCheckRoute: typeof ReadinessCheckRoute
@@ -1083,6 +1096,13 @@ declare module '@tanstack/react-router' {
       path: '/leadership-report'
       fullPath: '/leadership-report'
       preLoaderRoute: typeof LeadershipReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/managed-interviews': {
+      id: '/managed-interviews'
+      path: '/managed-interviews'
+      fullPath: '/managed-interviews'
+      preLoaderRoute: typeof ManagedInterviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/plan-architecture': {
@@ -1596,6 +1616,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExitInterviewsRoute: ExitInterviewsRoute,
   LeadershipDashboardRoute: LeadershipDashboardRoute,
   LeadershipReportRoute: LeadershipReportRoute,
+  ManagedInterviewsRoute: ManagedInterviewsRoute,
   PlanArchitectureRoute: PlanArchitectureRoute,
   PricingRoute: PricingRoute,
   ReadinessCheckRoute: ReadinessCheckRoute,

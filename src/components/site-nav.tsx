@@ -15,8 +15,7 @@ const LINKS = [
   { label: "Virtual Consultant", href: "/virtual-consultant" },
   { label: "DDHS Recruitment Intelligence", href: "/services/recruitment-suite" },
   { label: "DDHS Equity Intelligence Academy", href: "/academy" },
-  { label: "Exit Interviews", href: "/exit-interviews" },
-  { label: "Stay Interviews", href: "/stay-interviews" },
+  { label: "DDHS Managed Stay & Exit Interview Service", href: "/managed-interviews" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -30,8 +29,7 @@ export function SiteNav() {
       <nav className="hidden flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold text-teal md:flex">
         {LINKS.map((l) => (
           l.href === "/delivery-methodology" ? <Link key={l.href} to="/delivery-methodology" className={desk}>{l.label}</Link> :
-          l.href === "/exit-interviews" ? <Link key={l.href} to="/exit-interviews" className={desk}>{l.label}</Link> :
-          l.href === "/stay-interviews" ? <Link key={l.href} to="/stay-interviews" className={desk}>{l.label}</Link> :
+          l.href === "/managed-interviews" ? <Link key={l.href} to="/managed-interviews" className="transition-colors hover:text-primary">{l.label}</Link> :
           <a key={l.href} href={l.href} className={desk}>
             {l.label}
           </a>
@@ -52,8 +50,7 @@ export function SiteNav() {
           <nav className="mt-2 flex flex-col gap-1 rounded-xl border border-border bg-card p-2 shadow-sm">
             {LINKS.map((l) => (
               l.href === "/delivery-methodology" ? <Link key={l.href} to="/delivery-methodology" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
-              l.href === "/exit-interviews" ? <Link key={l.href} to="/exit-interviews" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
-              l.href === "/stay-interviews" ? <Link key={l.href} to="/stay-interviews" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
+              l.href === "/managed-interviews" ? <Link key={l.href} to="/managed-interviews" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
               <a
                 key={l.href}
                 href={l.href}
