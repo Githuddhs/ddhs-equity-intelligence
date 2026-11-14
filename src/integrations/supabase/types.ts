@@ -989,6 +989,80 @@ export type Database = {
         }
         Relationships: []
       }
+      stay_interview_links: {
+        Row: {
+          created_at: string
+          created_by: string
+          employee_label: string
+          expires_at: string
+          id: string
+          org_name: string
+          revoked: boolean
+          submitted_at: string | null
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          employee_label?: string
+          expires_at: string
+          id?: string
+          org_name?: string
+          revoked?: boolean
+          submitted_at?: string | null
+          token: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          employee_label?: string
+          expires_at?: string
+          id?: string
+          org_name?: string
+          revoked?: boolean
+          submitted_at?: string | null
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      stay_interview_responses: {
+        Row: {
+          answers: Json
+          created_at: string
+          employee_label: string
+          id: string
+          link_id: string | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          employee_label?: string
+          id?: string
+          link_id?: string | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          employee_label?: string
+          id?: string
+          link_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stay_interview_responses_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "stay_interview_links"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           amount: number
@@ -1228,6 +1302,7 @@ export type Database = {
         Returns: undefined
       }
       shared_portal: { Args: { _token: string }; Returns: Json }
+      stay_interview_link_info: { Args: { _token: string }; Returns: Json }
       submit_barrier_survey: {
         Args: {
           _answers: Json
@@ -1240,6 +1315,10 @@ export type Database = {
         Returns: boolean
       }
       submit_exit_interview: {
+        Args: { _answers: Json; _token: string }
+        Returns: boolean
+      }
+      submit_stay_interview: {
         Args: { _answers: Json; _token: string }
         Returns: boolean
       }

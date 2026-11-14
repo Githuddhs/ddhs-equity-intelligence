@@ -33,6 +33,7 @@ import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StaffLoginRouteImport } from './routes/staff-login'
+import { Route as StayInterviewsRouteImport } from './routes/stay-interviews'
 import { Route as TourRouteImport } from './routes/tour'
 import { Route as VirtualConsultantRouteImport } from './routes/virtual-consultant'
 import { Route as WorkforceFoundationRouteImport } from './routes/workforce-foundation'
@@ -72,6 +73,7 @@ import { Route as ServicesImplementationRouteImport } from './routes/services.im
 import { Route as ServicesRecruitmentGovernanceRouteImport } from './routes/services.recruitment-governance'
 import { Route as ServicesRecruitmentSuiteRouteImport } from './routes/services.recruitment-suite'
 import { Route as ServicesSaasSubscriptionsRouteImport } from './routes/services.saas-subscriptions'
+import { Route as StayInterviewTokenRouteImport } from './routes/stay-interview.$token'
 import { Route as SurveyTokenRouteImport } from './routes/survey.$token'
 import { Route as ViewTokenRouteImport } from './routes/view.$token'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
@@ -201,6 +203,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const StaffLoginRoute = StaffLoginRouteImport.update({
   id: '/staff-login',
   path: '/staff-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StayInterviewsRoute = StayInterviewsRouteImport.update({
+  id: '/stay-interviews',
+  path: '/stay-interviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TourRoute = TourRouteImport.update({
@@ -406,6 +413,11 @@ const ServicesSaasSubscriptionsRoute =
     path: '/services/saas-subscriptions',
     getParentRoute: () => rootRouteImport,
   } as any)
+const StayInterviewTokenRoute = StayInterviewTokenRouteImport.update({
+  id: '/stay-interview/$token',
+  path: '/stay-interview/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SurveyTokenRoute = SurveyTokenRouteImport.update({
   id: '/survey/$token',
   path: '/survey/$token',
@@ -485,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-login': typeof StaffLoginRoute
+  '/stay-interviews': typeof StayInterviewsRoute
   '/tour': typeof TourRoute
   '/virtual-consultant': typeof VirtualConsultantRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
@@ -522,6 +535,7 @@ export interface FileRoutesByFullPath {
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
   '/services/recruitment-suite': typeof ServicesRecruitmentSuiteRoute
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
+  '/stay-interview/$token': typeof StayInterviewTokenRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/blog/': typeof BlogIndexRoute
@@ -559,6 +573,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-login': typeof StaffLoginRoute
+  '/stay-interviews': typeof StayInterviewsRoute
   '/tour': typeof TourRoute
   '/virtual-consultant': typeof VirtualConsultantRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
@@ -596,6 +611,7 @@ export interface FileRoutesByTo {
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
   '/services/recruitment-suite': typeof ServicesRecruitmentSuiteRoute
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
+  '/stay-interview/$token': typeof StayInterviewTokenRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/blog': typeof BlogIndexRoute
@@ -635,6 +651,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-login': typeof StaffLoginRoute
+  '/stay-interviews': typeof StayInterviewsRoute
   '/tour': typeof TourRoute
   '/virtual-consultant': typeof VirtualConsultantRoute
   '/workforce-foundation': typeof WorkforceFoundationRoute
@@ -672,6 +689,7 @@ export interface FileRoutesById {
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
   '/services/recruitment-suite': typeof ServicesRecruitmentSuiteRoute
   '/services/saas-subscriptions': typeof ServicesSaasSubscriptionsRoute
+  '/stay-interview/$token': typeof StayInterviewTokenRoute
   '/survey/$token': typeof SurveyTokenRoute
   '/view/$token': typeof ViewTokenRoute
   '/blog/': typeof BlogIndexRoute
@@ -711,6 +729,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/staff-login'
+    | '/stay-interviews'
     | '/tour'
     | '/virtual-consultant'
     | '/workforce-foundation'
@@ -748,6 +767,7 @@ export interface FileRouteTypes {
     | '/services/recruitment-governance'
     | '/services/recruitment-suite'
     | '/services/saas-subscriptions'
+    | '/stay-interview/$token'
     | '/survey/$token'
     | '/view/$token'
     | '/blog/'
@@ -785,6 +805,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/staff-login'
+    | '/stay-interviews'
     | '/tour'
     | '/virtual-consultant'
     | '/workforce-foundation'
@@ -822,6 +843,7 @@ export interface FileRouteTypes {
     | '/services/recruitment-governance'
     | '/services/recruitment-suite'
     | '/services/saas-subscriptions'
+    | '/stay-interview/$token'
     | '/survey/$token'
     | '/view/$token'
     | '/blog'
@@ -860,6 +882,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/staff-login'
+    | '/stay-interviews'
     | '/tour'
     | '/virtual-consultant'
     | '/workforce-foundation'
@@ -897,6 +920,7 @@ export interface FileRouteTypes {
     | '/services/recruitment-governance'
     | '/services/recruitment-suite'
     | '/services/saas-subscriptions'
+    | '/stay-interview/$token'
     | '/survey/$token'
     | '/view/$token'
     | '/blog/'
@@ -936,6 +960,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StaffLoginRoute: typeof StaffLoginRoute
+  StayInterviewsRoute: typeof StayInterviewsRoute
   TourRoute: typeof TourRoute
   VirtualConsultantRoute: typeof VirtualConsultantRoute
   WorkforceFoundationRoute: typeof WorkforceFoundationRoute
@@ -950,6 +975,7 @@ export interface RootRouteChildren {
   ServicesRecruitmentGovernanceRoute: typeof ServicesRecruitmentGovernanceRoute
   ServicesRecruitmentSuiteRoute: typeof ServicesRecruitmentSuiteRoute
   ServicesSaasSubscriptionsRoute: typeof ServicesSaasSubscriptionsRoute
+  StayInterviewTokenRoute: typeof StayInterviewTokenRoute
   SurveyTokenRoute: typeof SurveyTokenRoute
   ViewTokenRoute: typeof ViewTokenRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -1127,6 +1153,13 @@ declare module '@tanstack/react-router' {
       path: '/staff-login'
       fullPath: '/staff-login'
       preLoaderRoute: typeof StaffLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stay-interviews': {
+      id: '/stay-interviews'
+      path: '/stay-interviews'
+      fullPath: '/stay-interviews'
+      preLoaderRoute: typeof StayInterviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tour': {
@@ -1402,6 +1435,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesSaasSubscriptionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stay-interview/$token': {
+      id: '/stay-interview/$token'
+      path: '/stay-interview/$token'
+      fullPath: '/stay-interview/$token'
+      preLoaderRoute: typeof StayInterviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/survey/$token': {
       id: '/survey/$token'
       path: '/survey/$token'
@@ -1566,6 +1606,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StaffLoginRoute: StaffLoginRoute,
+  StayInterviewsRoute: StayInterviewsRoute,
   TourRoute: TourRoute,
   VirtualConsultantRoute: VirtualConsultantRoute,
   WorkforceFoundationRoute: WorkforceFoundationRoute,
@@ -1580,6 +1621,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRecruitmentGovernanceRoute: ServicesRecruitmentGovernanceRoute,
   ServicesRecruitmentSuiteRoute: ServicesRecruitmentSuiteRoute,
   ServicesSaasSubscriptionsRoute: ServicesSaasSubscriptionsRoute,
+  StayInterviewTokenRoute: StayInterviewTokenRoute,
   SurveyTokenRoute: SurveyTokenRoute,
   ViewTokenRoute: ViewTokenRoute,
   BlogIndexRoute: BlogIndexRoute,

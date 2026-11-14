@@ -1,5 +1,6 @@
 import { WorkforceSubmission } from "@/components/workforce-submission";
 import { ExitInterviewLinks } from "@/components/exit-interview-links";
+import { StayInterviewLinks } from "@/components/stay-interview-links";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -276,6 +277,7 @@ function WorkforcePage() {
         <FoundationRecords />
 
         <ExitInterviewLinks />
+        <StayInterviewLinks />
 
         <div className="mt-6 grid gap-4 sm:grid-cols-4">
           <Stat label="Total employees" value={total ? total.toLocaleString("en-ZA") : "–"} />
