@@ -43,3 +43,4 @@
 - Stay interviews use separate retention questionnaire definitions and storage with the same scoped consent and single-use token boundaries as exit interviews; summaries exclude names and free text so exit wording and data remain unchanged.
 - Present both interview types through a shared public overview and workforce section while retaining separate detail routes, questionnaires, dashboards and storage, so combined navigation cannot mix confidential records or invalidate existing links.
 - Managed interview pricing is rendered from a browser-safe tier list with tests for each employee band and annual fee, so advertised values remain verifiable without enabling billing.
+- Culture & Inclusion pulse responses are written only through the one-time token function; clients receive aggregate-only summaries with three-response suppression, while raw rows require scoped staff sensitive consent, preventing dashboards and exports from exposing identifiable feedback.
