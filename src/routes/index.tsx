@@ -641,6 +641,9 @@ function Index() {
             <a href="/tour" className="inline-flex items-center gap-2 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-teal-foreground hover:bg-teal/90">
               Start the guided tour <ArrowRight className="h-4 w-4" />
             </a>
+            <a href="/questionnaire-tour" className="inline-flex items-center rounded-lg border border-teal px-6 py-3 text-sm font-semibold text-teal hover:bg-teal/10">
+              Tour the questionnaires
+            </a>
             <a href="/virtual-consultant" className="inline-flex items-center rounded-lg border border-input px-6 py-3 text-sm font-semibold text-primary hover:bg-accent">
               Talk to a Virtual Consultant
             </a>

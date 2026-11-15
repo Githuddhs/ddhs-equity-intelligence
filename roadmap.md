@@ -115,3 +115,4 @@
 - [x] Re-check staff opening/switching demo client workspaces (no flash, cross-client blocked)
 - [x] Staff onboard subscribed clients; multiple users per client; staff-only capturing; clients upload workforce files for staff capture
 - [x] Add Exit interviews to the client menu
+- [x] Add Academy to the questionnaire tour

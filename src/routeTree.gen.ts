@@ -27,6 +27,7 @@ import { Route as LeadershipReportRouteImport } from './routes/leadership-report
 import { Route as ManagedInterviewsRouteImport } from './routes/managed-interviews'
 import { Route as PlanArchitectureRouteImport } from './routes/plan-architecture'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as QuestionnaireTourRouteImport } from './routes/questionnaire-tour'
 import { Route as ReadinessCheckRouteImport } from './routes/readiness-check'
 import { Route as RecruitmentTourRouteImport } from './routes/recruitment-tour'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -178,6 +179,11 @@ const PlanArchitectureRoute = PlanArchitectureRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionnaireTourRoute = QuestionnaireTourRouteImport.update({
+  id: '/questionnaire-tour',
+  path: '/questionnaire-tour',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReadinessCheckRoute = ReadinessCheckRouteImport.update({
@@ -517,6 +523,7 @@ export interface FileRoutesByFullPath {
   '/managed-interviews': typeof ManagedInterviewsRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
+  '/questionnaire-tour': typeof QuestionnaireTourRoute
   '/readiness-check': typeof ReadinessCheckRoute
   '/recruitment-tour': typeof RecruitmentTourRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -597,6 +604,7 @@ export interface FileRoutesByTo {
   '/managed-interviews': typeof ManagedInterviewsRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
+  '/questionnaire-tour': typeof QuestionnaireTourRoute
   '/readiness-check': typeof ReadinessCheckRoute
   '/recruitment-tour': typeof RecruitmentTourRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -679,6 +687,7 @@ export interface FileRoutesById {
   '/managed-interviews': typeof ManagedInterviewsRoute
   '/plan-architecture': typeof PlanArchitectureRoute
   '/pricing': typeof PricingRoute
+  '/questionnaire-tour': typeof QuestionnaireTourRoute
   '/readiness-check': typeof ReadinessCheckRoute
   '/recruitment-tour': typeof RecruitmentTourRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -761,6 +770,7 @@ export interface FileRouteTypes {
     | '/managed-interviews'
     | '/plan-architecture'
     | '/pricing'
+    | '/questionnaire-tour'
     | '/readiness-check'
     | '/recruitment-tour'
     | '/reset-password'
@@ -841,6 +851,7 @@ export interface FileRouteTypes {
     | '/managed-interviews'
     | '/plan-architecture'
     | '/pricing'
+    | '/questionnaire-tour'
     | '/readiness-check'
     | '/recruitment-tour'
     | '/reset-password'
@@ -922,6 +933,7 @@ export interface FileRouteTypes {
     | '/managed-interviews'
     | '/plan-architecture'
     | '/pricing'
+    | '/questionnaire-tour'
     | '/readiness-check'
     | '/recruitment-tour'
     | '/reset-password'
@@ -1004,6 +1016,7 @@ export interface RootRouteChildren {
   ManagedInterviewsRoute: typeof ManagedInterviewsRoute
   PlanArchitectureRoute: typeof PlanArchitectureRoute
   PricingRoute: typeof PricingRoute
+  QuestionnaireTourRoute: typeof QuestionnaireTourRoute
   ReadinessCheckRoute: typeof ReadinessCheckRoute
   RecruitmentTourRoute: typeof RecruitmentTourRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -1164,6 +1177,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/questionnaire-tour': {
+      id: '/questionnaire-tour'
+      path: '/questionnaire-tour'
+      fullPath: '/questionnaire-tour'
+      preLoaderRoute: typeof QuestionnaireTourRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/readiness-check': {
@@ -1683,6 +1703,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManagedInterviewsRoute: ManagedInterviewsRoute,
   PlanArchitectureRoute: PlanArchitectureRoute,
   PricingRoute: PricingRoute,
+  QuestionnaireTourRoute: QuestionnaireTourRoute,
   ReadinessCheckRoute: ReadinessCheckRoute,
   RecruitmentTourRoute: RecruitmentTourRoute,
   ResetPasswordRoute: ResetPasswordRoute,
