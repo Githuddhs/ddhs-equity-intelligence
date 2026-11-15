@@ -15,6 +15,7 @@ import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AccountabilityManagementRouteImport } from './routes/accountability-management'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClientViewRouteImport } from './routes/client-view'
+import { Route as CultureInclusionIntelligenceRouteImport } from './routes/culture-inclusion-intelligence'
 import { Route as DeliveryMethodologyRouteImport } from './routes/delivery-methodology'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
@@ -116,6 +117,12 @@ const ClientViewRoute = ClientViewRouteImport.update({
   path: '/client-view',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CultureInclusionIntelligenceRoute =
+  CultureInclusionIntelligenceRouteImport.update({
+    id: '/culture-inclusion-intelligence',
+    path: '/culture-inclusion-intelligence',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DeliveryMethodologyRoute = DeliveryMethodologyRouteImport.update({
   id: '/delivery-methodology',
   path: '/delivery-methodology',
@@ -485,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
+  '/culture-inclusion-intelligence': typeof CultureInclusionIntelligenceRoute
   '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
@@ -562,6 +570,7 @@ export interface FileRoutesByTo {
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
+  '/culture-inclusion-intelligence': typeof CultureInclusionIntelligenceRoute
   '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
@@ -641,6 +650,7 @@ export interface FileRoutesById {
   '/accountability-management': typeof AccountabilityManagementRoute
   '/auth': typeof AuthRoute
   '/client-view': typeof ClientViewRoute
+  '/culture-inclusion-intelligence': typeof CultureInclusionIntelligenceRoute
   '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
@@ -720,6 +730,7 @@ export interface FileRouteTypes {
     | '/accountability-management'
     | '/auth'
     | '/client-view'
+    | '/culture-inclusion-intelligence'
     | '/delivery-methodology'
     | '/eea12'
     | '/eea13-planning'
@@ -797,6 +808,7 @@ export interface FileRouteTypes {
     | '/accountability-management'
     | '/auth'
     | '/client-view'
+    | '/culture-inclusion-intelligence'
     | '/delivery-methodology'
     | '/eea12'
     | '/eea13-planning'
@@ -875,6 +887,7 @@ export interface FileRouteTypes {
     | '/accountability-management'
     | '/auth'
     | '/client-view'
+    | '/culture-inclusion-intelligence'
     | '/delivery-methodology'
     | '/eea12'
     | '/eea13-planning'
@@ -954,6 +967,7 @@ export interface RootRouteChildren {
   AccountabilityManagementRoute: typeof AccountabilityManagementRoute
   AuthRoute: typeof AuthRoute
   ClientViewRoute: typeof ClientViewRoute
+  CultureInclusionIntelligenceRoute: typeof CultureInclusionIntelligenceRoute
   DeliveryMethodologyRoute: typeof DeliveryMethodologyRoute
   Eea12Route: typeof Eea12Route
   Eea13PlanningRoute: typeof Eea13PlanningRoute
@@ -1040,6 +1054,13 @@ declare module '@tanstack/react-router' {
       path: '/client-view'
       fullPath: '/client-view'
       preLoaderRoute: typeof ClientViewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/culture-inclusion-intelligence': {
+      id: '/culture-inclusion-intelligence'
+      path: '/culture-inclusion-intelligence'
+      fullPath: '/culture-inclusion-intelligence'
+      preLoaderRoute: typeof CultureInclusionIntelligenceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/delivery-methodology': {
@@ -1608,6 +1629,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountabilityManagementRoute: AccountabilityManagementRoute,
   AuthRoute: AuthRoute,
   ClientViewRoute: ClientViewRoute,
+  CultureInclusionIntelligenceRoute: CultureInclusionIntelligenceRoute,
   DeliveryMethodologyRoute: DeliveryMethodologyRoute,
   Eea12Route: Eea12Route,
   Eea13PlanningRoute: Eea13PlanningRoute,
