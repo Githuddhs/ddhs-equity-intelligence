@@ -21,6 +21,12 @@ import { GoalForecast } from "@/components/goal-forecast";
 import { MovementPlan } from "@/components/movement-plan";
 import { BarrierRegister } from "@/components/barrier-register";
 import { PlanTimeline } from "@/components/plan-timeline";
+import { questionnaireFindings } from "@/lib/plan-questionnaire-findings";
+import { summariseExitInterviews } from "@/lib/exit-interview-report";
+import { summariseStayInterviews } from "@/lib/stay-interview-report";
+import { buildPulseSummary, type PulseSummaryInput } from "@/lib/inclusion-pulse-report";
+import type { ExitInterviewAnswers } from "@/lib/exit-interview";
+import type { StayInterviewAnswers } from "@/lib/stay-interview";
 import { exportPlanPdf } from "@/lib/capability-reports";
 
 export const Route = createFileRoute("/_authenticated/plans/$id")({
@@ -184,6 +190,22 @@ function PlanBuilder() {
             setContent({ ...content, barriers: q.barriers, measures: q.measures, objectives: q.objectives || content.objectives }); setDirty(true);
             toast.success(`Pulled objectives, barriers and measures from ${q.count} questionnaire response(s) — review, then Save plan.`);
           }} className="ml-2 mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal disabled:opacity-50">Pull from EE questionnaire</button>
+          <button onClick={async () => {
+            const [st, ex, pu] = await Promise.all([
+              supabase.from("stay_interview_responses").select("answers"),
+              supabase.from("exit_interview_responses").select("answers"),
+              supabase.rpc("inclusion_pulse_summary"),
+            ]);
+            const f = questionnaireFindings({
+              stay: st.data ? summariseStayInterviews(st.data.map((r) => r.answers as unknown as StayInterviewAnswers)) : null,
+              exit: ex.data ? summariseExitInterviews(ex.data.map((r) => r.answers as unknown as ExitInterviewAnswers)) : null,
+              pulse: pu.data ? buildPulseSummary(pu.data as unknown as PulseSummaryInput) : null,
+            });
+            if (!f) { toast.info("No stay, exit or culture questionnaire has at least three responses yet."); return; }
+            const add = (old: string, extra: string) => (old.includes(extra) ? old : [old.trim(), extra].filter(Boolean).join("\n\n"));
+            setContent({ ...content, barriers: add(content.barriers, f.barriers), measures: add(content.measures, f.measures) }); setDirty(true);
+            toast.success(`Added combined findings from ${f.sources} questionnaire(s) to Barriers and Affirmative action measures — review, then Save plan.`);
+          }} className="ml-2 mt-3 rounded-lg border border-teal px-4 py-2 text-sm font-semibold text-teal">Add stay, exit & culture findings</button>
           <button onClick={async () => {
             const e = await latestEvidence();
             if (!e) { toast.error("No document evidence yet — run it on the Document evidence page."); return; }
