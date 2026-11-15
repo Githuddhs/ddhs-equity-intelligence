@@ -635,7 +635,7 @@ function Index() {
           <SectionHeading
             eyebrow="Guided Tour"
             title="See Every Capability in Five Minutes"
-            body="An eight-step guided tour from workforce data to EEA12 analysis, EE plans, monitoring, DG review readiness and DoEL reporting — no sign-in needed."
+            body="A guided tour from workforce data, EEA12 analysis and EE plans to DoEL reporting, recruitment, the Academy, stay and exit interviews and culture surveys — no sign-in needed."
           />
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a href="/tour" className="inline-flex items-center gap-2 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-teal-foreground hover:bg-teal/90">
