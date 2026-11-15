@@ -12,18 +12,24 @@ const CAPTURE = /^\s*(\+|save|saved|edit|delete|remove|add|new|create|submit|imp
 
 export function isStaffOnlyPage(path: string) { return STAFF_ONLY.some((r) => r.test(path)); }
 
-/** Read-only state plus whether the staff check is still running, so wording can wait instead of flashing the wrong message. */
-export function useClientReadOnlyStatus() {
-  const path = useLocation({ select: (l) => l.pathname });
-  const applies = isStaffOnlyPage(path);
-  const { data, isPending } = useQuery({ queryKey: ["is-staff"], enabled: applies, staleTime: 300_000, queryFn: async () => {
+/** Staff check for any page, so wording can branch on it without the staff-only page rule. */
+export function useIsStaffStatus(enabled = true) {
+  const { data, isPending } = useQuery({ queryKey: ["is-staff"], enabled, staleTime: 300_000, queryFn: async () => {
     // Real signed-in session: inside a client workspace the scoped client reports the client's id.
     const { data: u } = await sessionClient.auth.getUser();
     if (!u.user) return true; // signed-out visitors on public pages are not client users
     const { data } = await sessionClient.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
     return data === true;
   } });
-  return { readOnly: applies && data === false, pending: applies && isPending };
+  return { isStaff: data as boolean | undefined, pending: enabled && isPending };
+}
+
+/** Read-only state plus whether the staff check is still running, so wording can wait instead of flashing the wrong message. */
+export function useClientReadOnlyStatus() {
+  const path = useLocation({ select: (l) => l.pathname });
+  const applies = isStaffOnlyPage(path);
+  const { isStaff, pending } = useIsStaffStatus(applies);
+  return { readOnly: applies && isStaff === false, pending: applies && pending };
 }
 
 export function useClientReadOnly() {

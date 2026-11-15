@@ -7,6 +7,7 @@ import { AppHeader } from "@/components/app-header";
 import { ShareLinks } from "@/components/share-links";
 import { TourInvite } from "@/components/tour-invite";
 import { MyClientWorkspaces } from "@/components/client-team";
+import { useIsStaffStatus } from "@/components/client-read-only";
 
 export const Route = createFileRoute("/_authenticated/portal")({
   staticData: { sitemap: false },
@@ -27,6 +28,8 @@ const fmt = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "numer
 
 function Portal() {
   const qc = useQueryClient();
+  // Clients are told to send their files to DDHS; staff keep the plain wording.
+  const staffView = useIsStaffStatus();
   // Live subscription status: PayFast confirms payments in the background, so listen for changes.
   useEffect(() => {
     let channel: ReturnType<typeof supabase.channel> | null = null;
@@ -160,7 +163,9 @@ function Portal() {
               <Row key={x.id} to="/history" title={`${x.sector || "No sector"} — ${x.level}`} sub={`${x.total_headcount} employees · ${fmt(x.created_at)}`} />
             ))}
           </Panel>
-          <Panel title="EE plans" all="/plans" create="/plans" createLabel="New plan" empty="No plans yet.">
+          <Panel title="EE plans" all="/plans" create="/plans" createLabel="New plan" empty={staffView.isStaff === false
+            ? "No plans yet. Send your workforce and HR files to DDHS — our staff capture them and prepare your Employment Equity plan."
+            : "No plans yet."}>
             {data?.plans.map((x) => (
               <Link key={x.id} to="/plans/$id" params={{ id: x.id }} className="block rounded-lg border border-border p-3 hover:border-teal">
                 <p className="font-semibold">{x.title}</p>
