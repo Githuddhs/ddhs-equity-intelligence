@@ -218,11 +218,11 @@ export function ContactForm() {
 
       <div className="mt-5">
         <label className={labelClass} htmlFor="message">
-          What are your current EE processes and challenges?
+          What are your current EE processes and challenges? <span className="font-normal text-muted-foreground">(optional)</span>
         </label>
         <textarea
           id="message"
-            aria-invalid={!!errors.message}
+          aria-invalid={!!errors.message}
           name="message"
           rows={4}
           className={`${fieldClass} resize-y`}
@@ -231,7 +231,7 @@ export function ContactForm() {
           onChange={update("message")}
         />
         <p className={`mt-1.5 text-xs ${errors.message ? "font-medium text-destructive" : "text-muted-foreground"}`}>
-          {errors.message ?? `${form.message.trim().length}/20 characters minimum`}
+          {errors.message ?? "You can send your booking without answering this question."}
         </p>
       </div>
 

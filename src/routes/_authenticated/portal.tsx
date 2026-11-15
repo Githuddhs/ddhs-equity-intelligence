@@ -163,7 +163,7 @@ function Portal() {
               <Row key={x.id} to="/history" title={`${x.sector || "No sector"} — ${x.level}`} sub={`${x.total_headcount} employees · ${fmt(x.created_at)}`} />
             ))}
           </Panel>
-          <Panel title="EE plans" all="/plans" create="/plans" createLabel="New plan" empty={staffView.isStaff === false
+          <Panel title="EE plans" all="/plans" create="/plans" createLabel="New plan" showCreate={staffView.isStaff === true} empty={staffView.isStaff === false
             ? "No plans yet. Send your workforce and HR files to DDHS — our staff capture them and prepare your Employment Equity plan."
             : "No plans yet."}>
             {data?.plans.map((x) => (
@@ -210,7 +210,7 @@ function Row({ to, title, sub }: { to: "/history"; title: string; sub: string })
   );
 }
 
-function Panel({ title, all, create, createLabel, empty, children }: { title: string; all: "/history" | "/plans" | "/dg-history"; create: "/eea12" | "/plans" | "/dg-review"; createLabel: string; empty: string; children?: React.ReactNode }) {
+function Panel({ title, all, create, createLabel, showCreate = true, empty, children }: { title: string; all: "/history" | "/plans" | "/dg-history"; create: "/eea12" | "/plans" | "/dg-review"; createLabel: string; showCreate?: boolean; empty: string; children?: React.ReactNode }) {
   const has = Array.isArray(children) ? children.length > 0 : !!children;
   return (
     <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
@@ -219,7 +219,7 @@ function Panel({ title, all, create, createLabel, empty, children }: { title: st
         <Link to={all} className="text-sm font-semibold text-teal">View all</Link>
       </div>
       <div className="mt-4 space-y-2">{has ? children : <p className="text-sm text-muted-foreground">{empty}</p>}</div>
-      <Link to={create} className="mt-4 inline-block rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal">{createLabel}</Link>
+      {showCreate && <Link to={create} className="mt-4 inline-block rounded-lg border border-teal px-3 py-1.5 text-sm font-semibold text-teal">{createLabel}</Link>}
     </section>
   );
 }

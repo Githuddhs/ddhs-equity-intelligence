@@ -31,8 +31,9 @@ export const enquirySchema = z.object({
   message: z
     .string()
     .trim()
-    .min(20, "Please tell us a little more about your EE process")
-    .max(2000, "Please keep your message under 2,000 characters"),
+    .max(2000, "Please keep your message under 2,000 characters")
+    .optional()
+    .default(""),
   // Honeypot: real visitors never fill this in.
   website: z.string().max(500).optional(),
 });
