@@ -16,6 +16,7 @@ const LINKS = [
   { label: "DDHS Recruitment Intelligence", href: "/services/recruitment-suite" },
   { label: "DDHS Equity Intelligence Academy", href: "/academy" },
   { label: "DDHS Managed Stay & Exit Interview Service", href: "/managed-interviews" },
+  { label: "DDHS Culture & Inclusion Intelligence", href: "/culture-inclusion-intelligence" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -30,6 +31,7 @@ export function SiteNav() {
         {LINKS.map((l) => (
           l.href === "/delivery-methodology" ? <Link key={l.href} to="/delivery-methodology" className={desk}>{l.label}</Link> :
           l.href === "/managed-interviews" ? <Link key={l.href} to="/managed-interviews" className="transition-colors hover:text-primary">{l.label}</Link> :
+          l.href === "/culture-inclusion-intelligence" ? <Link key={l.href} to="/culture-inclusion-intelligence" className={desk}>{l.label}</Link> :
           <a key={l.href} href={l.href} className={desk}>
             {l.label}
           </a>
@@ -51,6 +53,7 @@ export function SiteNav() {
             {LINKS.map((l) => (
               l.href === "/delivery-methodology" ? <Link key={l.href} to="/delivery-methodology" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
               l.href === "/managed-interviews" ? <Link key={l.href} to="/managed-interviews" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
+              l.href === "/culture-inclusion-intelligence" ? <Link key={l.href} to="/culture-inclusion-intelligence" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
               <a
                 key={l.href}
                 href={l.href}
