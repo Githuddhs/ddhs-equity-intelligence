@@ -1,6 +1,8 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Publish the questionnaire and invitation update, then verify a copied employee survey link on the published site opens the questions rather than the previous 404 page.
+- [x] Culture & Inclusion invitations: staff prepare up to 50 private pulse links from pasted employee email addresses and send each invitation individually through the verified sender domain; clients see completion counts, aggregate-only results and four-format reports, never invitation emails, individual answers or participant references. Migration 0049 restricts invitation rows to staff. Twenty focused tests and typecheck pass; real email delivery and the full browser sending flow were not exercised.
 - [x] Culture & Inclusion page on narrow phones: the Managed Stay & Exit Interview Service button now wraps inside the screen (no sideways scrolling at 360/375/390px) and both "Recommended for…" notes use a darker teal that is readable on white; wording and amounts unchanged, desktop layout unchanged.
 - [x] Culture survey pricing: five packages, add-ons and subscriptions (ZAR excl. VAT) on the Culture & Inclusion page.
 - [x] Culture Survey pricing on phones: each package shown as a full-width stacked card (name, employee population, recommended note, fee) with balanced title wrapping; desktop table unchanged. Phone screenshots checked at 390px: cards full width, no sideways scroll, no orphaned words; desktop table verified unchanged.

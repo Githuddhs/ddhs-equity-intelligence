@@ -47,6 +47,8 @@ describe("inclusion pulse surveys — isolated workspace privacy and permissions
       ${[...tables,"workforce_snapshots","workforce_foundation_periods"].map((table) => `GRANT SELECT,INSERT,UPDATE,DELETE ON public.${table} TO authenticated; ALTER TABLE public.${table} ENABLE ROW LEVEL SECURITY; CREATE POLICY owner_policy ON public.${table} FOR ALL TO authenticated USING(user_id=auth.uid()) WITH CHECK(user_id=auth.uid());`).join("\n")}`);
     await db.exec(migrations);
     await db.exec(readFileSync(new URL('../../drizzle/migrations/0047_inclusion_pulse_surveys.sql', import.meta.url), 'utf8'));
+    await db.exec(readFileSync(new URL('../../drizzle/migrations/0048_inclusion_pulse_email_invitations.sql', import.meta.url), 'utf8'));
+    await db.exec(readFileSync(new URL('../../drizzle/migrations/0049_restrict_pulse_invitation_links_to_staff.sql', import.meta.url), 'utf8'));
     await db.exec(`INSERT INTO staff_demo_companies(id,company) VALUES('${DEMO}','Fictional demo'); INSERT INTO client_team_members(client_id,user_id,email,created_by) VALUES('${CLIENT}','${TEAM}','team@example.invalid','${STAFF}');`);
   });
   afterEach(async () => { await db.close(); });
@@ -55,6 +57,23 @@ describe("inclusion pulse surveys — isolated workspace privacy and permissions
     await actor(STAFF,DEMO);
     await db.exec(`INSERT INTO inclusion_pulse_links(user_id,token,expires_at) VALUES('${DEMO}','${'a'.repeat(48)}',now()+interval '14 days')`);
     expect((await db.query<{user_id:string}>('SELECT user_id FROM inclusion_pulse_links')).rows).toEqual([{user_id:DEMO}]);
+  });
+  it("staff prepares one recipient-specific link per employee email", async () => {
+    await actor(STAFF,DEMO);
+    const recipients = ['one@example.invalid','two@example.invalid','three@example.invalid'];
+    for (const [index,email] of recipients.entries()) {
+      await db.query("INSERT INTO inclusion_pulse_links(user_id,token,recipient_email,expires_at) VALUES($1,$2,$3,now()+interval '14 days')",[DEMO,String(index+1).repeat(48),email]);
+    }
+    const rows=(await db.query<{recipient_email:string;token:string}>('SELECT recipient_email,token FROM inclusion_pulse_links ORDER BY recipient_email')).rows;
+    expect(rows.map((row)=>row.recipient_email).sort()).toEqual([...recipients].sort());
+    expect(new Set(rows.map((row)=>row.token)).size).toBe(3);
+  });
+  it("clients cannot record invitation delivery themselves", async () => {
+    await actor(STAFF,DEMO);
+    await db.query("INSERT INTO inclusion_pulse_links(user_id,token,recipient_email,expires_at) VALUES($1,$2,'employee@example.invalid',now()+interval '14 days')",[DEMO,'9'.repeat(48)]);
+    await actor(CLIENT,DEMO);
+    await expect(db.query("UPDATE inclusion_pulse_links SET invitation_sent_at=now() WHERE token=$1",['9'.repeat(48)])).rejects.toThrow();
+    expect((await db.query('SELECT recipient_email,token FROM inclusion_pulse_links')).rows).toHaveLength(0);
   });
   it("clients cannot create pulse links", async () => {
     await actor(CLIENT);

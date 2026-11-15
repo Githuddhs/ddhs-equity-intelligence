@@ -594,8 +594,10 @@ export type Database = {
           created_by: string
           expires_at: string
           id: string
+          invitation_sent_at: string | null
           org_name: string
           participant_label: string
+          recipient_email: string
           revoked: boolean
           submitted_at: string | null
           survey_title: string
@@ -607,8 +609,10 @@ export type Database = {
           created_by?: string
           expires_at: string
           id?: string
+          invitation_sent_at?: string | null
           org_name?: string
           participant_label?: string
+          recipient_email?: string
           revoked?: boolean
           submitted_at?: string | null
           survey_title?: string
@@ -620,8 +624,10 @@ export type Database = {
           created_by?: string
           expires_at?: string
           id?: string
+          invitation_sent_at?: string | null
           org_name?: string
           participant_label?: string
+          recipient_email?: string
           revoked?: boolean
           submitted_at?: string | null
           survey_title?: string

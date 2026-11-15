@@ -21,10 +21,12 @@ import { template as enquiryNotificationTemplate } from './enquiry-notification'
 import { template as complianceReminderTemplate } from './compliance-reminder'
 import { template as quoteNotificationTemplate } from './quote-notification'
 import { template as exitInterviewSubmittedTemplate } from './exit-interview-submitted'
+import { template as inclusionPulseInvitationTemplate } from './inclusion-pulse-invitation'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'enquiry-notification': enquiryNotificationTemplate,
   'compliance-reminder': complianceReminderTemplate,
   'quote-notification': quoteNotificationTemplate,
   'exit-interview-submitted': exitInterviewSubmittedTemplate,
+  'inclusion-pulse-invitation': inclusionPulseInvitationTemplate,
 }
