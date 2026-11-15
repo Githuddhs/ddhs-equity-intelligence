@@ -12,17 +12,22 @@ const CAPTURE = /^\s*(\+|save|saved|edit|delete|remove|add|new|create|submit|imp
 
 export function isStaffOnlyPage(path: string) { return STAFF_ONLY.some((r) => r.test(path)); }
 
-export function useClientReadOnly() {
+/** Read-only state plus whether the staff check is still running, so wording can wait instead of flashing the wrong message. */
+export function useClientReadOnlyStatus() {
   const path = useLocation({ select: (l) => l.pathname });
   const applies = isStaffOnlyPage(path);
-  const { data } = useQuery({ queryKey: ["is-staff"], enabled: applies, staleTime: 300_000, queryFn: async () => {
+  const { data, isPending } = useQuery({ queryKey: ["is-staff"], enabled: applies, staleTime: 300_000, queryFn: async () => {
     // Real signed-in session: inside a client workspace the scoped client reports the client's id.
     const { data: u } = await sessionClient.auth.getUser();
     if (!u.user) return true; // signed-out visitors on public pages are not client users
     const { data } = await sessionClient.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
     return data === true;
   } });
-  return applies && data === false;
+  return { readOnly: applies && data === false, pending: applies && isPending };
+}
+
+export function useClientReadOnly() {
+  return useClientReadOnlyStatus().readOnly;
 }
 
 /** Hides capture controls on staff-only pages for client users; the database refuses client writes regardless. */

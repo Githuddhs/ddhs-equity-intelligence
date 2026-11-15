@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/lib/workspace-client";
 import { AppHeader } from "@/components/app-header";
+import { useClientReadOnlyStatus } from "@/components/client-read-only";
 import { emptyContent } from "@/lib/ee-plan";
 
 export const Route = createFileRoute("/_authenticated/plans/")({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/plans/")({
 
 function PlansPage() {
   const navigate = useNavigate();
+  const planView = useClientReadOnlyStatus();
   const { data, isLoading } = useQuery({
     queryKey: ["ee_plans"],
     queryFn: async () => {
@@ -57,7 +59,11 @@ function PlansPage() {
           <button onClick={create} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">New plan</button></div>
         </div>
         {isLoading && <p className="mt-6 text-sm text-muted-foreground">Loading…</p>}
-        {data?.length === 0 && <p className="mt-8 text-sm">No plans yet — click <strong>New plan</strong> to start.</p>}
+        {data?.length === 0 && (planView.pending
+          ? <p className="mt-8 text-sm">No plans yet.</p>
+          : planView.readOnly
+            ? <p className="mt-8 text-sm">No plans yet. Send your workforce and HR files to DDHS — our staff capture them and prepare your Employment Equity plan.</p>
+            : <p className="mt-8 text-sm">No plans yet — click <strong>New plan</strong> to start.</p>)}
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {data?.map((p) => (
             <Link key={p.id} to="/plans/$id" params={{ id: p.id }} className="rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
