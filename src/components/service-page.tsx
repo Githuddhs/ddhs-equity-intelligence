@@ -9,7 +9,7 @@ import { pageHead, SITE_URL } from "@/lib/seo";
 export const SERVICES = [
   { to: "/services/saas-subscriptions", label: "SaaS subscriptions" },
   { to: "/services/implementation", label: "Implementation services" },
-  { to: "/services/ee-advisory", label: "Specialist EE advisory" },
+  { to: "/services/ee-advisory", label: "EE, DEI & transformation advisory" },
   { to: "/services/recruitment-suite", label: "DDHS Recruitment Intelligence" },
 ] as const;
 

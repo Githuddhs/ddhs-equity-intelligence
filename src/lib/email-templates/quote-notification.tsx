@@ -108,7 +108,7 @@ function QuoteNotification({
           <Hr style={{ borderColor: '#E2E8F0', margin: '20px 0' }} />
           <Text style={{ color: '#8A97A5', fontSize: '12px', margin: 0 }}>
             Reply directly to this email to respond to {fullName}. DDHS Equity Intelligence (Pty)
-            Ltd · Employment Equity compliance, workforce transformation and governance.
+            Ltd · Employment Equity, DEI and Organisational Transformation.
           </Text>
         </Container>
       </Body>
@@ -119,7 +119,7 @@ function QuoteNotification({
 export const template = {
   component: QuoteNotification,
   subject: (data: Record<string, any>) =>
-    `Quote request: ${data['service'] ?? 'Consulting'} — ${data['company'] ?? 'DDHS Equity Intelligence website'}`,
+    `Quote request: ${data['service'] ?? 'Advisory'} — ${data['company'] ?? 'DDHS Equity Intelligence website'}`,
   displayName: 'Quote request notification',
   to: 'sdm@ddhs.co.za',
   previewData: {

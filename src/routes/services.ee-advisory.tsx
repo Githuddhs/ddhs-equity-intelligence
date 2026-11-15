@@ -3,22 +3,25 @@ import { ServicePage, serviceHead } from "@/components/service-page";
 
 export const Route = createFileRoute("/services/ee-advisory")({
   staticData: { sitemap: true },
-  head: () => serviceHead("/services/ee-advisory", "Specialist Employment Equity Advisory", "Specialist Employment Equity advisory from DDHS: EE plan reviews, barrier analysis, DG review preparation, corrective action plans and EE committee support."),
+  head: () => serviceHead("/services/ee-advisory", "Employment Equity, DEI & Transformation Advisory", "Specialist Employment Equity, DEI and Organisational Transformation advisory from DDHS: EE plan reviews, barrier and inclusion analysis, DG review preparation, corrective action plans and EE committee support."),
   component: () => (
     <ServicePage c={{
       current: "/services/ee-advisory",
       eyebrow: "Service · Advisory",
-      title: "Specialist Employment Equity advisory",
-      lead: "Experienced EE specialists who work alongside your team — interpreting your data, strengthening your plans and preparing you for DG reviews and DoEL submissions.",
+      title: "Employment Equity, DEI and Organisational Transformation advisory",
+      lead: "Experienced specialists who work alongside your team — interpreting your workforce data, strengthening your Employment Equity and DEI plans, and preparing you for DG reviews and DoEL submissions.",
       forWho: [
         "Employers facing a Director-General review or recommendations",
         "EE committees needing independent guidance",
         "Leadership teams setting realistic numerical targets",
-        "Organisations wanting a Virtual EE Consultant on call",
+        "Organisations building a DEI and transformation programme beyond minimum compliance",
+        "Employers wanting a Virtual EE Consultant on call",
       ],
       offerings: [
         { title: "EE plan review", body: "Review of objectives, barriers, affirmative action measures and timelines against the Act." },
         { title: "Barrier analysis", body: "Facilitated questionnaires, stakeholder consultation and findings in plain language." },
+        { title: "DEI and inclusion diagnostics", body: "Representation, progression and inclusion barriers identified from your workforce data and staff feedback." },
+        { title: "Transformation planning", body: "Prioritised interventions, owners, measures and timeframes that turn analysis into organisational change." },
         { title: "DG review preparation", body: "Evidence checks, response drafting and corrective action planning." },
         { title: "Target setting", body: "Sector targets, provincial EAP and reasonable grounds for not meeting targets." },
         { title: "EE committee support", body: "Agenda, minutes and consultation records that stand up to review." },

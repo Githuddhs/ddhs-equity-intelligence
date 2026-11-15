@@ -109,7 +109,7 @@ function EnquiryNotification({
           <Hr style={{ borderColor: '#E2E8F0', margin: '20px 0' }} />
           <Text style={{ color: '#8A97A5', fontSize: '12px', margin: 0 }}>
             Reply directly to this email to respond to {fullName}. DDHS Equity Intelligence (Pty)
-            Ltd · Employment Equity compliance, workforce transformation and governance.
+            Ltd · Employment Equity, DEI and Organisational Transformation.
           </Text>
         </Container>
       </Body>

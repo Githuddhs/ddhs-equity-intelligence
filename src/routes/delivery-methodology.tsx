@@ -11,7 +11,7 @@ export const Route = createFileRoute("/delivery-methodology")({
     const head = pageHead({
       path: "/delivery-methodology",
       title: "Six-Phase Delivery Methodology | DDHS Equity Intelligence",
-      description: "The DDHS delivery methodology: Mobilise, Diagnose, Analyse, Consult and Plan, Build Capability, Monitor and Improve — a connected approach to Employment Equity.",
+      description: "The DDHS delivery methodology: Mobilise, Diagnose, Analyse, Consult and Plan, Build Capability, Monitor and Improve — a connected approach to Employment Equity, DEI and Organisational Transformation.",
       crumbs: [{ name: "Six-Phase Delivery Methodology", path: "/delivery-methodology" }],
     });
     return { ...head, meta: head.meta.filter((tag) => !("property" in tag && tag.property?.startsWith("og:image")) && !("name" in tag && tag.name === "twitter:image")) };
@@ -44,7 +44,7 @@ function DeliveryMethodologyPage() {
           <div className="mx-auto max-w-5xl px-4 py-10 text-center sm:px-6 sm:py-14 lg:px-8">
             <p className="text-sm font-semibold text-teal">DDHS Equity Intelligence</p>
             <h1 className="mt-3 text-balance font-display text-3xl font-bold tracking-normal text-primary sm:text-4xl">Six-Phase Delivery Methodology</h1>
-            <p className="mx-auto mt-4 max-w-3xl text-muted-foreground">A connected approach to Employment Equity delivery, from establishing the starting point to building capability and sustaining measurable improvement.</p>
+            <p className="mx-auto mt-4 max-w-3xl text-muted-foreground">A connected approach to Employment Equity, DEI and Organisational Transformation delivery, from establishing the starting point to building capability and sustaining measurable improvement.</p>
             <ol aria-label="Delivery phases" className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-3 text-sm font-semibold text-primary">
               {phases.map((phase, index) => (
                 <li key={phase.title} className="flex items-center gap-3">

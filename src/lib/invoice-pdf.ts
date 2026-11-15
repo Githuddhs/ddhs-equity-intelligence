@@ -135,7 +135,7 @@ export async function exportInvoicePdf(inv: InvoiceForPdf) {
 
   doc.setTextColor(...GREY);
   doc.setFontSize(8);
-  doc.text("DDHS Equity Intelligence (Pty) Ltd — Employment Equity compliance, workforce transformation and governance.", 14, 285);
+  doc.text("DDHS Equity Intelligence (Pty) Ltd — Employment Equity, DEI and Organisational Transformation.", 14, 285);
 
   reportPdf(doc, `${inv.invoice_number}.pdf`);
 }

@@ -16,7 +16,7 @@ export const Route = createFileRoute("/pricing")({
     cancelled: search["cancelled"] === "1",
   }),
   staticData: { sitemap: true },
-  head: () => pageHead({ path: "/pricing", title: "Employment Equity Services & Pricing | DDHS Equity Intelligence", description: "DDHS Equity Intelligence pricing: Comply, Plan, Manage and Transform services, software-only subscriptions and specialist support for South African employers." }),
+  head: () => pageHead({ path: "/pricing", title: "Employment Equity, DEI & Transformation Services and Pricing | DDHS Equity Intelligence", description: "DDHS Equity Intelligence pricing: Employment Equity, DEI and Organisational Transformation services — Comply, Plan, Manage and Transform, software-only subscriptions and specialist support for South African employers." }),
   component: PricingPage,
 });
 
@@ -86,7 +86,7 @@ const PATHWAY: Pathway[] = [
 ];
 
 const OPTIONAL_SERVICES = [
-  { title: "Specialist advisory", body: "EE consulting, DG Review support, executive advisory, custom analytics and tailored training." },
+  { title: "Specialist advisory", body: "Employment Equity, DEI and Organisational Transformation advisory, DG Review support, executive advisory, custom analytics and tailored training." },
   { title: "Enterprise add-ons", body: "Extra business units or committees, executive dashboards, barrier-analysis projects, recruitment governance modules, historical data clean-up and custom Power BI dashboards." },
 ];
 
@@ -184,8 +184,8 @@ function PricingPage() {
         </div>
       </header>
       <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
-        <h1 className="page-title text-center text-primary">Employment Equity services and pricing</h1>
-        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Scalable compliance, workforce intelligence and governance support for South African employers. Our fees scale with your headcount and organisational complexity, so a 75-person employer and a 7,500-person university each pay a fair price for the support they need.</p>
+        <h1 className="page-title text-center text-primary">Employment Equity, DEI and Organisational Transformation services and pricing</h1>
+        <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Scalable Employment Equity, DEI and Organisational Transformation support — compliance, workforce intelligence and governance for South African employers. Fees scale with your headcount and organisational complexity, so a 75-person employer and a 7,500-person university each pay a fair price.</p>
         <h2 className="section-title mt-8 text-primary">Our service pathway: Comply, Plan, Manage, Transform</h2>
         <p className="mt-1 text-muted-foreground">Start where you are and add support as your Employment Equity programme matures. Every step builds on reliable workforce data.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -251,7 +251,7 @@ function PricingPage() {
         </section>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-2">
-          {([["Specialist consulting rates", RATES], ["Once-off projects", PROJECTS]] as const).map(([title, rows]) => (
+          {([["Specialist advisory rates", RATES], ["Once-off projects", PROJECTS]] as const).map(([title, rows]) => (
             <section key={title} className="rounded-xl border border-border bg-card p-8">
               <h2 className="section-title text-primary">{title}</h2>
               <dl className="mt-4 divide-y divide-border text-sm">
@@ -280,13 +280,13 @@ function PricingPage() {
               "Briefing executives, EXCO and boards on progress and risk",
             ].map((f) => <li key={f} className="flex gap-2"><span className="text-teal">✓</span>{f}</li>)}
           </ul>
-          <p className="mt-6 text-sm text-muted-foreground">Rate: R1,500 per hour (see specialist consulting rates above). Consultant guidance is not legal advice — we recommend confirming material positions with your own legal advisers.</p>
+          <p className="mt-6 text-sm text-muted-foreground">Rate: R1,500 per hour (see specialist advisory rates above). Consultant guidance is not legal advice — we recommend confirming material positions with your own legal advisers.</p>
           <Link to="/virtual-consultant" className="mt-4 inline-block text-sm font-semibold text-teal">View consultant profile & book a session →</Link>
         </section>
 
         <section id="quote" className="mt-16 scroll-mt-8 rounded-xl border border-border bg-card p-8">
           <h2 className="section-title text-primary">Request a quote</h2>
-          <p className="mt-1 text-muted-foreground">Tell us what you need and our team will come back to you with a quote. Every request goes straight to our consulting team.</p>
+          <p className="mt-1 text-muted-foreground">Tell us what you need and our team will come back to you with a quote. Every request goes straight to our advisory team.</p>
           <QuoteForm />
         </section>
 

@@ -42,7 +42,7 @@ import { CAPABILITIES, CapabilityExplainer, type Capability } from "@/components
 
 export const Route = createFileRoute("/")({
   staticData: { sitemap: true },
-  head: () => pageHead({ path: "/", title: "Employment Equity Software South Africa | DDHS Equity Intelligence", description: "AI-assisted Employment Equity software for South African employers: EEA12 workforce analysis, EEA13 EE plans, DoEL reporting, DG review evidence and executive insight." }),
+  head: () => pageHead({ path: "/", title: "Employment Equity Software South Africa | DDHS Equity Intelligence", description: "AI-assisted Employment Equity, DEI and Organisational Transformation software for South African employers: EEA12 workforce analysis, EEA13 EE plans, DoEL reporting, DG review evidence and executive insight." }),
   component: Index,
 });
 
@@ -260,13 +260,13 @@ function Index() {
             From Workforce Data to Defensible Employment Equity Decisions
           </h1>
           <p className="mx-auto mt-4 max-w-3xl text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
-            Turn workforce data into Employment Equity intelligence, compliance evidence and
-            actionable transformation decisions.
+            Turn workforce data into Employment Equity, DEI and Organisational Transformation
+            intelligence: compliance evidence, inclusion insight and actionable decisions.
             <span className="hidden sm:inline">{" "}
               <span className="font-semibold text-primary">DDHS</span>{" "}
               <span className="font-semibold text-teal">Equity Intelligence</span> brings Employment
-              Equity compliance, workforce analytics and recruitment governance together in one
-              platform for South African employers.
+              Equity compliance, DEI and transformation analytics, workforce intelligence and
+              recruitment governance together in one platform for South African employers.
             </span>
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -345,17 +345,17 @@ function Index() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <SectionHeading
             eyebrow="Six Integrated Capabilities"
-            title="Everything Employment Equity Needs, in One Platform"
-            body="Compliance, workforce intelligence, transformation analytics, recruitment governance, evidence and expert services work from the same Employee Profile data."
+            title="Everything Employment Equity, DEI and Transformation Needs, in One Platform"
+            body="Employment Equity compliance, DEI and transformation analytics, workforce intelligence, recruitment governance, evidence and expert services work from the same Employee Profile data."
           />
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               { title: "Employment Equity Compliance", href: "/eea13-planning", items: ["EEA2 and EEA4 reporting support", "EEA12 workforce analysis", "EEA13 Employment Equity Plan development", "Occupational level and designated-group analysis", "Numerical goals and annual targets", "Compliance evidence and document management"] },
               { title: "Workforce Intelligence", href: "/workforce-foundation", items: ["One employee dataset for profiles, pay, levels and movements", "Representation and workforce-profile dashboards", "Recruitment, promotion and termination analysis", "Fixed-term and permanent employment analysis"] },
-              { title: "Transformation Analytics", href: "/executive-intelligence", items: ["Gap analysis against EE objectives and targets", "Barrier identification and tracking", "Transformation interventions", "Progress dashboards", "Management and committee reporting"] },
+              { title: "DEI & Transformation Analytics", href: "/executive-intelligence", items: ["Gap analysis against EE objectives and targets", "Barrier identification and tracking", "Inclusion, belonging and progression barriers", "Transformation interventions", "Progress dashboards", "Management and committee reporting"] },
               { title: "Recruitment Intelligence & Governance", href: "/services/recruitment-suite", items: ["Requisition and approval controls", "Candidate pipeline and applicant tracking", "Shortlisting and selection governance", "EE representation considerations", "Appointment decision records", "Audit trail for defensible decisions"] },
               { title: "Governance & Evidence", href: "/evidence-governance", items: ["EE committee governance", "Consultation records", "Evidence repository", "Actions, responsibilities and deadlines", "Audit-ready compliance records", "Executive and board reporting"] },
-              { title: "Professional Services", href: "/services/saas-subscriptions", items: ["SaaS subscriptions", "Implementation and data onboarding", "Employment Equity advisory", "Workforce analysis", "EE Plan development", "Training and governance support"] },
+              { title: "Professional Services", href: "/services/saas-subscriptions", items: ["SaaS subscriptions", "Implementation and data onboarding", "Employment Equity, DEI & transformation advisory", "Workforce analysis", "EE Plan development", "Training and governance support"] },
             ].map((c, i) => (
               <Link
                 key={c.title}
@@ -794,7 +794,8 @@ function Index() {
               <p className="mt-2 text-sm text-muted-foreground">
                 <span className="font-semibold text-primary">DDHS</span>{" "}
                 <span className="font-semibold text-teal">Equity Intelligence</span> (Pty) Ltd —
-                South African enterprise workforce transformation intelligence.
+                South African enterprise Employment Equity, DEI and Organisational Transformation
+                intelligence.
               </p>
               <address className="mt-4 text-sm not-italic text-muted-foreground">
                 26 Loubser Street, Ferndale, Brackenfell, Cape Town, 7560

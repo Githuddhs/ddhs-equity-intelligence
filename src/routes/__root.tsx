@@ -126,7 +126,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "AI-assisted Employment Equity compliance, workforce transformation and governance platform for South African employers.",
+          "AI-assisted Employment Equity, DEI and Organisational Transformation platform for South African employers: workforce intelligence, compliance evidence and governance in one place.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

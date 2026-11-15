@@ -9,7 +9,7 @@ import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/virtual-consultant")({
   staticData: { sitemap: true },
-  head: () => pageHead({ path: "/virtual-consultant", title: "Online Employment Equity Consultant | DDHS Virtual EE Consultant", description: "Book remote, hourly Employment Equity consulting for EEA12 analysis, EE plans, DG review readiness and EEA2/EEA4 reporting support.", crumbs: [{"name": "Services", "path": "/services/ee-advisory"}, {"name": "Online Employment Equity Consultant", "path": "/virtual-consultant"}] }),
+  head: () => pageHead({ path: "/virtual-consultant", title: "Online Employment Equity & DEI Consultant | DDHS Virtual Consultant", description: "Book remote, hourly Employment Equity, DEI and Organisational Transformation advice for EEA12 analysis, EE plans, DG review readiness and EEA2/EEA4 reporting support.", crumbs: [{"name": "Services", "path": "/services/ee-advisory"}, {"name": "Online Employment Equity Consultant", "path": "/virtual-consultant"}] }),
   component: ConsultantPage,
 });
 
@@ -100,9 +100,9 @@ function ConsultantPage() {
         <div className="mt-4 grid gap-6 md:grid-cols-[auto_1fr]">
           <img src="/icons/icon-192.png" alt="DDHS Equity Intelligence logo" width={96} height={96} className="h-24 w-24 rounded-xl" />
           <div className="text-sm">
-            <p className="font-semibold text-primary">DDHS Employment Equity consulting team</p>
+            <p className="font-semibold text-primary">DDHS Employment Equity, DEI and Organisational Transformation advisory team</p>
             <p className="mt-2 text-muted-foreground">
-              Our consultants specialise in South African Employment Equity compliance under the Employment Equity Act and its codes of good practice — from workforce analysis and EE plan development to EE committee support, DG review readiness and DoEL reporting. Sessions are held online and draw directly on your DDHS Equity Intelligence data, so advice is grounded in your actual workforce figures.
+              Our advisers specialise in South African Employment Equity compliance under the Employment Equity Act and its codes of good practice, and in the DEI and organisational transformation work that follows from it — from workforce analysis and EE plan development to inclusion and barrier analysis, EE committee support, DG review readiness and DoEL reporting. Sessions are held online and draw directly on your DDHS Equity Intelligence data, so advice is grounded in your actual workforce figures.
             </p>
             <ul className="mt-3 grid gap-1 md:grid-cols-2">
               {["Employment Equity Act & regulations", "Sector targets and provincial EAP", "EEA2, EEA4, EEA12 and EEA13", "DG review and compliance orders", "Private sector and higher education", "Online sessions across South Africa"].map((x) => (
