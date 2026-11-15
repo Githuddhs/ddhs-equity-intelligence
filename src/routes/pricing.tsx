@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { startPayfastCheckout, type PayfastPlan } from "@/lib/payfast.functions";
 import { QuoteForm } from "@/components/quote-form";
-import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 
 export const Route = createFileRoute("/pricing")({
@@ -178,7 +177,6 @@ function PricingPage() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center justify-between py-4">
           <BrandMark />
           <div className="flex items-center gap-4">
-            <AuthCta />
             <Link to="/auth" search={{ next: "/portal" }} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Sign in</Link>
           </div>
         </div>
