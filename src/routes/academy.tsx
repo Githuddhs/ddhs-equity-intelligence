@@ -149,12 +149,14 @@ function Academy() {
               <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
                 {t.items.map((i) => <li key={i} className="flex gap-2"><span className="text-teal">✓</span><span>{i}</span></li>)}
               </ul>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Covered in:{" "}
-                {t.links.map((l, k) => (
-                  <span key={l}>{k > 0 && " · "}<a href={l.startsWith("c") ? `#course-${l.slice(1)}` : `#module-${l.slice(1)}`} className="font-semibold text-teal underline-offset-2 hover:underline">{l.startsWith("c") ? `Course ${l.slice(1)}: ${COURSES.find((c) => c.n === l.slice(1))?.title ?? ""}` : `Module ${l.slice(1)}: ${DEI_MODULES[Number(l.slice(1)) - 1]?.[0] ?? ""}`}</a></span>
-                ))}
-              </p>
+              <div className="mt-3 text-xs text-muted-foreground">
+                <p>Covered in:</p>
+                <ul className="mt-1 space-y-1">
+                  {t.links.map((l) => (
+                    <li key={l}><a href={l.startsWith("c") ? `#course-${l.slice(1)}` : `#module-${l.slice(1)}`} className="font-semibold text-teal underline-offset-2 hover:underline">{l.startsWith("c") ? `Course ${l.slice(1)}: ${COURSES.find((c) => c.n === l.slice(1))?.title ?? ""}` : `Module ${l.slice(1)}: ${DEI_MODULES[Number(l.slice(1)) - 1]?.[0] ?? ""}`}</a></li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>
