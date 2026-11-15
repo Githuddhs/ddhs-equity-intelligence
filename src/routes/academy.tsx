@@ -152,7 +152,7 @@ function Academy() {
               <p className="mt-3 text-xs text-muted-foreground">
                 Covered in:{" "}
                 {t.links.map((l, k) => (
-                  <span key={l}>{k > 0 && " · "}<a href={l.startsWith("c") ? `#course-${l.slice(1)}` : `#module-${l.slice(1)}`} className="font-semibold text-teal underline-offset-2 hover:underline">{l.startsWith("c") ? `Course ${l.slice(1)}` : `Module ${l.slice(1)}`}</a></span>
+                  <span key={l}>{k > 0 && " · "}<a href={l.startsWith("c") ? `#course-${l.slice(1)}` : `#module-${l.slice(1)}`} className="font-semibold text-teal underline-offset-2 hover:underline">{l.startsWith("c") ? `Course ${l.slice(1)}: ${COURSES.find((c) => c.n === l.slice(1))?.title ?? ""}` : `Module ${l.slice(1)}: ${DEI_MODULES[Number(l.slice(1)) - 1]?.[0] ?? ""}`}</a></span>
                 ))}
               </p>
             </div>
