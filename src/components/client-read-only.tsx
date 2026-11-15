@@ -6,7 +6,7 @@ import { Lock } from "lucide-react";
 import { sessionClient } from "@/lib/workspace-client";
 
 /** Pages whose records only DDHS staff capture (enforced in the database). DDHS Recruitment Intelligence pages are deliberately excluded. */
-const STAFF_ONLY = [/^\/workforce$/, /^\/eea12$/, /^\/plans(\/|$)/, /^\/dg-review$/, /^\/doel-submissions$/, /^\/eea13$/, /^\/eea13-planning$/, /^\/compliance$/, /^\/evidence$/, /^\/workforce-foundation$/, /^\/plan-lifecycle$/];
+const STAFF_ONLY = [/^\/workforce$/, /^\/eea12$/, /^\/plans(\/|$)/, /^\/dg-review$/, /^\/doel-submissions$/, /^\/eea13$/, /^\/eea13-planning$/, /^\/compliance$/, /^\/evidence$/, /^\/workforce-foundation$/, /^\/plan-lifecycle$/, /^\/culture-inclusion$/];
 /** Button labels that capture, edit or delete records. */
 const CAPTURE = /^\s*(\+|save|saved|edit|delete|remove|add|new|create|submit|import|assemble|sign[ -]off|record|update|run|upload|auto-fill|fill|pull|write|draft|build|generate|reopen|approve)|\b(save|delete)\b/i;
 

@@ -588,6 +588,83 @@ export type Database = {
           },
         ]
       }
+      inclusion_pulse_links: {
+        Row: {
+          created_at: string
+          created_by: string
+          expires_at: string
+          id: string
+          org_name: string
+          participant_label: string
+          revoked: boolean
+          submitted_at: string | null
+          survey_title: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          expires_at: string
+          id?: string
+          org_name?: string
+          participant_label?: string
+          revoked?: boolean
+          submitted_at?: string | null
+          survey_title?: string
+          token: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          id?: string
+          org_name?: string
+          participant_label?: string
+          revoked?: boolean
+          submitted_at?: string | null
+          survey_title?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      inclusion_pulse_responses: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          link_id: string | null
+          participant_label: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          link_id?: string | null
+          participant_label?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          link_id?: string | null
+          participant_label?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inclusion_pulse_responses_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "inclusion_pulse_links"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       internal_tokens: {
         Row: {
           name: string
@@ -1277,6 +1354,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      inclusion_pulse_link_info: { Args: { _token: string }; Returns: Json }
+      inclusion_pulse_summary: { Args: never; Returns: Json }
       platform_owner: { Args: { p_sensitive?: boolean }; Returns: string }
       request_client_handover: {
         Args: { p_client: string; p_notes?: string }
@@ -1315,6 +1394,10 @@ export type Database = {
         Returns: boolean
       }
       submit_exit_interview: {
+        Args: { _answers: Json; _token: string }
+        Returns: boolean
+      }
+      submit_inclusion_pulse: {
         Args: { _answers: Json; _token: string }
         Returns: boolean
       }

@@ -115,6 +115,15 @@ function Portal() {
           <span className="text-sm font-semibold text-teal">{data?.snapshot ? "Update workforce data →" : "Capture workforce data →"}</span>
         </Link>
 
+        <Link to="/culture-inclusion" className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
+          <div>
+            <p className="label-title text-teal">Culture &amp; Inclusion Intelligence</p>
+            <p className="mt-1 font-semibold text-primary">Confidential inclusion and belonging pulse surveys</p>
+            <p className="text-sm text-muted-foreground">Private one-time employee links, aggregate results and management reports with small-group protection.</p>
+          </div>
+          <span className="text-sm font-semibold text-teal">Open pulse surveys →</span>
+        </Link>
+
         <Link to="/barrier-analysis" className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-5 shadow-sm hover:border-teal">
           <div>
             <p className="label-title text-teal">EEA13 Barrier Analysis</p>

@@ -43,6 +43,7 @@ import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedBarrierAnalysisRouteImport } from './routes/_authenticated/barrier-analysis'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
+import { Route as AuthenticatedCultureInclusionRouteImport } from './routes/_authenticated/culture-inclusion'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
@@ -70,6 +71,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ExitInterviewTokenRouteImport } from './routes/exit-interview.$token'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
+import { Route as InclusionPulseTokenRouteImport } from './routes/inclusion-pulse.$token'
 import { Route as ServicesEeAdvisoryRouteImport } from './routes/services.ee-advisory'
 import { Route as ServicesImplementationRouteImport } from './routes/services.implementation'
 import { Route as ServicesRecruitmentGovernanceRouteImport } from './routes/services.recruitment-governance'
@@ -259,6 +261,12 @@ const AuthenticatedComplianceRoute = AuthenticatedComplianceRouteImport.update({
   path: '/compliance',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCultureInclusionRoute =
+  AuthenticatedCultureInclusionRouteImport.update({
+    id: '/culture-inclusion',
+    path: '/culture-inclusion',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -398,6 +406,11 @@ const GuidesSlugRoute = GuidesSlugRouteImport.update({
   path: '/guides/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InclusionPulseTokenRoute = InclusionPulseTokenRouteImport.update({
+  id: '/inclusion-pulse/$token',
+  path: '/inclusion-pulse/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesEeAdvisoryRoute = ServicesEeAdvisoryRouteImport.update({
   id: '/services/ee-advisory',
   path: '/services/ee-advisory',
@@ -520,6 +533,7 @@ export interface FileRoutesByFullPath {
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
+  '/culture-inclusion': typeof AuthenticatedCultureInclusionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
@@ -545,6 +559,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/exit-interview/$token': typeof ExitInterviewTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/inclusion-pulse/$token': typeof InclusionPulseTokenRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -598,6 +613,7 @@ export interface FileRoutesByTo {
   '/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/compliance': typeof AuthenticatedComplianceRoute
+  '/culture-inclusion': typeof AuthenticatedCultureInclusionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
@@ -623,6 +639,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/exit-interview/$token': typeof ExitInterviewTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/inclusion-pulse/$token': typeof InclusionPulseTokenRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -678,6 +695,7 @@ export interface FileRoutesById {
   '/_authenticated/barrier-analysis': typeof AuthenticatedBarrierAnalysisRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
+  '/_authenticated/culture-inclusion': typeof AuthenticatedCultureInclusionRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
@@ -703,6 +721,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/exit-interview/$token': typeof ExitInterviewTokenRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/inclusion-pulse/$token': typeof InclusionPulseTokenRoute
   '/services/ee-advisory': typeof ServicesEeAdvisoryRoute
   '/services/implementation': typeof ServicesImplementationRoute
   '/services/recruitment-governance': typeof ServicesRecruitmentGovernanceRoute
@@ -758,6 +777,7 @@ export interface FileRouteTypes {
     | '/barrier-analysis'
     | '/clients'
     | '/compliance'
+    | '/culture-inclusion'
     | '/dashboard'
     | '/dg-history'
     | '/dg-review'
@@ -783,6 +803,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/exit-interview/$token'
     | '/guides/$slug'
+    | '/inclusion-pulse/$token'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -836,6 +857,7 @@ export interface FileRouteTypes {
     | '/barrier-analysis'
     | '/clients'
     | '/compliance'
+    | '/culture-inclusion'
     | '/dashboard'
     | '/dg-history'
     | '/dg-review'
@@ -861,6 +883,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/exit-interview/$token'
     | '/guides/$slug'
+    | '/inclusion-pulse/$token'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -915,6 +938,7 @@ export interface FileRouteTypes {
     | '/_authenticated/barrier-analysis'
     | '/_authenticated/clients'
     | '/_authenticated/compliance'
+    | '/_authenticated/culture-inclusion'
     | '/_authenticated/dashboard'
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
@@ -940,6 +964,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/exit-interview/$token'
     | '/guides/$slug'
+    | '/inclusion-pulse/$token'
     | '/services/ee-advisory'
     | '/services/implementation'
     | '/services/recruitment-governance'
@@ -997,6 +1022,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   ExitInterviewTokenRoute: typeof ExitInterviewTokenRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
+  InclusionPulseTokenRoute: typeof InclusionPulseTokenRoute
   ServicesEeAdvisoryRoute: typeof ServicesEeAdvisoryRoute
   ServicesImplementationRoute: typeof ServicesImplementationRoute
   ServicesRecruitmentGovernanceRoute: typeof ServicesRecruitmentGovernanceRoute
@@ -1252,6 +1278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedComplianceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/culture-inclusion': {
+      id: '/_authenticated/culture-inclusion'
+      path: '/culture-inclusion'
+      fullPath: '/culture-inclusion'
+      preLoaderRoute: typeof AuthenticatedCultureInclusionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -1441,6 +1474,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inclusion-pulse/$token': {
+      id: '/inclusion-pulse/$token'
+      path: '/inclusion-pulse/$token'
+      fullPath: '/inclusion-pulse/$token'
+      preLoaderRoute: typeof InclusionPulseTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/ee-advisory': {
       id: '/services/ee-advisory'
       path: '/services/ee-advisory'
@@ -1561,6 +1601,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBarrierAnalysisRoute: typeof AuthenticatedBarrierAnalysisRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedComplianceRoute: typeof AuthenticatedComplianceRoute
+  AuthenticatedCultureInclusionRoute: typeof AuthenticatedCultureInclusionRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
@@ -1592,6 +1633,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBarrierAnalysisRoute: AuthenticatedBarrierAnalysisRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedComplianceRoute: AuthenticatedComplianceRoute,
+  AuthenticatedCultureInclusionRoute: AuthenticatedCultureInclusionRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
@@ -1659,6 +1701,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   ExitInterviewTokenRoute: ExitInterviewTokenRoute,
   GuidesSlugRoute: GuidesSlugRoute,
+  InclusionPulseTokenRoute: InclusionPulseTokenRoute,
   ServicesEeAdvisoryRoute: ServicesEeAdvisoryRoute,
   ServicesImplementationRoute: ServicesImplementationRoute,
   ServicesRecruitmentGovernanceRoute: ServicesRecruitmentGovernanceRoute,

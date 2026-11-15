@@ -185,8 +185,8 @@ function CultureInclusionIntelligence() {
           <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
             <h2 id="status" className="text-2xl font-bold text-primary">Where it stands today</h2>
             <div className="mt-5 space-y-4 text-sm text-muted-foreground">
-              <p><strong className="text-primary">Available now:</strong> confidential stay and exit interviews with their own dashboards and downloadable reports, plus workforce, occupational-level and barrier analysis on the platform.</p>
-              <p><strong className="text-primary">In development:</strong> culture and inclusion pulse surveys of its own, manager and team diagnostics, and year-on-year culture reporting. Organisations taking part in the pilot help shape the questions and the reporting format.</p>
+              <p><strong className="text-primary">Available now:</strong> confidential inclusion and belonging pulse surveys with private one-time links, an aggregate results dashboard and downloadable reports, alongside confidential stay and exit interviews and workforce, occupational-level and barrier analysis.</p>
+              <p><strong className="text-primary">In development:</strong> manager and team diagnostics, and year-on-year culture reporting. Organisations taking part in the pilot help shape the questions and the reporting format.</p>
             </div>
           </div>
         </section>

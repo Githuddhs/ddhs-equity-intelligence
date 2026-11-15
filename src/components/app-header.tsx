@@ -84,6 +84,7 @@ export function AppHeader() {
                 <Link to="/workforce-foundation" className={item} activeProps={activeItem} onClick={closeMenu}>Employee Profiles</Link>
                 <Link to="/readiness" className={item} activeProps={activeItem} onClick={closeMenu}>Data readiness</Link>
                 <Link to="/workforce" hash="managed-interviews" className={item} onClick={closeMenu}>DDHS Managed Stay &amp; Exit Interview Service</Link>
+                <Link to="/culture-inclusion" className={item} activeProps={activeItem} onClick={closeMenu}>Culture &amp; Inclusion Intelligence</Link>
               </NavGroup>
               <NavGroup label="B · EEA12 Analytics">
                 <Link to="/eea12" className={item} activeProps={activeItem} onClick={closeMenu}>EEA12 analysis</Link>

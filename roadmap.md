@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Culture & Inclusion Intelligence portal: confidential one-time inclusion and belonging pulse surveys, staff administration, aggregate-only results dashboard and reports with small-group suppression; verify permissions and workspace isolation without live client records.
 - [x] Add supplied subscription scope to the combined service page, clearly separating existing interview tools from planned advanced analytics and scheduled surveys; implementing the planned capabilities is not included in this presentation update.
 - [x] Combine Stay and Exit Interviews into one named public service and workspace section; existing links, questionnaires and private records retained. Public menu, both detail links and no-overflow checks passed on desktop/tablet/mobile; 10 report tests passed. Workspace grouping is presentation-only; no live client records accessed.
 - [x] Stay Interviews: public page/menu and Workforce menu/section, confidential single-use questionnaire, scoped staff administration, aggregate dashboard and Word/Excel/PDF/PowerPoint reports. Fictional isolated browser create/submit/readback/expiry/workspace-switch checks passed; four downloads checked for figures and excluded names/comments; 18 focused tests passed. Public page checked on desktop/tablet/phone; real hosted sign-in and workspace-opening button were not exercised. Exit Interviews wording unchanged; no live client records accessed.
