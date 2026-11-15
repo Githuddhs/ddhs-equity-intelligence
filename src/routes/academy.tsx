@@ -113,7 +113,7 @@ function Academy() {
       {/* Hero */}
       <p className="text-sm font-semibold uppercase tracking-wider text-teal">DDHS Equity Intelligence Academy</p>
       <h1 className="display-title mt-2 text-balance text-primary">
-        Five self-paced courses for practical Employment Equity capability.
+        Five self-paced courses and ten DEI modules for practical Employment Equity and transformation capability.
       </h1>
       <p className="page-lead mt-4 text-muted-foreground">
         Learn the rules, apply them to real workplace decisions, and produce the evidence your organisation needs.
