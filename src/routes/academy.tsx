@@ -112,7 +112,7 @@ function Academy() {
     <GuideShell>
       {/* Hero */}
       <p className="text-sm font-semibold uppercase tracking-wider text-teal">DDHS Equity Intelligence Academy</p>
-      <h1 className="display-title mt-2 text-balance text-primary">
+      <h1 className="display-title academy-title mt-2 text-balance text-primary">
         Five self-paced courses and ten DEI modules for practical Employment Equity and transformation capability.
       </h1>
       <p className="page-lead mt-4 text-muted-foreground">

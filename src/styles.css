@@ -200,3 +200,8 @@ meter.accent-teal::-moz-meter-bar { background: var(--teal); }
   :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
   img { max-width: 100%; }
 }
+
+/* The Academy heading is long, so on phones it needs a slightly smaller size to keep the last line from holding one orphaned word. */
+@media (max-width: 639.98px) {
+  .academy-title { font-size: 1.75rem; }
+}
