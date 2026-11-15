@@ -74,6 +74,19 @@ const COURSES = [
   },
 ];
 
+const DEI_MODULES = [
+  ["Understanding Diversity, Equity, Inclusion & Belonging", "Establishes the foundations of diversity, equity, equality, inclusion, belonging, intersectionality, power and privilege."],
+  ["Employment Equity and the South African Context", "Links DEI to Employment Equity, designated groups, occupational levels, workforce representation, barriers, affirmative action, reasonable accommodation and EE Plans."],
+  ["Bias, Stereotypes and Decision-Making", "Examines conscious and unconscious bias and provides practical controls for reducing bias in recruitment, promotion, performance and other workplace decisions."],
+  ["Inclusive Leadership", "Develops leaders' capability in psychological safety, employee voice, equitable decision-making, opportunity allocation, inclusive teams and accountability."],
+  ["Respect, Dignity and Workplace Belonging", "Focuses on respectful workplace behaviour, exclusion, micro-behaviours, inclusive communication, psychological safety and constructive intervention."],
+  ["Inclusive Recruitment, Selection and Career Progression", "Covers equitable workforce planning, sourcing, shortlisting, interviewing, selection-panel governance, appointments, promotions, succession and reasonable accommodation."],
+  ["Disability Inclusion and Reasonable Accommodation", "Builds understanding of visible and non-visible disability, workplace accessibility, reasonable accommodation, confidentiality and removal of environmental and procedural barriers."],
+  ["Cross-Cultural Collaboration and Inclusive Teams", "Strengthens communication, trust, perspective-taking, conflict management, inclusive meetings and collaboration across differences."],
+  ["From DEI Awareness to Behavioural Change", "Converts learning into observable workplace behaviour through habit formation, role modelling, accountability and 30-60-90 day action planning."],
+  ["Measuring DEI and Organisational Transformation", "Uses workforce and employee-experience evidence to measure representation, recruitment, promotion, retention, inclusion, barriers and organisational transformation outcomes."],
+];
+
 const FAQ = [
   {
     q: "Who is the Academy for?",
@@ -168,6 +181,30 @@ function Academy() {
         </div>
         <p className="mt-4 text-sm text-muted-foreground">
           Recommended order: 01 → 02 → 03 → 04 → 05. Each course can also be taken on its own.
+        </p>
+      </section>
+
+      {/* DEI modules */}
+      <section id="dei-modules" className="mt-14 scroll-mt-28">
+        <h2 className="font-display text-2xl font-semibold text-primary">DEI modules</h2>
+        <p className="mt-3 text-muted-foreground">
+          Ten modules that connect Employment Equity compliance, workplace behaviour, management practice, workforce
+          systems and measurable organisational outcomes. This is not simply DEI awareness training; it is an
+          evidence-led transformation intervention.
+        </p>
+        <ol className="mt-6 grid gap-4 sm:grid-cols-2">
+          {DEI_MODULES.map(([title, text], i) => (
+            <li key={title} className="rounded-2xl border border-border p-5">
+              <p className="text-sm font-bold text-teal">Module {String(i + 1).padStart(2, "0")}</p>
+              <h3 className="mt-1 font-semibold text-primary">{title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-4 text-sm text-muted-foreground">
+          <span className="font-semibold text-primary">Progression:</span> Understand → Comply → Recognise Bias → Lead
+          Inclusively → Build Belonging → Recruit Fairly → Enable Disability Inclusion → Collaborate Across Difference →
+          Change Behaviour → Measure Transformation.
         </p>
       </section>
 
