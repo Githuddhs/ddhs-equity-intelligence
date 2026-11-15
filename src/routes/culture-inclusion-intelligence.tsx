@@ -198,13 +198,13 @@ function CultureInclusionIntelligence() {
           <div className="mt-5 overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-left text-sm">
               <thead className="bg-secondary/60 text-primary">
-                <tr><th className="p-3">Package</th><th className="p-3">Employee population</th><th className="p-3 text-right">Fee (ZAR, excl. VAT)</th></tr>
+                <tr><th className="p-3">Package</th><th className="hidden p-3 sm:table-cell">Employee population</th><th className="p-3 text-right">Fee (ZAR, excl. VAT)</th></tr>
               </thead>
               <tbody>
                 {CULTURE_SURVEY_PACKAGES.map((p) => (
                   <tr key={p.name} className="border-t border-border">
-                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-accent">{p.highlight}</span>}</td>
-                    <td className="p-3 text-muted-foreground">{p.population}</td>
+                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span><span className="mt-1 block text-xs text-muted-foreground sm:hidden">{p.population}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-accent">{p.highlight}</span>}</td>
+                    <td className="hidden p-3 text-muted-foreground sm:table-cell">{p.population}</td>
                     <td className="p-3 text-right font-semibold text-primary whitespace-nowrap">{p.from ? "From " : ""}{zar(p.fee)}</td>
                   </tr>
                 ))}
@@ -216,13 +216,13 @@ function CultureInclusionIntelligence() {
             <div className="rounded-lg border border-border p-5">
               <h3 className="font-semibold text-primary">Add-ons (ZAR, excl. VAT)</h3>
               <ul className="mt-3 space-y-2 text-sm">
-                {CULTURE_SURVEY_ADDONS.map(([n, v]) => (<li key={n} className="flex justify-between gap-4"><span className="text-muted-foreground">{n}</span><span className="text-right font-medium text-primary">{v}</span></li>))}
+                {CULTURE_SURVEY_ADDONS.map(([n, v]) => (<li key={n} className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4"><span className="text-muted-foreground">{n}</span><span className="font-medium text-primary sm:text-right">{v}</span></li>))}
               </ul>
             </div>
             <div className="rounded-lg border border-border p-5">
               <h3 className="font-semibold text-primary">Subscription option (ZAR, excl. VAT)</h3>
               <ul className="mt-3 space-y-2 text-sm">
-                {CULTURE_SUBSCRIPTIONS.map((s) => (<li key={s.name} className="flex justify-between gap-4"><span className="text-muted-foreground">{s.name}</span><span className="text-right font-medium text-primary">{s.from ? "From " : ""}{zar(s.monthly)}/month · {zar(s.annual)}{s.from ? "+" : ""}/year</span></li>))}
+                {CULTURE_SUBSCRIPTIONS.map((s) => (<li key={s.name} className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4"><span className="text-muted-foreground">{s.name}</span><span className="font-medium text-primary sm:text-right">{s.from ? "From " : ""}{zar(s.monthly)}/month · {zar(s.annual)}{s.from ? "+" : ""}/year</span></li>))}
               </ul>
             </div>
           </div>
