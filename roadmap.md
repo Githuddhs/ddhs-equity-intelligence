@@ -1,7 +1,7 @@
 # DDHS roadmap
 
 ## Open
-- [ ] Culture survey pricing: add to the public Culture & Inclusion Intelligence page once Sello supplies the price, employee bands if applicable, and whether billing is annual, monthly or once-off.
+- [x] Culture survey pricing: five packages, add-ons and subscriptions (ZAR excl. VAT) on the Culture & Inclusion page.
 - [x] Culture & Inclusion Intelligence portal: confidential one-time inclusion and belonging pulse surveys, staff administration, aggregate-only results dashboard and four-format reports with three-response suppression. Live fictional staff flow passed: three links/submissions, used-link rejection, 4.0/5 score, 86% favourable, 67% barrier, 100% completion and all downloads checked for figures/no participant references; phone layouts passed. Fifteen focused tests passed; full suite 223 passed plus five skipped, with one unrelated recruitment timeout passing separately. Temporary backend fixtures removed; no real client records accessed.
 - [x] Add supplied subscription scope to the combined service page, clearly separating existing interview tools from planned advanced analytics and scheduled surveys; implementing the planned capabilities is not included in this presentation update.
 - [x] Combine Stay and Exit Interviews into one named public service and workspace section; existing links, questionnaires and private records retained. Public menu, both detail links and no-overflow checks passed on desktop/tablet/mobile; 10 report tests passed. Workspace grouping is presentation-only; no live client records accessed.

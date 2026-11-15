@@ -4,6 +4,7 @@ import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
 import { FooterSocial } from "@/components/footer-social";
 import { pageHead } from "@/lib/seo";
+import { CULTURE_SURVEY_PACKAGES, CULTURE_SURVEY_ADDONS, CULTURE_SUBSCRIPTIONS, CULTURE_SURVEY_FROM, zar } from "@/lib/culture-survey-pricing";
 
 export const Route = createFileRoute("/culture-inclusion-intelligence")({
   staticData: { sitemap: true },
@@ -187,6 +188,42 @@ function CultureInclusionIntelligence() {
             <div className="mt-5 space-y-4 text-sm text-muted-foreground">
               <p><strong className="text-primary">Available now:</strong> confidential inclusion and belonging pulse surveys with private one-time links, an aggregate results dashboard and downloadable reports, alongside confidential stay and exit interviews and workforce, occupational-level and barrier analysis.</p>
               <p><strong className="text-primary">In development:</strong> manager and team diagnostics, and year-on-year culture reporting. Organisations taking part in the pilot help shape the questions and the reporting format.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8" aria-labelledby="pricing">
+          <h2 id="pricing" className="text-2xl font-bold text-primary">Culture Surveys from {zar(CULTURE_SURVEY_FROM)}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">All prices are in South African rand (ZAR) and exclude VAT.</p>
+          <div className="mt-5 overflow-x-auto rounded-lg border border-border">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-secondary/60 text-primary">
+                <tr><th className="p-3">Package</th><th className="p-3">Employee population</th><th className="p-3 text-right">Fee (ZAR, excl. VAT)</th></tr>
+              </thead>
+              <tbody>
+                {CULTURE_SURVEY_PACKAGES.map((p) => (
+                  <tr key={p.name} className="border-t border-border">
+                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-accent">{p.highlight}</span>}</td>
+                    <td className="p-3 text-muted-foreground">{p.population}</td>
+                    <td className="p-3 text-right font-semibold text-primary whitespace-nowrap">{p.from ? "From " : ""}{zar(p.fee)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground"><strong className="text-primary">Professional ({zar(95000)}):</strong> a comprehensive diagnostic with up to 12 dimensions, demographic and occupational-level analysis, up to 10 reporting units, detailed comment analysis, executive reporting and a 90-day improvement plan.</p>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <div className="rounded-lg border border-border p-5">
+              <h3 className="font-semibold text-primary">Add-ons (ZAR, excl. VAT)</h3>
+              <ul className="mt-3 space-y-2 text-sm">
+                {CULTURE_SURVEY_ADDONS.map(([n, v]) => (<li key={n} className="flex justify-between gap-4"><span className="text-muted-foreground">{n}</span><span className="text-right font-medium text-primary">{v}</span></li>))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-border p-5">
+              <h3 className="font-semibold text-primary">Subscription option (ZAR, excl. VAT)</h3>
+              <ul className="mt-3 space-y-2 text-sm">
+                {CULTURE_SUBSCRIPTIONS.map((s) => (<li key={s.name} className="flex justify-between gap-4"><span className="text-muted-foreground">{s.name}</span><span className="text-right font-medium text-primary">{s.from ? "From " : ""}{zar(s.monthly)}/month · {zar(s.annual)}{s.from ? "+" : ""}/year</span></li>))}
+              </ul>
             </div>
           </div>
         </section>
