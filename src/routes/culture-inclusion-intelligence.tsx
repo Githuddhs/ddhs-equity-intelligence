@@ -195,16 +195,26 @@ function CultureInclusionIntelligence() {
         <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8" aria-labelledby="pricing">
           <h2 id="pricing" className="text-2xl font-bold text-primary">Culture Surveys from {zar(CULTURE_SURVEY_FROM)}</h2>
           <p className="mt-2 text-sm text-muted-foreground">All prices are in South African rand (ZAR) and exclude VAT.</p>
-          <div className="mt-5 overflow-x-auto rounded-lg border border-border">
+          <div className="mt-5 space-y-3 sm:hidden">
+            {CULTURE_SURVEY_PACKAGES.map((p) => (
+              <div key={p.name} className="rounded-lg border border-border bg-card p-4">
+                <span className="block font-semibold text-balance text-primary">{p.name}</span>
+                <span className="mt-1.5 block text-xs text-muted-foreground">{p.population}</span>
+                {p.highlight && <span className="mt-1.5 block text-xs font-medium text-accent">{p.highlight}</span>}
+                <span className="mt-3 block border-t border-border pt-3 font-semibold text-primary">{p.from ? "From " : ""}{zar(p.fee)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 hidden overflow-x-auto rounded-lg border border-border sm:block">
             <table className="w-full text-left text-sm">
               <thead className="bg-secondary/60 text-primary">
-                <tr><th className="p-3">Package</th><th className="hidden p-3 sm:table-cell">Employee population</th><th className="w-24 p-3 text-right sm:w-auto">Fee (ZAR, excl. VAT)</th></tr>
+                <tr><th className="p-3">Package</th><th className="p-3">Employee population</th><th className="p-3 text-right">Fee (ZAR, excl. VAT)</th></tr>
               </thead>
               <tbody>
                 {CULTURE_SURVEY_PACKAGES.map((p) => (
                   <tr key={p.name} className="border-t border-border">
-                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span><span className="mt-1 block text-xs text-muted-foreground sm:hidden">{p.population}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-accent">{p.highlight}</span>}</td>
-                    <td className="hidden p-3 text-muted-foreground sm:table-cell">{p.population}</td>
+                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-accent">{p.highlight}</span>}</td>
+                    <td className="p-3 text-muted-foreground">{p.population}</td>
                     <td className="p-3 text-right font-semibold text-primary whitespace-nowrap">{p.from ? "From " : ""}{zar(p.fee)}</td>
                   </tr>
                 ))}
