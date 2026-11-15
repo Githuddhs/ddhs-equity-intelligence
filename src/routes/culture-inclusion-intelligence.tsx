@@ -152,7 +152,7 @@ function CultureInclusionIntelligence() {
               </article>
             ))}
           </div>
-          <Button asChild variant="outline" className="mt-6">
+          <Button asChild variant="outline" className="mt-6 h-auto max-w-full whitespace-normal py-3 text-center leading-snug">
             <Link to="/managed-interviews">See the Managed Stay &amp; Exit Interview Service <ArrowRight aria-hidden="true" /></Link>
           </Button>
         </section>
@@ -200,7 +200,7 @@ function CultureInclusionIntelligence() {
               <div key={p.name} className="rounded-lg border border-border bg-card p-4">
                 <span className="block font-semibold text-balance text-primary">{p.name}</span>
                 <span className="mt-1.5 block text-xs text-muted-foreground">{p.population}</span>
-                {p.highlight && <span className="mt-1.5 block text-xs font-medium text-accent">{p.highlight}</span>}
+                {p.highlight && <span className="mt-1.5 block text-xs font-medium text-teal-deep">{p.highlight}</span>}
                 <span className="mt-3 block border-t border-border pt-3 font-semibold text-primary">{p.from ? "From " : ""}{zar(p.fee)}</span>
               </div>
             ))}
@@ -213,7 +213,7 @@ function CultureInclusionIntelligence() {
               <tbody>
                 {CULTURE_SURVEY_PACKAGES.map((p) => (
                   <tr key={p.name} className="border-t border-border">
-                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-accent">{p.highlight}</span>}</td>
+                    <td className="p-3"><span className="font-semibold text-primary">{p.name}</span>{p.highlight && <span className="mt-1 block text-xs font-medium text-teal-deep">{p.highlight}</span>}</td>
                     <td className="p-3 text-muted-foreground">{p.population}</td>
                     <td className="p-3 text-right font-semibold text-primary whitespace-nowrap">{p.from ? "From " : ""}{zar(p.fee)}</td>
                   </tr>

@@ -35,6 +35,7 @@
   --color-teal: var(--teal);
   --color-teal-foreground: var(--teal-foreground);
   --color-teal-soft: var(--teal-soft);
+  --color-teal-deep: var(--teal-deep);
   --font-display: "Aptos", "Aptos Display", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
@@ -71,6 +72,8 @@
   --teal: oklch(0.65 0.11 195);
   --teal-foreground: oklch(0.98 0.005 240);
   --teal-soft: oklch(0.94 0.03 195);
+  /* Darker teal for small accent text on light backgrounds */
+  --teal-deep: oklch(0.5 0.11 195);
 }
 
 @layer base {

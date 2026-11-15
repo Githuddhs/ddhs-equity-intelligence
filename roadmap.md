@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [x] Culture & Inclusion page on narrow phones: the Managed Stay & Exit Interview Service button now wraps inside the screen (no sideways scrolling at 360/375/390px) and both "Recommended for…" notes use a darker teal that is readable on white; wording and amounts unchanged, desktop layout unchanged.
 - [x] Culture survey pricing: five packages, add-ons and subscriptions (ZAR excl. VAT) on the Culture & Inclusion page.
 - [x] Culture Survey pricing on phones: each package shown as a full-width stacked card (name, employee population, recommended note, fee) with balanced title wrapping; desktop table unchanged. Phone screenshots checked at 390px: cards full width, no sideways scroll, no orphaned words; desktop table verified unchanged.
 - [x] Culture & Inclusion Intelligence portal: confidential one-time inclusion and belonging pulse surveys, staff administration, aggregate-only results dashboard and four-format reports with three-response suppression. Live fictional staff flow passed: three links/submissions, used-link rejection, 4.0/5 score, 86% favourable, 67% barrier, 100% completion and all downloads checked for figures/no participant references; phone layouts passed. Fifteen focused tests passed; full suite 223 passed plus five skipped, with one unrelated recruitment timeout passing separately. Temporary backend fixtures removed; no real client records accessed.
