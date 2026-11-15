@@ -88,12 +88,12 @@ const DEI_MODULES = [
 ];
 
 const TOPICS = [
-  { title: "Employment Equity law and compliance", items: ["April 2025 Employment Equity Regulations", "Designated groups and occupational levels", "Sector targets, provincial EAP and EE Plans", "EEA2 and EEA4 reporting and submission readiness"] },
-  { title: "Workforce data and analysis", items: ["Validating and reconciling HR and payroll data", "Workforce profiles, movements and barriers", "Measures with owners, milestones and evidence"] },
-  { title: "Governance and consultation", items: ["Management responsibility and defensible decision records", "EE committee agendas, minutes and action trackers", "Separating consultation from decision-making"] },
-  { title: "Fair recruitment and progression", items: ["Recruitment focus from workforce analysis", "Structured, accessible selection and panel governance", "Promotion, succession and spotting weak evidence"] },
-  { title: "Diversity, equity, inclusion and belonging", items: ["Bias, stereotypes and decision-making", "Inclusive leadership and psychological safety", "Respect, dignity and cross-cultural collaboration"] },
-  { title: "Disability inclusion and measuring transformation", items: ["Reasonable accommodation and accessibility", "Turning learning into behavioural change", "Measuring DEI and organisational transformation"] },
+  { title: "Employment Equity law and compliance", links: ["c03", "c04", "m02"], items: ["April 2025 Employment Equity Regulations", "Designated groups and occupational levels", "Sector targets, provincial EAP and EE Plans", "EEA2 and EEA4 reporting and submission readiness"] },
+  { title: "Workforce data and analysis", links: ["c03", "c04"], items: ["Validating and reconciling HR and payroll data", "Workforce profiles, movements and barriers", "Measures with owners, milestones and evidence"] },
+  { title: "Governance and consultation", links: ["c01", "c02"], items: ["Management responsibility and defensible decision records", "EE committee agendas, minutes and action trackers", "Separating consultation from decision-making"] },
+  { title: "Fair recruitment and progression", links: ["c05", "m06"], items: ["Recruitment focus from workforce analysis", "Structured, accessible selection and panel governance", "Promotion, succession and spotting weak evidence"] },
+  { title: "Diversity, equity, inclusion and belonging", links: ["m01", "m03", "m04", "m05", "m08"], items: ["Bias, stereotypes and decision-making", "Inclusive leadership and psychological safety", "Respect, dignity and cross-cultural collaboration"] },
+  { title: "Disability inclusion and measuring transformation", links: ["m07", "m09", "m10"], items: ["Reasonable accommodation and accessibility", "Turning learning into behavioural change", "Measuring DEI and organisational transformation"] },
 ];
 
 const FAQ = [
@@ -149,6 +149,12 @@ function Academy() {
               <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
                 {t.items.map((i) => <li key={i} className="flex gap-2"><span className="text-teal">✓</span><span>{i}</span></li>)}
               </ul>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Covered in:{" "}
+                {t.links.map((l, k) => (
+                  <span key={l}>{k > 0 && " · "}<a href={l.startsWith("c") ? `#course-${l.slice(1)}` : `#module-${l.slice(1)}`} className="font-semibold text-teal underline-offset-2 hover:underline">{l.startsWith("c") ? `Course ${l.slice(1)}` : `Module ${l.slice(1)}`}</a></span>
+                ))}
+              </p>
             </div>
           ))}
         </div>
@@ -191,7 +197,7 @@ function Academy() {
         <h2 className="font-display text-2xl font-semibold text-primary">Our courses</h2>
         <div className="mt-6 space-y-5">
           {COURSES.map((c) => (
-            <article key={c.n} className="rounded-2xl border border-border p-6">
+            <article key={c.n} id={`course-${c.n}`} className="scroll-mt-28 rounded-2xl border border-border p-6">
               <p className="text-sm font-bold text-teal">{c.n}</p>
               <h3 className="mt-1 font-display text-xl font-semibold text-primary">{c.title}</h3>
               <p className="mt-1 text-sm font-semibold text-teal">{c.audience}</p>
@@ -219,7 +225,7 @@ function Academy() {
         </p>
         <ol className="mt-6 grid gap-4 sm:grid-cols-2">
           {DEI_MODULES.map(([title, text], i) => (
-            <li key={title} className="rounded-2xl border border-border p-5">
+            <li key={title} id={`module-${String(i + 1).padStart(2, "0")}`} className="scroll-mt-28 rounded-2xl border border-border p-5">
               <p className="text-sm font-bold text-teal">Module {String(i + 1).padStart(2, "0")}</p>
               <h3 className="mt-1 font-semibold text-primary">{title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{text}</p>
