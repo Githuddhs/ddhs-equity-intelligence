@@ -173,8 +173,8 @@ function PricingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl items-center justify-between py-4">
+      <header className="border-b border-border bg-background">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <BrandMark />
           <div className="flex items-center gap-4">
             <Link to="/auth" search={{ next: "/portal" }} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Sign in</Link>

@@ -63,7 +63,7 @@ function ApplyPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border"><div className="mx-auto flex max-w-3xl items-center gap-2 px-6 py-4"><BrandMark to={null} /><span className="font-display font-bold text-primary">· Careers</span></div></header>
+      <header className="border-b border-border bg-background"><div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-4 sm:px-6 lg:px-8"><BrandMark to={null} /><span className="font-display font-bold text-primary">· Careers</span></div></header>
       <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-8">
         {info === undefined && <p className="text-sm text-muted-foreground">Loading…</p>}
         {info === null && <p className="text-sm">This vacancy is not open for applications.</p>}

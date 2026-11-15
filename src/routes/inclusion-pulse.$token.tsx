@@ -42,7 +42,11 @@ function InclusionPulsePage() {
   const chip = (on: boolean) => `h-auto min-h-9 whitespace-normal rounded-md border px-3 py-1 text-xs ${on ? "border-teal bg-teal text-teal-foreground" : "border-border bg-background text-foreground hover:bg-muted"}`;
   const input = "mt-1 w-full rounded border border-border bg-background p-2 text-sm";
   return <div className="min-h-screen bg-background text-foreground">
-    <header className="border-b border-border bg-card px-6 py-4"><BrandMark to={null} /></header>
+    <header className="border-b border-border bg-background">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
+          <BrandMark to={null} />
+        </div>
+      </header>
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
       {info === undefined && <p className="text-muted-foreground">Loading…</p>}
       {info === null && <p className="text-destructive">This pulse survey link is invalid, has expired or has already been used.</p>}

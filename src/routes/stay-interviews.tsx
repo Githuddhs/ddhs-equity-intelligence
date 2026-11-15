@@ -46,8 +46,8 @@ const insights = [
 function StayInterviewsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <header className="border-b border-border bg-background">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8 flex-wrap">
           <BrandMark />
           <Button asChild variant="ghost" className="text-teal">
             <Link to="/"><ArrowLeft aria-hidden="true" /> Back to DDHS</Link>
