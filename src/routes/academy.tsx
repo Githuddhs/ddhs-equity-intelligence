@@ -87,6 +87,15 @@ const DEI_MODULES = [
   ["Measuring DEI and Organisational Transformation", "Uses workforce and employee-experience evidence to measure representation, recruitment, promotion, retention, inclusion, barriers and organisational transformation outcomes."],
 ];
 
+const TOPICS = [
+  { title: "Employment Equity law and compliance", items: ["April 2025 Employment Equity Regulations", "Designated groups and occupational levels", "Sector targets, provincial EAP and EE Plans", "EEA2 and EEA4 reporting and submission readiness"] },
+  { title: "Workforce data and analysis", items: ["Validating and reconciling HR and payroll data", "Workforce profiles, movements and barriers", "Measures with owners, milestones and evidence"] },
+  { title: "Governance and consultation", items: ["Management responsibility and defensible decision records", "EE committee agendas, minutes and action trackers", "Separating consultation from decision-making"] },
+  { title: "Fair recruitment and progression", items: ["Recruitment focus from workforce analysis", "Structured, accessible selection and panel governance", "Promotion, succession and spotting weak evidence"] },
+  { title: "Diversity, equity, inclusion and belonging", items: ["Bias, stereotypes and decision-making", "Inclusive leadership and psychological safety", "Respect, dignity and cross-cultural collaboration"] },
+  { title: "Disability inclusion and measuring transformation", items: ["Reasonable accommodation and accessibility", "Turning learning into behavioural change", "Measuring DEI and organisational transformation"] },
+];
+
 const FAQ = [
   {
     q: "Who is the Academy for?",
@@ -128,6 +137,22 @@ function Academy() {
         </Link>
       </div>
       <p className="mt-4 text-sm font-semibold tracking-wide text-teal">Learn • Apply • Evidence</p>
+
+      {/* Topics summary */}
+      <section id="topics" className="mt-14 scroll-mt-28">
+        <h2 className="font-display text-2xl font-semibold text-primary">Topics covered</h2>
+        <p className="mt-3 text-muted-foreground">A summary of what the five courses and ten DEI modules cover.</p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {TOPICS.map((t) => (
+            <div key={t.title} className="rounded-2xl border border-border p-5">
+              <h3 className="font-semibold text-primary">{t.title}</h3>
+              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                {t.items.map((i) => <li key={i} className="flex gap-2"><span className="text-teal">✓</span><span>{i}</span></li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Why the Academy */}
       <section className="mt-14">
