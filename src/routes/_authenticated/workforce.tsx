@@ -256,7 +256,7 @@ function WorkforcePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <WorkforceSubmission />
         <div className="flex items-center justify-between gap-4">
           <Link to="/portal" className="text-sm font-semibold text-teal">← My portal</Link>

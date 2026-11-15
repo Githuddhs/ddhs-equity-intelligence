@@ -62,7 +62,7 @@ function SharedView() {
           <span className="text-sm text-muted-foreground">Read-only shared view</span>
         </div>
       </header>
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-10">
+      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         {isLoading ? <p>Loading…</p> : !data ? (
           <div className="rounded-lg border border-border p-8 text-center">
             <h1 className="font-display text-3xl font-bold text-primary">This link isn't active</h1>

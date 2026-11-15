@@ -47,7 +47,7 @@ function InclusionPulsePage() {
           <BrandMark to={null} />
         </div>
       </header>
-    <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
       {info === undefined && <p className="text-muted-foreground">Loading…</p>}
       {info === null && <p className="text-destructive">This pulse survey link is invalid, has expired or has already been used.</p>}
       {info && done && <div className={card}><h1 className="page-title text-primary">Thank you</h1><p className="mt-2 text-muted-foreground">Your inclusion and belonging pulse response has been submitted. Your feedback helps identify where people feel included and where workplace barriers remain.</p></div>}

@@ -85,7 +85,7 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </div>
       </nav>
 
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">{c.eyebrow}</p>

@@ -81,7 +81,7 @@ function ResponsibleAiPage() {
         </div>
       </header>
 
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-teal">Capability 11 of 11</p>

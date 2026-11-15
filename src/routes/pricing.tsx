@@ -181,7 +181,7 @@ function PricingPage() {
           </div>
         </div>
       </header>
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="page-title text-center text-primary">Employment Equity, DEI and Organisational Transformation services and pricing</h1>
         <p className="page-lead mx-auto mt-3 max-w-2xl text-center text-muted-foreground">Scalable Employment Equity, DEI and Organisational Transformation support — compliance, workforce intelligence and governance for South African employers. Fees scale with your headcount and organisational complexity, so a 75-person employer and a 7,500-person university each pay a fair price.</p>
         <h2 className="section-title mt-8 text-primary">Our service pathway: Comply, Plan, Manage, Transform</h2>

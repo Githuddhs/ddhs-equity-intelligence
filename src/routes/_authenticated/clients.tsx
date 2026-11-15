@@ -70,7 +70,7 @@ function ClientsDashboard() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <p className="text-sm font-semibold uppercase tracking-wide text-teal">DDHS staff</p>
         <h1 className="page-title text-primary">Client compliance dashboard</h1>
         {isLoading ? <p className="mt-6 text-muted-foreground">Loading…</p>

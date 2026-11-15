@@ -17,9 +17,9 @@ const closeMenu = (e: React.MouseEvent<HTMLElement>) => e.currentTarget.closest(
 
 function NavGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <details className="relative">
+    <details className="group relative">
       <summary className="cursor-pointer list-none rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary">{label} ▾</summary>
-      <div className="absolute left-0 z-50 mt-1 w-64 rounded-lg border border-border bg-popover p-1 shadow-lg">{children}</div>
+      <div className="absolute left-0 z-50 hidden group-open:block max-w-[calc(100vw-2rem)] mt-1 w-64 rounded-lg border border-border bg-popover p-1 shadow-lg">{children}</div>
     </details>
   );
 }
@@ -62,8 +62,8 @@ export function AppHeader() {
     <>
     <PageExport />
     <ClientWorkspaceBanner />
-    <header className={`border-b border-border print:hidden ${isAdmin ? "bg-secondary" : ""}`}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex max-w-7xl flex-wrap items-center justify-between gap-3 py-4">
+    <header className={`border-b border-border print:hidden ${isAdmin ? "bg-secondary" : "bg-background"}`}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8 flex-wrap">
         <BrandMark to={isAdmin ? "/staff" : "/"}>
           {isAdmin && <span className="ml-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">Staff portal</span>}
         </BrandMark>

@@ -207,7 +207,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppHeader />
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">{children}</main>
     </div>
   );
 }
