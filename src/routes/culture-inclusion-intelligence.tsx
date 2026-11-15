@@ -198,7 +198,7 @@ function CultureInclusionIntelligence() {
           <div className="mt-5 overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-left text-sm">
               <thead className="bg-secondary/60 text-primary">
-                <tr><th className="p-3">Package</th><th className="hidden p-3 sm:table-cell">Employee population</th><th className="p-3 text-right">Fee (ZAR, excl. VAT)</th></tr>
+                <tr><th className="p-3">Package</th><th className="hidden p-3 sm:table-cell">Employee population</th><th className="w-24 p-3 text-right sm:w-auto">Fee (ZAR, excl. VAT)</th></tr>
               </thead>
               <tbody>
                 {CULTURE_SURVEY_PACKAGES.map((p) => (
@@ -215,13 +215,13 @@ function CultureInclusionIntelligence() {
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             <div className="rounded-lg border border-border p-5">
               <h3 className="font-semibold text-primary">Add-ons (ZAR, excl. VAT)</h3>
-              <ul className="mt-3 space-y-2 text-sm">
+              <ul className="mt-3 space-y-3 text-sm sm:space-y-2">
                 {CULTURE_SURVEY_ADDONS.map(([n, v]) => (<li key={n} className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4"><span className="text-muted-foreground">{n}</span><span className="font-medium text-primary sm:text-right">{v}</span></li>))}
               </ul>
             </div>
             <div className="rounded-lg border border-border p-5">
               <h3 className="font-semibold text-primary">Subscription option (ZAR, excl. VAT)</h3>
-              <ul className="mt-3 space-y-2 text-sm">
+              <ul className="mt-3 space-y-3 text-sm sm:space-y-2">
                 {CULTURE_SUBSCRIPTIONS.map((s) => (<li key={s.name} className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4"><span className="text-muted-foreground">{s.name}</span><span className="font-medium text-primary sm:text-right">{s.from ? "From " : ""}{zar(s.monthly)}/month · {zar(s.annual)}{s.from ? "+" : ""}/year</span></li>))}
               </ul>
             </div>
