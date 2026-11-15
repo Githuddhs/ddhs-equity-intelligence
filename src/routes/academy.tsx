@@ -151,7 +151,7 @@ function Academy() {
               </ul>
               <div className="mt-3 text-xs text-muted-foreground">
                 <p>Covered in:</p>
-                <ul className="mt-1 space-y-1">
+                <ul className="mt-1.5 space-y-2.5 sm:space-y-1.5">
                   {t.links.map((l) => (
                     <li key={l}><a href={l.startsWith("c") ? `#course-${l.slice(1)}` : `#module-${l.slice(1)}`} className="font-semibold text-teal underline-offset-2 hover:underline">{l.startsWith("c") ? `Course ${l.slice(1)}: ${COURSES.find((c) => c.n === l.slice(1))?.title ?? ""}` : `Module ${l.slice(1)}: ${DEI_MODULES[Number(l.slice(1)) - 1]?.[0] ?? ""}`}</a></li>
                   ))}
