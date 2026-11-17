@@ -11,7 +11,7 @@ describe("deviation governance report", () => {
       { title: "C", level: "", rating: "amber", status: "in_review", reason: "", trajectory: null, approvals: [] },
     ]);
     const overview = r.blocks.find((b) => b.kind === "table" && b.title === "Overview");
-    expect(overview && overview.kind === "table" && overview.body.find((x) => x[0].startsWith("At or above"))?.[1]).toBe("1 of 2");
+    expect(overview && overview.kind === "table" && overview.body.find((x) => x[0]?.startsWith("At or above"))?.[1]).toBe("1 of 2");
   });
   it("freezes the impact shown, with Not available when no milestone exists", () => {
     const s = impactSnapshot({ trajectory: { ...t(40, 45, 0), milestone: null } as Trajectory, verdict: "Neutral" });
