@@ -5,9 +5,9 @@ import { Menu, X } from "lucide-react";
 /** The front page menu, in the order shown on every screen size. */
 const LINKS = [
   { label: "Why DDHS", href: "#why-ddhs" },
-  { label: "EE Deviation & Appointment Governance", href: "/deviation-governance" },
   { label: "Problems We Solve", href: "#problems" },
   { label: "DDHS Equity Intelligence Platform", href: "#platform" },
+  { label: "EE Deviation & Appointment Governance", href: "/deviation-governance" },
   { label: "Client Outcomes", href: "#outcomes" },
   { label: "B-BBEE", href: "#bbbee" },
   { label: "Book a Demonstration", href: "#contact" },
