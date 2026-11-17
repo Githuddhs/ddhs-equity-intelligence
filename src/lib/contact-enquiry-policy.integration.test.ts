@@ -21,7 +21,7 @@ describe("booking enquiry insert policy", () => {
   beforeAll(async () => {
     db = new PGlite();
     await db.exec("CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role BYPASSRLS;");
-    const create = readFileSync("drizzle/migrations/0000_create_contact_enquiries.sql", "utf8").split("CREATE POLICY")[0];
+    const create = readFileSync("drizzle/migrations/0000_create_contact_enquiries.sql", "utf8").split("CREATE POLICY")[0] ?? "";
     await db.exec(create);
     await db.exec(`CREATE POLICY "Anyone can submit a valid enquiry" ON public.contact_enquiries FOR INSERT TO anon, authenticated WITH CHECK (true);`);
     await db.exec(readFileSync("drizzle/migrations/0050_allow_short_enquiry_message.sql", "utf8"));
@@ -34,6 +34,6 @@ describe("booking enquiry insert policy", () => {
   it("rejects 2001 characters", async () => { await expect(insertAsAnon("x".repeat(2001))).rejects.toThrow(/row-level security/); });
   it("leaves no rows behind", async () => {
     const r = await db.query<{ n: number }>("SELECT count(*)::int AS n FROM public.contact_enquiries");
-    expect(r.rows[0].n).toBe(0);
+    expect(r.rows[0]?.n).toBe(0);
   });
 });
