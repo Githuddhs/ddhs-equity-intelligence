@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { DataOwnershipNote } from "@/components/data-ownership";
 import { FooterSocial } from "@/components/footer-social";
 import { RelatedLinks } from "@/components/related-links";
 import { pageHead, SITE_URL } from "@/lib/seo";
@@ -121,6 +122,8 @@ export function ServicePage({ c }: { c: ServiceContent }) {
         </section>
 
         {c.extra}
+
+        <DataOwnershipNote compact />
 
         <section className="mt-16 rounded-xl border border-border bg-secondary/50 p-8">
           <h2 className="section-title text-primary">How it works</h2>

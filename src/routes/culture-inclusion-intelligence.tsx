@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, BarChart3, Building2, Gauge, Lock, ShieldCheck, TrendingUp, Users } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
+import { DataOwnershipNote } from "@/components/data-ownership";
 import { Button } from "@/components/ui/button";
 import { FooterSocial } from "@/components/footer-social";
 import { pageHead } from "@/lib/seo";
@@ -181,6 +182,10 @@ function CultureInclusionIntelligence() {
             <li>DDHS staff administer the surveys; clients view and download the findings.</li>
           </ul>
         </section>
+
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <DataOwnershipNote compact />
+        </div>
 
         <section className="border-y border-border bg-secondary/40" aria-labelledby="status">
           <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">

@@ -20,7 +20,7 @@ function Page() {
     <GuideShell>
       <p className="text-sm font-semibold uppercase tracking-wide text-teal">Platform</p>
       <h1 className="page-title text-primary">Your EEA13 plan, assembled from your own data</h1>
-      <p className="page-lead mt-2 text-muted-foreground">An EEA13 plan should not be filled in on its own. The Department's template asks for barriers and affirmative action measures that match your analysis, and numerical goals based on it. DDHS collects your information once and uses it to build, monitor and evidence your plan for its whole life.</p>
+      <p className="page-lead mt-2 text-muted-foreground">An EEA13 plan should not be filled in on its own. The Department's template asks for barriers and affirmative action measures that match your analysis, and numerical goals based on it. Your information is collected once and used to build, monitor and evidence your plan for its whole life.</p>
       <h2 className="section-title mt-10 text-primary">The chain</h2>
       <ol className="mt-4 flex flex-col items-center gap-1">
         {CHAIN_TITLES.map((t, n) => (

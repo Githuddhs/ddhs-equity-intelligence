@@ -13,6 +13,7 @@ import {
 
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
+import { DataOwnershipNote } from "@/components/data-ownership";
 import { FooterSocial } from "@/components/footer-social";
 
 export const Route = createFileRoute("/evidence-governance")({
@@ -143,6 +144,8 @@ function EvidencePage() {
             ))}
           </div>
         </section>
+
+        <DataOwnershipNote compact />
 
         <section className="mt-16 grid gap-10 lg:grid-cols-2">
           <div>

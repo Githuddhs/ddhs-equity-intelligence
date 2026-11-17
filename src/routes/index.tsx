@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SERVICES } from "@/components/service-page";
 import { InstallApp } from "@/components/install-app";
 import { AuthCta } from "@/components/auth-cta";
+import { DataOwnershipNote } from "@/components/data-ownership";
 import shotReady from "@/assets/walkthrough/ready.jpg.asset.json";
 import shotEea12 from "@/assets/walkthrough/eea12-filled.jpg.asset.json";
 import shotPlan from "@/assets/walkthrough/plan.jpg.asset.json";
@@ -605,6 +606,13 @@ function Index() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Data ownership */}
+      <section className="py-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <DataOwnershipNote compact tight />
         </div>
       </section>
 

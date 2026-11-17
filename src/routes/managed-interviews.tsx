@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, BarChart3, Lock, ShieldCheck } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
+import { DataOwnershipNote } from "@/components/data-ownership";
 import { Button } from "@/components/ui/button";
 import { FooterSocial } from "@/components/footer-social";
 import { pageHead } from "@/lib/seo";
@@ -70,6 +71,10 @@ function ManagedInterviewService() {
             <li>Clients view and download findings; DDHS staff administer interviews. Small groups may still be identifiable and require careful handling.</li>
           </ul>
         </section>
+
+        <div className="mx-auto max-w-5xl px-4 pb-10 sm:px-6 lg:px-8">
+          <DataOwnershipNote compact />
+        </div>
         <section aria-label="Subscription scope" className="border-y border-border bg-secondary/40">
           <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-primary">What the subscription should include</h2>

@@ -1,3 +1,4 @@
+import { DataOwnershipNote } from "@/components/data-ownership";
 import { RelatedLinks } from "@/components/related-links";
 import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -51,7 +52,7 @@ const collected = [
 const protects = [
   "Individual salary and disability records in Workforce Foundation reporting periods are account-owner only; staff, managers and shared links cannot read them.",
   "Each snapshot is private to your account. Nobody else sees it, and each client account is separate.",
-  "DDHS staff can see it only for the clients we are actively working with — the same people who hold your file.",
+  "DDHS staff can see it only for the clients we are actively working with — the same people working on your file.",
   "Uploads are private files with a 20 MB limit, opened through a short-lived link rather than a public URL.",
   "Nothing is emailed around as an attachment, so there is no spreadsheet version drifting between inboxes.",
 ];
@@ -202,7 +203,7 @@ function WorkforceFoundationPage() {
         </section>
 
         <section className="mt-16 rounded-xl border border-border bg-secondary/50 p-8">
-          <h2 className="section-title text-primary">What the foundation holds</h2>
+          <h2 className="section-title text-primary">What the foundation covers</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {collected.map((c) => (
               <div key={c.title} className="rounded-xl border border-border bg-card p-5 shadow-sm">
@@ -241,6 +242,8 @@ function WorkforceFoundationPage() {
             </ul>
           </div>
         </section>
+
+        <DataOwnershipNote />
 
         <section className="mt-16">
           <h2 className="section-title text-primary">What it unlocks</h2>

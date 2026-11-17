@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, BarChart3, FileDown, Link2, Lock, Users, ShieldCheck } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
+import { DataOwnershipNote } from "@/components/data-ownership";
 import { Button } from "@/components/ui/button";
 import { FooterSocial } from "@/components/footer-social";
 import { pageHead } from "@/lib/seo";
@@ -107,6 +108,10 @@ function StayInterviewsPage() {
             </ul>
           </div>
         </section>
+
+        <div className="mx-auto max-w-5xl px-4 pb-10 sm:px-6 lg:px-8">
+          <DataOwnershipNote compact />
+        </div>
 
         <section aria-label="What you see" className="border-y border-border bg-secondary/40">
           <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
