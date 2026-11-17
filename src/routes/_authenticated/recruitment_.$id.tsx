@@ -1,5 +1,5 @@
 import { withStartOver } from "@/components/start-over";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
@@ -19,6 +19,8 @@ import { FlowStep, GovernanceStep, ImpactStep } from "@/components/recruitment-p
 import { EvidenceStep, RiskStep } from "@/components/recruitment-phase3";
 import { FocusStep } from "@/components/recruitment-focus";
 import { riskFlags, type C as RC, type V as RV } from "@/lib/recruitment-phase3";
+import { RATING_LABEL, STATUS_LABEL as DEVIATION_STATUS_LABEL } from "@/lib/deviation";
+import { loadDeviationAssessment, type DeviationAssessment, type DeviationCandidate, type DeviationVacancy } from "@/lib/deviation-data";
 
 export const Route = createFileRoute("/_authenticated/recruitment_/$id")({
   staticData: { sitemap: false },
@@ -87,6 +89,7 @@ function VacancyPage() {
         <GovernanceStep key={`g-${v.id}`} v={v} save={save} busy={busy} />
         <RiskStep risks={risks} />
         <ImpactStep key={`i-${v.id}`} v={v} cands={cands} save={save} busy={busy} reload={load} highRisks={risks.filter((r) => r.severity === "High").length} />
+        <DeviationStep v={v} cands={cands} />
         <EvidenceStep v={v} cands={cands} risks={risks} />
       </main>
     </div>
@@ -387,5 +390,84 @@ function Handover({ c, save, reload }: { c: Candidate; save: (h: HandoverData) =
         {!h.completed_at && (!all || !h.start_date) && <p className="self-center text-xs text-muted-foreground">Tick every item and set a start date to complete the handover.</p>}
       </div>
     </div>
+  );
+}
+
+/** EE Deviation & Appointment Governance: the live assessment for this vacancy
+ * plus every deviation request already raised against it. Nothing here decides
+ * who is appointed — it records the EE position and the approval trail. */
+function DeviationStep({ v, cands }: { v: Vacancy; cands: Candidate[] }) {
+  const navigate = useNavigate();
+  const [a, setA] = useState<DeviationAssessment | null>(null);
+  const [rows, setRows] = useState<{ id: string; status: string; rating: string }[]>([]);
+  const [creating, setCreating] = useState(false);
+
+  const load = async () => {
+    const [{ data: rs }, ass] = await Promise.all([
+      supabase.from("ee_deviations").select("id,status,rating").eq("vacancy_id", v.id).order("created_at", { ascending: false }),
+      loadDeviationAssessment(v as unknown as DeviationVacancy, cands as unknown as DeviationCandidate[]),
+    ]);
+    setRows((rs ?? []) as { id: string; status: string; rating: string }[]);
+    setA(ass);
+  };
+  useEffect(() => { void load(); }, [v.id, cands]);
+
+  const open = async () => {
+    if (!a) return;
+    setCreating(true);
+    const { data, error } = await supabase.from("ee_deviations").insert({
+      vacancy_id: v.id,
+      candidate_id: a.candidate?.id ?? null,
+      status: "draft",
+      rating: a.rating.rating,
+      objective: a.objective as unknown as Json,
+      trajectory: a.trajectory as unknown as Json,
+      funnel: a.funnel as unknown as Json,
+      review: a.review as unknown as Json,
+      thresholds: a.thresholds as unknown as Json,
+    }).select("id").single();
+    setCreating(false);
+    if (error || !data) { toast.error("The deviation form couldn't be opened."); return; }
+    void navigate({ to: "/deviations/$id", params: { id: data.id } });
+  };
+
+  return (
+    <section className="mt-10 rounded-xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="card-title text-primary">EE deviation &amp; appointment governance</h2>
+        <button onClick={() => void open()} disabled={creating || !a} className={`${btn} bg-primary text-primary-foreground`}>
+          {creating ? "Opening…" : "Open deviation form"}
+        </button>
+      </div>
+      {!a ? <p className="mt-2 text-sm text-muted-foreground">Loading the assessment…</p> : (
+        <>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Deviation status", RATING_LABEL[a.rating.rating]],
+              ["EE recruitment objective", a.objective.label],
+              ["Current representation", a.objective.current === null ? "Not available" : `${a.objective.current}%`],
+              ["Trajectory", a.trajectory.status],
+            ].map(([k, val]) => (
+              <div key={k} className="rounded-lg bg-secondary/50 p-3"><p className="text-xs text-muted-foreground">{k}</p><p className="font-display text-lg font-bold text-primary">{val}</p></div>
+            ))}
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">{a.trajectory.note}</p>
+          <ul className="mt-1 list-disc pl-5 text-sm text-muted-foreground">{a.rating.reasons.map((r, i) => <li key={i}>{r}</li>)}</ul>
+          <p className="mt-2 text-sm">Completeness review: <b className={a.review.status === "Complete" ? "text-teal" : "text-destructive"}>{a.review.status}</b></p>
+        </>
+      )}
+      {!!rows.length && (
+        <ul className="mt-3 grid gap-1 text-sm">
+          {rows.map((r) => (
+            <li key={r.id} className="flex flex-wrap items-center gap-2 rounded-lg border border-border px-3 py-2">
+              <span className="break-words">Deviation request {r.id.slice(0, 8)}</span>
+              <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold text-primary">{DEVIATION_STATUS_LABEL[r.status as keyof typeof DEVIATION_STATUS_LABEL] ?? r.status}</span>
+              <Link to="/deviations/$id" params={{ id: r.id }} className="font-semibold text-teal underline">Open</Link>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="mt-3 text-xs text-muted-foreground">Green, amber and red are your own workflow settings, not statutory tests. DDHS records the objective and the approval trail; it never appoints a candidate.</p>
+    </section>
   );
 }

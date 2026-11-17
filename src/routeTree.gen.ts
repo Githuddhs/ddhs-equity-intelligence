@@ -46,6 +46,7 @@ import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedComplianceRouteImport } from './routes/_authenticated/compliance'
 import { Route as AuthenticatedCultureInclusionRouteImport } from './routes/_authenticated/culture-inclusion'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDeviationsRouteImport } from './routes/_authenticated/deviations'
 import { Route as AuthenticatedDgHistoryRouteImport } from './routes/_authenticated/dg-history'
 import { Route as AuthenticatedDgReviewRouteImport } from './routes/_authenticated/dg-review'
 import { Route as AuthenticatedDoelSubmissionsRouteImport } from './routes/_authenticated/doel-submissions'
@@ -82,6 +83,7 @@ import { Route as StayInterviewTokenRouteImport } from './routes/stay-interview.
 import { Route as SurveyTokenRouteImport } from './routes/survey.$token'
 import { Route as ViewTokenRouteImport } from './routes/view.$token'
 import { Route as AuthenticatedClientsIdRouteImport } from './routes/_authenticated/clients_.$id'
+import { Route as AuthenticatedDeviationsIdRouteImport } from './routes/_authenticated/deviations_.$id'
 import { Route as AuthenticatedPlansIndexRouteImport } from './routes/_authenticated/plans.index'
 import { Route as AuthenticatedPlansIdRouteImport } from './routes/_authenticated/plans.$id'
 import { Route as AuthenticatedPortalAreaRouteImport } from './routes/_authenticated/portal_.$area'
@@ -278,6 +280,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDeviationsRoute = AuthenticatedDeviationsRouteImport.update({
+  id: '/deviations',
+  path: '/deviations',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDgHistoryRoute = AuthenticatedDgHistoryRouteImport.update({
   id: '/dg-history',
   path: '/dg-history',
@@ -465,6 +472,12 @@ const AuthenticatedClientsIdRoute = AuthenticatedClientsIdRouteImport.update({
   path: '/clients/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDeviationsIdRoute =
+  AuthenticatedDeviationsIdRouteImport.update({
+    id: '/deviations_/$id',
+    path: '/deviations/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPlansIndexRoute = AuthenticatedPlansIndexRouteImport.update({
   id: '/plans/',
   path: '/plans/',
@@ -542,6 +555,7 @@ export interface FileRoutesByFullPath {
   '/compliance': typeof AuthenticatedComplianceRoute
   '/culture-inclusion': typeof AuthenticatedCultureInclusionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/deviations': typeof AuthenticatedDeviationsRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/doel-submissions': typeof AuthenticatedDoelSubmissionsRoute
@@ -578,6 +592,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
+  '/deviations/$id': typeof AuthenticatedDeviationsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
   '/recruitment/$id': typeof AuthenticatedRecruitmentIdRoute
@@ -623,6 +638,7 @@ export interface FileRoutesByTo {
   '/compliance': typeof AuthenticatedComplianceRoute
   '/culture-inclusion': typeof AuthenticatedCultureInclusionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/deviations': typeof AuthenticatedDeviationsRoute
   '/dg-history': typeof AuthenticatedDgHistoryRoute
   '/dg-review': typeof AuthenticatedDgReviewRoute
   '/doel-submissions': typeof AuthenticatedDoelSubmissionsRoute
@@ -659,6 +675,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/clients/$id': typeof AuthenticatedClientsIdRoute
+  '/deviations/$id': typeof AuthenticatedDeviationsIdRoute
   '/plans/$id': typeof AuthenticatedPlansIdRoute
   '/portal/$area': typeof AuthenticatedPortalAreaRoute
   '/recruitment/$id': typeof AuthenticatedRecruitmentIdRoute
@@ -706,6 +723,7 @@ export interface FileRoutesById {
   '/_authenticated/compliance': typeof AuthenticatedComplianceRoute
   '/_authenticated/culture-inclusion': typeof AuthenticatedCultureInclusionRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/deviations': typeof AuthenticatedDeviationsRoute
   '/_authenticated/dg-history': typeof AuthenticatedDgHistoryRoute
   '/_authenticated/dg-review': typeof AuthenticatedDgReviewRoute
   '/_authenticated/doel-submissions': typeof AuthenticatedDoelSubmissionsRoute
@@ -742,6 +760,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/_authenticated/clients_/$id': typeof AuthenticatedClientsIdRoute
+  '/_authenticated/deviations_/$id': typeof AuthenticatedDeviationsIdRoute
   '/_authenticated/plans/$id': typeof AuthenticatedPlansIdRoute
   '/_authenticated/portal_/$area': typeof AuthenticatedPortalAreaRoute
   '/_authenticated/recruitment_/$id': typeof AuthenticatedRecruitmentIdRoute
@@ -789,6 +808,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/culture-inclusion'
     | '/dashboard'
+    | '/deviations'
     | '/dg-history'
     | '/dg-review'
     | '/doel-submissions'
@@ -825,6 +845,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/guides/'
     | '/clients/$id'
+    | '/deviations/$id'
     | '/plans/$id'
     | '/portal/$area'
     | '/recruitment/$id'
@@ -870,6 +891,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/culture-inclusion'
     | '/dashboard'
+    | '/deviations'
     | '/dg-history'
     | '/dg-review'
     | '/doel-submissions'
@@ -906,6 +928,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/guides'
     | '/clients/$id'
+    | '/deviations/$id'
     | '/plans/$id'
     | '/portal/$area'
     | '/recruitment/$id'
@@ -952,6 +975,7 @@ export interface FileRouteTypes {
     | '/_authenticated/compliance'
     | '/_authenticated/culture-inclusion'
     | '/_authenticated/dashboard'
+    | '/_authenticated/deviations'
     | '/_authenticated/dg-history'
     | '/_authenticated/dg-review'
     | '/_authenticated/doel-submissions'
@@ -988,6 +1012,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/guides/'
     | '/_authenticated/clients_/$id'
+    | '/_authenticated/deviations_/$id'
     | '/_authenticated/plans/$id'
     | '/_authenticated/portal_/$area'
     | '/_authenticated/recruitment_/$id'
@@ -1312,6 +1337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/deviations': {
+      id: '/_authenticated/deviations'
+      path: '/deviations'
+      fullPath: '/deviations'
+      preLoaderRoute: typeof AuthenticatedDeviationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dg-history': {
       id: '/_authenticated/dg-history'
       path: '/dg-history'
@@ -1564,6 +1596,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClientsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/deviations_/$id': {
+      id: '/_authenticated/deviations_/$id'
+      path: '/deviations/$id'
+      fullPath: '/deviations/$id'
+      preLoaderRoute: typeof AuthenticatedDeviationsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/plans/': {
       id: '/_authenticated/plans/'
       path: '/plans'
@@ -1623,6 +1662,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedComplianceRoute: typeof AuthenticatedComplianceRoute
   AuthenticatedCultureInclusionRoute: typeof AuthenticatedCultureInclusionRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDeviationsRoute: typeof AuthenticatedDeviationsRoute
   AuthenticatedDgHistoryRoute: typeof AuthenticatedDgHistoryRoute
   AuthenticatedDgReviewRoute: typeof AuthenticatedDgReviewRoute
   AuthenticatedDoelSubmissionsRoute: typeof AuthenticatedDoelSubmissionsRoute
@@ -1642,6 +1682,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
   AuthenticatedClientsIdRoute: typeof AuthenticatedClientsIdRoute
+  AuthenticatedDeviationsIdRoute: typeof AuthenticatedDeviationsIdRoute
   AuthenticatedPlansIdRoute: typeof AuthenticatedPlansIdRoute
   AuthenticatedPortalAreaRoute: typeof AuthenticatedPortalAreaRoute
   AuthenticatedRecruitmentIdRoute: typeof AuthenticatedRecruitmentIdRoute
@@ -1655,6 +1696,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedComplianceRoute: AuthenticatedComplianceRoute,
   AuthenticatedCultureInclusionRoute: AuthenticatedCultureInclusionRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDeviationsRoute: AuthenticatedDeviationsRoute,
   AuthenticatedDgHistoryRoute: AuthenticatedDgHistoryRoute,
   AuthenticatedDgReviewRoute: AuthenticatedDgReviewRoute,
   AuthenticatedDoelSubmissionsRoute: AuthenticatedDoelSubmissionsRoute,
@@ -1675,6 +1717,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
   AuthenticatedClientsIdRoute: AuthenticatedClientsIdRoute,
+  AuthenticatedDeviationsIdRoute: AuthenticatedDeviationsIdRoute,
   AuthenticatedPlansIdRoute: AuthenticatedPlansIdRoute,
   AuthenticatedPortalAreaRoute: AuthenticatedPortalAreaRoute,
   AuthenticatedRecruitmentIdRoute: AuthenticatedRecruitmentIdRoute,

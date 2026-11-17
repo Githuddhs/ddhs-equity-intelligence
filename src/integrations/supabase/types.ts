@@ -281,6 +281,24 @@ export type Database = {
         }
         Relationships: []
       }
+      deviation_settings: {
+        Row: {
+          thresholds: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          thresholds?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          thresholds?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       dg_outcome_analyses: {
         Row: {
           created_at: string
@@ -390,6 +408,77 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      ee_deviations: {
+        Row: {
+          approvals: Json
+          candidate_id: string | null
+          corrective: Json
+          created_at: string
+          evidence: Json
+          funnel: Json
+          id: string
+          objective: Json
+          rating: string
+          reason_code: string
+          reason_detail: string
+          review: Json
+          status: string
+          thresholds: Json
+          trajectory: Json
+          updated_at: string
+          user_id: string
+          vacancy_id: string
+        }
+        Insert: {
+          approvals?: Json
+          candidate_id?: string | null
+          corrective?: Json
+          created_at?: string
+          evidence?: Json
+          funnel?: Json
+          id?: string
+          objective?: Json
+          rating?: string
+          reason_code?: string
+          reason_detail?: string
+          review?: Json
+          status?: string
+          thresholds?: Json
+          trajectory?: Json
+          updated_at?: string
+          user_id?: string
+          vacancy_id: string
+        }
+        Update: {
+          approvals?: Json
+          candidate_id?: string | null
+          corrective?: Json
+          created_at?: string
+          evidence?: Json
+          funnel?: Json
+          id?: string
+          objective?: Json
+          rating?: string
+          reason_code?: string
+          reason_detail?: string
+          review?: Json
+          status?: string
+          thresholds?: Json
+          trajectory?: Json
+          updated_at?: string
+          user_id?: string
+          vacancy_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ee_deviations_vacancy_id_fkey"
+            columns: ["vacancy_id"]
+            isOneToOne: false
+            referencedRelation: "recruitment_vacancies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ee_plans: {
         Row: {

@@ -358,6 +358,20 @@
       "when": 1794915774371,
       "tag": "0050_allow_short_enquiry_message",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1794917244311,
+      "tag": "0051_ee_deviation_governance",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1794917317368,
+      "tag": "0052_deviation_evidence_storage_access",
+      "breakpoints": true
     }
   ]
 }

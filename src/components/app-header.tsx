@@ -96,6 +96,7 @@ export function AppHeader() {
                 <Link to="/recruitment" className={item} onClick={closeMenu}>D · Governance (per vacancy)</Link>
                 <Link to="/recruitment" className={item} onClick={closeMenu}>E · Selection (candidates)</Link>
                 <Link to="/recruitment-dashboard" className={item} activeProps={activeItem} onClick={closeMenu}>Recruitment dashboard</Link>
+                <Link to="/deviations" className={item} activeProps={activeItem} onClick={closeMenu}>Deviation register</Link>
               </NavGroup>
               <NavGroup label="F · Evidence & Reporting">
                 <Link to="/compliance" className={item} activeProps={activeItem} onClick={closeMenu}>Compliance</Link>
