@@ -455,6 +455,7 @@ export type Database = {
           funnel: Json
           id: string
           objective: Json
+          plan_id: string | null
           rating: string
           reason_code: string
           reason_detail: string
@@ -478,6 +479,7 @@ export type Database = {
           funnel?: Json
           id?: string
           objective?: Json
+          plan_id?: string | null
           rating?: string
           reason_code?: string
           reason_detail?: string
@@ -501,6 +503,7 @@ export type Database = {
           funnel?: Json
           id?: string
           objective?: Json
+          plan_id?: string | null
           rating?: string
           reason_code?: string
           reason_detail?: string
@@ -516,6 +519,13 @@ export type Database = {
           vacancy_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "ee_deviations_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "ee_plans"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ee_deviations_vacancy_id_fkey"
             columns: ["vacancy_id"]

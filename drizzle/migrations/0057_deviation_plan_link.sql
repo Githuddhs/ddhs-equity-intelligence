@@ -1,0 +1,2 @@
+ALTER TABLE public.ee_deviations ADD COLUMN IF NOT EXISTS plan_id uuid REFERENCES public.ee_plans(id) ON DELETE SET NULL;
+CREATE INDEX IF NOT EXISTS ee_deviations_plan_id_idx ON public.ee_deviations(plan_id);

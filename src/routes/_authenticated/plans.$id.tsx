@@ -1,3 +1,4 @@
+import { RATING_LABEL, STATUS_LABEL } from "@/lib/deviation";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -336,6 +337,7 @@ function PlanBuilder() {
           )}
         </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
+        <LinkedDeviations planId={id} />
       </main>
 
       <article className="hidden p-8 text-sm print:block">
@@ -361,5 +363,31 @@ function PlanBuilder() {
         </div>
       </article>
     </div>
+  );
+}
+
+
+/** Deviation requests linked to this plan, so plan owners see where appointments departed from its goals. */
+function LinkedDeviations({ planId }: { planId: string }) {
+  const [rows, setRows] = useState<{ id: string; status: string; rating: string; title: string }[] | null>(null);
+  useEffect(() => {
+    void supabase.from("ee_deviations").select("id,status,rating,recruitment_vacancies(title)").eq("plan_id", planId).order("created_at", { ascending: false })
+      .then(({ data }) => setRows((data ?? []).map((d) => ({ id: d.id, status: d.status, rating: d.rating, title: (d.recruitment_vacancies as { title?: string } | null)?.title ?? "Vacancy removed" }))));
+  }, [planId]);
+  if (!rows) return null;
+  return (
+    <section className="mt-8 rounded-xl border border-border bg-card p-5">
+      <h2 className="card-title text-primary">Linked deviation requests</h2>
+      {rows.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">No deviation requests are linked to this plan.</p> : (
+        <ul className="mt-2 divide-y divide-border text-sm">
+          {rows.map((r) => (
+            <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+              <span className="break-words">{r.title} · {RATING_LABEL[r.rating as keyof typeof RATING_LABEL] ?? r.rating} · {STATUS_LABEL[r.status as keyof typeof STATUS_LABEL] ?? r.status}</span>
+              <Link to="/deviations/$id" params={{ id: r.id }} className="font-semibold text-teal underline">Open</Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

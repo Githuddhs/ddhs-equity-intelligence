@@ -29,6 +29,7 @@ export type DeviationCandidate = {
 export type DeviationAssessment = {
   objective: Objective;
   trajectory: Trajectory;
+  plan: { id: string; title: string; year: number; linked: boolean } | null;
   funnel: FunnelStage[];
   rating: Rating;
   review: Review;
@@ -89,10 +90,19 @@ export async function saveThresholds(t: Thresholds): Promise<boolean> {
 }
 
 /** Latest EE plan on file for the current client (scoped by the workspace client and RLS). */
-async function latestPlanContent(): Promise<{ content: unknown; start: string | null; end: string | null } | null> {
-  const { data } = await supabase.from("ee_plans")
-    .select("content,start_date,end_date").order("updated_at", { ascending: false }).limit(1).maybeSingle();
-  return data ? { content: data.content, start: data.start_date, end: data.end_date } : null;
+async function latestPlanContent(planId?: string | null): Promise<{ id: string; title: string; content: unknown; start: string | null; end: string | null } | null> {
+  const q = supabase.from("ee_plans").select("id,title,content,start_date,end_date");
+  const { data } = planId
+    ? await q.eq("id", planId).maybeSingle()
+    : await q.order("updated_at", { ascending: false }).limit(1).maybeSingle();
+  if (!data && planId) return latestPlanContent(null);
+  return data ? { id: data.id, title: data.title, content: data.content, start: data.start_date, end: data.end_date } : null;
+}
+
+/** Every EE plan in the current workspace, for linking a deviation. */
+export async function loadPlanOptions(): Promise<{ id: string; title: string }[]> {
+  const { data } = await supabase.from("ee_plans").select("id,title").order("updated_at", { ascending: false });
+  return data ?? [];
 }
 
 /**
@@ -100,10 +110,10 @@ async function latestPlanContent(): Promise<{ content: unknown; start: string | 
  * outcome, green/amber/red status and the completeness review.
  */
 export async function loadDeviationAssessment(
-  v: DeviationVacancy, cands: DeviationCandidate[], excludeId?: string,
+  v: DeviationVacancy, cands: DeviationCandidate[], excludeId?: string, planId?: string | null,
 ): Promise<DeviationAssessment> {
   const [base, plan, thresholds, earlier] = await Promise.all([
-    loadBaseline(), latestPlanContent(), loadThresholds(),
+    loadBaseline(), latestPlanContent(planId), loadThresholds(),
     supabase.from("ee_deviations").select("id, rating, status, corrective, reason_code, reason_detail, evidence, created_at")
       .eq("vacancy_id", v.id),
   ]);
@@ -153,6 +163,7 @@ export async function loadDeviationAssessment(
     objective, trajectory, funnel, rating, review, impact, thresholds, declared,
     candidate: recommended ? { id: recommended.id, name: recommended.full_name } : null,
     repeatDeviations, counts: counts ?? null, hasWorkforce: !!base.date,
+    plan: plan ? { id: plan.id, title: plan.title, year, linked: !!planId && plan.id === planId } : null,
   };
 }
 
@@ -162,7 +173,7 @@ export type DeviationRow = {
   objective: Json; trajectory: Json; funnel: Json; reason_code: string; reason_detail: string;
   evidence: Json; review: Json; approvals: Json; corrective: Json; thresholds: Json;
   created_at: string; updated_at: string;
-  reviewer_emails?: Json; review_notices?: Json;
+  reviewer_emails?: Json; review_notices?: Json; plan_id?: string | null;
   recruitment_vacancies: { title: string; occupational_level: string; organisation: string; division: string; department: string; section: string } | null;
 };
 
@@ -193,7 +204,7 @@ export function rowSummary(r: DeviationRow): import("@/lib/deviation").Deviation
 /** Every deviation record for the current client, newest first. */
 export async function loadDeviationRows(): Promise<DeviationRow[]> {
   const { data } = await supabase.from("ee_deviations").select(
-    "id,vacancy_id,candidate_id,status,rating,objective,trajectory,funnel,reason_code,reason_detail,evidence,review,approvals,corrective,thresholds,created_at,updated_at,recruitment_vacancies(title,occupational_level,organisation,division,department,section)",
+    "id,vacancy_id,candidate_id,status,rating,objective,trajectory,funnel,reason_code,reason_detail,evidence,review,approvals,corrective,thresholds,created_at,updated_at,plan_id,recruitment_vacancies(title,occupational_level,organisation,division,department,section)",
   ).order("created_at", { ascending: false });
   return (data ?? []) as unknown as DeviationRow[];
 }
@@ -201,7 +212,7 @@ export async function loadDeviationRows(): Promise<DeviationRow[]> {
 /** One deviation record with its vacancy, for the form page. */
 export async function loadDeviation(id: string): Promise<DeviationRow | null> {
   const { data } = await supabase.from("ee_deviations").select(
-    "id,vacancy_id,candidate_id,status,rating,objective,trajectory,funnel,reason_code,reason_detail,evidence,review,approvals,corrective,thresholds,created_at,updated_at,reviewer_emails,review_notices,recruitment_vacancies(title,occupational_level,organisation,division,department,section)",
+    "id,vacancy_id,candidate_id,status,rating,objective,trajectory,funnel,reason_code,reason_detail,evidence,review,approvals,corrective,thresholds,created_at,updated_at,reviewer_emails,review_notices,plan_id,recruitment_vacancies(title,occupational_level,organisation,division,department,section)",
   ).eq("id", id).maybeSingle();
   return (data ?? null) as unknown as DeviationRow | null;
 }

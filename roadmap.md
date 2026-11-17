@@ -128,4 +128,4 @@
 - [x] Confirmed all role players are included in the deviation approval workflows (hiring manager, HRBP, EE specialist, designated senior authority); added route-membership tests
 - [x] Deviation reviewer reminder emails after configurable waiting period
 - [x] In-app notification centre for pending deviation reviews
-- [ ] Link deviations to the EE plan and show reviewers the deviation's impact
+- [x] Link deviations to the EE plan and show reviewers the deviation's impact

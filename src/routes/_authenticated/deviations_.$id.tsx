@@ -13,6 +13,7 @@ import { dueForDeletion, retentionEnds, DEVIATION_RETENTION_YEARS } from "@/lib/
 import { useNavigate } from "@tanstack/react-router";
 import { notifyNextDeviationReviewer } from "@/lib/deviation-notify.functions";
 import { offerReport } from "@/lib/report-download";
+import { loadPlanOptions } from "@/lib/deviation-data";
 import { loadDeviation, loadDeviationAssessment, rowCorrective, rowUnit, type DeviationAssessment, type DeviationPatch, type DeviationRow } from "@/lib/deviation-data";
 import { loadDeviationVacancy, loadDeviationCandidates, type DeviationVacancy, type DeviationCandidate } from "@/lib/deviation-data";
 
@@ -51,7 +52,7 @@ function DeviationPage() {
     if (!r) return;
     const [v, cs] = await Promise.all([loadDeviationVacancy(r.vacancy_id), loadDeviationCandidates(r.vacancy_id)]);
     setVacancy(v); setCands(cs);
-    setA(v ? await loadDeviationAssessment(v, cs, r.id) : null);
+    setA(v ? await loadDeviationAssessment(v, cs, r.id, r.plan_id ?? null) : null);
   };
   useEffect(() => { void load(); }, [id]);
 
@@ -162,6 +163,8 @@ function DeviationPage() {
 
         <ReasonSection row={row} save={save} busy={busy} />
         <EvidenceSection row={row} evidence={evidence} save={save} busy={busy} />
+        <PlanLinkSection row={row} assessment={a} save={save} busy={busy} />
+        {a && <ReviewerImpact a={a} />}
         <ApprovalSection row={row} approvals={approvals} progress={progress} save={save} busy={busy} />
         <CorrectiveSection row={row} corrective={corrective} save={save} busy={busy} />
         <StatusSection row={row} progress={progress} save={save} busy={busy} assessment={a} />
@@ -192,6 +195,67 @@ function DeviationPage() {
 }
 
 type Save = (patch: DeviationPatch, msg?: string) => Promise<boolean>;
+
+function PlanLinkSection({ row, assessment, save, busy }: { row: DeviationRow; assessment: DeviationAssessment | null; save: Save; busy: boolean }) {
+  const [plans, setPlans] = useState<{ id: string; title: string }[] | null>(null);
+  const [pick, setPick] = useState(row.plan_id ?? "");
+  useEffect(() => { void loadPlanOptions().then(setPlans); }, []);
+  useEffect(() => { setPick(row.plan_id ?? ""); }, [row.plan_id]);
+  const plan = assessment?.plan ?? null;
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <h2 className="card-title text-primary">Linked EE plan</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {plan
+          ? <>Milestones are read from <Link to="/plans/$id" params={{ id: plan.id }} className="font-semibold text-teal underline">{plan.title || "Untitled plan"}</Link> (plan year {plan.year}){plan.linked ? "." : " — your latest plan, because none is linked yet."}</>
+          : "No EE plan on file, so annual milestones are not available."}
+      </p>
+      {plans && plans.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-end gap-3">
+          <label className="text-sm font-medium">Link to plan
+            <select className={input} value={pick} onChange={(e) => setPick(e.target.value)}>
+              <option value="">Use the latest plan</option>
+              {plans.map((p) => <option key={p.id} value={p.id}>{p.title || "Untitled plan"}</option>)}
+            </select>
+          </label>
+          <button disabled={busy || pick === (row.plan_id ?? "")} onClick={() => void save({ plan_id: pick || null }, "EE plan link saved.")} className={`${btn} border border-border`}>Save link</button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** What approving this appointment does to the level's representation, shown beside the approvals. */
+function ReviewerImpact({ a }: { a: DeviationAssessment }) {
+  const i = a.impact; const t = a.trajectory;
+  const pct = (n: number | null | undefined) => (n === null || n === undefined ? "Not available" : `${n}%`);
+  const pp = (b: number, c: number) => { const d = Math.round((c - b) * 10) / 10; return `${d > 0 ? "+" : ""}${d} pp`; };
+  return (
+    <section className="mt-6 rounded-xl border border-teal/40 bg-card p-5">
+      <h2 className="card-title text-primary">Impact for reviewers</h2>
+      <p className="mt-1 text-sm text-muted-foreground">What happens at this level if the recommended appointment is approved.</p>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          ["Overall effect", i?.verdict ?? "Not available"],
+          ["Appointee group", i?.groupLabel ?? "Not yet named"],
+          ["Designated share now → after", t.designatedNow === null ? "Not available" : `${pct(t.designatedNow)} → ${pct(t.designatedAfter)}`],
+          ["Plan milestone", t.milestone === null ? "Not available" : `${t.milestone}% · ${t.status}`],
+        ].map(([k, v]) => (
+          <div key={k} className="rounded-lg bg-secondary/50 p-3"><p className="text-xs text-muted-foreground">{k}</p><p className="font-semibold text-primary break-words">{v}</p></div>
+        ))}
+      </div>
+      {i?.sectoral && (
+        <ul className="mt-3 grid gap-1 text-sm">
+          {i.sectoral.map((s) => <li key={s.group}>{s.group}: {s.before}% → {s.after}% ({pp(s.before, s.after)}) against a sector target of {s.target}%{s.closesGap ? " — narrows the gap" : ""}</li>)}
+        </ul>
+      )}
+      {i?.eap && <p className="mt-1 text-sm">{i.groupLabel} vs provincial EAP: {i.eap.before}% → {i.eap.after}% ({pp(i.eap.before, i.eap.after)}) against {i.eap.eap}%</p>}
+      {!i?.eap && <p className="mt-1 text-sm text-muted-foreground">Provincial EAP comparison: Not available</p>}
+      <p className="mt-2 text-sm text-muted-foreground">{t.note}</p>
+      {i?.notes.length ? <ul className="mt-2 list-disc pl-5 text-xs text-muted-foreground">{i.notes.map((n, k) => <li key={k}>{n}</li>)}</ul> : null}
+    </section>
+  );
+}
 
 /** Alerts the reviewer whose step is next; reports the outcome without blocking the save. */
 async function alertNextReviewer(id: string) {
