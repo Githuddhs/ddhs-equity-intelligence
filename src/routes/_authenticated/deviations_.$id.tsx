@@ -162,6 +162,7 @@ function DeviationPage() {
         <ApprovalSection row={row} approvals={approvals} progress={progress} save={save} busy={busy} />
         <CorrectiveSection row={row} corrective={corrective} save={save} busy={busy} />
         <StatusSection row={row} progress={progress} save={save} busy={busy} assessment={a} />
+        <AuditTrail id={row.id} version={row.updated_at} />
 
         <div className="mt-8 flex flex-wrap gap-3">
           <button
@@ -359,6 +360,40 @@ function StatusSection({ row, progress, save, busy, assessment }: { row: Deviati
                 : `Waiting on: ${progress.missing.join(", ") || "—"}`}
         </span>
       </div>
+    </section>
+  );
+}
+
+const AUDIT_LABEL: Record<string, string> = {
+  created: "Request opened", status: "Status changed", approval: "Approval recorded",
+  approval_removed: "Approval removed", document_added: "Document added", document_removed: "Document removed",
+};
+
+type AuditEntry = { id: string; action: string; detail: string; actor_email: string; created_at: string };
+
+function AuditTrail({ id, version }: { id: string; version: string }) {
+  const [rows, setRows] = useState<AuditEntry[] | null>(null);
+  useEffect(() => {
+    void supabase.from("ee_deviation_audit").select("id, action, detail, actor_email, created_at")
+      .eq("deviation_id", id).order("created_at", { ascending: false })
+      .then(({ data }) => setRows((data ?? []) as AuditEntry[]));
+  }, [id, version]);
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <h2 className="card-title text-primary">Audit trail</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Recorded automatically when the status, approvals or supporting documents change. Entries cannot be edited or deleted.</p>
+      {rows === null ? <p className="mt-3 text-sm text-muted-foreground">Loading…</p>
+        : !rows.length ? <p className="mt-3 text-sm text-muted-foreground">No changes recorded yet.</p>
+        : (
+          <ol className="mt-3 divide-y divide-border">
+            {rows.map((r) => (
+              <li key={r.id} className="flex flex-wrap items-baseline justify-between gap-2 py-2 text-sm">
+                <span className="min-w-0 break-words"><span className="font-semibold text-primary">{AUDIT_LABEL[r.action] ?? r.action}</span>{r.detail ? ` — ${r.detail}` : ""}</span>
+                <span className="text-xs text-muted-foreground">{r.actor_email || "System"} · {new Date(r.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })}</span>
+              </li>
+            ))}
+          </ol>
+        )}
     </section>
   );
 }

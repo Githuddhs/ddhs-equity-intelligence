@@ -409,6 +409,39 @@ export type Database = {
         }
         Relationships: []
       }
+      ee_deviation_audit: {
+        Row: {
+          action: string
+          actor_email: string
+          actor_id: string | null
+          created_at: string
+          detail: string
+          deviation_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: string
+          deviation_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: string
+          deviation_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ee_deviations: {
         Row: {
           approvals: Json

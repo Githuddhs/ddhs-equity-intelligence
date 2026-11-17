@@ -120,3 +120,6 @@
 - [x] Staff onboard subscribed clients; multiple users per client; staff-only capturing; clients upload workforce files for staff capture
 - [x] Add Exit interviews to the client menu
 - [x] Add Academy to the questionnaire tour
+
+- [ ] Workspace-level retention and deletion controls for deviation requests and their supporting documents
+- [x] Audit trail on each deviation request (status, approvals, documents, who and when)

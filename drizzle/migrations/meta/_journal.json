@@ -372,6 +372,13 @@
       "when": 1794917317368,
       "tag": "0052_deviation_evidence_storage_access",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1794919369298,
+      "tag": "0053_deviation_audit_trail",
+      "breakpoints": true
     }
   ]
 }
