@@ -9,6 +9,7 @@ const GROUPS = [
       { to: "/eea13-planning", label: "EEA13 Employment Equity plan" },
       { to: "/accountability-management", label: "Accountability management" },
       { to: "/evidence-governance", label: "Evidence & DG review readiness" },
+      { to: "/deviation-governance", label: "EE Deviation & Appointment Governance" },
       { to: "/executive-intelligence", label: "Executive EE reporting" },
       { to: "/leadership-dashboard", label: "Leadership dashboard" },
       { to: "/leadership-report", label: "Leadership report" },
