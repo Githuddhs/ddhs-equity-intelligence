@@ -154,7 +154,7 @@ function DeviationGovernancePage() {
             </div>
           </div>
 
-          <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <section id="workflow" className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <p className="label-title text-teal">How a request moves</p>
             <ol className="mt-4 space-y-3">
               {steps.map((s, i) => (
@@ -169,6 +169,13 @@ function DeviationGovernancePage() {
                 </li>
               ))}
             </ol>
+            <Link
+              to="/auth"
+              search={{ next: "/deviations" }}
+              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+            >
+              Open the deviation workflow <ArrowRight className="h-4 w-4" />
+            </Link>
           </section>
         </div>
 
