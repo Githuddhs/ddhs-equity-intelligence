@@ -74,6 +74,7 @@ export function AppHeader() {
               <Link to="/clients" className={link} activeProps={active}>Clients, invites &amp; deadlines</Link>
               <Link to="/invoices" className={link} activeProps={active}>Invoices</Link>
               <Link to="/review" className={link} activeProps={active}>Review checklist</Link>
+              <Link to="/reviews" className={link} activeProps={active}>Pending reviews</Link>
             </>
           ) : (
             <>
@@ -106,6 +107,7 @@ export function AppHeader() {
                 <Link to="/dg-history" className={item} activeProps={activeItem} onClick={closeMenu}>DG review evidence</Link>
               </NavGroup>
               {isManager && <Link to="/manager" className={link} activeProps={active}>Review portal</Link>}
+              <Link to="/reviews" className={link} activeProps={active}>Pending reviews</Link>
               <Link to="/account" className={link} activeProps={active}>My account</Link>
             </>
           )}

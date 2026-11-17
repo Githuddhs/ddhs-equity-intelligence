@@ -224,3 +224,17 @@ export async function loadDeviationCandidates(vacancyId: string): Promise<Deviat
 
 export const DEVIATION_REASONS = REASON_CODES;
 export { governanceScorecard };
+
+/** Workspace setting: days a reviewer may wait before an automatic reminder email. */
+export async function loadReminderDays(): Promise<number> {
+  const { clampReminderDays } = await import("@/lib/deviation-reminders");
+  const { data } = await supabase.from("deviation_settings").select("reminder_days").maybeSingle();
+  return clampReminderDays(data?.reminder_days ?? undefined);
+}
+
+export async function saveReminderDays(days: number): Promise<boolean> {
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return false;
+  const { error } = await supabase.from("deviation_settings").upsert({ user_id: auth.user.id, reminder_days: days, updated_at: new Date().toISOString() });
+  return !error;
+}

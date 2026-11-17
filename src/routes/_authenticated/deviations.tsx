@@ -1,3 +1,6 @@
+import { toast } from "sonner";
+import { loadReminderDays, saveReminderDays } from "@/lib/deviation-data";
+import { clampReminderDays, REMINDER_DAYS_MIN, REMINDER_DAYS_MAX } from "@/lib/deviation-reminders";
 import { dueForDeletion } from "@/lib/deviation-retention";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -41,6 +44,28 @@ function aggregateFunnel(rows: DeviationRow[]): FunnelStage[] {
     }
     return { label, total, target, share: total ? Math.round((target / total) * 1000) / 10 : null };
   });
+}
+
+function ReminderSetting() {
+  const [days, setDays] = useState<number | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { void loadReminderDays().then(setDays); }, []);
+  if (days === null) return null;
+  const save = async () => {
+    setBusy(true);
+    const ok = await saveReminderDays(clampReminderDays(days));
+    setBusy(false);
+    if (ok) toast.success("Reminder period saved."); else toast.error("Couldn't save the reminder period.");
+  };
+  return (
+    <div className="mt-4 flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4">
+      <label className="text-sm font-medium">Remind reviewers after (days)
+        <input type="number" min={REMINDER_DAYS_MIN} max={REMINDER_DAYS_MAX} className={`${input} w-28`} value={days} onChange={(e) => setDays(Number(e.target.value))} />
+      </label>
+      <button disabled={busy} onClick={() => void save()} className={`${btn} border border-border`}>Save</button>
+      <p className="text-sm text-muted-foreground">A reviewer who hasn't decided within this period gets a reminder email, then again each period until they do.</p>
+    </div>
+  );
 }
 
 function DeviationsPage() {
@@ -87,6 +112,7 @@ function DeviationsPage() {
             Download register
           </button>
         </div>
+        <ReminderSetting />
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
           Every appointment reviewed against the approved EE objective, with its reason, approval trail and corrective action.
           Green, amber and red are your own workflow settings, not statutory tests.

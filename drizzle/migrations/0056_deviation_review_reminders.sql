@@ -1,0 +1,2 @@
+ALTER TABLE public.deviation_settings ADD COLUMN IF NOT EXISTS reminder_days integer NOT NULL DEFAULT 3 CHECK (reminder_days BETWEEN 1 AND 30);
+ALTER TABLE public.ee_deviations ADD COLUMN IF NOT EXISTS review_reminders jsonb NOT NULL DEFAULT '{}'::jsonb;

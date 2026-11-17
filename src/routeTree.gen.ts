@@ -64,6 +64,7 @@ import { Route as AuthenticatedReadinessRouteImport } from './routes/_authentica
 import { Route as AuthenticatedRecruitmentRouteImport } from './routes/_authenticated/recruitment'
 import { Route as AuthenticatedRecruitmentDashboardRouteImport } from './routes/_authenticated/recruitment-dashboard'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
+import { Route as AuthenticatedReviewsRouteImport } from './routes/_authenticated/reviews'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
@@ -91,6 +92,7 @@ import { Route as AuthenticatedPortalAreaRouteImport } from './routes/_authentic
 import { Route as AuthenticatedRecruitmentIdRouteImport } from './routes/_authenticated/recruitment_.$id'
 import { Route as ApiPublicHooksComplianceRemindersRouteImport } from './routes/api/public/hooks/compliance-reminders'
 import { Route as ApiPublicHooksPayfastItnRouteImport } from './routes/api/public/hooks/payfast-itn'
+import { Route as ApiPublicJobsDeviationRemindersRouteImport } from './routes/api/public/jobs/deviation-reminders'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -375,6 +377,11 @@ const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
   path: '/review',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReviewsRoute = AuthenticatedReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -517,6 +524,12 @@ const ApiPublicHooksPayfastItnRoute =
     path: '/api/public/hooks/payfast-itn',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicJobsDeviationRemindersRoute =
+  ApiPublicJobsDeviationRemindersRouteImport.update({
+    id: '/api/public/jobs/deviation-reminders',
+    path: '/api/public/jobs/deviation-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -579,6 +592,7 @@ export interface FileRoutesByFullPath {
   '/recruitment': typeof AuthenticatedRecruitmentRoute
   '/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/reviews': typeof AuthenticatedReviewsRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
@@ -606,6 +620,7 @@ export interface FileRoutesByFullPath {
   '/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
+  '/api/public/jobs/deviation-reminders': typeof ApiPublicJobsDeviationRemindersRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -663,6 +678,7 @@ export interface FileRoutesByTo {
   '/recruitment': typeof AuthenticatedRecruitmentRoute
   '/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/reviews': typeof AuthenticatedReviewsRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
@@ -690,6 +706,7 @@ export interface FileRoutesByTo {
   '/plans': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
+  '/api/public/jobs/deviation-reminders': typeof ApiPublicJobsDeviationRemindersRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -749,6 +766,7 @@ export interface FileRoutesById {
   '/_authenticated/recruitment': typeof AuthenticatedRecruitmentRoute
   '/_authenticated/recruitment-dashboard': typeof AuthenticatedRecruitmentDashboardRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
+  '/_authenticated/reviews': typeof AuthenticatedReviewsRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
@@ -776,6 +794,7 @@ export interface FileRoutesById {
   '/_authenticated/plans/': typeof AuthenticatedPlansIndexRoute
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
+  '/api/public/jobs/deviation-reminders': typeof ApiPublicJobsDeviationRemindersRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -835,6 +854,7 @@ export interface FileRouteTypes {
     | '/recruitment'
     | '/recruitment-dashboard'
     | '/review'
+    | '/reviews'
     | '/staff'
     | '/workforce'
     | '/api/ee-assist'
@@ -862,6 +882,7 @@ export interface FileRouteTypes {
     | '/plans/'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
+    | '/api/public/jobs/deviation-reminders'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -919,6 +940,7 @@ export interface FileRouteTypes {
     | '/recruitment'
     | '/recruitment-dashboard'
     | '/review'
+    | '/reviews'
     | '/staff'
     | '/workforce'
     | '/api/ee-assist'
@@ -946,6 +968,7 @@ export interface FileRouteTypes {
     | '/plans'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
+    | '/api/public/jobs/deviation-reminders'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -1004,6 +1027,7 @@ export interface FileRouteTypes {
     | '/_authenticated/recruitment'
     | '/_authenticated/recruitment-dashboard'
     | '/_authenticated/review'
+    | '/_authenticated/reviews'
     | '/_authenticated/staff'
     | '/_authenticated/workforce'
     | '/api/ee-assist'
@@ -1031,6 +1055,7 @@ export interface FileRouteTypes {
     | '/_authenticated/plans/'
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
+    | '/api/public/jobs/deviation-reminders'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -1086,6 +1111,7 @@ export interface RootRouteChildren {
   GuidesIndexRoute: typeof GuidesIndexRoute
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
   ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
+  ApiPublicJobsDeviationRemindersRoute: typeof ApiPublicJobsDeviationRemindersRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -1476,6 +1502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReviewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reviews': {
+      id: '/_authenticated/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof AuthenticatedReviewsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/staff': {
       id: '/_authenticated/staff'
       path: '/staff'
@@ -1665,6 +1698,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksPayfastItnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/deviation-reminders': {
+      id: '/api/public/jobs/deviation-reminders'
+      path: '/api/public/jobs/deviation-reminders'
+      fullPath: '/api/public/jobs/deviation-reminders'
+      preLoaderRoute: typeof ApiPublicJobsDeviationRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -1699,6 +1739,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRecruitmentRoute: typeof AuthenticatedRecruitmentRoute
   AuthenticatedRecruitmentDashboardRoute: typeof AuthenticatedRecruitmentDashboardRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
+  AuthenticatedReviewsRoute: typeof AuthenticatedReviewsRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
   AuthenticatedClientsIdRoute: typeof AuthenticatedClientsIdRoute
@@ -1734,6 +1775,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRecruitmentDashboardRoute:
     AuthenticatedRecruitmentDashboardRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
+  AuthenticatedReviewsRoute: AuthenticatedReviewsRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
   AuthenticatedClientsIdRoute: AuthenticatedClientsIdRoute,
@@ -1800,6 +1842,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksComplianceRemindersRoute:
     ApiPublicHooksComplianceRemindersRoute,
   ApiPublicHooksPayfastItnRoute: ApiPublicHooksPayfastItnRoute,
+  ApiPublicJobsDeviationRemindersRoute: ApiPublicJobsDeviationRemindersRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport

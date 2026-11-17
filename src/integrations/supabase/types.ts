@@ -283,16 +283,19 @@ export type Database = {
       }
       deviation_settings: {
         Row: {
+          reminder_days: number
           thresholds: Json
           updated_at: string
           user_id: string
         }
         Insert: {
+          reminder_days?: number
           thresholds?: Json
           updated_at?: string
           user_id: string
         }
         Update: {
+          reminder_days?: number
           thresholds?: Json
           updated_at?: string
           user_id?: string
@@ -457,6 +460,7 @@ export type Database = {
           reason_detail: string
           review: Json
           review_notices: Json
+          review_reminders: Json
           reviewer_emails: Json
           status: string
           thresholds: Json
@@ -479,6 +483,7 @@ export type Database = {
           reason_detail?: string
           review?: Json
           review_notices?: Json
+          review_reminders?: Json
           reviewer_emails?: Json
           status?: string
           thresholds?: Json
@@ -501,6 +506,7 @@ export type Database = {
           reason_detail?: string
           review?: Json
           review_notices?: Json
+          review_reminders?: Json
           reviewer_emails?: Json
           status?: string
           thresholds?: Json
