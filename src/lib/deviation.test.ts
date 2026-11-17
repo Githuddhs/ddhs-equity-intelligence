@@ -181,6 +181,13 @@ describe("risk-based approval routing", () => {
     expect(p.missing).toHaveLength(5);
   });
 
+  it("includes every role player in each rating's route", () => {
+    expect(APPROVAL_ROUTES.green.map((s) => s.label)).toEqual(["Hiring manager", "HR business partner"]);
+    expect(APPROVAL_ROUTES.amber.map((s) => s.label)).toEqual(["Hiring manager", "HR business partner", "EE specialist / designated authority"]);
+    expect(APPROVAL_ROUTES.not_available.map((s) => s.label)).toEqual(["Hiring manager", "HR business partner", "EE specialist / designated authority"]);
+    expect(APPROVAL_ROUTES.red.map((s) => s.label)).toEqual(["Dean / RC head", "Hiring manager", "HR business partner", "Director: EE or HR", "Designated senior authority"]);
+  });
+
   it("advances only in order", () => {
     const p = approvalProgress("red", [rec("executive", "Dean / RC head")]);
     expect(p.next?.key).toBe("hiring_manager");
