@@ -1,0 +1,2 @@
+ALTER TABLE public.ee_deviations ADD COLUMN IF NOT EXISTS reviewer_emails jsonb NOT NULL DEFAULT '{}'::jsonb;
+ALTER TABLE public.ee_deviations ADD COLUMN IF NOT EXISTS review_notices jsonb NOT NULL DEFAULT '{}'::jsonb;

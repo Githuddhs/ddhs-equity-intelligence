@@ -11,6 +11,7 @@ import {
 } from "@/lib/deviation";
 import { dueForDeletion, retentionEnds, DEVIATION_RETENTION_YEARS } from "@/lib/deviation-retention";
 import { useNavigate } from "@tanstack/react-router";
+import { notifyNextDeviationReviewer } from "@/lib/deviation-notify.functions";
 import { offerReport } from "@/lib/report-download";
 import { loadDeviation, loadDeviationAssessment, rowCorrective, rowUnit, type DeviationAssessment, type DeviationPatch, type DeviationRow } from "@/lib/deviation-data";
 import { loadDeviationVacancy, loadDeviationCandidates, type DeviationVacancy, type DeviationCandidate } from "@/lib/deviation-data";
@@ -192,6 +193,16 @@ function DeviationPage() {
 
 type Save = (patch: DeviationPatch, msg?: string) => Promise<boolean>;
 
+/** Alerts the reviewer whose step is next; reports the outcome without blocking the save. */
+async function alertNextReviewer(id: string) {
+  try {
+    const r = await notifyNextDeviationReviewer({ data: { deviationId: id } });
+    if (r.sent && !("alreadySent" in r && r.alreadySent)) toast.success(`Email sent to the ${r.step}.`);
+    else if (!r.sent && r.reason === "no_email") toast.message(`Add an email for the ${r.step} to alert them.`);
+    else if (!r.sent && r.reason === "recipient_suppressed") toast.message(`The ${r.step} has unsubscribed from emails; let them know directly.`);
+  } catch { toast.error("Saved, but the reviewer email could not be sent."); }
+}
+
 function ReasonSection({ row, save, busy }: { row: DeviationRow; save: Save; busy: boolean }) {
   const [d, setD] = useState({ reason_code: row.reason_code, reason_detail: row.reason_detail });
   useEffect(() => { setD({ reason_code: row.reason_code, reason_detail: row.reason_detail }); }, [row.reason_code, row.reason_detail]);
@@ -269,6 +280,21 @@ function ApprovalSection({ row, approvals, progress, save, busy }: { row: Deviat
     const rec: ApprovalRecord = { key: next.key, label: next.label, by: d.by.trim().slice(0, 150), decision: d.decision, comments: d.comments.trim().slice(0, 2000), at: new Date().toISOString() };
     const ok = await save({ approvals: [...approvals.filter((x) => x.key !== next.key), rec] as unknown as Json }, `Recorded: ${next.label}.`);
     if (ok && d.decision === "declined") await save({ status: "declined" }, "Deviation declined.");
+    else if (ok) await alertNextReviewer(row.id);
+  };
+  const savedEmails = (row.reviewer_emails && typeof row.reviewer_emails === "object" && !Array.isArray(row.reviewer_emails) ? row.reviewer_emails : {}) as Record<string, string>;
+  const notices = (row.review_notices && typeof row.review_notices === "object" && !Array.isArray(row.review_notices) ? row.review_notices : {}) as Record<string, string>;
+  const [emails, setEmails] = useState<Record<string, string>>(savedEmails);
+  useEffect(() => { setEmails(savedEmails); }, [row.updated_at]);
+  const saveEmails = async () => {
+    const clean: Record<string, string> = {};
+    for (const s of progress.route) {
+      const v = (emails[s.key] ?? "").trim();
+      if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { toast.error(`Check the email for the ${s.label}.`); return; }
+      if (v) clean[s.key] = v.slice(0, 254);
+    }
+    const ok = await save({ reviewer_emails: clean as unknown as Json }, "Reviewer emails saved.");
+    if (ok && (row.status === "submitted" || row.status === "in_review")) await alertNextReviewer(row.id);
   };
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-5">
@@ -290,6 +316,19 @@ function ApprovalSection({ row, approvals, progress, save, busy }: { row: Deviat
             );
           })}</tbody>
         </table>
+      </div>
+      <div className="mt-4 rounded-xl border border-border p-4">
+        <h3 className="text-sm font-semibold text-primary">Reviewer email alerts</h3>
+        <p className="mt-1 text-sm text-muted-foreground">Each reviewer is emailed once, when the request reaches their step. No candidate details are included.</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          {progress.route.map((s) => (
+            <label key={s.key} className="text-sm font-medium">{s.label}
+              <input type="email" className={input} maxLength={254} value={emails[s.key] ?? ""} onChange={(e) => setEmails({ ...emails, [s.key]: e.target.value })} />
+              {notices[s.key] && <span className="mt-1 block text-xs text-muted-foreground">Alerted {new Date(notices[s.key] as string).toLocaleString("en-ZA")}</span>}
+            </label>
+          ))}
+        </div>
+        <button disabled={busy} onClick={() => void saveEmails()} className={`${btn} mt-3 border border-border`}>Save reviewer emails</button>
       </div>
       {next && !progress.declined && (
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -346,6 +385,7 @@ function StatusSection({ row, progress, save, busy, assessment }: { row: Deviati
       thresholds: assessment.thresholds as unknown as Json,
     }, "Submitted for approval.");
     if (ok && assessment.rating.rating !== "not_available") await save({ status: "in_review" });
+    if (ok) await alertNextReviewer(row.id);
   };
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-5">

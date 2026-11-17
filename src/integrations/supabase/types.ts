@@ -456,6 +456,8 @@ export type Database = {
           reason_code: string
           reason_detail: string
           review: Json
+          review_notices: Json
+          reviewer_emails: Json
           status: string
           thresholds: Json
           trajectory: Json
@@ -476,6 +478,8 @@ export type Database = {
           reason_code?: string
           reason_detail?: string
           review?: Json
+          review_notices?: Json
+          reviewer_emails?: Json
           status?: string
           thresholds?: Json
           trajectory?: Json
@@ -496,6 +500,8 @@ export type Database = {
           reason_code?: string
           reason_detail?: string
           review?: Json
+          review_notices?: Json
+          reviewer_emails?: Json
           status?: string
           thresholds?: Json
           trajectory?: Json

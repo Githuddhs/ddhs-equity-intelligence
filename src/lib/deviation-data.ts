@@ -162,6 +162,7 @@ export type DeviationRow = {
   objective: Json; trajectory: Json; funnel: Json; reason_code: string; reason_detail: string;
   evidence: Json; review: Json; approvals: Json; corrective: Json; thresholds: Json;
   created_at: string; updated_at: string;
+  reviewer_emails?: Json; review_notices?: Json;
   recruitment_vacancies: { title: string; occupational_level: string; organisation: string; division: string; department: string; section: string } | null;
 };
 
@@ -200,7 +201,7 @@ export async function loadDeviationRows(): Promise<DeviationRow[]> {
 /** One deviation record with its vacancy, for the form page. */
 export async function loadDeviation(id: string): Promise<DeviationRow | null> {
   const { data } = await supabase.from("ee_deviations").select(
-    "id,vacancy_id,candidate_id,status,rating,objective,trajectory,funnel,reason_code,reason_detail,evidence,review,approvals,corrective,thresholds,created_at,updated_at,recruitment_vacancies(title,occupational_level,organisation,division,department,section)",
+    "id,vacancy_id,candidate_id,status,rating,objective,trajectory,funnel,reason_code,reason_detail,evidence,review,approvals,corrective,thresholds,created_at,updated_at,reviewer_emails,review_notices,recruitment_vacancies(title,occupational_level,organisation,division,department,section)",
   ).eq("id", id).maybeSingle();
   return (data ?? null) as unknown as DeviationRow | null;
 }
