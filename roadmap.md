@@ -129,3 +129,6 @@
 - [x] Deviation reviewer reminder emails after configurable waiting period
 - [x] In-app notification centre for pending deviation reviews
 - [x] Link deviations to the EE plan and show reviewers the deviation's impact
+- [x] Governance PDF report: linked deviations, reviewer impact, plan milestone progress
+- [x] Deviation decision audit trail with comments and EE plan impact snapshot
+- [x] Review site tour covers all platform capabilities

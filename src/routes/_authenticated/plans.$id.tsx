@@ -1,4 +1,5 @@
-import { RATING_LABEL, STATUS_LABEL } from "@/lib/deviation";
+import { RATING_LABEL, STATUS_LABEL, planGovernanceReport, type GovernanceDeviation, type Trajectory } from "@/lib/deviation";
+import { offerReport } from "@/lib/report-download";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -337,7 +338,7 @@ function PlanBuilder() {
           )}
         </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
-        <LinkedDeviations planId={id} />
+        <LinkedDeviations planId={id} planTitle={meta.title || "EE plan"} />
       </main>
 
       <article className="hidden p-8 text-sm print:block">
@@ -368,16 +369,32 @@ function PlanBuilder() {
 
 
 /** Deviation requests linked to this plan, so plan owners see where appointments departed from its goals. */
-function LinkedDeviations({ planId }: { planId: string }) {
+function LinkedDeviations({ planId, planTitle }: { planId: string; planTitle: string }) {
   const [rows, setRows] = useState<{ id: string; status: string; rating: string; title: string }[] | null>(null);
   useEffect(() => {
     void supabase.from("ee_deviations").select("id,status,rating,recruitment_vacancies(title)").eq("plan_id", planId).order("created_at", { ascending: false })
       .then(({ data }) => setRows((data ?? []).map((d) => ({ id: d.id, status: d.status, rating: d.rating, title: (d.recruitment_vacancies as { title?: string } | null)?.title ?? "Vacancy removed" }))));
   }, [planId]);
+  const downloadReport = async () => {
+    const { data, error } = await supabase.from("ee_deviations").select("rating,status,reason_code,reason_detail,trajectory,approvals,recruitment_vacancies(title,occupational_level)").eq("plan_id", planId).order("created_at");
+    if (error) { toast.error("The report couldn't be prepared."); return; }
+    const list: GovernanceDeviation[] = (data ?? []).map((d) => {
+      const v = d.recruitment_vacancies as { title?: string; occupational_level?: string } | null;
+      const t = d.trajectory as unknown as Trajectory | null;
+      return { title: v?.title ?? "Vacancy removed", level: v?.occupational_level ?? "", rating: d.rating, status: d.status,
+        reason: [d.reason_code, d.reason_detail].filter(Boolean).join(" — "),
+        trajectory: t && typeof t === "object" && "status" in t ? t : null,
+        approvals: Array.isArray(d.approvals) ? (d.approvals as unknown as GovernanceDeviation["approvals"]) : [] };
+    });
+    offerReport({ name: `deviation-governance-${planTitle.replace(/[^\w]+/g, "-").toLowerCase()}`, data: planGovernanceReport({ title: planTitle }, list) });
+  };
   if (!rows) return null;
   return (
     <section className="mt-8 rounded-xl border border-border bg-card p-5">
-      <h2 className="card-title text-primary">Linked deviation requests</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="card-title text-primary">Linked deviation requests</h2>
+        {rows.length > 0 && <button onClick={() => void downloadReport()} className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground">Governance report</button>}
+      </div>
       {rows.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">No deviation requests are linked to this plan.</p> : (
         <ul className="mt-2 divide-y divide-border text-sm">
           {rows.map((r) => (

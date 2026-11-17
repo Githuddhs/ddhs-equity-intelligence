@@ -505,3 +505,58 @@ export function deviationRegisterReport(input: { rows: DeviationSummary[]; analy
     ],
   };
 }
+
+/** EE plan impact as shown to a reviewer at the moment of their decision (frozen into the approval record). */
+export type ImpactSnapshot = { verdict: string; group: string; designated: string; milestone: string; plan: string };
+
+const pctText = (n: number | null | undefined) => (n === null || n === undefined ? "Not available" : `${n}%`);
+
+export function impactSnapshot(input: { trajectory: Trajectory; verdict?: string | null | undefined; group?: string | null | undefined; planTitle?: string | null | undefined }): ImpactSnapshot {
+  const t = input.trajectory;
+  return {
+    verdict: input.verdict || "Not available",
+    group: input.group || "Not yet named",
+    designated: t.designatedNow === null ? "Not available" : `${pctText(t.designatedNow)} → ${pctText(t.designatedAfter)}`,
+    milestone: t.milestone === null ? "Not available" : `${t.milestone}% · ${t.status}`,
+    plan: input.planTitle || "Latest EE plan",
+  };
+}
+
+export type GovernanceDeviation = {
+  title: string; level: string; rating: string; status: string; reason: string;
+  trajectory: Trajectory | null; approvals: (ApprovalRecord & { impact?: ImpactSnapshot | undefined })[];
+};
+
+/** Governance-meeting summary of all deviations linked to one EE plan. */
+export function planGovernanceReport(plan: { title: string; year?: string }, rows: GovernanceDeviation[]): ReportData {
+  const onTrack = rows.filter((r) => r.trajectory && r.trajectory.designatedAfter !== null && r.trajectory.milestone !== null && r.trajectory.designatedAfter >= r.trajectory.milestone).length;
+  const measurable = rows.filter((r) => r.trajectory && r.trajectory.designatedAfter !== null && r.trajectory.milestone !== null).length;
+  const label = (m: Record<string, string>, k: string) => m[k] ?? k;
+  const blocks: ReportBlock[] = [
+    { kind: "h", text: "Summary" },
+    { kind: "table", title: "Overview", head: ["Measure", "Value"], body: [
+      ["Linked deviation requests", String(rows.length)],
+      ["Approved", String(rows.filter((r) => r.status === "approved").length)],
+      ["Declined", String(rows.filter((r) => r.status === "declined").length)],
+      ["Awaiting decision", String(rows.filter((r) => r.status === "submitted" || r.status === "in_review").length)],
+      ["At or above plan milestone after appointment", measurable ? `${onTrack} of ${measurable}` : "Not available"],
+    ] },
+    { kind: "h", text: "Progress against EE plan milestones" },
+    { kind: "table", title: "Milestones", head: ["Vacancy", "Level", "Rating", "Status", "Milestone", "Designated now → after", "Trajectory"], body: rows.map((r) => {
+      const t = r.trajectory;
+      return [r.title, r.level || "—", label(RATING_LABEL as Record<string, string>, r.rating), label(STATUS_LABEL as Record<string, string>, r.status),
+        t?.milestone == null ? "Not available" : `${t.milestone}%`,
+        !t || t.designatedNow === null ? "Not available" : `${pctText(t.designatedNow)} → ${pctText(t.designatedAfter)}`,
+        t?.status ?? "Not available"];
+    }) },
+    { kind: "h", text: "Reviewer decisions and impact shown" },
+    { kind: "table", title: "Decisions", head: ["Vacancy", "Step", "Reviewer", "Decision", "Date", "Impact shown", "Comments"], body: rows.flatMap((r) => r.approvals.map((a) => [
+      r.title, a.label, a.by, a.decision || "—", a.at ? a.at.slice(0, 10) : "—",
+      a.impact ? `${a.impact.verdict}; ${a.impact.designated}; milestone ${a.impact.milestone}` : "Not recorded",
+      a.comments || "—",
+    ])) },
+    { kind: "h", text: "Reasons given" },
+    ...rows.map((r): ReportBlock => ({ kind: "p", text: `${r.title}: ${r.reason || "No reason recorded"}` })),
+  ];
+  return { title: `Deviation governance report · ${plan.title}`, fields: [["EE plan", plan.title], ["Generated", new Date().toISOString().slice(0, 10)]], blocks };
+}

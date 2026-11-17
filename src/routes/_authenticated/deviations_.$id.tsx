@@ -13,6 +13,7 @@ import { dueForDeletion, retentionEnds, DEVIATION_RETENTION_YEARS } from "@/lib/
 import { useNavigate } from "@tanstack/react-router";
 import { notifyNextDeviationReviewer } from "@/lib/deviation-notify.functions";
 import { offerReport } from "@/lib/report-download";
+import { impactSnapshot, type ImpactSnapshot } from "@/lib/deviation";
 import { loadPlanOptions } from "@/lib/deviation-data";
 import { loadDeviation, loadDeviationAssessment, rowCorrective, rowUnit, type DeviationAssessment, type DeviationPatch, type DeviationRow } from "@/lib/deviation-data";
 import { loadDeviationVacancy, loadDeviationCandidates, type DeviationVacancy, type DeviationCandidate } from "@/lib/deviation-data";
@@ -165,7 +166,7 @@ function DeviationPage() {
         <EvidenceSection row={row} evidence={evidence} save={save} busy={busy} />
         <PlanLinkSection row={row} assessment={a} save={save} busy={busy} />
         {a && <ReviewerImpact a={a} />}
-        <ApprovalSection row={row} approvals={approvals} progress={progress} save={save} busy={busy} />
+        <ApprovalSection assessment={a} row={row} approvals={approvals} progress={progress} save={save} busy={busy} />
         <CorrectiveSection row={row} corrective={corrective} save={save} busy={busy} />
         <StatusSection row={row} progress={progress} save={save} busy={busy} assessment={a} />
         <AuditTrail id={row.id} version={row.updated_at} />
@@ -335,13 +336,14 @@ function EvidenceSection({ row, evidence, save, busy }: { row: DeviationRow; evi
   );
 }
 
-function ApprovalSection({ row, approvals, progress, save, busy }: { row: DeviationRow; approvals: ApprovalRecord[]; progress: ReturnType<typeof approvalProgress>; save: Save; busy: boolean }) {
+function ApprovalSection({ assessment, row, approvals, progress, save, busy }: { assessment: DeviationAssessment | null; row: DeviationRow; approvals: ApprovalRecord[]; progress: ReturnType<typeof approvalProgress>; save: Save; busy: boolean }) {
   const next = progress.next;
   const [d, setD] = useState({ by: "", decision: "" as "" | "approved" | "declined", comments: "" });
   useEffect(() => { setD({ by: "", decision: "", comments: "" }); }, [next?.key]);
   const record = async () => {
     if (!next || !d.by.trim() || !d.decision) { toast.error("Enter the reviewer's name and decision."); return; }
-    const rec: ApprovalRecord = { key: next.key, label: next.label, by: d.by.trim().slice(0, 150), decision: d.decision, comments: d.comments.trim().slice(0, 2000), at: new Date().toISOString() };
+    const rec: ApprovalRecord & { impact?: ImpactSnapshot | undefined } = { key: next.key, label: next.label, by: d.by.trim().slice(0, 150), decision: d.decision, comments: d.comments.trim().slice(0, 2000), at: new Date().toISOString(),
+      impact: assessment ? impactSnapshot({ trajectory: assessment.trajectory, verdict: assessment.impact?.verdict, group: assessment.impact?.groupLabel, planTitle: assessment.plan?.title }) : undefined };
     const ok = await save({ approvals: [...approvals.filter((x) => x.key !== next.key), rec] as unknown as Json }, `Recorded: ${next.label}.`);
     if (ok && d.decision === "declined") await save({ status: "declined" }, "Deviation declined.");
     else if (ok) await alertNextReviewer(row.id);
@@ -365,17 +367,18 @@ function ApprovalSection({ row, approvals, progress, save, busy }: { row: Deviat
       <h2 className="card-title text-primary">Approvals</h2>
       <p className="mt-1 text-sm text-muted-foreground">Route for this status: {progress.route.map((s) => s.label).join(" → ")}. Each step is recorded in order.</p>
       <div className="mt-3 overflow-x-auto rounded-xl border border-border">
-        <table className="w-full min-w-[640px] text-sm">
-          <thead className="bg-secondary/60 text-left"><tr><th className="p-3">Step</th><th>By</th><th>Decision</th><th>Comments</th><th>Date</th></tr></thead>
+        <table className="w-full min-w-[820px] text-sm">
+          <thead className="bg-secondary/60 text-left"><tr><th className="p-3">Step</th><th>By</th><th>Decision</th><th>Comments</th><th>Date and time</th><th>EE plan impact shown</th></tr></thead>
           <tbody>{progress.route.map((s) => {
-            const rec = approvals.find((x) => x.key === s.key);
+            const rec = approvals.find((x) => x.key === s.key) as (ApprovalRecord & { impact?: ImpactSnapshot | undefined }) | undefined;
             return (
               <tr key={s.key} className="border-t border-border align-top">
                 <td className="p-3 font-semibold text-primary">{s.label}</td>
                 <td>{rec?.by || "—"}</td>
                 <td>{rec?.decision ? (rec.decision === "approved" ? "Approved" : "Declined") : "Pending"}</td>
                 <td className="max-w-[18rem] break-words">{rec?.comments || "—"}</td>
-                <td>{rec?.at ? new Date(rec.at).toLocaleDateString("en-ZA") : "—"}</td>
+                <td>{rec?.at ? new Date(rec.at).toLocaleString("en-ZA") : "—"}</td>
+                <td className="max-w-[16rem] break-words text-xs">{rec?.impact ? `${rec.impact.verdict} · ${rec.impact.group} · designated ${rec.impact.designated} · milestone ${rec.impact.milestone} (${rec.impact.plan})` : rec ? "Not recorded" : "—"}</td>
               </tr>
             );
           })}</tbody>
