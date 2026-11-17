@@ -351,6 +351,13 @@
       "when": 1794762061961,
       "tag": "0049_restrict_pulse_invitation_links_to_staff",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1794915774371,
+      "tag": "0050_allow_short_enquiry_message",
+      "breakpoints": true
     }
   ]
 }
