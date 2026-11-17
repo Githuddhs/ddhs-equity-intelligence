@@ -123,4 +123,5 @@
 
 - [x] Workspace-level retention and deletion controls for deviation requests and their supporting documents
 - [x] Audit trail on each deviation request (status, approvals, documents, who and when)
-- [x] Public EE Deviation & Appointment Governance page; menu now leads there instead of the Six-Phase Delivery Methodology (page kept live at /delivery-methodology)
+- [x] Public EE Deviation & Appointment Governance page; menu now leads there instead of the Six-Phase Delivery Methodology
+- [x] Six-Phase Delivery Methodology page removed from the site and sitemap; /delivery-methodology now 301-redirects to the homepage
