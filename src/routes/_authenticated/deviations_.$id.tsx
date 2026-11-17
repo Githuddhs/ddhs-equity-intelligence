@@ -9,6 +9,8 @@ import {
   APPROVAL_ROUTES, CORRECTIVE_MEASURES, REASON_CODES, RATING_LABEL, STATUS_LABEL,
   approvalProgress, correctiveState, deviationFormReport, type ApprovalRecord, type Corrective,
 } from "@/lib/deviation";
+import { dueForDeletion, retentionEnds, DEVIATION_RETENTION_YEARS } from "@/lib/deviation-retention";
+import { useNavigate } from "@tanstack/react-router";
 import { offerReport } from "@/lib/report-download";
 import { loadDeviation, loadDeviationAssessment, rowCorrective, rowUnit, type DeviationAssessment, type DeviationPatch, type DeviationRow } from "@/lib/deviation-data";
 import { loadDeviationVacancy, loadDeviationCandidates, type DeviationVacancy, type DeviationCandidate } from "@/lib/deviation-data";
@@ -163,6 +165,7 @@ function DeviationPage() {
         <CorrectiveSection row={row} corrective={corrective} save={save} busy={busy} />
         <StatusSection row={row} progress={progress} save={save} busy={busy} assessment={a} />
         <AuditTrail id={row.id} version={row.updated_at} />
+        <RetentionSection id={row.id} createdAt={row.created_at} evidence={evidence} />
 
         <div className="mt-8 flex flex-wrap gap-3">
           <button
@@ -394,6 +397,35 @@ function AuditTrail({ id, version }: { id: string; version: string }) {
             ))}
           </ol>
         )}
+    </section>
+  );
+}
+
+function RetentionSection({ id, createdAt, evidence }: { id: string; createdAt: string; evidence: { path: string }[] }) {
+  const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+  const due = dueForDeletion(createdAt);
+  const ends = retentionEnds(createdAt).toLocaleDateString("en-ZA", { dateStyle: "medium" });
+  const remove = async () => {
+    if (!confirm("Delete this deviation request and all its supporting documents? This cannot be undone.")) return;
+    setBusy(true);
+    const { error } = await supabase.from("ee_deviations").delete().eq("id", id);
+    if (error) { setBusy(false); toast.error("Couldn't delete the request."); return; }
+    if (evidence.length) await supabase.storage.from("deviation-evidence").remove(evidence.map((e) => e.path));
+    toast.success("Deviation request deleted.");
+    void navigate({ to: "/deviations" });
+  };
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <h2 className="card-title text-primary">Retention</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Requests and their documents are kept for {DEVIATION_RETENTION_YEARS} years. {due ? `This request passed its retention period on ${ends} and is due for deletion.` : `This request can be deleted from ${ends}.`}
+      </p>
+      {due && (
+        <button onClick={remove} disabled={busy} className={`${btn} mt-3 bg-destructive text-destructive-foreground`}>
+          Delete request and documents
+        </button>
+      )}
     </section>
   );
 }

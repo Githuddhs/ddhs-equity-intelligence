@@ -1,3 +1,4 @@
+import { dueForDeletion } from "@/lib/deviation-retention";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
@@ -155,7 +156,7 @@ function DeviationsPage() {
                           <td><span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${RATING_STYLE[r.rating]}`}>{RATING_LABEL[r.rating]}</span><p className="mt-1 text-xs text-muted-foreground">{STATUS_LABEL[r.status]}</p></td>
                           <td className="max-w-[16rem] break-words">{r.reason_code || "Not selected"}</td>
                           <td className="max-w-[14rem] break-words">{state === "none" ? "None" : c.action}{state === "overdue" && <p className="text-xs font-semibold text-destructive">Overdue {c.due}</p>}{state === "due_soon" && <p className="text-xs text-muted-foreground">Due {c.due}</p>}</td>
-                          <td>{new Date(r.created_at).toLocaleDateString("en-ZA")}</td>
+                          <td>{new Date(r.created_at).toLocaleDateString("en-ZA")}{dueForDeletion(r.created_at) && <p className="text-xs font-semibold text-destructive">Due for deletion</p>}</td>
                         </tr>
                       );
                     })}
