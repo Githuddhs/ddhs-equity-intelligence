@@ -1,6 +1,7 @@
 # DDHS roadmap
 
 ## Open
+- [ ] EE Deviation & Appointment Governance module (Sello's uploaded proposal, 17 Nov): vacancy EE check before advertising, recruitment strategy, funnel demographic monitoring, green/amber/red deviation trigger, digital deviation form, AI completeness review, risk-based approvals, corrective actions, deviation register, analytics, early warnings, EEA12/EEA13 linkage. BLOCKED: waiting on Sello to say whether to build it now, plan it, or keep it as reference only.
 - [x] Allow demonstration bookings without current EE process/challenge details; blank and omitted validation tests pass, and the real no-storage submission path succeeds on desktop and phone.
 - [x] Hide the client portal EE plans "New plan" link for client accounts; staff retain the link, with isolated desktop and phone checks passed.
 - [x] Published the questionnaire and invitation update at https://ddhs-equity-intelligence.lovable.app. The public questionnaire route no longer returns 404; a nonexistent token shows the closed-link message, and fictional valid-link data renders all 14 questions at 390px without overflow or page errors. Fresh basic security scan found no issues. Full suite: 213 passed and 23 skipped; six tests and three suites hit PGlite 10-second resource timeouts under the full parallel run, while all 20 focused invitation/privacy/report checks passed separately.
