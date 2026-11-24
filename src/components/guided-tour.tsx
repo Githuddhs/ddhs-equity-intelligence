@@ -7,7 +7,7 @@ import { track } from "@/lib/track";
 
 const shareOrigin = () => (typeof window === "undefined" || /localhost|127\.0\.0\.1/.test(window.location.origin) ? "https://ddhs-equity-intelligence.lovable.app" : window.location.origin);
 
-export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string; hash?: string; access?: string };
+export type TourStep = { kicker: string; title: string; body: string; points: string[]; to: string; cta: string; hash?: string; access?: string; dest?: string };
 
 /** Icon for the step's access note: open/globe when the tool is free without signing in, padlock when it needs a client login. */
 export const tourAccessOpen = (access: string | undefined) => !!access && /free|no sign-in needed|open to use/i.test(access);
@@ -68,7 +68,17 @@ export function GuidedTour({ steps: STEPS, path, invitedFor, invitedFrom, label 
               <p className="text-xs leading-relaxed text-muted-foreground">{s.access}</p>
             </div>
           )}
-          <Link to={s.to} {...(s.hash ? { hash: s.hash } : {})} className="mt-6 inline-block text-sm font-semibold text-teal underline">{s.cta}</Link>
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link
+              to={s.to}
+              {...(s.hash ? { hash: s.hash } : {})}
+              className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-teal-foreground shadow-sm transition-colors hover:bg-teal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2"
+            >
+              {s.cta}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <span className="text-xs text-muted-foreground">Opens {s.dest ?? s.title}</span>
+          </div>
         </section>
         <div className="mt-6 flex items-center justify-between">
           <button onClick={() => setI(i - 1)} disabled={i === 0} className="inline-flex items-center gap-2 rounded-lg border border-input px-4 py-2 text-sm font-semibold text-primary disabled:opacity-40">
