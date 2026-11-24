@@ -100,7 +100,7 @@ function StaffDashboard() {
       <AppHeader />
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="page-title text-primary">Staff dashboard</h1>
-        <Button asChild className="mt-4"><Link to="/clients">Create & manage client profiles</Link></Button>
+        <div className="mt-4 flex flex-wrap gap-3"><Button asChild><Link to="/clients">Create & manage client profiles</Link></Button><Button asChild variant="outline"><Link to="/workflow-stages">Workflow stages due</Link></Button></div>
         <p className="page-lead mt-2 text-muted-foreground">Everything that needs your attention across clients. Click a box to see the details, and a client to expand them.</p>
         {isLoading && <p className="mt-8 text-muted-foreground">Loading…</p>}
         {error && <p className="mt-8 text-destructive">Could not load the dashboard.</p>}
