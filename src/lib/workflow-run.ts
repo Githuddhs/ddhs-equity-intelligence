@@ -1,7 +1,7 @@
 export type StageStatus = "not_started" | "in_progress" | "complete";
 export type WorkflowRun = {
   startedAt: string; startedBy: string;
-  stages: { status: StageStatus; completedAt?: string; completedBy?: string }[];
+  stages: { status: StageStatus; completedAt?: string; completedBy?: string; due?: string }[];
 };
 
 export const STAGE_COUNT = 14;
@@ -20,9 +20,13 @@ export function currentStage(run: WorkflowRun): number | null {
 export function completeStage(run: WorkflowRun, i: number, by: string, at = new Date().toISOString()): WorkflowRun {
   if (currentStage(run) !== i) return run;
   return { ...run, stages: run.stages.map((s, k) =>
-    k === i ? { status: "complete", completedAt: at, completedBy: by } : k === i + 1 ? { status: "in_progress" } : s) };
+    k === i ? { ...s, status: "complete", completedAt: at, completedBy: by } : k === i + 1 ? { ...s, status: "in_progress" } : s) };
 }
 
 export function runProgress(run: WorkflowRun): number {
   return Math.round((run.stages.filter((s) => s.status === "complete").length / STAGE_COUNT) * 100);
+}
+
+export function setStageDue(run: WorkflowRun, i: number, due: string): WorkflowRun {
+  return { ...run, stages: run.stages.map((s, k) => (k === i ? (due ? { ...s, due } : (({ due: _d, ...rest }) => rest)(s)) : s)) };
 }

@@ -535,6 +535,42 @@ export type Database = {
           },
         ]
       }
+      ee_plan_workflow_audit: {
+        Row: {
+          action: string
+          actor_email: string
+          actor_id: string | null
+          created_at: string
+          detail: string
+          id: string
+          plan_id: string
+          stage: number | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: string
+          id?: string
+          plan_id: string
+          stage?: number | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: string
+          id?: string
+          plan_id?: string
+          stage?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ee_plans: {
         Row: {
           company: string
@@ -551,6 +587,7 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          workflow_reminders: Json
         }
         Insert: {
           company?: string
@@ -567,6 +604,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          workflow_reminders?: Json
         }
         Update: {
           company?: string
@@ -583,6 +621,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          workflow_reminders?: Json
         }
         Relationships: []
       }

@@ -1,4 +1,5 @@
-import { completeStage, currentStage, runProgress, startRun, type WorkflowRun } from "@/lib/workflow-run";
+import { completeStage, currentStage, runProgress, setStageDue, startRun, type WorkflowRun } from "@/lib/workflow-run";
+import { DAYS_MAX, DAYS_MIN, clampDays, cleanEmails, normaliseSettings, stageNotices, type StageReminderSettings } from "@/lib/stage-reminders";
 import { useIsStaffStatus } from "@/components/client-read-only";
 import { supabase as sessionClient } from "@/integrations/supabase/client";
 import { STAGES } from "@/lib/ee-workflow";
@@ -344,6 +345,8 @@ function PlanBuilder() {
         </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
         <WorkflowRunSection run={content.workflow} onChange={(workflow) => upContent({ workflow })} />
+        <StageReminderSection planId={id} run={content.workflow} />
+        <WorkflowActivityLog planId={id} />
         <StageDeliverySection value={content.delivery ?? {}} onChange={(delivery) => upContent({ delivery })} />
         <LinkedDeviations planId={id} planTitle={meta.title || "EE plan"} />
       </main>
@@ -401,14 +404,86 @@ function WorkflowRunSection({ run, onChange }: { run: WorkflowRun | undefined; o
             return (
               <li key={st.title} className={`flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3 text-sm ${i === cur ? "border-primary" : "border-border"}`}>
                 <span><span className="font-semibold text-primary">{i + 1}. {st.title}</span> <span className="text-muted-foreground">— {label}</span></span>
+                <span className="flex flex-wrap items-center gap-2">
+                {s?.status !== "complete" && (isStaff
+                  ? <label className="text-xs text-muted-foreground">Due <input type="date" value={s?.due ?? ""} onChange={(e) => onChange(setStageDue(run, i, e.target.value))} className="ml-1 rounded border border-input bg-background px-1 py-0.5 text-xs" /></label>
+                  : s?.due ? <span className="text-xs text-muted-foreground">Due {s.due}</span> : null)}
                 {i === cur && isStaff && (
                   <button type="button" onClick={() => void who().then((by) => { onChange(completeStage(run, i, by)); toast.success(i === 13 ? "Workflow complete — click Save plan." : `Stage ${i + 1} complete; stage ${i + 2} is now open. Click Save plan.`); })}
                     className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-teal">Complete stage</button>
                 )}
+                </span>
               </li>
             );
           })}
         </ol>
+      )}
+    </section>
+  );
+}
+
+function StageReminderSection({ planId, run }: { planId: string; run: WorkflowRun | undefined }) {
+  const { isStaff } = useIsStaffStatus();
+  const [s, setS] = useState<StageReminderSettings | null>(null);
+  const [emails, setEmails] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { void supabase.from("ee_plans").select("workflow_reminders").eq("id", planId).maybeSingle().then(({ data }) => { const v = normaliseSettings(data?.workflow_reminders); setS(v); setEmails(v.emails.join(", ")); }); }, [planId]);
+  if (!s) return null;
+  const notices = stageNotices(run, s, new Date().toISOString().slice(0, 10));
+  const save = async () => {
+    const next = { ...s, daysBefore: clampDays(s.daysBefore), emails: cleanEmails(emails.split(/[,;\s]+/)) };
+    if (next.enabled && !next.emails.length) { toast.error("Add at least one valid email address for reminders."); return; }
+    setBusy(true);
+    const { error } = await supabase.from("ee_plans").update({ workflow_reminders: next as unknown as Json }).eq("id", planId);
+    setBusy(false);
+    if (error) toast.error("Couldn't save the reminder settings."); else { setS(next); setEmails(next.emails.join(", ")); toast.success("Reminder settings saved."); }
+  };
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <h2 className="font-display text-lg font-bold text-primary">Stage reminders</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Emails go out each morning for stages due within the set number of days, and once a stage is overdue. Set due dates on the stages above.</p>
+      {notices.length > 0 && (
+        <ul className="mt-3 space-y-1 text-sm">
+          {notices.map((n) => <li key={n.key} className={n.kind === "overdue" ? "font-semibold text-destructive" : "text-primary"}>{n.kind === "overdue" ? "Overdue" : "Due soon"}: Stage {n.stage} {STAGES[n.stage - 1]?.title} — {n.kind === "overdue" ? `${n.days} day(s) late` : n.days ? `in ${n.days} day(s)` : "today"} ({n.due})</li>)}
+        </ul>
+      )}
+      {isStaff ? (
+        <div className="mt-3 grid gap-3 sm:grid-cols-[auto_10rem_1fr_auto] sm:items-end">
+          <label className="inline-flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={s.enabled} onChange={(e) => setS({ ...s, enabled: e.target.checked })} /> Send reminders</label>
+          <label className="text-sm font-semibold">Days before due<input type="number" min={DAYS_MIN} max={DAYS_MAX} value={s.daysBefore} onChange={(e) => setS({ ...s, daysBefore: Number(e.target.value) })} className="mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm" /></label>
+          <label className="text-sm font-semibold">Send to (comma-separated emails)<input value={emails} onChange={(e) => setEmails(e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm" /></label>
+          <button type="button" disabled={busy} onClick={() => void save()} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Save reminders</button>
+        </div>
+      ) : (
+        <p className="mt-3 text-sm text-muted-foreground">{s.enabled ? `Reminders on: ${s.daysBefore} day(s) before due.` : "Reminders are off."}</p>
+      )}
+    </section>
+  );
+}
+
+type ActivityRow = { id: string; actor_email: string; stage: number | null; action: string; detail: string; created_at: string };
+function WorkflowActivityLog({ planId }: { planId: string }) {
+  const [rows, setRows] = useState<ActivityRow[] | null>(null);
+  useEffect(() => { void supabase.from("ee_plan_workflow_audit").select("id,actor_email,stage,action,detail,created_at").eq("plan_id", planId).order("created_at", { ascending: false }).limit(200).then(({ data }) => setRows((data ?? []) as ActivityRow[])); }, [planId]);
+  const label: Record<string, string> = { started: "Started", opened: "Opened", completed: "Completed", changed: "Changed" };
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <h2 className="font-display text-lg font-bold text-primary">Workflow activity log</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Recorded automatically each time the plan is saved. Entries cannot be edited or deleted.</p>
+      {rows === null ? <p className="mt-3 text-sm text-muted-foreground">Loading…</p> : rows.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">No workflow activity yet.</p> : (
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="text-left text-muted-foreground"><th className="p-2">When</th><th className="p-2">Who</th><th className="p-2">Action</th><th className="p-2">Stage</th><th className="p-2">Detail</th></tr></thead>
+            <tbody>{rows.map((r) => (
+              <tr key={r.id} className="border-t border-border">
+                <td className="whitespace-nowrap p-2">{new Date(r.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" })}</td>
+                <td className="p-2">{r.actor_email || "System"}</td>
+                <td className="p-2 font-semibold">{label[r.action] ?? r.action}</td>
+                <td className="p-2">{r.stage ? `${r.stage}. ${STAGES[r.stage - 1]?.title ?? ""}` : "Whole workflow"}</td>
+                <td className="p-2 text-muted-foreground">{r.detail}</td>
+              </tr>))}</tbody>
+          </table>
+        </div>
       )}
     </section>
   );

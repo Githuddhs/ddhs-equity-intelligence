@@ -95,6 +95,7 @@ import { Route as AuthenticatedRecruitmentIdRouteImport } from './routes/_authen
 import { Route as ApiPublicHooksComplianceRemindersRouteImport } from './routes/api/public/hooks/compliance-reminders'
 import { Route as ApiPublicHooksPayfastItnRouteImport } from './routes/api/public/hooks/payfast-itn'
 import { Route as ApiPublicJobsDeviationRemindersRouteImport } from './routes/api/public/jobs/deviation-reminders'
+import { Route as ApiPublicJobsWorkflowStageRemindersRouteImport } from './routes/api/public/jobs/workflow-stage-reminders'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -543,6 +544,12 @@ const ApiPublicJobsDeviationRemindersRoute =
     path: '/api/public/jobs/deviation-reminders',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicJobsWorkflowStageRemindersRoute =
+  ApiPublicJobsWorkflowStageRemindersRouteImport.update({
+    id: '/api/public/jobs/workflow-stage-reminders',
+    path: '/api/public/jobs/workflow-stage-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -636,6 +643,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
   '/api/public/jobs/deviation-reminders': typeof ApiPublicJobsDeviationRemindersRoute
+  '/api/public/jobs/workflow-stage-reminders': typeof ApiPublicJobsWorkflowStageRemindersRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -724,6 +732,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
   '/api/public/jobs/deviation-reminders': typeof ApiPublicJobsDeviationRemindersRoute
+  '/api/public/jobs/workflow-stage-reminders': typeof ApiPublicJobsWorkflowStageRemindersRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -814,6 +823,7 @@ export interface FileRoutesById {
   '/api/public/hooks/compliance-reminders': typeof ApiPublicHooksComplianceRemindersRoute
   '/api/public/hooks/payfast-itn': typeof ApiPublicHooksPayfastItnRoute
   '/api/public/jobs/deviation-reminders': typeof ApiPublicJobsDeviationRemindersRoute
+  '/api/public/jobs/workflow-stage-reminders': typeof ApiPublicJobsWorkflowStageRemindersRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -904,6 +914,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
     | '/api/public/jobs/deviation-reminders'
+    | '/api/public/jobs/workflow-stage-reminders'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -992,6 +1003,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
     | '/api/public/jobs/deviation-reminders'
+    | '/api/public/jobs/workflow-stage-reminders'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -1081,6 +1093,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/compliance-reminders'
     | '/api/public/hooks/payfast-itn'
     | '/api/public/jobs/deviation-reminders'
+    | '/api/public/jobs/workflow-stage-reminders'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -1138,6 +1151,7 @@ export interface RootRouteChildren {
   ApiPublicHooksComplianceRemindersRoute: typeof ApiPublicHooksComplianceRemindersRoute
   ApiPublicHooksPayfastItnRoute: typeof ApiPublicHooksPayfastItnRoute
   ApiPublicJobsDeviationRemindersRoute: typeof ApiPublicJobsDeviationRemindersRoute
+  ApiPublicJobsWorkflowStageRemindersRoute: typeof ApiPublicJobsWorkflowStageRemindersRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -1745,6 +1759,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicJobsDeviationRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/workflow-stage-reminders': {
+      id: '/api/public/jobs/workflow-stage-reminders'
+      path: '/api/public/jobs/workflow-stage-reminders'
+      fullPath: '/api/public/jobs/workflow-stage-reminders'
+      preLoaderRoute: typeof ApiPublicJobsWorkflowStageRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -1886,6 +1907,8 @@ const rootRouteChildren: RootRouteChildren = {
     ApiPublicHooksComplianceRemindersRoute,
   ApiPublicHooksPayfastItnRoute: ApiPublicHooksPayfastItnRoute,
   ApiPublicJobsDeviationRemindersRoute: ApiPublicJobsDeviationRemindersRoute,
+  ApiPublicJobsWorkflowStageRemindersRoute:
+    ApiPublicJobsWorkflowStageRemindersRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport

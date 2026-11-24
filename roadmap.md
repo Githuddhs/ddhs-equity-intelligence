@@ -142,3 +142,5 @@
 - [x] Print-ready PDF of each role's 14-stage journey
 - [x] Remote / On-site / Hybrid per workflow stage on each EE plan, with venue or meeting link
 - [x] Staff can start and advance the 14-stage EE workflow
+- [x] Activity log of workflow stage start/complete/change on each EE plan
+- [x] Configurable reminders for upcoming and overdue workflow stages

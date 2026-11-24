@@ -23,6 +23,7 @@ import { template as quoteNotificationTemplate } from './quote-notification'
 import { template as exitInterviewSubmittedTemplate } from './exit-interview-submitted'
 import { template as inclusionPulseInvitationTemplate } from './inclusion-pulse-invitation'
 import { template as deviationReviewRequestTemplate } from './deviation-review-request'
+import { template as workflowStageReminderTemplate } from './workflow-stage-reminder'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'enquiry-notification': enquiryNotificationTemplate,
@@ -31,4 +32,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'exit-interview-submitted': exitInterviewSubmittedTemplate,
   'inclusion-pulse-invitation': inclusionPulseInvitationTemplate,
   'deviation-review-request': deviationReviewRequestTemplate,
+  'workflow-stage-reminder': workflowStageReminderTemplate,
 }
