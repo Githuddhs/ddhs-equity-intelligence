@@ -467,7 +467,7 @@ function WorkflowActivityLog({ planId }: { planId: string }) {
   useEffect(() => { void supabase.from("ee_plan_workflow_audit").select("id,actor_email,stage,action,detail,created_at").eq("plan_id", planId).order("created_at", { ascending: false }).limit(200).then(({ data }) => setRows((data ?? []) as ActivityRow[])); }, [planId]);
   const label: Record<string, string> = { started: "Started", opened: "Opened", completed: "Completed", changed: "Changed" };
   const [busy, setBusy] = useState(false);
-  const exportCsv = async () => {
+  const exportCsv = async (fmt: "csv" | "report" = "csv") => {
     setBusy(true);
     try {
       const { activityCsv } = await import("@/lib/activity-csv");
@@ -479,6 +479,13 @@ function WorkflowActivityLog({ planId }: { planId: string }) {
         if (!data || data.length < 1000) break;
       }
       const csv = activityCsv(all.map((r) => ({ ...r, action: label[r.action] ?? r.action })), (n) => STAGES[n - 1]?.title ?? "");
+      const name = `workflow-activity-log-${planId.slice(0, 8)}-${new Date().toISOString().slice(0, 10)}`;
+      if (fmt !== "csv") {
+        const { offerReport } = await import("@/lib/report-download");
+        const body = all.map((r) => [new Date(r.created_at).toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" }), r.actor_email || "System", label[r.action] ?? r.action, r.stage ? `${r.stage}. ${STAGES[r.stage - 1]?.title ?? ""}` : "Whole workflow", r.detail ?? ""]);
+        offerReport({ name, data: { title: "Workflow activity log", fields: [["Entries", String(all.length)], ["Exported", new Date().toLocaleString("en-ZA")]], blocks: [{ kind: "table", title: "Workflow activity", head: ["When", "Who", "Action", "Stage", "Detail"], body }] } });
+        return;
+      }
       const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
       const a = document.createElement("a"); a.href = url; a.download = `workflow-activity-log-${planId.slice(0, 8)}-${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30_000);
@@ -489,7 +496,8 @@ function WorkflowActivityLog({ planId }: { planId: string }) {
     <section className="mt-6 rounded-xl border border-border bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-display text-lg font-bold text-primary">Workflow activity log</h2>
-        {rows && rows.length > 0 && <button type="button" onClick={exportCsv} disabled={busy} className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold text-teal disabled:opacity-60">{busy ? "Preparing…" : "Download CSV"}</button>}
+        {rows && rows.length > 0 && <button type="button" onClick={() => void exportCsv("csv")} disabled={busy} className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold text-teal disabled:opacity-60">{busy ? "Preparing…" : "Download CSV"}</button>}
+        {rows && rows.length > 0 && <button type="button" onClick={() => void exportCsv("report")} disabled={busy} className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-60">Word, Excel, PDF or PowerPoint</button>}
       </div>
       <p className="mt-1 text-sm text-muted-foreground">Recorded automatically each time the plan is saved. Entries cannot be edited or deleted.</p>
       {rows === null ? <p className="mt-3 text-sm text-muted-foreground">Loading…</p> : rows.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">No workflow activity yet.</p> : (
