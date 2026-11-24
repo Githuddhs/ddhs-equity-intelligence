@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "Anyone can read the public workflow" ON public.ee_workflow_config;
+CREATE POLICY "Anyone can read the published default workflow" ON public.ee_workflow_config FOR SELECT TO anon, authenticated USING (id = 'default');
