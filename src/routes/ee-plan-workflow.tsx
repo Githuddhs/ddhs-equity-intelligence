@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Gavel } from "lucide-react";
 import { AuthCta } from "@/components/auth-cta";
 import { BrandMark } from "@/components/brand-mark";
 import { DataOwnershipNote } from "@/components/data-ownership";
@@ -72,6 +72,60 @@ const DUTIES: string[][] = [
   ["Signs off the annual performance report", "Compares plan with actual and sets the next cycle", "Prepares annual movement and target results", "Reviews annual outcomes and next-year needs", "Reviews unit results and adjustments", "Records root causes and next-year requirements", "Opens the next planning cycle", "Views retained annual evidence"],
 ];
 
+/** Per stage: roles that take the key decision, and the main handoff (from role, to role, what). Indexes follow ROLES. */
+const FLOW: { decide: number[]; handoff: [number, number, string] }[] = [
+  { decide: [0], handoff: [1, 6, "Structure to configure"] },
+  { decide: [0], handoff: [1, 6, "Roles to set permissions for"] },
+  { decide: [2], handoff: [2, 1, "Validated dataset"] },
+  { decide: [1], handoff: [2, 1, "Gap analysis"] },
+  { decide: [1], handoff: [5, 1, "Unit barriers and evidence"] },
+  { decide: [0, 1], handoff: [1, 0, "Target adjustments for approval"] },
+  { decide: [5], handoff: [1, 5, "Measures to own"] },
+  { decide: [1], handoff: [1, 3, "Consultation draft"] },
+  { decide: [3], handoff: [3, 1, "Committee recommendation"] },
+  { decide: [0], handoff: [1, 0, "Recommended plan"] },
+  { decide: [5], handoff: [1, 5, "Implementation tasks"] },
+  { decide: [1], handoff: [5, 1, "Variances and corrective actions"] },
+  { decide: [1], handoff: [5, 1, "Deviation reason and corrective action"] },
+  { decide: [0], handoff: [1, 0, "Annual performance report"] },
+];
+
+/** A role's path through the 14 stages; marks are text and icons so it reads without colour. */
+function RoleJourney({ role }: { role: number }) {
+  const name = (i: number) => ROLES[i]?.[0] ?? "";
+  return (
+    <div className="mt-4 rounded-xl border border-border bg-card p-5">
+      <h3 className="font-display text-lg font-bold text-primary">{name(role)} journey</h3>
+      <p className="mt-1 flex flex-wrap gap-4 text-xs text-muted-foreground">
+        <span className="inline-flex items-center gap-1"><Gavel className="h-3.5 w-3.5" aria-hidden /> Key decision</span>
+        <span className="inline-flex items-center gap-1"><ArrowRight className="h-3.5 w-3.5" aria-hidden /> Hands over</span>
+        <span className="inline-flex items-center gap-1"><ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Receives</span>
+      </p>
+      <ol className="mt-4 space-y-0">
+        {STAGES.map((st, i) => {
+          const f = FLOW[i];
+          const decides = !!f?.decide.includes(role);
+          const out = f && f.handoff[0] === role, inn = f && f.handoff[1] === role;
+          const key = decides || out || inn;
+          return (
+            <li key={st.title} className="relative flex gap-3 pb-4 last:pb-0">
+              {i < STAGES.length - 1 && <span className="absolute left-[13px] top-7 h-full w-px bg-border" aria-hidden />}
+              <span className={`relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold ${decides ? "border-primary bg-primary text-primary-foreground" : key ? "border-teal bg-background text-teal" : "border-border bg-background text-muted-foreground"}`}>{i + 1}</span>
+              <div className={`min-w-0 text-sm ${key ? "" : "text-muted-foreground"}`}>
+                <p className="font-semibold text-primary">{st.title}</p>
+                <p>{DUTIES[i]?.[role]}</p>
+                {decides && <p className="mt-1 inline-flex items-center gap-1 font-semibold text-primary"><Gavel className="h-3.5 w-3.5" aria-hidden /> Key decision</p>}
+                {out && f && <p className="mt-1 flex items-center gap-1 font-semibold text-teal"><ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden /> Hands {f.handoff[2].toLowerCase()} to {name(f.handoff[1])}</p>}
+                {inn && f && <p className="mt-1 flex items-center gap-1 font-semibold text-teal"><ArrowLeft className="h-3.5 w-3.5 shrink-0" aria-hidden /> Receives {f.handoff[2].toLowerCase()} from {name(f.handoff[0])}</p>}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
 const ESCALATION: [string, string][] = [
   ["30 days before due date", "Reminder to the responsible manager"],
   ["7 days before due date", "Final reminder, visible to the EE Manager"],
@@ -126,6 +180,7 @@ function EeWorkflowPage() {
             ))}
           </div>
           {role !== null && <p className="mt-3 text-sm"><span className="font-semibold text-primary">{ROLES[role]?.[0]}:</span> {ROLES[role]?.[1]}</p>}
+          {role !== null && <RoleJourney role={role} />}
           <ol className="mt-6 grid gap-4 md:grid-cols-2">
             {STAGES.map((s, i) => (
               <li key={s.title} className="rounded-xl border border-border bg-card p-5">
