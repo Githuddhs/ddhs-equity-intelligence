@@ -1,3 +1,6 @@
+import { completeStage, currentStage, runProgress, startRun, type WorkflowRun } from "@/lib/workflow-run";
+import { useIsStaffStatus } from "@/components/client-read-only";
+import { supabase as sessionClient } from "@/integrations/supabase/client";
 import { STAGES } from "@/lib/ee-workflow";
 import { DELIVERY_LABEL, EMPTY_DELIVERY, deliveryGaps, safeMeetingLink, type DeliveryMode, type StageDelivery } from "@/lib/stage-delivery";
 import { RATING_LABEL, STATUS_LABEL, planGovernanceReport, type GovernanceDeviation, type Trajectory } from "@/lib/deviation";
@@ -340,6 +343,7 @@ function PlanBuilder() {
           )}
         </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
+        <WorkflowRunSection run={content.workflow} onChange={(workflow) => upContent({ workflow })} />
         <StageDeliverySection value={content.delivery ?? {}} onChange={(delivery) => upContent({ delivery })} />
         <LinkedDeviations planId={id} planTitle={meta.title || "EE plan"} />
       </main>
@@ -372,6 +376,44 @@ function PlanBuilder() {
 
 
 /** Deviation requests linked to this plan, so plan owners see where appointments departed from its goals. */
+function WorkflowRunSection({ run, onChange }: { run: WorkflowRun | undefined; onChange: (r: WorkflowRun) => void }) {
+  const { isStaff } = useIsStaffStatus();
+  const who = async () => { const { data } = await sessionClient.auth.getUser(); return data.user?.email ?? "DDHS staff"; };
+  const when = (t?: string) => (t ? new Date(t).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" }) : "");
+  const cur = run ? currentStage(run) : null;
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="font-display text-lg font-bold text-primary">Employment Equity Workflow</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{run ? `Started ${when(run.startedAt)} by ${run.startedBy} · ${runProgress(run)}% complete` : "Not started yet. DDHS staff start the workflow, then complete each of the 14 stages in order."}</p>
+        </div>
+        {!run && isStaff && (
+          <button type="button" onClick={() => void who().then((by) => { onChange(startRun(by)); toast.success("Workflow started at stage 1 — click Save plan to keep it."); })}
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Start workflow</button>
+        )}
+      </div>
+      {run && (
+        <ol className="mt-4 space-y-2">
+          {STAGES.map((st, i) => {
+            const s = run.stages[i];
+            const label = s?.status === "complete" ? `Complete · ${when(s.completedAt)} · ${s.completedBy ?? ""}` : s?.status === "in_progress" ? "In progress" : "Not started";
+            return (
+              <li key={st.title} className={`flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3 text-sm ${i === cur ? "border-primary" : "border-border"}`}>
+                <span><span className="font-semibold text-primary">{i + 1}. {st.title}</span> <span className="text-muted-foreground">— {label}</span></span>
+                {i === cur && isStaff && (
+                  <button type="button" onClick={() => void who().then((by) => { onChange(completeStage(run, i, by)); toast.success(i === 13 ? "Workflow complete — click Save plan." : `Stage ${i + 1} complete; stage ${i + 2} is now open. Click Save plan.`); })}
+                    className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-teal">Complete stage</button>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </section>
+  );
+}
+
 function StageDeliverySection({ value, onChange }: { value: Record<string, StageDelivery>; onChange: (v: Record<string, StageDelivery>) => void }) {
   const set = (k: string, p: Partial<StageDelivery>) => onChange({ ...value, [k]: { ...EMPTY_DELIVERY, ...value[k], ...p } });
   const inputCls = "mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm";
