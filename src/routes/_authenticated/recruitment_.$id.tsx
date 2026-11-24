@@ -414,6 +414,8 @@ function DeviationStep({ v, cands }: { v: Vacancy; cands: Candidate[] }) {
 
   const open = async () => {
     if (!a) return;
+    const draft = rows.find((r) => r.status === "draft");
+    if (draft) { void navigate({ to: "/deviations/$id", params: { id: draft.id } }); return; }
     setCreating(true);
     const { data, error } = await supabase.from("ee_deviations").insert({
       vacancy_id: v.id,

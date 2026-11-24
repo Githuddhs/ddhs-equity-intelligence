@@ -114,8 +114,9 @@ export async function loadDeviationAssessment(
 ): Promise<DeviationAssessment> {
   const [base, plan, thresholds, earlier] = await Promise.all([
     loadBaseline(), latestPlanContent(planId), loadThresholds(),
-    supabase.from("ee_deviations").select("id, rating, status, corrective, reason_code, reason_detail, evidence, created_at")
-      .eq("vacancy_id", v.id),
+    // Earlier deviations at this occupational level across all vacancies; drafts are not yet deviations.
+    supabase.from("ee_deviations").select("id, rating, status, corrective, reason_code, reason_detail, evidence, created_at, recruitment_vacancies!inner(occupational_level)")
+      .eq("recruitment_vacancies.occupational_level", v.occupational_level),
   ]);
 
   const scoped = baselineCounts(base, v);
@@ -139,7 +140,7 @@ export async function loadDeviationAssessment(
     : null;
 
   const rows = (earlier.data ?? []) as { id: string; rating: string; status: string; corrective: unknown; reason_code: string; reason_detail: string; evidence: unknown; created_at: string }[];
-  const repeatDeviations = rows.filter((r) => r.id !== excludeId && r.rating !== "green").length;
+  const repeatDeviations = countRepeatDeviations(rows, excludeId);
 
   const rating = deviationRating({ impact, trajectory, repeatDeviations, thresholds });
   const g = (v.governance ?? {}) as Governance;
@@ -248,4 +249,9 @@ export async function saveReminderDays(days: number): Promise<boolean> {
   if (!auth.user) return false;
   const { error } = await supabase.from("deviation_settings").upsert({ user_id: auth.user.id, reminder_days: days, updated_at: new Date().toISOString() });
   return !error;
+}
+
+/** Earlier non-green, non-draft deviations at the level, excluding the request being assessed. */
+export function countRepeatDeviations(rows: { id: string; rating: string; status: string }[], excludeId?: string): number {
+  return rows.filter((r) => r.id !== excludeId && r.status !== "draft" && r.rating !== "green").length;
 }
