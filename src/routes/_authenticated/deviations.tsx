@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { StaleRatingCheck } from "@/components/stale-rating-check";
 import { loadReminderDays, saveReminderDays } from "@/lib/deviation-data";
 import { clampReminderDays, REMINDER_DAYS_MIN, REMINDER_DAYS_MAX } from "@/lib/deviation-reminders";
 import { dueForDeletion } from "@/lib/deviation-retention";
@@ -114,6 +115,7 @@ function DeviationsPage() {
           </button>
         </div>
         <ReminderSetting />
+        <StaleRatingCheck rows={rows} onDone={() => void loadDeviationRows().then(setRows)} />
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
           Every appointment reviewed against the approved EE objective, with its reason, approval trail and corrective action.
           Green, amber and red are your own workflow settings, not statutory tests.

@@ -1,4 +1,4 @@
-import { reportPdf } from "@/lib/report-download";
+import { reportPdf, safePdfDoc } from "@/lib/report-download";
 // EEA2 / EEA4 form structures, AI result parsing and PDF output.
 // Official Department of Employment and Labour online reporting portal.
 export const DOEL_PORTAL_URL = "https://ees.labour.gov.za";
@@ -82,7 +82,7 @@ export function doelStatus(f: DoelForms | null, subs: { form_type: string; statu
 export async function exportDoelPdf(form: "EEA2" | "EEA4", f: DoelForms) {
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF({ orientation: "landscape" });
+  const doc = safePdfDoc(new jsPDF({ orientation: "landscape" }));
   doc.setFontSize(16);
   doc.text(form === "EEA2" ? "EEA2 — Employment Equity Report (draft)" : "EEA4 — Income Differential Statement (draft)", 14, 16);
   doc.setFontSize(9);

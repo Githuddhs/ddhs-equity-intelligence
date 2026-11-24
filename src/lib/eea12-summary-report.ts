@@ -1,4 +1,4 @@
-import { reportPdf } from "@/lib/report-download";
+import { reportPdf, safePdfDoc } from "@/lib/report-download";
 import { eapGap, eapExplanation, eapShare, EAP_GAP_LEGEND } from "@/lib/eap-presentation";
 // EEA12 summary across all occupational levels plus one page per level.
 type Row = Record<string, number>;
@@ -37,7 +37,7 @@ function analyse(c: Row, eap: Row, t: { males: number; females: number; total: n
 export async function exportEea12SummaryPdf(i: Eea12ReportInput) {
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF();
+  const doc = safePdfDoc(new jsPDF());
   const header = (sub: string) => {
     doc.setFillColor(...NAVY); doc.rect(0, 0, 210, 34, "F");
     doc.setTextColor(255, 255, 255); doc.setFontSize(16); doc.text("DDHS Equity Intelligence", 14, 13);

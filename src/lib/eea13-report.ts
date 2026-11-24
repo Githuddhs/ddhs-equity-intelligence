@@ -1,4 +1,4 @@
-import { reportPdf } from "@/lib/report-download";
+import { reportPdf, safePdfDoc } from "@/lib/report-download";
 import { describeFilter, type UnitFilter } from "@/lib/org-units";
 
 export type Eea13Row = {
@@ -29,7 +29,7 @@ const GREY: [number, number, number] = [90, 100, 112];
 export async function exportEea13Pdf(input: Eea13PdfInput) {
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const doc = safePdfDoc(new jsPDF({ unit: "mm", format: "a4" }));
   const W = 210;
 
   doc.setFillColor(...NAVY);

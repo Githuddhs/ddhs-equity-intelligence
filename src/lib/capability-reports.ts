@@ -1,4 +1,4 @@
-import { reportPdf, reportWorkbook } from "@/lib/report-download";
+import { reportPdf, reportWorkbook, safePdfDoc } from "@/lib/report-download";
 import { DG_ITEMS, TEXT_SECTIONS, type Deadline, type DgAnswer, type PlanContent } from "@/lib/ee-plan";
 
 const NAVY: [number, number, number] = [10, 37, 64];
@@ -15,7 +15,7 @@ type AutoTable = (typeof import("jspdf-autotable"))["default"];
 async function pdfDoc(subtitle: string, meta: string): Promise<{ doc: JsPdf; autoTable: AutoTable }> {
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF();
+  const doc = safePdfDoc(new jsPDF());
   doc.setFillColor(...NAVY);
   doc.rect(0, 0, 210, 34, "F");
   doc.setTextColor(255, 255, 255);

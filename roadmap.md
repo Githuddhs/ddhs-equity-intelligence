@@ -136,3 +136,5 @@
 - [x] Review site tour covers all platform capabilities
 - [x] Fix arrows in governance report PDF
 - [x] Delete throwaway test account's records
+- [x] Admin tool: find deviation requests with stale repeat-deviation ratings, preview, refresh selected (keep past decisions)
+- [x] Replace unsupported symbols in all PDF reports

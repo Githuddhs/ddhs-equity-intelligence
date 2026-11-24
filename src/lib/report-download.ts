@@ -188,7 +188,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
   if (format === "pdf") {
     const { jsPDF } = await import("jspdf"), autoTable = (await import("jspdf-autotable")).default;
     const B = EXPORT_BRAND, rgb = (h: string): [number, number, number] => [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
-    const doc = new jsPDF(), logo = await brandLogo(); let y = 18;
+    const doc = safePdfDoc(new jsPDF()), logo = await brandLogo(); let y = 18;
     const t = pdfSafe;
     // Aptos cannot be embedded in PDFs; Helvetica is the standard built-in fallback.
     doc.setFont("helvetica", "bold"); doc.setFontSize(13);
@@ -264,4 +264,17 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
 /** Helvetica in jsPDF only covers WinAnsi; other glyphs (e.g. arrows) garble the whole string, so swap them for plain text. */
 export function pdfSafe(text: string): string {
   return text.replace(/\u2192/g, "->").replace(/\u2190/g, "<-").replace(/[\u2264]/g, "<=").replace(/[\u2265]/g, ">=").replace(/\u2212/g, "-").replace(/[^\x00-\xFF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026\u20AC]/g, "?");
+}
+
+type TextDoc = { text: (...a: never[]) => unknown; splitTextToSize: (...a: never[]) => unknown; getTextWidth: (...a: never[]) => unknown; getStringUnitWidth?: (...a: never[]) => unknown };
+const safeArg = (v: unknown): unknown => typeof v === "string" ? pdfSafe(v) : Array.isArray(v) ? v.map(safeArg) : v;
+/** Makes every string a jsPDF document draws or measures (including autotable cells) pass through pdfSafe. */
+export function safePdfDoc<T>(doc: T): T {
+  const d = doc as unknown as TextDoc & Record<string, unknown>;
+  for (const k of ["text", "splitTextToSize", "getTextWidth", "getStringUnitWidth"] as const) {
+    const orig = d[k] as ((...a: unknown[]) => unknown) | undefined;
+    if (typeof orig !== "function") continue;
+    d[k] = function (this: unknown, first: unknown, ...rest: unknown[]) { return orig.call(this, safeArg(first), ...rest); } as never;
+  }
+  return doc;
 }

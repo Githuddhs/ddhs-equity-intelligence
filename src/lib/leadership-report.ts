@@ -1,4 +1,4 @@
-import { reportPdf } from "@/lib/report-download";
+import { reportPdf, safePdfDoc } from "@/lib/report-download";
 import type { PlanContent, SavedAnalysis } from "@/lib/ee-plan";
 import { goalsFromAnalyses, emptyContent, buildDeadlines, daysUntil } from "@/lib/ee-plan";
 import { averageBarrierScores } from "@/lib/plan-autofill";
@@ -25,7 +25,7 @@ export type LeadershipReportInput = {
 export async function exportLeadershipPdf(input: LeadershipReportInput) {
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF();
+  const doc = safePdfDoc(new jsPDF());
   const today = fmt(new Date());
 
   // ---------- Computed figures (same logic as the dashboard) ----------

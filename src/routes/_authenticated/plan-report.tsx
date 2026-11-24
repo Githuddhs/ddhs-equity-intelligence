@@ -1,5 +1,5 @@
 import { withPageTools } from "@/components/start-over";
-import { reportPdf } from "@/lib/report-download";
+import { reportPdf, safePdfDoc } from "@/lib/report-download";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -84,7 +84,7 @@ function PlanReport() {
     try {
       const { jsPDF } = await import("jspdf");
       const autoTable = (await import("jspdf-autotable")).default;
-      const doc = new jsPDF({ orientation: "landscape" });
+      const doc = safePdfDoc(new jsPDF({ orientation: "landscape" }));
       doc.setFillColor(10, 37, 64); doc.rect(0, 0, 297, 28, "F");
       doc.setTextColor(255, 255, 255); doc.setFontSize(15); doc.text("DDHS Equity Intelligence", 14, 12);
       doc.setFontSize(11); doc.setTextColor(0, 163, 163); doc.text(`EE plan report — ${describeFilter(filter)}`, 14, 20);

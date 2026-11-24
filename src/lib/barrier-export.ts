@@ -1,4 +1,4 @@
-import { reportPdf, reportWorkbook } from "@/lib/report-download";
+import { reportPdf, reportWorkbook, safePdfDoc } from "@/lib/report-download";
 import {
   LIKERT_SECTIONS, OPEN_QUESTIONS, BARRIER_TEXT, FINAL_TEXT, QUESTIONNAIRE_VERSION,
   sectionScores, completionPct, rolesFor, barrierFrequency,
@@ -123,7 +123,7 @@ export async function exportBarrierExcel(responses: ExportableResponse[]) {
 export async function exportBarrierPdf(responses: ExportableResponse[]) {
   const [{ jsPDF }, autoTableMod] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
   const autoTable = autoTableMod.default;
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const doc = safePdfDoc(new jsPDF({ unit: "pt", format: "a4" }));
   const navy: [number, number, number] = [10, 37, 64];
   const teal: [number, number, number] = [0, 163, 163];
   let y = 48;

@@ -1,4 +1,4 @@
-import { reportPdf } from "@/lib/report-download";
+import { reportPdf, safePdfDoc } from "@/lib/report-download";
 import type { InvoiceItem } from "@/lib/invoice.functions";
 
 export type InvoiceForPdf = {
@@ -25,7 +25,7 @@ const fmtDate = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "n
 export async function exportInvoicePdf(inv: InvoiceForPdf) {
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const doc = safePdfDoc(new jsPDF({ unit: "mm", format: "a4" }));
   const W = 210;
   let y = 0;
 
