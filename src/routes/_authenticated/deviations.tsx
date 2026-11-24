@@ -9,7 +9,7 @@ import { AppHeader } from "@/components/app-header";
 import { LEVELS } from "@/lib/workforce";
 import { RATING_LABEL, STATUS_LABEL, correctiveState, deviationAnalytics, deviationRegisterReport, deviationWarnings, type Corrective, type DeviationSummary, type FunnelStage } from "@/lib/deviation";
 import { offerReport } from "@/lib/report-download";
-import { loadDeviationRows, rowCorrective, rowSummary, rowUnit, type DeviationRow } from "@/lib/deviation-data";
+import { loadDeviationRows, loadThresholds, rowCorrective, rowSummary, rowUnit, type DeviationRow } from "@/lib/deviation-data";
 
 export const Route = createFileRoute("/_authenticated/deviations")({
   staticData: { sitemap: false },
@@ -72,12 +72,13 @@ function DeviationsPage() {
   const [rows, setRows] = useState<DeviationRow[] | null>(null);
   const [f, setF] = useState({ level: "", unit: "", status: "", rating: "", reason: "", corrective: "", year: "" });
 
-  useEffect(() => { void loadDeviationRows().then(setRows); }, []);
+  const [repeatCount, setRepeatCount] = useState(2);
+  useEffect(() => { void loadDeviationRows().then(setRows); void loadThresholds().then((t) => setRepeatCount(t.repeatCount)); }, []);
 
   const summaries: DeviationSummary[] = useMemo(() => (rows ?? []).map(rowSummary), [rows]);
   const analytics = useMemo(() => deviationAnalytics(summaries), [summaries]);
   const funnel = useMemo(() => aggregateFunnel(rows ?? []), [rows]);
-  const warnings = useMemo(() => deviationWarnings({ summaries, funnel, repeatCount: 2 }), [summaries, funnel]);
+  const warnings = useMemo(() => deviationWarnings({ summaries, funnel, repeatCount }), [summaries, funnel, repeatCount]);
 
   const visible = useMemo(() => (rows ?? []).filter((r) => {
     const v = r.recruitment_vacancies;
