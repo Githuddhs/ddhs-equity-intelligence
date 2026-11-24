@@ -1,8 +1,8 @@
 # DDHS roadmap
 
 ## Open
-- [ ] Direct link from the EE Deviation & Appointment Governance tour step to the deviation workflow, so visitors can explore the capability.
-- [ ] Test the governance report with real deviation data and verify the PDF contains linked requests, reviewer impact snapshots, decisions and EE plan milestone progress.
+- [x] Direct link from the EE Deviation & Appointment Governance tour step to the deviation workflow, so visitors can explore the capability.
+- [x] Test the governance report with real deviation data and verify the PDF contains linked requests, reviewer impact snapshots, decisions and EE plan milestone progress.
 - [x] Repositioned DDHS as the Operator of the platform, not the Owner of client data: public pages now state "You own your data. DDHS operates the platform." (homepage, all four service pages, Workforce Foundation, the combined interview service, stay and exit interview pages, Culture & Inclusion and evidence governance), and wording that implied DDHS owns or holds client records was rewritten. Checked on desktop and phone: the statement appears once on each of the eleven pages with no sideways scrolling.
 - [x] EE Deviation & Appointment Governance module (Sello's uploaded proposal, 17 Nov): live deviation assessment on each vacancy (EE recruitment objective, annual-milestone trajectory, funnel representation, green/amber/red workflow status), digital deviation form with reason, evidence upload, deterministic completeness review, sequential risk-based approvals, corrective action with owner/due/indicator, central deviation register with filters, analytics, early warnings, funnel and four-format downloads. Verified end to end in a throwaway account (amber record raised, submitted, three approvals recorded, register showed Approved; desktop and phone checks clean). Isolated-database rules tests: 30 passed. AI completeness review deliberately left out — the check is deterministic.
 - [x] Allow demonstration bookings without current EE process/challenge details; blank and omitted validation tests pass, and the real no-storage submission path succeeds on desktop and phone.
@@ -134,3 +134,5 @@
 - [x] Governance PDF report: linked deviations, reviewer impact, plan milestone progress
 - [x] Deviation decision audit trail with comments and EE plan impact snapshot
 - [x] Review site tour covers all platform capabilities
+- [x] Fix arrows in governance report PDF
+- [x] Delete throwaway test account's records

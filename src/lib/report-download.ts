@@ -189,6 +189,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     const { jsPDF } = await import("jspdf"), autoTable = (await import("jspdf-autotable")).default;
     const B = EXPORT_BRAND, rgb = (h: string): [number, number, number] => [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
     const doc = new jsPDF(), logo = await brandLogo(); let y = 18;
+    const t = pdfSafe;
     // Aptos cannot be embedded in PDFs; Helvetica is the standard built-in fallback.
     doc.setFont("helvetica", "bold"); doc.setFontSize(13);
     if (logo) doc.addImage(logo, "PNG", 14, 9, 9, 9);
@@ -197,7 +198,7 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     doc.setDrawColor(...rgb(B.teal)); doc.setLineWidth(0.6); doc.line(14, 20, 196, 20); y = 30;
     doc.setTextColor(...rgb(B.navy));
     doc.setFontSize(15);
-    const titleLines = doc.splitTextToSize(d.title, 180) as string[];
+    const titleLines = doc.splitTextToSize(t(d.title), 180) as string[];
     doc.text(titleLines, 14, y); y += titleLines.length * 6 + 6;
     for (const b of d.blocks) {
       if (b.kind === "table") {
@@ -205,12 +206,12 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
         for (let c = 1; c < Math.max(columns, 2); c += 5) {
           const keys = columns === 1 ? [0] : [0, ...Array.from({ length: Math.min(5, columns - c) }, (_, i) => c + i)];
           if (y > 250) { doc.addPage(); y = 18; }
-          autoTable(doc, { startY: y, head: b.head.length ? [keys.map((k) => b.head[k] ?? "")] : [], body: b.body.map((row) => keys.map((k) => row[k] ?? "")), styles: { fontSize: 8, font: "helvetica", textColor: rgb(B.navy), lineColor: rgb(B.border), lineWidth: 0.1 }, headStyles: { fillColor: rgb(B.navy), textColor: [255, 255, 255] }, alternateRowStyles: { fillColor: rgb(B.tealSoft) }, margin: 14 });
+          autoTable(doc, { startY: y, head: b.head.length ? [keys.map((k) => t(b.head[k] ?? ""))] : [], body: b.body.map((row) => keys.map((k) => t(String(row[k] ?? "")))), styles: { fontSize: 8, font: "helvetica", textColor: rgb(B.navy), lineColor: rgb(B.border), lineWidth: 0.1 }, headStyles: { fillColor: rgb(B.navy), textColor: [255, 255, 255] }, alternateRowStyles: { fillColor: rgb(B.tealSoft) }, margin: 14 });
           y = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? y; y += 8;
         }
       } else {
         doc.setFont("helvetica", b.kind === "h" ? "bold" : "normal"); doc.setFontSize(b.kind === "h" ? 13 : 10); doc.setTextColor(...rgb(b.kind === "h" ? B.teal : B.navy));
-        const lines = doc.splitTextToSize(b.text, 180) as string[];
+        const lines = doc.splitTextToSize(t(b.text), 180) as string[];
         for (const line of lines) { if (y > 280) { doc.addPage(); y = 18; } doc.text(line, 14, y); y += 5; } y += 4;
       }
     }
@@ -259,4 +260,8 @@ export async function buildReportFile(request: ReportRequest, format: ReportForm
     }
   }
   return finalizePresentation(await pptx.write({ outputType: "blob" }) as Blob);
+}
+/** Helvetica in jsPDF only covers WinAnsi; other glyphs (e.g. arrows) garble the whole string, so swap them for plain text. */
+export function pdfSafe(text: string): string {
+  return text.replace(/\u2192/g, "->").replace(/\u2190/g, "<-").replace(/[\u2264]/g, "<=").replace(/[\u2265]/g, ">=").replace(/\u2212/g, "-").replace(/[^\x00-\xFF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026\u20AC]/g, "?");
 }
