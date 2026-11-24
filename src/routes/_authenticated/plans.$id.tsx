@@ -1,3 +1,5 @@
+import { STAGES } from "@/lib/ee-workflow";
+import { DELIVERY_LABEL, EMPTY_DELIVERY, deliveryGaps, safeMeetingLink, type DeliveryMode, type StageDelivery } from "@/lib/stage-delivery";
 import { RATING_LABEL, STATUS_LABEL, planGovernanceReport, type GovernanceDeviation, type Trajectory } from "@/lib/deviation";
 import { offerReport } from "@/lib/report-download";
 import { withStartOver } from "@/components/start-over";
@@ -338,6 +340,7 @@ function PlanBuilder() {
           )}
         </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
+        <StageDeliverySection value={content.delivery ?? {}} onChange={(delivery) => upContent({ delivery })} />
         <LinkedDeviations planId={id} planTitle={meta.title || "EE plan"} />
       </main>
 
@@ -369,6 +372,45 @@ function PlanBuilder() {
 
 
 /** Deviation requests linked to this plan, so plan owners see where appointments departed from its goals. */
+function StageDeliverySection({ value, onChange }: { value: Record<string, StageDelivery>; onChange: (v: Record<string, StageDelivery>) => void }) {
+  const set = (k: string, p: Partial<StageDelivery>) => onChange({ ...value, [k]: { ...EMPTY_DELIVERY, ...value[k], ...p } });
+  const inputCls = "mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm";
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-card p-5">
+      <h2 className="font-display text-lg font-bold text-primary">Remote and on-site delivery</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Choose how each workflow stage, meeting and consultation is held. Remote needs a meeting link, on-site a venue, hybrid both. Click Save plan to keep changes.</p>
+      <ol className="mt-4 space-y-3">
+        {STAGES.map((st, i) => {
+          const k = String(i + 1), d = { ...EMPTY_DELIVERY, ...value[k] }, gaps = deliveryGaps(d), link = safeMeetingLink(d.link);
+          return (
+            <li key={k} className="rounded-lg border border-border p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-primary">{k}. {st.title}</p>
+                <div className="flex flex-wrap gap-1" role="group" aria-label={`Delivery for ${st.title}`}>
+                  {(Object.keys(DELIVERY_LABEL) as DeliveryMode[]).map((m) => (
+                    <button key={m} type="button" aria-pressed={d.mode === m} onClick={() => set(k, { mode: d.mode === m ? "" : m })}
+                      className={`rounded-full border px-3 py-1 text-xs font-semibold ${d.mode === m ? "border-primary bg-primary text-primary-foreground" : "border-border text-teal"}`}>{DELIVERY_LABEL[m]}</button>
+                  ))}
+                </div>
+              </div>
+              {d.mode && (
+                <div className="mt-2 grid gap-2 sm:grid-cols-4">
+                  {d.mode !== "remote" && <label className="text-xs font-semibold">Venue<input className={inputCls} maxLength={160} value={d.venue} onChange={(e) => set(k, { venue: e.target.value })} /></label>}
+                  {d.mode !== "onsite" && <label className="text-xs font-semibold">Meeting link<input className={inputCls} type="url" maxLength={500} placeholder="https://" value={d.link} onChange={(e) => set(k, { link: e.target.value })} /></label>}
+                  <label className="text-xs font-semibold">Date<input className={inputCls} type="date" value={d.date} onChange={(e) => set(k, { date: e.target.value })} /></label>
+                  <label className="text-xs font-semibold">Notes<input className={inputCls} maxLength={240} value={d.notes} onChange={(e) => set(k, { notes: e.target.value })} /></label>
+                </div>
+              )}
+              {gaps.length > 0 && <p className="mt-1 text-xs font-semibold text-destructive">Still needs a {gaps.join(" and a ")}.</p>}
+              {link && <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs font-semibold text-teal underline">Open meeting link</a>}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
 function LinkedDeviations({ planId, planTitle }: { planId: string; planTitle: string }) {
   const [rows, setRows] = useState<{ id: string; status: string; rating: string; title: string }[] | null>(null);
   useEffect(() => {

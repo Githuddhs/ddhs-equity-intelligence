@@ -586,6 +586,30 @@ export type Database = {
         }
         Relationships: []
       }
+      ee_workflow_config: {
+        Row: {
+          duties: Json
+          flow: Json
+          id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          duties?: Json
+          flow?: Json
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          duties?: Json
+          flow?: Json
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       eea12_analyses: {
         Row: {
           ai_summary: string | null

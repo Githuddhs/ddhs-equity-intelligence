@@ -67,6 +67,7 @@ import { Route as AuthenticatedRecruitmentDashboardRouteImport } from './routes/
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as AuthenticatedReviewsRouteImport } from './routes/_authenticated/reviews'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
+import { Route as AuthenticatedWorkflowEditorRouteImport } from './routes/_authenticated/workflow-editor'
 import { Route as AuthenticatedWorkforceRouteImport } from './routes/_authenticated/workforce'
 import { Route as ApiEeAssistRouteImport } from './routes/api/ee-assist'
 import { Route as ApiEeaInsightsRouteImport } from './routes/api/eea-insights'
@@ -393,6 +394,12 @@ const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWorkflowEditorRoute =
+  AuthenticatedWorkflowEditorRouteImport.update({
+    id: '/workflow-editor',
+    path: '/workflow-editor',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedWorkforceRoute = AuthenticatedWorkforceRouteImport.update({
   id: '/workforce',
   path: '/workforce',
@@ -601,6 +608,7 @@ export interface FileRoutesByFullPath {
   '/review': typeof AuthenticatedReviewRoute
   '/reviews': typeof AuthenticatedReviewsRoute
   '/staff': typeof AuthenticatedStaffRoute
+  '/workflow-editor': typeof AuthenticatedWorkflowEditorRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
@@ -688,6 +696,7 @@ export interface FileRoutesByTo {
   '/review': typeof AuthenticatedReviewRoute
   '/reviews': typeof AuthenticatedReviewsRoute
   '/staff': typeof AuthenticatedStaffRoute
+  '/workflow-editor': typeof AuthenticatedWorkflowEditorRoute
   '/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
@@ -777,6 +786,7 @@ export interface FileRoutesById {
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/reviews': typeof AuthenticatedReviewsRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
+  '/_authenticated/workflow-editor': typeof AuthenticatedWorkflowEditorRoute
   '/_authenticated/workforce': typeof AuthenticatedWorkforceRoute
   '/api/ee-assist': typeof ApiEeAssistRoute
   '/api/eea-insights': typeof ApiEeaInsightsRoute
@@ -866,6 +876,7 @@ export interface FileRouteTypes {
     | '/review'
     | '/reviews'
     | '/staff'
+    | '/workflow-editor'
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
@@ -953,6 +964,7 @@ export interface FileRouteTypes {
     | '/review'
     | '/reviews'
     | '/staff'
+    | '/workflow-editor'
     | '/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
@@ -1041,6 +1053,7 @@ export interface FileRouteTypes {
     | '/_authenticated/review'
     | '/_authenticated/reviews'
     | '/_authenticated/staff'
+    | '/_authenticated/workflow-editor'
     | '/_authenticated/workforce'
     | '/api/ee-assist'
     | '/api/eea-insights'
@@ -1536,6 +1549,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedStaffRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/workflow-editor': {
+      id: '/_authenticated/workflow-editor'
+      path: '/workflow-editor'
+      fullPath: '/workflow-editor'
+      preLoaderRoute: typeof AuthenticatedWorkflowEditorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/workforce': {
       id: '/_authenticated/workforce'
       path: '/workforce'
@@ -1761,6 +1781,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
   AuthenticatedReviewsRoute: typeof AuthenticatedReviewsRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
+  AuthenticatedWorkflowEditorRoute: typeof AuthenticatedWorkflowEditorRoute
   AuthenticatedWorkforceRoute: typeof AuthenticatedWorkforceRoute
   AuthenticatedClientsIdRoute: typeof AuthenticatedClientsIdRoute
   AuthenticatedDeviationsIdRoute: typeof AuthenticatedDeviationsIdRoute
@@ -1797,6 +1818,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
   AuthenticatedReviewsRoute: AuthenticatedReviewsRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
+  AuthenticatedWorkflowEditorRoute: AuthenticatedWorkflowEditorRoute,
   AuthenticatedWorkforceRoute: AuthenticatedWorkforceRoute,
   AuthenticatedClientsIdRoute: AuthenticatedClientsIdRoute,
   AuthenticatedDeviationsIdRoute: AuthenticatedDeviationsIdRoute,
