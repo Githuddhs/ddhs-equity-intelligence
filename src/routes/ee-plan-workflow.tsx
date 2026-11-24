@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { AuthCta } from "@/components/auth-cta";
@@ -52,6 +53,25 @@ const ROLES: [string, string][] = [
   ["Auditor / Reviewer", "Read-only access to records and evidence"],
 ];
 
+
+/** What each core role does at each stage, in STAGES order. Roles follow the ROLES list. */
+const DUTIES: string[][] = [
+  ["Confirms the accountable senior manager and plan period", "Sets up the EE project workspace and structure", "Supplies the organisational units and occupational levels", "Notes the committee structure and representatives", "Confirms business-unit structure for their area", "Confirms their unit and reporting lines", "Creates the workspace and configures settings", "Views the setup record"],
+  ["Accepts sponsorship and approves the responsibility matrix", "Nominates participants and schedules milestones", "Accepts the data and analytics responsibility", "Members accept their nomination and meeting schedule", "Accepts business-unit support responsibilities", "Accepts target and action ownership", "Assigns role-based permissions to users", "Views the governance register"],
+  ["Is informed when critical data errors block analysis", "Reviews validation status before analysis starts", "Uploads data, corrects errors and resolves Amber and Red flags", "Is told when the dataset is validated", "Helps resolve unit-level data queries", "Confirms employee and unit details when asked", "Manages import settings and upload access", "Views corrections in the audit trail"],
+  ["Reviews material representation gaps", "Checks the analysis and routes gaps to target modelling", "Prepares the profile, gaps, exits and opportunities", "Scrutinises the analysis presented", "Reviews gaps for their business units", "Sees the gaps in their own area", "Maintains filters and access", "Views the analysis and its sources"],
+  ["Supports interventions that need resources", "Runs the barrier assessment and keeps the register", "Provides movement and practice evidence", "Contributes barriers and evidence from consultation", "Captures unit-level barriers and evidence", "Owns barriers in their area and proposes interventions", "Maintains the barrier categories", "Views barriers and supporting evidence"],
+  ["Approves manual target adjustments", "Accepts, adjusts or refers back the recommended trajectory", "Models movement, opportunities and expected exits", "Reviews proposed goals and targets", "Tests targets against business-unit realities", "Agrees the targets for their area", "Configures modelling settings", "Views original and adjusted values in the audit trail"],
+  ["Approves resources for measures", "Turns gaps and barriers into managed measures", "Sets KPIs and evidence requirements for data measures", "Reviews proposed measures", "Supports units to plan their measures", "Owns measures, dates and KPIs in their area", "Sets up statuses and escalation", "Views measures and their status"],
+  ["Receives the draft for review", "Generates and controls the plan versions", "Checks the figures in the draft", "Receives the consultation draft", "Reviews unit content in the draft", "Checks actions assigned to them", "Protects earlier versions from overwriting", "Views every saved version"],
+  ["Is told of the committee recommendation", "Records management responses with reasons", "Answers data questions raised by members", "Comments, scrutinises and makes the recommendation", "Responds to unit-level comments", "Responds to comments on their actions", "Sends notices to committee members", "Views the consultation register and meeting evidence"],
+  ["Approves, returns for revision or rejects the plan", "Routes the recommended plan and starts amendments", "Locks the data baseline behind the plan", "Is told of the decision", "Is told the plan is active", "Is told the plan is active", "Locks the approved baseline", "Views the electronic approval record"],
+  ["Monitors overall progress", "Converts measures into tasks and assigns owners", "Delivers data-related tasks", "Follows progress on committee actions", "Supports units with their tasks", "Delivers tasks and uploads evidence", "Maintains task notices and escalation paths", "Views tasks and evidence"],
+  ["Reviews the quarterly dashboard", "Opens each cycle and prepares the report", "Supplies actual appointments, promotions and exits", "Reviews quarterly performance", "Reviews business-unit performance", "Explains variances and records corrective actions", "Keeps thresholds and indicators configured", "Views quarterly results and evidence"],
+  ["Is told of serious or repeated deviations", "Reviews and approves corrective actions", "Confirms the figures behind a deviation", "Is told of deviations and recovery", "Reviews corrective actions for their units", "Records the reason and proposed corrective action", "Maintains the reason categories and alerts", "Views the deviation register"],
+  ["Signs off the annual performance report", "Compares plan with actual and sets the next cycle", "Prepares annual movement and target results", "Reviews annual outcomes and next-year needs", "Reviews unit results and adjustments", "Records root causes and next-year requirements", "Opens the next planning cycle", "Views retained annual evidence"],
+];
+
 const ESCALATION: [string, string][] = [
   ["30 days before due date", "Reminder to the responsible manager"],
   ["7 days before due date", "Final reminder, visible to the EE Manager"],
@@ -59,6 +79,7 @@ const ESCALATION: [string, string][] = [
 ];
 
 function EeWorkflowPage() {
+  const [role, setRole] = useState<number | null>(null);
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border bg-background">
@@ -95,6 +116,16 @@ function EeWorkflowPage() {
 
         <section className="mt-10">
           <h2 className="section-title text-primary">End-to-end workflow</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Choose a role to see what it does at every stage.</p>
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="View by role">
+            {[["All stages", null] as const, ...ROLES.map(([r], i) => [r, i] as const)].map(([label, i]) => (
+              <button key={label} type="button" aria-pressed={role === i} onClick={() => setRole(i)}
+                className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors ${role === i ? "border-primary bg-primary text-primary-foreground" : "border-border text-teal hover:bg-muted"}`}>
+                {label}
+              </button>
+            ))}
+          </div>
+          {role !== null && <p className="mt-3 text-sm"><span className="font-semibold text-primary">{ROLES[role]?.[0]}:</span> {ROLES[role]?.[1]}</p>}
           <ol className="mt-6 grid gap-4 md:grid-cols-2">
             {STAGES.map((s, i) => (
               <li key={s.title} className="rounded-xl border border-border bg-card p-5">
@@ -104,6 +135,9 @@ function EeWorkflowPage() {
                   {s.points.map((p) => <li key={p}>{p}</li>)}
                 </ul>
                 <p className="mt-3 text-sm"><span className="font-semibold text-primary">Output:</span> {s.output}</p>
+                {role !== null && (
+                  <p className="mt-3 rounded-lg bg-secondary/60 p-3 text-sm"><span className="font-semibold text-primary">{ROLES[role]?.[0]}:</span> {DUTIES[i]?.[role]}</p>
+                )}
               </li>
             ))}
           </ol>
