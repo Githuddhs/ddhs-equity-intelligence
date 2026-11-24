@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/workspace-client";
 
-export type SiteEvent = "visit" | "tour_complete" | "assessment_download" | "demo_request" | "app_install" | "readiness_check";
+export type SiteEvent = "visit" | "tour_complete" | "assessment_download" | "demo_request" | "app_install" | "readiness_check" | "tour_action";
 
 /** Fire-and-forget anonymous event; never blocks or breaks the UI. Stores no personal data. */
 export function track(event: SiteEvent, detail = "") {

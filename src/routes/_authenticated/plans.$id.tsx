@@ -8,8 +8,9 @@ import { RATING_LABEL, STATUS_LABEL, planGovernanceReport, type GovernanceDeviat
 import { offerReport } from "@/lib/report-download";
 import { withStartOver } from "@/components/start-over";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { notifyWorkflowRolePlayers } from "@/lib/workflow-notices.functions";
 import { supabase } from "@/lib/workspace-client";
 import type { Json } from "@/integrations/supabase/types";
 import { AppHeader } from "@/components/app-header";
@@ -70,6 +71,8 @@ function PlanBuilder() {
   const [org, setOrg] = useState<Record<string, string> | null>(null);
   const ai = useAiStream();
   const { data: wf } = useLatestOrgUnits();
+  // A stage change only reaches role players once the plan is actually saved.
+  const pendingNotice = useRef<{ reason: string; label: string } | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -103,6 +106,14 @@ function PlanBuilder() {
     if (error) { toast.error("Could not save: " + error.message); return; }
     setDirty(false);
     toast.success("Plan saved.");
+    const pending = pendingNotice.current;
+    if (pending) {
+      pendingNotice.current = null;
+      try {
+        const r = await notifyWorkflowRolePlayers({ data: { planId: id, reason: pending.reason } });
+        toast.success(r.sent ? `Notified ${r.sent} role player(s) about ${pending.label}.` : "The stage change is saved, but no role player email addresses are set up for this plan yet.");
+      } catch { toast.error("The stage change is saved, but the role player emails could not be sent."); }
+    }
   };
 
   const draft = async (key: keyof PlanContent, title: string) => {
@@ -344,7 +355,8 @@ function PlanBuilder() {
           )}
         </section>
         <p className="mt-6 text-xs text-muted-foreground">AI drafts are guidance — review them with your EE committee before adoption. Not legal advice.</p>
-        <WorkflowRunSection run={content.workflow} onChange={(workflow) => upContent({ workflow })} />
+        <WorkflowRunSection planId={id} run={content.workflow} onChange={(workflow) => upContent({ workflow })}
+          onNotice={(reason, label) => { pendingNotice.current = { reason, label }; }} />
         <StageReminderSection planId={id} run={content.workflow} />
         <WorkflowActivityLog planId={id} />
         <StageDeliverySection value={content.delivery ?? {}} onChange={(delivery) => upContent({ delivery })} />
@@ -379,9 +391,20 @@ function PlanBuilder() {
 
 
 /** Deviation requests linked to this plan, so plan owners see where appointments departed from its goals. */
-function WorkflowRunSection({ run, onChange }: { run: WorkflowRun | undefined; onChange: (r: WorkflowRun) => void }) {
+function WorkflowRunSection({ planId, run, onChange, onNotice }: { planId: string; run: WorkflowRun | undefined; onChange: (r: WorkflowRun) => void; onNotice: (reason: string, label: string) => void }) {
   const { isStaff } = useIsStaffStatus();
+  const [note, setNote] = useState("");
+  const [notifying, setNotifying] = useState(false);
   const who = async () => { const { data } = await sessionClient.auth.getUser(); return data.user?.email ?? "DDHS staff"; };
+  const notifyAll = async () => {
+    setNotifying(true);
+    try {
+      const r = await notifyWorkflowRolePlayers({ data: { planId, reason: "manual", note: note.trim() || undefined } });
+      toast.success(r.sent ? `Emailed ${r.sent} role player(s).` : "No role player email addresses are available — invite the client's team members first.");
+      if (r.sent) setNote("");
+    } catch { toast.error("Could not send the role player emails."); }
+    setNotifying(false);
+  };
   const when = (t?: string) => (t ? new Date(t).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" }) : "");
   const cur = run ? currentStage(run) : null;
   return (
@@ -392,7 +415,7 @@ function WorkflowRunSection({ run, onChange }: { run: WorkflowRun | undefined; o
           <p className="mt-1 text-sm text-muted-foreground">{run ? `Started ${when(run.startedAt)} by ${run.startedBy} · ${runProgress(run)}% complete` : "Not started yet. DDHS staff start the workflow, then complete each of the 14 stages in order."}</p>
         </div>
         {!run && isStaff && (
-          <button type="button" onClick={() => void who().then((by) => { onChange(startRun(by)); toast.success("Workflow started at stage 1 — click Save plan to keep it."); })}
+          <button type="button" onClick={() => void who().then((by) => { onChange(startRun(by)); onNotice("stage-1-started", "stage 1 starting"); toast.success("Workflow started at stage 1 — click Save plan to keep it."); })}
             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Start workflow</button>
         )}
       </div>
@@ -409,7 +432,7 @@ function WorkflowRunSection({ run, onChange }: { run: WorkflowRun | undefined; o
                   ? <label className="text-xs text-muted-foreground">Due <input type="date" value={s?.due ?? ""} onChange={(e) => onChange(setStageDue(run, i, e.target.value))} className="ml-1 rounded border border-input bg-background px-1 py-0.5 text-xs" /></label>
                   : s?.due ? <span className="text-xs text-muted-foreground">Due {s.due}</span> : null)}
                 {i === cur && isStaff && (
-                  <button type="button" onClick={() => void who().then((by) => { onChange(completeStage(run, i, by)); toast.success(i === 13 ? "Workflow complete — click Save plan." : `Stage ${i + 1} complete; stage ${i + 2} is now open. Click Save plan.`); })}
+                  <button type="button" onClick={() => void who().then((by) => { onChange(completeStage(run, i, by)); onNotice(`stage-${i + 1}-complete`, `stage ${i + 1} being complete`); toast.success(i === 13 ? "Workflow complete — click Save plan." : `Stage ${i + 1} complete; stage ${i + 2} is now open. Click Save plan.`); })}
                     className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-teal">Complete stage</button>
                 )}
                 </span>
@@ -417,6 +440,18 @@ function WorkflowRunSection({ run, onChange }: { run: WorkflowRun | undefined; o
             );
           })}
         </ol>
+      )}
+      {isStaff && (
+        <div className="mt-4 rounded-lg border border-border bg-background p-3">
+          <label className="text-sm font-semibold text-primary">Notify all role players</label>
+          <p className="mt-1 text-xs text-muted-foreground">Emails the client's team members and the DDHS staff supporting this client about the current stage. Notices also go out automatically when a stage starts or completes and the plan is saved.</p>
+          <div className="mt-2 flex flex-wrap items-end gap-2">
+            <input value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} placeholder="Optional message to include"
+              className="min-w-[12rem] flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm" />
+            <button type="button" disabled={notifying} onClick={() => void notifyAll()}
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">{notifying ? "Sending…" : "Notify all role players"}</button>
+          </div>
+        </div>
       )}
     </section>
   );

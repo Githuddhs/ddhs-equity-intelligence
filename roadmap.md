@@ -1,6 +1,9 @@
 # DDHS roadmap
 
 ## Open
+- [ ] Send email to all role players in the Employment Equity Workflow (trigger and recipient source still to be confirmed with Sello).
+- [x] Site tour shows a progress indicator (step X of Y, steps remaining, % complete) and resumes a visitor at the step they stopped on, with a Start over option.
+- [x] Analytics record which site tour action buttons visitors click, so the staff dashboard can show which capabilities attract the most interest.
 - [x] Direct link from the EE Deviation & Appointment Governance tour step to the deviation workflow, so visitors can explore the capability.
 - [x] Test the governance report with real deviation data and verify the PDF contains linked requests, reviewer impact snapshots, decisions and EE plan milestone progress.
 - [x] Repositioned DDHS as the Operator of the platform, not the Owner of client data: public pages now state "You own your data. DDHS operates the platform." (homepage, all four service pages, Workforce Foundation, the combined interview service, stay and exit interview pages, Culture & Inclusion and evidence governance), and wording that implied DDHS owns or holds client records was rewritten. Checked on desktop and phone: the statement appears once on each of the eleven pages with no sideways scrolling.

@@ -428,6 +428,13 @@
       "when": 1795560097247,
       "tag": "0060_restrict_workflow_config_read",
       "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1795560755475,
+      "tag": "0061_site_events_tour_action",
+      "breakpoints": true
     }
   ]
 }

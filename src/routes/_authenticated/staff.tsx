@@ -50,7 +50,7 @@ function StaffDashboard() {
         supabase.from("contact_enquiries").select("id,full_name,email,message,created_at").order("created_at", { ascending: false }).limit(10),
         supabase.from("quote_requests").select("id,created_at").order("created_at", { ascending: false }),
         supabase.from("ai_usage").select("id,feature,model,created_at").order("created_at", { ascending: false }).limit(500),
-        supabase.from("site_events").select("event,created_at").gte("created_at", new Date(Date.now() - 30 * 864e5).toISOString()).limit(10000),
+        supabase.from("site_events").select("event,created_at,detail").gte("created_at", new Date(Date.now() - 30 * 864e5).toISOString()).limit(10000),
       ]);
       for (const x of [c, p, r, d]) if (x.error) throw x.error;
       const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
@@ -64,6 +64,16 @@ function StaffDashboard() {
         aiByFeature: aiRows.reduce<Record<string, number>>((m, x) => { m[x.feature] = (m[x.feature] ?? 0) + 1; return m; }, {}),
         aiRecent: aiRows.slice(0, 10),
         events: (ev.data ?? []).reduce<Record<string, { month: number; week: number }>>((m, x) => { const t = m[x.event] ??= { month: 0, week: 0 }; t.month++; if (+new Date(x.created_at) > Date.now() - 7 * 864e5) t.week++; return m; }, {}),
+        tourButtons: Object.entries(
+          (ev.data ?? []).filter((x) => x.event === "tour_action").reduce<Record<string, { month: number; week: number }>>((m, x) => {
+            const [where = "", , what = ""] = (x.detail ?? "").split(" · ");
+            const key = what ? `${what} (${where})` : where;
+            const t = m[key] ??= { month: 0, week: 0 };
+            t.month++;
+            if (+new Date(x.created_at) > Date.now() - 7 * 864e5) t.week++;
+            return m;
+          }, {}),
+        ).sort((a, b) => b[1].month - a[1].month).slice(0, 12),
       };
       return { overview, clients: (c.data ?? []).map((cl) => {
         const docs = (d.data ?? []).filter((x) => x.user_id === cl.id);
@@ -128,6 +138,16 @@ function StaffDashboard() {
                 {([["visit", "Page visits"], ["tour_complete", "Guided tour completions"], ["assessment_download", "Assessment downloads"], ["demo_request", "Demo requests"], ["app_install", "App installs"]] as const).map(([k, label]) => (
                   <div key={k}><p className="text-sm text-muted-foreground">{label}</p><p className="font-display text-2xl font-bold">{ov.events[k]?.month ?? 0} <span className="text-base font-semibold text-muted-foreground">({ov.events[k]?.week ?? 0})</span></p></div>
                 ))}
+              </div>
+              <div className="mt-4 border-t border-border pt-3">
+                <p className="text-sm font-semibold text-primary">Tour action buttons clicked</p>
+                <p className="mt-1 text-xs text-muted-foreground">Which capability a visitor opened from a guided tour. Last 30 days (last 7 days in brackets).</p>
+                <ul className="mt-2 grid gap-1 sm:grid-cols-2">
+                  {ov.tourButtons.map(([where, n]) => (
+                    <li key={where} className="text-sm"><span className="font-semibold">{n.month}×</span> <span className="text-muted-foreground">({n.week})</span> {where}</li>
+                  ))}
+                  {ov.tourButtons.length === 0 && <li className="text-sm text-muted-foreground">No tour buttons clicked yet.</li>}
+                </ul>
               </div>
             </section>
 
