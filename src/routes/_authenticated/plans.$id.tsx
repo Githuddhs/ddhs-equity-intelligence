@@ -466,9 +466,31 @@ function WorkflowActivityLog({ planId }: { planId: string }) {
   const [rows, setRows] = useState<ActivityRow[] | null>(null);
   useEffect(() => { void supabase.from("ee_plan_workflow_audit").select("id,actor_email,stage,action,detail,created_at").eq("plan_id", planId).order("created_at", { ascending: false }).limit(200).then(({ data }) => setRows((data ?? []) as ActivityRow[])); }, [planId]);
   const label: Record<string, string> = { started: "Started", opened: "Opened", completed: "Completed", changed: "Changed" };
+  const [busy, setBusy] = useState(false);
+  const exportCsv = async () => {
+    setBusy(true);
+    try {
+      const { activityCsv } = await import("@/lib/activity-csv");
+      const all: ActivityRow[] = [];
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await supabase.from("ee_plan_workflow_audit").select("id,actor_email,stage,action,detail,created_at").eq("plan_id", planId).order("created_at", { ascending: true }).range(from, from + 999);
+        if (error) throw error;
+        all.push(...((data ?? []) as ActivityRow[]));
+        if (!data || data.length < 1000) break;
+      }
+      const csv = activityCsv(all.map((r) => ({ ...r, action: label[r.action] ?? r.action })), (n) => STAGES[n - 1]?.title ?? "");
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      const a = document.createElement("a"); a.href = url; a.download = `workflow-activity-log-${planId.slice(0, 8)}-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30_000);
+    } catch { alert("Couldn't prepare the activity log download. Please try again."); }
+    finally { setBusy(false); }
+  };
   return (
     <section className="mt-6 rounded-xl border border-border bg-card p-5">
-      <h2 className="font-display text-lg font-bold text-primary">Workflow activity log</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="font-display text-lg font-bold text-primary">Workflow activity log</h2>
+        {rows && rows.length > 0 && <button type="button" onClick={exportCsv} disabled={busy} className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold text-teal disabled:opacity-60">{busy ? "Preparing…" : "Download CSV"}</button>}
+      </div>
       <p className="mt-1 text-sm text-muted-foreground">Recorded automatically each time the plan is saved. Entries cannot be edited or deleted.</p>
       {rows === null ? <p className="mt-3 text-sm text-muted-foreground">Loading…</p> : rows.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">No workflow activity yet.</p> : (
         <div className="mt-3 overflow-x-auto">

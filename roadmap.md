@@ -144,3 +144,4 @@
 - [x] Staff can start and advance the 14-stage EE workflow
 - [x] Activity log of workflow stage start/complete/change on each EE plan
 - [x] Configurable reminders for upcoming and overdue workflow stages
+- [x] CSV export of each EE plan workflow activity log
