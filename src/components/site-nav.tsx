@@ -17,6 +17,7 @@ const LINKS = [
   { label: "DDHS Equity Intelligence Academy", href: "/academy" },
   { label: "DDHS Managed Stay & Exit Interview Service", href: "/managed-interviews" },
   { label: "DDHS Culture & Inclusion Intelligence", href: "/culture-inclusion-intelligence" },
+  { label: "Employment Equity Workflow", href: "/ee-plan-workflow" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -30,6 +31,7 @@ export function SiteNav() {
       <nav className="hidden flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold text-teal md:flex">
         {LINKS.map((l) => (
           l.href === "/deviation-governance" ? <Link key={l.href} to="/deviation-governance" className={desk}>{l.label}</Link> :
+          l.href === "/ee-plan-workflow" ? <Link key={l.href} to="/ee-plan-workflow" className={desk}>{l.label}</Link> :
           l.href === "/managed-interviews" ? <Link key={l.href} to="/managed-interviews" className="transition-colors hover:text-primary">{l.label}</Link> :
           l.href === "/culture-inclusion-intelligence" ? <Link key={l.href} to="/culture-inclusion-intelligence" className={desk}>{l.label}</Link> :
           <a key={l.href} href={l.href} className={desk}>
@@ -52,6 +54,7 @@ export function SiteNav() {
           <nav className="mt-2 flex flex-col gap-1 rounded-xl border border-border bg-card p-2 shadow-sm">
             {LINKS.map((l) => (
               l.href === "/deviation-governance" ? <Link key={l.href} to="/deviation-governance" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
+          l.href === "/ee-plan-workflow" ? <Link key={l.href} to="/ee-plan-workflow" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
               l.href === "/managed-interviews" ? <Link key={l.href} to="/managed-interviews" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
               l.href === "/culture-inclusion-intelligence" ? <Link key={l.href} to="/culture-inclusion-intelligence" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-semibold text-teal transition-colors hover:bg-muted hover:text-primary">{l.label}</Link> :
               <a

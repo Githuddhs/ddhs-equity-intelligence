@@ -18,6 +18,7 @@ import { Route as ClientViewRouteImport } from './routes/client-view'
 import { Route as CultureInclusionIntelligenceRouteImport } from './routes/culture-inclusion-intelligence'
 import { Route as DeliveryMethodologyRouteImport } from './routes/delivery-methodology'
 import { Route as DeviationGovernanceRouteImport } from './routes/deviation-governance'
+import { Route as EePlanWorkflowRouteImport } from './routes/ee-plan-workflow'
 import { Route as Eea12RouteImport } from './routes/eea12'
 import { Route as Eea13PlanningRouteImport } from './routes/eea13-planning'
 import { Route as EvidenceGovernanceRouteImport } from './routes/evidence-governance'
@@ -139,6 +140,11 @@ const DeliveryMethodologyRoute = DeliveryMethodologyRouteImport.update({
 const DeviationGovernanceRoute = DeviationGovernanceRouteImport.update({
   id: '/deviation-governance',
   path: '/deviation-governance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EePlanWorkflowRoute = EePlanWorkflowRouteImport.update({
+  id: '/ee-plan-workflow',
+  path: '/ee-plan-workflow',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Eea12Route = Eea12RouteImport.update({
@@ -546,6 +552,7 @@ export interface FileRoutesByFullPath {
   '/culture-inclusion-intelligence': typeof CultureInclusionIntelligenceRoute
   '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/deviation-governance': typeof DeviationGovernanceRoute
+  '/ee-plan-workflow': typeof EePlanWorkflowRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -632,6 +639,7 @@ export interface FileRoutesByTo {
   '/culture-inclusion-intelligence': typeof CultureInclusionIntelligenceRoute
   '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/deviation-governance': typeof DeviationGovernanceRoute
+  '/ee-plan-workflow': typeof EePlanWorkflowRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -720,6 +728,7 @@ export interface FileRoutesById {
   '/culture-inclusion-intelligence': typeof CultureInclusionIntelligenceRoute
   '/delivery-methodology': typeof DeliveryMethodologyRoute
   '/deviation-governance': typeof DeviationGovernanceRoute
+  '/ee-plan-workflow': typeof EePlanWorkflowRoute
   '/eea12': typeof Eea12Route
   '/eea13-planning': typeof Eea13PlanningRoute
   '/evidence-governance': typeof EvidenceGovernanceRoute
@@ -808,6 +817,7 @@ export interface FileRouteTypes {
     | '/culture-inclusion-intelligence'
     | '/delivery-methodology'
     | '/deviation-governance'
+    | '/ee-plan-workflow'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -894,6 +904,7 @@ export interface FileRouteTypes {
     | '/culture-inclusion-intelligence'
     | '/delivery-methodology'
     | '/deviation-governance'
+    | '/ee-plan-workflow'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -981,6 +992,7 @@ export interface FileRouteTypes {
     | '/culture-inclusion-intelligence'
     | '/delivery-methodology'
     | '/deviation-governance'
+    | '/ee-plan-workflow'
     | '/eea12'
     | '/eea13-planning'
     | '/evidence-governance'
@@ -1069,6 +1081,7 @@ export interface RootRouteChildren {
   CultureInclusionIntelligenceRoute: typeof CultureInclusionIntelligenceRoute
   DeliveryMethodologyRoute: typeof DeliveryMethodologyRoute
   DeviationGovernanceRoute: typeof DeviationGovernanceRoute
+  EePlanWorkflowRoute: typeof EePlanWorkflowRoute
   Eea12Route: typeof Eea12Route
   Eea13PlanningRoute: typeof Eea13PlanningRoute
   EvidenceGovernanceRoute: typeof EvidenceGovernanceRoute
@@ -1178,6 +1191,13 @@ declare module '@tanstack/react-router' {
       path: '/deviation-governance'
       fullPath: '/deviation-governance'
       preLoaderRoute: typeof DeviationGovernanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ee-plan-workflow': {
+      id: '/ee-plan-workflow'
+      path: '/ee-plan-workflow'
+      fullPath: '/ee-plan-workflow'
+      preLoaderRoute: typeof EePlanWorkflowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eea12': {
@@ -1799,6 +1819,7 @@ const rootRouteChildren: RootRouteChildren = {
   CultureInclusionIntelligenceRoute: CultureInclusionIntelligenceRoute,
   DeliveryMethodologyRoute: DeliveryMethodologyRoute,
   DeviationGovernanceRoute: DeviationGovernanceRoute,
+  EePlanWorkflowRoute: EePlanWorkflowRoute,
   Eea12Route: Eea12Route,
   Eea13PlanningRoute: Eea13PlanningRoute,
   EvidenceGovernanceRoute: EvidenceGovernanceRoute,
