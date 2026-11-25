@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/workspace-client";
 import { RATING_LABEL, STATUS_LABEL, type DeviationRating } from "@/lib/deviation";
 import { loadDeviationAssessment, loadDeviationCandidates, loadDeviationVacancy, type DeviationAssessment, type DeviationRow } from "@/lib/deviation-data";
 import { canRerate, isStale } from "@/lib/deviation-rerate";
@@ -40,14 +40,16 @@ export function StaleRatingCheck({ rows, onDone }: { rows: DeviationRow[]; onDon
       if (!picked.has(p.row.id)) continue;
       const a = p.next;
       // Assessment fields only: approvals, comments and decision history stay as recorded.
-      const { error } = await supabase.from("ee_deviations").update({
+      const { data, error } = await supabase.from("ee_deviations").update({
         rating: a.rating.rating, thresholds: a.thresholds as unknown as Json, objective: a.objective as unknown as Json,
         trajectory: a.trajectory as unknown as Json, funnel: a.funnel as unknown as Json, review: a.review as unknown as Json,
-      }).eq("id", p.row.id).in("status", ["draft", "submitted", "in_review"]);
-      if (!error) ok++;
+      }).eq("id", p.row.id).in("status", ["draft", "submitted", "in_review"]).select("id");
+      if (!error && data?.length) ok++;
     }
     setBusy(false); setPreviews(null);
-    toast.success(`${ok} request${ok === 1 ? "" : "s"} refreshed. Past reviewer decisions were kept.`);
+    const failed = picked.size - ok;
+    if (failed > 0) toast.error(`${failed} request${failed === 1 ? "" : "s"} could not be refreshed.`);
+    if (ok > 0) toast.success(`${ok} request${ok === 1 ? "" : "s"} refreshed. Past reviewer decisions were kept.`);
     onDone();
   };
 
